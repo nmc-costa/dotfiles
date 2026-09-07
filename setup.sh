@@ -60,4 +60,4 @@ if [[ $DO_DOTFILES -eq 1 ]]; then
   fi
 fi
 
-echo "done"
+echo "done" 
