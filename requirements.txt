@@ -1,0 +1,4 @@
+# Requirements for VS Code Docs Monitor
+requests
+beautifulsoup4
+pyyaml

@@ -1,0 +1,62 @@
+{
+  "test_harness_version": "1.0",
+  "started_at": "2026-08-25T12:07:03.481405",
+  "completed_at": "2026-08-25T12:07:03.482018",
+  "results": [
+    {
+      "task_id": "task_a",
+      "task_name": "Markdown Formatting Fix",
+      "category": "markdown_editing",
+      "expected_model": "claude_haiku",
+      "predicted_model": "claude_haiku",
+      "routing_correct": true,
+      "timestamp": "2026-08-25T12:07:03.481619"
+    },
+    {
+      "task_id": "task_b",
+      "task_name": "Grammar & Spelling Review",
+      "category": "grammar_review",
+      "expected_model": "claude_haiku",
+      "predicted_model": "claude_haiku",
+      "routing_correct": true,
+      "timestamp": "2026-08-25T12:07:03.481668"
+    },
+    {
+      "task_id": "task_c",
+      "task_name": "Template Validation",
+      "category": "template_validation",
+      "expected_model": "claude_haiku",
+      "predicted_model": "claude_haiku",
+      "routing_correct": true,
+      "timestamp": "2026-08-25T12:07:03.481710"
+    },
+    {
+      "task_id": "task_d",
+      "task_name": "Document Structure Check",
+      "category": "structure_validation",
+      "expected_model": "claude_haiku",
+      "predicted_model": "claude_haiku",
+      "routing_correct": true,
+      "timestamp": "2026-08-25T12:07:03.481787"
+    },
+    {
+      "task_id": "task_e",
+      "task_name": "Content Refinement",
+      "category": "content_refinement",
+      "expected_model": "claude_haiku",
+      "predicted_model": "claude_haiku",
+      "routing_correct": true,
+      "timestamp": "2026-08-25T12:07:03.481827"
+    }
+  ],
+  "summary": {
+    "total_tests": 5,
+    "passed": 5,
+    "failed": 0,
+    "accuracy_percent": 100.0,
+    "haiku_assignments": 5,
+    "expensive_model_assignments": 0,
+    "expected_token_reduction": "~30-40% (Haiku tasks consume 5-10x fewer tokens)",
+    "completion_time": "0:00:00.000627"
+  }
+}

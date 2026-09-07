@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "path": "dtx/repos/sp_xai_nos",
+      "name": "🎯 sp_xai_nos"
+    }
+  ],
+  "settings": {
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.autoTestDiscoverOnSaveEnabled": false,
+    "[python]": {
+      "editor.defaultFormatter": "ms-python.python",
+      "editor.formatOnSave": true
+    }
+  }
+}

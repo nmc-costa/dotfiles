@@ -1,0 +1,28 @@
+{
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.autoTestDiscoverOnSaveEnabled": false,
+    "git.ignoreLimitWarning": true,
+    "chat.tools.terminal.autoApprove": {
+        "npm install": true,
+        "npm init": true
+    },
+    "chat.lm.models": [
+        {
+            "name": "GLM-5.3-Flash",
+            "vendor": "customendpoint",
+            "apiKey": "HDplkYN0JKWHSFKzVL3f7dWhLgD93m7Sl7EzsGwzf1E",
+            "models": [
+                {
+                    "id": "zai-org/GLM-5.3-Flash",
+                    "name": "GLM-5.3-Flash",
+                    "url": "https://glm53-flash.dtx-colab.com/v1/chat/completions",
+                    "toolCalling": true,
+                    "vision": true,
+                    "maxInputTokens": 128000,
+                    "maxOutputTokens": 16000
+                }
+            ]
+        }
+    ]
+}
