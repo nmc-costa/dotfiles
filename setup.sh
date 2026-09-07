@@ -16,8 +16,8 @@ done
 WORK_DIR="$BASE_DIR/Work"
 PROJECTS_DIR="$BASE_DIR/Projects"
 
-WORK_REPOS=(BAI codebase DriverCast gpt_code mermaid_flowchart mobai RAGFusion sp_xai_nos technopage wondercube)
-PROJECTS_REPOS=(architect agentic_instructions calls claude_code HIcode hicode-kedro HITnode HITtwintag ibots ideas jobs latex mermaid pocs roi_lab sciml_combinatorial_search)
+WORK_REPOS=(codebase mobai RAGFusion sp_xai_nos technopage wondercube)
+PROJECTS_REPOS=(architect agentic_instructions notes HIcode HITnode HITtwintag ibots roi_lab)
 
 echo "Base dir: $BASE_DIR"
 if [[ $DRY_RUN -eq 1 ]]; then
