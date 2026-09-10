@@ -192,3 +192,40 @@ A Gemini CLI config exists at `~/.gemini/` (`settings.json`, `GEMINI.md`). If yo
 want its user-level items (MCP servers, commands, subagents, skills,
 instructions) imported into Claude Code, reply `/import` to scan and list what's
 importable, then `/import --yes=<digest>` to apply.
+
+---
+
+## 🏆 Claude Code — Cheat Table (Oficial, Underground & Atalhos)
+
+> Referências: [ykdojo/claude-code-tips](https://github.com/ykdojo/claude-code-tips) · [Anthropic Cheatsheet](https://support.claude.com/en/articles/14553413-claude-code-cheatsheet) · [Claude Code Ultimate Guide](https://github.com/FlorianBruniaux/claude-code-ultimate-guide/blob/main/guide/cheatsheet.md) · [Njengah cheat-sheet](https://github.com/Njengah/claude-code-cheat-sheet)
+
+| Categoria | Atalho / Comando / Sintaxe | O que faz na prática | ⚡ Por que a Comunidade Usa (Impacto Pro) |
+|---|---|---|---|
+| Troca Rápida de Modos | `Shift + Tab` | Alterna entre: Manual ➔ acceptEdits ➔ Plan Mode. | Evita gastar tokens codando errado: no Plan Mode, ele apenas lê e projeta sem tocar em nada. |
+| Rebobinar / Desfazer | `Esc + Esc` | Abre o menu nativo de checkpoint / rewind. | Descarta o rascunho com erro e volta a sessão para o estado anterior, limpando tokens desperdiçados. |
+| Edição de Prompt Externo | `Ctrl + G` | Abre seu editor padrão (VS Code/Nano) para escrever o prompt. | Ideal para rascunhar especificações complexas sem limitações da linha do terminal. |
+| Histórico de Transcrição | `Ctrl + O` | Abre o visualizador do histórico detalhado de transcrição. | Inspeciona o que foi dito/feito em sessões anteriores. |
+| Modo Fundo (Background) | `Ctrl + B` | Joga o Claude para rodar em segundo plano durante testes demorados. | Libera o terminal enquanto o agente processa tarefas longas. |
+| Economia de Tokens (Anti-Chat) | Prompt: `"Use Caveman Mode"` | Força o Claude a eliminar rodeios, cortesias e saudações. | Corta até 40% de tokens de saída, fazendo sua janela Pro durar o dobro. |
+| Memória Instantânea | `# [instrução]` (ex: `# Use Bun`) | Injeta uma regra na auto-memória sem abrir o arquivo. | Forma mais rápida de gravar regras globais sem poluir o CLAUDE.md. |
+| Modularização de Regras | `.claude/rules/*.md` | Quebra regras do projeto em arquivos temáticos pequenos. | Evita carregar o contexto inteiro de uma vez; o Claude só puxa a regra necessária. |
+| Prevenção de Inchaço | Arquivo `.claudeignore` | Bloqueia leitura de `node_modules`, `dist`, logs e mídias. | Obrigatório. Sem isso, 2 ou 3 comandos esgotam toda a franquia Pro. |
+| Compensação Guiada | `/compact [foco]` (ex: `/compact auth`) | Resume a conversa preservando apenas o contexto pedido. | Libera janela de contexto mantendo vivo exatamente o módulo em que você está trabalhando. |
+| Retomar Sessão | `/resume` | Retoma a última sessão salva ou um marcador específico. | Volta ao ponto exato de trabalho sem repetir contexto. |
+| Troca de Tarefa com Rótulo | `/clear [nome]` (ex: `/clear feature-x`) | Reseta o contexto e salva um marcador na sessão. | Permite usar o `/resume` mais tarde para voltar àquela tarefa. |
+| Inspeção de Custos & Contexto | `/context` e `/cost` | Mostra gráfico do uso da memória e tokens consumidos. | Permite ver qual arquivo está inflando a sessão antes de estourar a cota. |
+| Diagnóstico de Inchaço | `/doctor` | Faz auditoria geral de instalação, hooks e inchaço do CLAUDE.md. | Alerta caso suas regras estejam longas demais gastando tokens à toa. |
+| Revisão Rápida sem Git | `/diff` | Abre um visualizador interativo das alterações feitas pelo Claude. | Inspeciona mudanças arquivo a arquivo sem precisar rodar comandos git manuais. |
+| Subagentes Isolados | `/agents` | Cria agentes customizados para tarefas específicas (testes, docs). | Executa buscas e testes em um sub-contexto separado, sem inchar sua conversa principal. |
+| Execução em Pipeline | `cat log.txt \| claude -p "resumo"` | Executa uma ordem direto no terminal e finaliza sem abrir o chat. | Economiza chamadas interativas para automações de terminal, CI/CD ou scripts. |
+| Multi-threading Físico | `git worktree` + novas abas | Abre diretórios paralelos apontando para branches diferentes. | Permite ter uma instância corrigindo testes enquanto outra constrói código novo. |
+
+### ⌨️ Atalhos de Teclado — Cola Rápida
+
+| Atalho | Ação |
+|--------|------|
+| `Shift + Tab` | Alterna modo de permissão: Manual → Auto-Accept → Plan |
+| `Ctrl + G` | Abre o prompt no VS Code / Nano |
+| `Ctrl + O` | Abre o visualizador do histórico de transcrição |
+| `Ctrl + B` | Envia o Claude para segundo plano durante testes longos |
+| `Esc + Esc` | Abre o menu de checkpoint para voltar no tempo |
