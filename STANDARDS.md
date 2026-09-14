@@ -57,7 +57,16 @@ crush-config/
 
 ### Repositório: `agent-framework` (Desenvolvimento)
 
-**Propósito:** Framework de agentes em desenvolvimento ativo. Source of truth para skills e workflows.
+**Propósito:** Framework completo de orquestração de agentes. Source of truth para personas, agents, skills, workflows, e multi-harness compliance enforcement.
+
+**O que inclui:**
+- Base personas (Master Architect)
+- Task-specific personas (Charter, Review, Diagram, etc.)
+- Specialized agents (7+ agents com SKILL.md)
+- Multi-harness support (Copilot, Claude, Gemini, OpenAI, LiteLLM)
+- Reusable skills e prompts
+- Central configuration
+- Compliance enforcement via CI/CD
 
 ```
 agent-framework/
@@ -119,11 +128,16 @@ agent-framework/
 ## 📝 CONVENÇÕES DE NOMENCLATURA
 
 ### Nomes de Repositórios
-- ✅ `crush-config` — Configuração (dotfiles) - RECOMENDADO
-- ✅ `agent-framework` — Framework de agentes - RECOMENDADO
-- ✅ `agents-core` — Alternativa para framework
-- ❌ `agentic_instructions` — Não standard (usar `agent-framework`)
-- ❌ `skills` — Ambíguo (usar dentro de `agent-framework`)
+
+| Nome | Uso | Status |
+|------|-----|--------|
+| `crush-config` | Configuração universal (dotfiles) | ✅ RECOMENDADO |
+| `agent-framework` | Framework de agents + personas + skills | ✅ RECOMENDADO |
+| `agents-core` | Alternativa menor escopo | ✅ OK |
+| ❌ ~~`agentic_instructions`~~ | Inadequado (subestima escopo) | ❌ RENOMEAR |
+| ❌ ~~`skills`~~ | Ambíguo (usar dentro de framework) | ❌ EVITAR |
+
+**Nota:** Se já tem repo chamado `agentic_instructions` com estrutura completa, **RENOMEI-A PARA `agent-framework`** — o escopo real (agents + skills + personas + harnesses) justifica.
 
 ### Nomes de Diretórios
 - **Kebab-case** (lowercase com hyphens): `my-skill`, `code-analyzer`, `web-research`
