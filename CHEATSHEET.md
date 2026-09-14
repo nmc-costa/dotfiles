@@ -43,14 +43,17 @@ git push
 | `~/Projects/agentic_instructions` | Biblioteca original de personas/skills | **Arquivado** (conteúdo já fundido para `dotfiles/.agents/`) — não editar, só consultar histórico |
 | `~/Projects/architect` | Playground pessoal de investigação sobre a persona "The Architect"/memória/auto-avaliação | Separado, não fundido — tem um padrão de testes "vermelho por design" que vale a pena copiar para `.agents/validation/` no futuro, mas o conteúdo em si (memory/, evolution/, architect_log/) fica lá |
 
-## 4. TODOs em aberto (não esquecer)
+## 4. TODO list persistente (fonte de verdade entre sessões)
 
-| Item | Estado | Próximo passo |
-|---|---|---|
-| Migrar `.vscode/settings.json` (API key) para chezmoi+age | Decidido, bloqueado | Corre `sudo pacman -S chezmoi age` tu mesmo, depois retoma o agente de secrets |
-| Decidir direção de sincronização (repo→sistema vs. sistema→repo) | Em aberto | Ver `CLAUDE.md` → Lacunas Conhecidas |
-| Arquivar `agentic_instructions` no GitHub | Pendente | Fazer manualmente (Settings → Archive this repository) depois de reveres e dares `git push` à fusão |
-| `setup.sh` com listas de repos hardcoded (`nmc-costa`) | Conhecido, não bloqueante | Só importa se algum dia quiseres partilhar o repo |
+A lista de tarefas que o Claude Code cria numa sessão (a ferramenta de tracking interna) **não sobrevive a uma sessão nova** — só sobrevive com `--resume`/`--continue`, que recarrega tudo (o oposto de poupar tokens). Esta tabela é o substituto persistente: qualquer sessão nova lê isto, recria a sua própria todo list interna a partir daqui, e **risca aqui** (não só na sessão) quando um item fica feito.
+
+- [x] Migrar `.vscode/settings.json` (API key) para chezmoi+age — feito 2026-09-14, commit `ef2a52f`. Falta: fazer backup da chave privada (`~/.config/chezmoi/key.txt`) para um gestor de password ou cópia física — **isto é manual, ninguém o faz por ti**.
+- [ ] Rever e dar `git push` aos commits locais em `dotfiles` (12 commits) e `architect` (1 commit) — nada foi enviado ainda para o remoto.
+- [ ] Arquivar `agentic_instructions` no GitHub (Settings → Archive this repository) — só depois do push acima.
+- [ ] Decidir direção de sincronização (repo→sistema vs. sistema→repo) — em aberto, ver `CLAUDE.md` → Lacunas Conhecidas.
+- [ ] `setup.sh` com listas de repos hardcoded (`nmc-costa`) — conhecido, não bloqueante, só importa se partilhares o repo.
+
+**Regra:** ao começar uma sessão nova, pede-lhe explicitamente para ler esta lista e criar a sua todo list interna a partir dela (ver secção 7). Ao terminar uma tarefa, o commit que a fecha tem de marcar o `[x]` aqui.
 
 ## 5. Roadmap do "Workspace Ágil" (ordem validada nas tuas notas — `~/Projects/notes/ideas/architecture/Workspace Agil para Agentes Multiplataforma.md` §13.7)
 
@@ -70,3 +73,11 @@ Não saltar fases — cada uma é pré-requisito da seguinte. O otimizador autó
 ## 6. Como manter isto vivo
 
 Esta tabela apodrece como qualquer doc estático se ninguém a atualizar. A regra fica no `CLAUDE.md`: qualquer sessão que mude a estrutura de `.agents/` (nova skill, novo harness, resolução de um TODO) atualiza esta tabela no mesmo commit — não depois, não "quando der jeito".
+
+## 7. Saltar para sessão nova sem perder o fio (poupar tokens)
+
+1. Fecha/ignora a sessão atual — não precisas de `/compact` nem de `--resume`. Abre uma sessão nova (`claude`, sem `--resume`/`--continue`, contexto limpo).
+2. Primeira mensagem, sempre:
+   > "Lê `~/dotfiles/CLAUDE.md` e `~/dotfiles/CHEATSHEET.md`. Cria uma todo list a partir da secção 4 (TODO list persistente) e continua a partir daí."
+3. A sessão nova cria a sua própria todo list interna (ferramenta de tracking do Claude Code) espelhando a secção 4 — isso mantém-na focada e visível para ti dentro dessa sessão.
+4. Quando um item fica feito, tem de ser marcado `[x]` **aqui**, na secção 4, no mesmo commit que o fecha — a todo list interna da sessão morre com ela; esta tabela é a que sobrevive.
