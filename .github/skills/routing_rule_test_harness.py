@@ -164,9 +164,13 @@ class RoutingRuleTestHarness:
 
 def main():
     """Run the test harness"""
+    from pathlib import Path
+
     harness = RoutingRuleTestHarness()
     summary = harness.run_test_suite()
-    harness.export_results("/home/user/github/.github/skills/routing_test_results_phase1.json")
+    # Write next to this script, regardless of where the repo is cloned or which user's home it's under.
+    output_path = Path(__file__).resolve().parent / "routing_test_results_phase1.json"
+    harness.export_results(str(output_path))
     
     # Print recommendation
     print("\n" + "=" * 80)

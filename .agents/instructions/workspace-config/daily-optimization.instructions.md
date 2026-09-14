@@ -165,7 +165,7 @@ Agent: "🔄 Daily optimization due. Running sequence..."
 
 ## File Locations
 
-- **Instructions:** `/home/user/github/.github/instructions/daily-optimization.instructions.md` (this file)
+- **Instructions:** `.agents/instructions/workspace-config/daily-optimization.instructions.md` (this file)
 - **Reference in Root:** `.github/copilot-instructions.md` (section: "Daily Workspace Optimization")
 - **Tracking:** `/memories/session/last_chronicle_run.md`
 - **Reports:** `/memories/session/daily_optimization_report_YYYYMMDD.md`

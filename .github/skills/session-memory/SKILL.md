@@ -13,7 +13,7 @@ Bridges VS Code's built-in `/compact` command with persistent storage for seamle
 ## Commands
 
 ### /memorize
-Saves compacted session state to `my/agentic_instructions/memories/CURRENT_SESSION.md` for reuse in future chats.
+Saves compacted session state to `.agents/validation/memory-workflow/CURRENT_SESSION.md` for reuse in future chats.
 
 **Usage:**
 ```
@@ -37,7 +37,7 @@ Saves compacted session state to `my/agentic_instructions/memories/CURRENT_SESSI
 - When switching between projects in new chats
 
 ### /recall
-Loads the last saved compacted state from `my/agentic_instructions/memories/CURRENT_SESSION.md`.
+Loads the last saved compacted state from `.agents/validation/memory-workflow/CURRENT_SESSION.md`.
 
 **Usage:**
 ```
@@ -79,11 +79,11 @@ Session A (long conversation)
     ↓ type: /compact focus on design decisions
     ↓ [conversation summarized in-place]
     ↓ type: /memorize
-    → Saved to: my/agentic_instructions/memories/CURRENT_SESSION.md
+    → Saved to: .agents/validation/memory-workflow/CURRENT_SESSION.md
                 
 Session B (new chat, fresh context window)
     ↓ type: /recall
-    → Loaded from: my/agentic_instructions/memories/CURRENT_SESSION.md
+    → Loaded from: .agents/validation/memory-workflow/CURRENT_SESSION.md
     ↓ [agent displays compacted summary]
     ↓ Continue work with minimal token overhead
 ```
@@ -91,7 +91,7 @@ Session B (new chat, fresh context window)
 ## Integration
 
 - **Complement, not replacement:** Uses VS Code's built-in `/compact` for within-chat compression
-- **Single source:** Stores compacted state in `my/agentic_instructions/memories/` (workspace-tracked, organized)
+- **Single source:** Stores compacted state in `.agents/validation/memory-workflow/` (workspace-tracked, organized)
 - **Token-efficient:** Only stores compacted summaries, not full conversation history
 - **Workspace-local:** No reliance on session-scoped temporary storage
 
@@ -105,7 +105,7 @@ User: /compact focus on decisions and validation results
 [VS Code summarizes and compresses history]
 
 User: /memorize
-Agent: ✅ Compacted session saved to my/agentic_instructions/memories/CURRENT_SESSION.md
+Agent: ✅ Compacted session saved to .agents/validation/memory-workflow/CURRENT_SESSION.md
   - Task: Bibliography validation (DriverCast Springer)
   - Progress: 20/20 entries validated
   - Decisions: Schema changes, format standardization

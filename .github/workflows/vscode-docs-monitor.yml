@@ -45,7 +45,7 @@ jobs:
         env:
           VSCODE_DOCS_BASE_URL: 'https://code.visualstudio.com/docs'
           CACHE_DIR: '.github/.vscode-docs-cache'
-          MEMORY_FILE: 'my/agentic_instructions/memories/VSCODE_WEEKLY.md'
+          MEMORY_FILE: '.agents/automation/VSCODE_WEEKLY.md'
           FORCE_UPDATE: ${{ github.event.inputs.force_update || 'false' }}
           GITHUB_REPO_OWNER: ${{ github.repository_owner }}
           GITHUB_REPO_NAME: ${{ github.event.repository.name }}
@@ -62,10 +62,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
-          if git diff --quiet .github/.vscode-docs-cache/ my/agentic_instructions/memories/VSCODE_WEEKLY.md; then
+          if git diff --quiet .github/.vscode-docs-cache/ .agents/automation/VSCODE_WEEKLY.md; then
             echo "No changes to commit"
           else
-            git add .github/.vscode-docs-cache/ my/agentic_instructions/memories/VSCODE_WEEKLY.md
+            git add .github/.vscode-docs-cache/ .agents/automation/VSCODE_WEEKLY.md
             git commit -m "chore: update VS Code docs cache and weekly report"
             git push
           fi
@@ -76,7 +76,7 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const memoryFile = 'my/agentic_instructions/memories/VSCODE_WEEKLY.md';
+            const memoryFile = '.agents/automation/VSCODE_WEEKLY.md';
             const content = fs.readFileSync(memoryFile, 'utf8');
             
             // Extract the latest report (between first and second ## VS Code Docs Weekly Update)
@@ -102,10 +102,10 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Status:** ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
           echo "**Cache:** Updated at .github/.vscode-docs-cache/" >> $GITHUB_STEP_SUMMARY
-          echo "**Report:** my/agentic_instructions/memories/VSCODE_WEEKLY.md" >> $GITHUB_STEP_SUMMARY
+          echo "**Report:** .agents/automation/VSCODE_WEEKLY.md" >> $GITHUB_STEP_SUMMARY
           
-          if [ -f "my/agentic_instructions/memories/VSCODE_WEEKLY.md" ]; then
+          if [ -f ".agents/automation/VSCODE_WEEKLY.md" ]; then
             echo "**Latest Report Preview:**" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            head -20 my/agentic_instructions/memories/VSCODE_WEEKLY.md >> $GITHUB_STEP_SUMMARY
+            head -20 .agents/automation/VSCODE_WEEKLY.md >> $GITHUB_STEP_SUMMARY
           fi

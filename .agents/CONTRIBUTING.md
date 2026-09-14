@@ -1,63 +1,46 @@
 # 🤝 Contributing - Adding New Harnesses
 
-**This guide explains how to add a new LLM harness to the Hybrid C architecture.**
+**This guide explains how to add a new LLM harness to this repo.**
+
+There is no `/my/agentic_instructions/` — this repo (`~/dotfiles`) is the single source of
+truth. There is also no `REGISTRY.md` (the old one, from the retired `agentic_instructions`
+repo, was aspirational/stale and was not carried over) and no per-harness subdirectory with a
+separate `integration-guide.md` — each harness is **one file**:
+`.agents/harnesses/{harness-name}.md`.
 
 ---
 
-## 🚀 Quick Process (4 Steps)
+## 🚀 Quick Process (3 Steps)
 
 ### Step 1: Copy the Template
 
 ```bash
-cp .github/harnesses/TEMPLATE.md .github/harnesses/{new-harness-name}.md
+cp .agents/harnesses/TEMPLATE.md .agents/harnesses/{new-harness-name}.md
 ```
 
-Replace `{new-harness-name}` with actual name (e.g., `claude-code`, `groq`, `together-ai`)
+Replace `{new-harness-name}` with the actual name (e.g., `claude-code`, `groq`, `together-ai`).
 
-### Step 2: Customize the Reference
+### Step 2: Write the Harness Doc
 
-Edit `.github/harnesses/{new-harness-name}.md`:
-- Replace all `{HARNESS-NAME}` with actual name
-- Update "Quick Links" section with harness-specific paths
-- Add harness-specific configuration notes
+Edit `.agents/harnesses/{new-harness-name}.md` directly — see
+[`.agents/harnesses/TEMPLATE.md`](harnesses/TEMPLATE.md) for the expected sections (how the
+harness actually discovers instructions, key file paths in this repo, a skill/trigger table, a
+deployment checklist). Look at `.agents/harnesses/claude-code.md` or
+`.agents/harnesses/vscode-copilot.md` for harnesses whose auto-discovery mechanism is real and
+verified, and at `.agents/harnesses/openai.md` or `.agents/harnesses/litellm.md` for the
+"you write the glue code yourself" pattern.
 
-**Example for Groq:**
-```markdown
-# 🔌 Groq Reference
+**Be honest about what's real.** The previous version of several harness docs in this repo
+described fictional mechanisms (a `.claude/.instructions.md` single-file auto-discovery/registry
+that doesn't exist, an `openai.ChatCompletion.create(..., system=...)` call that was never valid
+API usage, a mixed-up example that called the Anthropic SDK "the Gemini API"). Don't guess at
+how a harness works — verify it, or clearly mark what's unverified.
 
-**Status:** Active  
-**Setup:** Via API + function calling  
-**Task-Specific:** `/my/agentic_instructions/harnesses/groq/`
-```
+### Step 3: Update Copilot Discovery (if relevant)
 
-### Step 3: Create Integration Guide
-
-Create integration guide in `/my/agentic_instructions/`:
-
-```bash
-mkdir -p /my/agentic_instructions/harnesses/{new-harness-name}/
-touch /my/agentic_instructions/harnesses/{new-harness-name}/integration-guide.md
-```
-
-**Copy from existing harness as template:**
-```bash
-cp /my/agentic_instructions/harnesses/vscode-copilot/integration-guide.md \
-   /my/agentic_instructions/harnesses/{new-harness-name}/integration-guide.md
-```
-
-### Step 4: Update Links
-
-**In `.github/copilot-instructions.md`:**
-Add to "Supported Harnesses" section:
-```markdown
-- {New Harness Name}: see `.github/harnesses/{new-harness-name}.md`
-```
-
-**In `/my/agentic_instructions/REGISTRY.md`:**
-Add to harnesses table:
-```markdown
-| {New Harness} | `harnesses/{new-harness-name}/` | `integration-guide.md` | ✅ Active |
-```
+If the new harness should be mentioned in `.github/copilot-instructions.md`, add it there. That
+file (and `.github/harnesses`, which is a symlink to `.agents/harnesses`) is what GitHub Copilot
+actually reads — there's no separate registry to update.
 
 **Done!** ✅
 
@@ -67,70 +50,30 @@ Add to harnesses table:
 
 ### Before Starting
 - [ ] New harness name decided (lowercase, hyphenated)
-- [ ] Integration guide draft written
-- [ ] API keys / setup instructions ready
+- [ ] You've confirmed — not assumed — how this harness actually loads instructions/skills
+- [ ] API keys / setup instructions ready, if it's an API-based harness
 
-### Phase 1: `.github/` Reference
-- [ ] Copy TEMPLATE.md to `.github/harnesses/{name}.md`
-- [ ] Update all `{HARNESS-NAME}` placeholders
-- [ ] Review workspace config links
-- [ ] Review agent trigger examples
-- [ ] Test links are valid
+### Writing `.agents/harnesses/{name}.md`
+- [ ] Copied from `TEMPLATE.md`, all `{HARNESS-NAME}` placeholders replaced
+- [ ] States plainly whether this is `native` (auto-discovery, like Claude Code/Copilot),
+      `api` (you write the glue code), `abstraction` (multi-provider proxy), or `local`
+- [ ] Every file path referenced actually exists under `.agents/` in this repo — no
+      `/my/agentic_instructions/`, no `REGISTRY.md`, no `config/harness-config.json`
+- [ ] Skill/persona trigger table included (see the "Common Tasks" table in `TEMPLATE.md`)
+- [ ] Deployment/verification checklist included, specific to this harness
+- [ ] If the harness needs a symlinked directory (like `.github/` does for Copilot), that's
+      set up — don't duplicate skill/instruction content into a harness-specific copy
+- [ ] Any code samples use current, correct API syntax for that provider's SDK — test them if
+      you can, don't just pattern-match off an old example
 
-### Phase 2: Integration Guide
-- [ ] Create `/my/agentic_instructions/harnesses/{name}/` folder
-- [ ] Copy existing integration-guide.md as template
-- [ ] Update setup instructions
-- [ ] Update agent trigger configuration
-- [ ] Document harness-specific features
-- [ ] Test with actual harness
+### If This Harness Needs Copilot/VS Code Awareness
+- [ ] `.github/copilot-instructions.md` mentions it, if relevant
 
-### Phase 3: Central Links
-- [ ] Update `.github/copilot-instructions.md`
-- [ ] Update `/my/agentic_instructions/REGISTRY.md`
-- [ ] Update `/my/agentic_instructions/README.md` if needed
-- [ ] Test all links work
-
-### Phase 4: Documentation
-- [ ] Document in CONTRIBUTING.md
-- [ ] Add to `.github/harnesses/` folder list
-- [ ] Update main documentation index
-
-### Phase 5: Testing
-- [ ] Test harness auto-discovery (if applicable)
-- [ ] Test agent triggers work
-- [ ] Test workspace config is loaded
-- [ ] Test all 7 agents accessible
-- [ ] Test model routing works
-
----
-
-## 📝 Template Content
-
-### Reference File (`.github/harnesses/{name}.md`)
-
-**Sections to include:**
-1. Quick Links (workspace config, agents, setup guide)
-2. Workspace Configuration (model routing, optimization, etc.)
-3. Task-Specific Agents (all 7 with triggers)
-4. Setup Instructions (link to integration guide)
-5. Common Tasks (agent + command)
-6. Central Discovery (link to REGISTRY.md)
-7. Need Help (troubleshooting links)
-
-### Integration Guide (`/my/agentic_instructions/harnesses/{name}/integration-guide.md`)
-
-**Sections to include:**
-1. Overview (what is this harness)
-2. Prerequisites (API keys, software, etc.)
-3. Installation (step-by-step setup)
-4. Configuration (how to configure for agents)
-5. Persona Loading (how to load personas)
-6. Agent Trigger Setup (how to configure triggers)
-7. Workspace Config Integration (how to load shared rules)
-8. Multi-Agent Coordination (how @architect works)
-9. Troubleshooting (common issues)
-10. Examples (code/config examples)
+### Testing
+- [ ] Confirm the harness actually reads the files you pointed it at (open a real session and
+      check — don't just assume the doc is correct because it reads plausibly)
+- [ ] Test at least one skill trigger end-to-end
+- [ ] Test workspace config rules (`.agents/instructions/workspace-config/`) are followed
 
 ---
 
@@ -138,100 +81,62 @@ Add to harnesses table:
 
 ### Step 1: Copy Template
 ```bash
-cp .github/harnesses/TEMPLATE.md .github/harnesses/groq.md
+cp .agents/harnesses/TEMPLATE.md .agents/harnesses/groq.md
 ```
 
-### Step 2: Edit `.github/harnesses/groq.md`
-```markdown
-# 🔌 Groq Reference
+### Step 2: Edit `.agents/harnesses/groq.md`
 
-**Status:** Active  
-**Setup:** Via API + function calling  
-**Task-Specific:** `/my/agentic_instructions/harnesses/groq/`
+Groq's API is OpenAI-compatible, so base this on `.agents/harnesses/openai.md` rather than
+starting from scratch — same "you write the glue code" pattern, different `base_url` and model
+names. Fix the model list and any Groq-specific setup (API key env var, rate limits) as you go.
 
-[Rest of content with {HARNESS-NAME} → Groq]
-```
+### Step 3: Mention it in Copilot's instructions (optional)
 
-### Step 3: Create Integration Guide
-```bash
-mkdir -p /my/agentic_instructions/harnesses/groq
-cp /my/agentic_instructions/harnesses/openai/integration-guide.md \
-   /my/agentic_instructions/harnesses/groq/integration-guide.md
-```
-
-Edit to include Groq-specific setup (API key, model selection, etc.)
-
-### Step 4: Update Links
-
-**`.github/copilot-instructions.md`:**
-```markdown
-## Supported Harnesses
-
-- VS Code Copilot: see `.github/harnesses/vscode-copilot.md`
-- Claude Code: see `.github/harnesses/claude-code.md`
-- Gemini: see `.github/harnesses/gemini.md`
-- OpenAI: see `.github/harnesses/openai.md`
-- LiteLLM: see `.github/harnesses/litellm.md`
-- **Groq: see `.github/harnesses/groq.md`** ← NEW
-```
-
-**`/my/agentic_instructions/REGISTRY.md`:**
-```markdown
-| Groq | `harnesses/groq/` | `integration-guide.md` | ✅ Active |
-```
+If relevant, add a line to `.github/copilot-instructions.md` noting the new harness doc exists.
 
 ---
 
 ## ✅ File Structure After Adding New Harness
 
 ```
-.github/
-├── copilot-instructions.md (updated)
-└── harnesses/
-    ├── TEMPLATE.md (template)
-    ├── vscode-copilot.md
-    ├── claude-code.md
-    ├── gemini.md
-    ├── openai.md
-    ├── litellm.md
-    └── {new-harness}.md ← NEW
-
-my/agentic_instructions/
-├── REGISTRY.md (updated)
+.agents/
 ├── harnesses/
-    ├── vscode-copilot/
-    ├── claude-code/
-    ├── gemini/
-    ├── openai/
-    ├── litellm/
-    └── {new-harness}/ ← NEW
-        └── integration-guide.md
+│   ├── TEMPLATE.md
+│   ├── vscode-copilot.md
+│   ├── claude-code.md
+│   ├── gemini.md
+│   ├── openai.md
+│   ├── litellm.md
+│   └── {new-harness}.md   ← NEW (single file, no subdirectory)
 ```
+
+`.github/harnesses` is a symlink to `.agents/harnesses`, so nothing needs to be duplicated
+there.
 
 ---
 
 ## 🎯 Benefits of This Process
 
-✅ **Scalable** - Same process for any new harness  
-✅ **Consistent** - All harnesses follow same pattern  
-✅ **Maintainable** - Changes in one place, reflected everywhere  
-✅ **Discoverable** - Every entry point linked  
-✅ **No Duplication** - Single source of truth  
-✅ **Easy to Extend** - Template makes it simple  
+✅ **Scalable** — same process for any new harness
+✅ **Consistent** — all harnesses follow the same template
+✅ **Maintainable** — one file per harness, no separate integration-guide subdirectory to keep
+   in sync
+✅ **No Duplication** — `.agents/` is the single source of truth; `.github/` symlinks to it
+✅ **Honest** — every harness doc states plainly what's verified vs. what still needs checking
 
 ---
 
 ## 📞 Questions?
 
-1. **Need help with specific harness?** Check existing integration-guide.md for similar provider
-2. **Need to update all harnesses at once?** Edit TEMPLATE.md, then update each reference file
-3. **Want to add new agent?** See `/my/agentic_instructions/agents/_templates/agent-template.md`
-4. **Want to add new skill?** See `/my/agentic_instructions/skills/_templates/skill-template.md`
+1. **Need help with a specific harness?** Check an existing `.agents/harnesses/*.md` for a
+   similar provider/mechanism (native vs. API vs. abstraction).
+2. **Need to update all harnesses at once?** Edit `TEMPLATE.md`, then update each harness file
+   individually — there's no registry to regenerate from.
+3. **Want to add a new skill?** See [`.agents/skills/_templates/`](skills/_templates/).
 
 ---
 
 ## 🚀 Ready to Add a New Harness?
 
-**Just follow the 4 steps above!**
-
-The process takes ~15 minutes and creates a fully-functional harness integration.
+**Just follow the 3 steps above!** Writing one honest, verified `.agents/harnesses/{name}.md`
+file is the whole job.

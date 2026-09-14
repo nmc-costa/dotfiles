@@ -137,7 +137,7 @@ These commands are automatically triggered by agents when:
 
 ### Monthly (after `/chronicle search`)
 - Calculate total token reduction: `(baseline - current) / baseline * 100%`
-- Document in `/home/user/github/docs/routing_compliance/routing_compliance_YYYYMMDD.md`
+- Document in `.agents/automation/routing_compliance_YYYYMMDD.md`
 - Update target for next month
 
 ---

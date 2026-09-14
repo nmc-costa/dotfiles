@@ -2,14 +2,14 @@
 ## Mermaid Diagrams
 
 When the user asks to create, edit, or visualize a diagram, follow the
-instructions in `my/agentic_instructions/instructions/workspace-config/mermaid.instructions.md`.
+instructions in `.agents/instructions/workspace-config/mermaid.instructions.md`.
 <!-- mermaid-ai-skills:end -->
 
 ## 🔄 Session Memory Management (/compact → /memorize → /recall)
 **Workflow for token-efficient cross-chat persistence:**
 
 1. **Within-session compaction:** Use VS Code's built-in `/compact [instructions]` to summarize chat history
-2. **Cross-chat saving:** Use `/memorize` to persist compacted state to `my/agentic_instructions/memories/CURRENT_SESSION.md`
+2. **Cross-chat saving:** Use `/memorize` to persist compacted state to `.agents/validation/memory-workflow/CURRENT_SESSION.md`
 3. **Next chat recovery:** Use `/recall` to restore compacted context in a new session
 
 - **Automatic Session Reminders:** Issue proactive reminder when:
@@ -19,8 +19,8 @@ instructions in `my/agentic_instructions/instructions/workspace-config/mermaid.i
   
   Message template: *"⚠️ This session is growing. You're at [N] turns over [T] minutes. Type `/compact` to compress history, then `/memorize` to save. This will reduce context overhead by ~60% on next chat."*
 
-- **`/memorize` Command:** When the user says `/memorize`, use the `memory` tool to save compacted summary to `my/agentic_instructions/memories/CURRENT_SESSION.md`. This is typically done after using `/compact` to compress the conversation. Confirm completion with summary.
-- **`/recall` Command & New Chats:** Whenever starting a new chat, or if the user says `/recall`, quietly check if `my/agentic_instructions/memories/CURRENT_SESSION.md` exists. Reply with: *"📋 Found compacted session about [Topic]. Do you want to continue with that work, or start a new topic?"* (If they choose to continue, use the memory file to resume context immediately).
+- **`/memorize` Command:** When the user says `/memorize`, use the `memory` tool to save compacted summary to `.agents/validation/memory-workflow/CURRENT_SESSION.md`. This is typically done after using `/compact` to compress the conversation. Confirm completion with summary.
+- **`/recall` Command & New Chats:** Whenever starting a new chat, or if the user says `/recall`, quietly check if `.agents/validation/memory-workflow/CURRENT_SESSION.md` exists. Reply with: *"📋 Found compacted session about [Topic]. Do you want to continue with that work, or start a new topic?"* (If they choose to continue, use the memory file to resume context immediately).
 - **Session Recovery:** If session.create fails (e.g., sendFailed error), attempt retry with exponential backoff (1s → 2s → 4s). If persistent failure, fall back to session-free mode and notify user. Track failures via `session_store_sql` for pattern analysis.
 
 ## 🛡️ Session Initialization & Error Recovery
@@ -98,7 +98,7 @@ To verify the routing rule is working end-to-end and achieving ~30-40% token red
 
 1. **Phase 1 - Validation (Completed):**
    - ✅ Test harness confirms 100% routing accuracy on 5 representative tasks
-   - Results: `/home/user/github/.github/skills/routing_test_results_phase1.json`
+   - Results: `.github/skills/routing_test_results_phase1.json`
 
 2. **Phase 2 - Real Session Monitoring (Weekly):**
    - Use the `model-routing-monitor` skill to query session store
@@ -110,9 +110,9 @@ To verify the routing rule is working end-to-end and achieving ~30-40% token red
    - Compare actual token usage against baseline (before routing rule)
    - Calculate percentage reduction: (Expensive tokens ↓ / Baseline) × 100%
    - Target: ≥30% reduction in expensive model usage
-   - Document findings in `docs/routing_compliance/routing_compliance_YYYYMMDD.md`
+   - Document findings in `.agents/automation/routing_compliance_YYYYMMDD.md`
 
-**Instructions for monitoring:** See `my/agentic_instructions/instructions/workspace-config/token-tracking.instructions.md`  
+**Instructions for monitoring:** See `.agents/instructions/workspace-config/token-tracking.instructions.md`  
 **Skill for analytics:** See `.github/skills/model-routing-monitor/SKILL.md`
 
 ## � Daily Workspace Optimization
@@ -137,11 +137,11 @@ To resume from a previous session: /recall
 - Model routing effectiveness & cost reduction opportunities (cost-tips)
 - Workspace instructions & skills improvements (improve)
 
-**Results:** Automatic report saved to `my/agentic_instructions/memories/` with findings and recommendations.
+**Results:** Automatic report saved to `.agents/automation/` with findings and recommendations.
 
-See `my/agentic_instructions/instructions/workspace-config/daily-optimization.instructions.md` for full automation logic, including silent mode option.
+See `.agents/instructions/workspace-config/daily-optimization.instructions.md` for full automation logic, including silent mode option.
 
 ## �📋 Project Documentation Patterns (INCM)
 - Maintain formal bilingual (Portuguese/English) structures for Project Charters and WP files.
 - Validate documents against project briefs before finalizing.
-- Rely on helper scripts in `scripts/` (e.g., markdown to docx conversion) and standard templates in `docs/` rather than generating formats from scratch.
+- Rely on helper scripts in `scripts/` (e.g., markdown to docx conversion) and standard templates in `.agents/skills/projecthits/examples/` and `.agents/skills/projecthits/scripts/v4/docs/` rather than generating formats from scratch.
