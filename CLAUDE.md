@@ -101,6 +101,7 @@ Depois:
 - **Não editar skills em `~/.agents/skills/`** — sempre editar em `~/dotfiles/.agents/skills/` e sincronizar
 - **Skills são shared** — se adicionas nova skill, todos os agentes a veem
 - **Workflows em `.agents/workflows/`** — personas e inicializações
+- **Ver `CHEATSHEET.md` para o fluxo completo** de trabalho (onde vai cada coisa, roadmap do workspace ágil, TODOs em aberto). **Regra obrigatória:** qualquer mudança à estrutura de `.agents/` (nova skill, novo harness, resolução de um TODO) tem de atualizar `CHEATSHEET.md` no mesmo commit — não deixar para depois, é assim que este ficheiro não apodrece como o `STANDARDS.md` apodreceu.
 
 ## ⚠️ Lacunas Conhecidas (audit 2026-09-14, atualizado após merge de agentic_instructions)
 
