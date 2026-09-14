@@ -15,10 +15,12 @@ cd dotfiles-tmp
 
 ## Documentation
 
+- **`STANDARDS.md`** — Nomenclatura, convenções e estrutura padrão (community standards + best practices)
 - **`AGENTS.md`** — Complete guide for AI agents (Crush, Copilot, Gemini, Cline), skills management, and workflows
 - **`CLAUDE.md`** — Claude Code-specific context and best practices
 - **`GEMINI.md`** — Gemini-specific context and best practices
 - **`SUBAGENTS_VERIFICATION.md`** — Verification checklist for agent setup
+- **`AUDIT_REPORT.md`** — Compliance and standards audit report
 
 ## Repository Structure
 
@@ -36,7 +38,38 @@ dotfiles/
 └── scripts/                    # Utility scripts
 ```
 
-## System Architecture
+## Integration with Agent Framework
+
+This repository (`crush-config`) is the **stable, synchronized configuration layer**. Development of new agents and skills happens in a separate repository:
+
+- **`crush-config`** (this repo) — Pinned versions, distributed config, symlinks to skill docs
+- **`agent-framework`** — Active development of agents, skills, workflows
+
+### Version Management
+
+```bash
+# Pinned versions in crush-config
+cat agent-versions.json
+# {
+#   "framework": "2.1.0",
+#   "skills": {"data-analyzer": "2.0.0", ...}
+# }
+```
+
+### Updating Skills
+
+```bash
+# In agent-framework: develop, test, publish
+npm version minor
+npm publish
+
+# In crush-config: pin and distribute
+npm install @crush/agent-framework@2.1.1
+./setup.sh --dotfiles
+./sync-skills.sh
+```
+
+For detailed standards, naming conventions, and linking patterns, see **`STANDARDS.md`**.
 
 ### Project Repositories
 
