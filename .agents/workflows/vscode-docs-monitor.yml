@@ -1,0 +1,111 @@
+name: VS Code Docs Monitor
+
+on:
+  schedule:
+    # Every Monday at 9:00 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+    inputs:
+      force_update:
+        description: 'Force check all pages (ignore cache)'
+        required: false
+        default: 'false'
+
+jobs:
+  monitor-vscode-docs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    permissions:
+      contents: read
+      issues: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4 pyyaml
+      
+      - name: Create cache directory
+        run: mkdir -p .github/.vscode-docs-cache
+      
+      - name: Run VS Code Docs Monitor
+        id: monitor
+        env:
+          VSCODE_DOCS_BASE_URL: 'https://code.visualstudio.com/docs'
+          CACHE_DIR: '.github/.vscode-docs-cache'
+          MEMORY_FILE: 'my/agentic_instructions/memories/VSCODE_WEEKLY.md'
+          FORCE_UPDATE: ${{ github.event.inputs.force_update || 'false' }}
+          GITHUB_REPO_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          python scripts/monitor_vscode_docs.py \
+            --cache-dir "$CACHE_DIR" \
+            --memory-file "$MEMORY_FILE" \
+            --base-url "$VSCODE_DOCS_BASE_URL" \
+            $([ "$FORCE_UPDATE" = 'true' ] && echo '--force' || echo '')
+      
+      - name: Commit cache updates
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          if git diff --quiet .github/.vscode-docs-cache/ my/agentic_instructions/memories/VSCODE_WEEKLY.md; then
+            echo "No changes to commit"
+          else
+            git add .github/.vscode-docs-cache/ my/agentic_instructions/memories/VSCODE_WEEKLY.md
+            git commit -m "chore: update VS Code docs cache and weekly report"
+            git push
+          fi
+      
+      - name: Create issue for new updates
+        if: steps.monitor.outputs.changes_detected == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const memoryFile = 'my/agentic_instructions/memories/VSCODE_WEEKLY.md';
+            const content = fs.readFileSync(memoryFile, 'utf8');
+            
+            // Extract the latest report (between first and second ## VS Code Docs Weekly Update)
+            const reportMatch = content.match(/## VS Code Docs Weekly Update[\s\S]*?(?=## VS Code Docs Weekly Update|$)/);
+            const latestReport = reportMatch ? reportMatch[0] : content;
+            
+            // Truncate to first 65536 chars if too long (GitHub issue limit)
+            const issueBody = latestReport.substring(0, 65000) + 
+              (latestReport.length > 65000 ? '\n\n... (truncated, see full report in VSCODE_WEEKLY.md)' : '');
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📚 VS Code Docs Update — Week of ${new Date().toISOString().split('T')[0]}`,
+              body: issueBody,
+              labels: ['documentation', 'automation', 'vscode-updates']
+            });
+      
+      - name: Print summary
+        if: always()
+        run: |
+          echo "## ✅ VS Code Docs Monitor Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:** ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Cache:** Updated at .github/.vscode-docs-cache/" >> $GITHUB_STEP_SUMMARY
+          echo "**Report:** my/agentic_instructions/memories/VSCODE_WEEKLY.md" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "my/agentic_instructions/memories/VSCODE_WEEKLY.md" ]; then
+            echo "**Latest Report Preview:**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            head -20 my/agentic_instructions/memories/VSCODE_WEEKLY.md >> $GITHUB_STEP_SUMMARY
+          fi

@@ -1,5 +1,5 @@
 ---
-description: Analyzes the project and creates a tailored GEMINI.md file
+description: Analyzes the project and creates a tailored AGENT.md file
 ---
 
 1. **Analyze the Project**:
@@ -8,7 +8,7 @@ description: Analyzes the project and creates a tailored GEMINI.md file
    - Read configuration files like `package.json`, `requirements.txt`, `pyproject.toml`, `cargo.toml` to identify dependencies.
    - Identify key directories (e.g., `src`, `app`, `lib`).
 
-2. **Generate GEMINI.md**:
+2. **Generate AGENT.md**:
    - Create a file named `GEMINI.md` in the root directory.
    - The file MUST contain the following sections:
      - **Project Overview**: A summary of what the project does.
