@@ -1,8 +1,8 @@
 # 🔌 Harness Reference Template
 
-**Status:** Template for new harnesses  
-**Purpose:** Lightweight entry point for any LLM harness  
-**Copy & Customize:** Replace `{HARNESS-NAME}` with actual name
+**Status:** Template for new harnesses
+**Purpose:** Lightweight entry point for any LLM harness
+**Copy & Customize:** Replace `{HARNESS-NAME}` with the actual name
 
 ---
 
@@ -10,9 +10,9 @@
 
 | What | Where |
 |------|-------|
-| **Workspace Config** | `.github/instructions/workspace-config.md` |
-| **All Agents** | `/my/agentic_instructions/REGISTRY.md` |
-| **This Harness Setup** | `/my/agentic_instructions/harnesses/{HARNESS-NAME}/integration-guide.md` |
+| **Workspace Config** | `.agents/instructions/workspace-config/` |
+| **All Skills** | `.agents/skills/` (no central registry file in this repo — browse the directory) |
+| **This Harness Setup** | `.agents/harnesses/{HARNESS-NAME}.md` |
 
 ---
 
@@ -22,82 +22,111 @@
 
 All harnesses follow these workspace rules:
 
-**Model Routing** (Haiku vs GPT-5/Gemini)
-- See: `.github/instructions/workspace-config.md` → Model Routing section
+**Model Routing** — `.agents/instructions/workspace-config/model-routing.instructions.md`
+**Daily Optimization** (chronicle workflow) — `.agents/instructions/workspace-config/daily-optimization.instructions.md`
+**Token Tracking** — `.agents/instructions/workspace-config/token-tracking.instructions.md`
+**Mermaid AI Skills** — `.agents/instructions/workspace-config/mermaid.instructions.md`
 
-**Daily Optimization** (chronicle workflow)
-- See: `.github/instructions/workspace-config.md` → Daily Optimization section
-
-**Token Tracking** (cost tracking & monitoring)
-- See: `.github/instructions/workspace-config.md` → Token Tracking section
-
-**Mermaid AI Skills** (diagram generation)
-- See: `.github/instructions/workspace-config.md` → Mermaid section
-
-### 2️⃣ Task-Specific Agents
-
-For project-specific tasks, use these agents:
+### 2️⃣ Task-Specific Skills
 
 ```
-Trigger          | Agent            | Purpose
-─────────────────┼──────────────────┼─────────────────────────────
-@projectHITs     | Charter Architect| Project charters + WPs
-@presentHITs     | Slide Architect  | Executive presentations
-@reviewHITs      | Review Architect | Peer review & critique
-@diagramHITs     | Diagram Architect| Mermaid diagrams
-@documentHITs    | Doc Architect    | Documentation synthesis
-@mockupHITs      | Mockup Architect | Interactive prototypes
-@architect       | Meta-Orchestrator| Coordinate all agents
+Trigger          | Skill          | Purpose
+─────────────────┼────────────────┼─────────────────────────────
+@projectHITs     | projecthits    | Project charters + WPs
+@presentHITs     | presenthits    | Executive presentations
+@reviewHITs      | reviewhits     | Peer review & critique
+@diagramHITs     | diagramhits    | Mermaid diagrams
+@documentHITs    | documenthits   | Documentation synthesis
+@mockupHITs      | mockuphits     | Interactive prototypes
+@architect       | archi          | Meta-orchestrator, coordinates the rest
 ```
 
-See full details: `/my/agentic_instructions/REGISTRY.md`
+See the skills directly: [`.agents/skills/`](../skills/) (no central registry file in this repo).
 
 ### 3️⃣ Full Setup
 
-For complete integration guide specific to `{HARNESS-NAME}`:
+For the complete integration guide specific to `{HARNESS-NAME}`:
 
-👉 `/my/agentic_instructions/harnesses/{HARNESS-NAME}/integration-guide.md`
+👉 `.agents/harnesses/{HARNESS-NAME}.md`
 
 ---
 
 ## 🎯 Common Tasks
 
-| Task | Agent | Location |
+| Task | Skill | Location |
 |------|-------|----------|
-| Create project charter | `@projectHITs` | `/my/agentic_instructions/agents/projectHITs/` |
-| Generate slides/presentation | `@presentHITs` | `/my/agentic_instructions/agents/presentHITs/` |
-| Review manuscript/code | `@reviewHITs` | `/my/agentic_instructions/agents/reviewHITs/` |
-| Create diagrams/visuals | `@diagramHITs` | `/my/agentic_instructions/agents/diagramHITs/` |
-| Update documentation | `@documentHITs` | `/my/agentic_instructions/agents/documentHITs/` |
-| Build interactive mockup | `@mockupHITs` | `/my/agentic_instructions/agents/mockupHITs/` |
+| Create project charter | `projecthits` | `.agents/skills/projecthits/` |
+| Generate slides/presentation | `presenthits` | `.agents/skills/presenthits/` |
+| Review manuscript/code | `reviewhits` | `.agents/skills/reviewhits/` |
+| Create diagrams/visuals | `diagramhits` | `.agents/skills/diagramhits/` |
+| Update documentation | `documenthits` | `.agents/skills/documenthits/` |
+| Build interactive mockup | `mockuphits` | `.agents/skills/mockuphits/` |
 
 ---
 
-## 🔗 Central Discovery
+## What Is a "Harness" Here?
 
-**Master Index:** `/my/agentic_instructions/REGISTRY.md`
+A harness is whatever surface actually loads instructions/skills for an LLM tool — an IDE
+extension (VS Code Copilot), a CLI (Claude Code, Gemini CLI), a proxy layer (LiteLLM), or a
+raw API integration you build yourself (OpenAI API). Concretely, when adding a new harness,
+decide:
 
-Contains:
-- All 7 agents with triggers
-- All personas (base + task-specific)
-- All skills & tools
-- All harnesses
-- All templates
-- Cross-references everything
+**Type** — pick one:
+- `native` — built into an IDE/CLI that auto-discovers files (e.g. Claude Code reading
+  `CLAUDE.md` / `SKILL.md`, Copilot reading `.github/copilot-instructions.md`)
+- `api` — you write the glue code that loads persona/skill files and calls a provider API
+  directly (see `.agents/harnesses/openai.md`)
+- `abstraction` — a multi-provider proxy/router (see `.agents/harnesses/litellm.md`)
+- `local` — runs locally with no external API calls
+
+**Status** — pick one:
+- `active` — real, verified, in use
+- `ready` — implemented, not yet exercised in anger
+- `experimental` — in development
+- `template` — not yet implemented, this file is the placeholder
+
+### Required Content for a New Harness Doc
+
+A single `.agents/harnesses/{harness-name}.md` file is enough — this repo does not use a
+per-harness subdirectory with separate config/README/integration-guide files, and does not use
+a central `REGISTRY.md`. The file should cover, at minimum:
+
+1. **How this harness actually discovers instructions** — file-based auto-discovery (like
+   Claude Code / Copilot) vs. code you have to write yourself (like the OpenAI/LiteLLM guides)
+   — be explicit about which one it is; don't invent an auto-discovery mechanism that isn't
+   real. If you're not sure how the tool actually loads context, say so rather than guessing.
+2. Key file paths **in this repo** (`.agents/instructions/...`, `.agents/skills/...`) — no
+   references to `/my/agentic_instructions/`, `REGISTRY.md`, or `config/harness-config.json`;
+   none of those exist here.
+3. A skill/persona trigger table (see the "Common Tasks" table above for the shape).
+4. A deployment/verification checklist specific to that harness.
+
+---
+
+## Checklist: Adding a New Harness
+
+- [ ] Create `.agents/harnesses/{harness-name}.md` (a single file, following this template)
+- [ ] Verify — don't assume — how the harness actually discovers instructions; describe only
+      what you've confirmed is real
+- [ ] Fix every path reference to point at real files under `.agents/` in this repo
+- [ ] Add a skill/persona trigger table
+- [ ] Add a deployment checklist specific to that harness
+- [ ] If the harness needs a symlinked directory (like `.github/` does for Copilot), set that
+      up rather than duplicating skill/instruction content into a harness-specific copy
 
 ---
 
 ## 📞 Need Help?
 
-1. **Setup:** See integration guide (link above)
-2. **All Available Resources:** Check REGISTRY.md
-3. **Architecture Decision:** See ARCHITECTURE_DECISION.md
-4. **Workspace Config:** See `.github/instructions/workspace-config.md`
+1. **Setup:** See the harness-specific file linked above
+2. **All Available Resources:** Browse `.agents/skills/` and `.agents/instructions/` directly
+   — there is no central `REGISTRY.md` in this repo
+3. **Workspace Config:** See `.agents/instructions/workspace-config/`
 
 ---
 
 ## ✨ That's It!
 
-You're now ready to use all agents on `{HARNESS-NAME}`. 
-
-All agents inherit from master persona and follow workspace rules automatically.
+Once `.agents/harnesses/{HARNESS-NAME}.md` exists and is accurate, that harness is ready to
+use all skills. Skills inherit from the master persona (`archi`) and follow workspace rules
+automatically where the harness actually supports loading them.

@@ -1,0 +1,20 @@
+# projectHITs v4 Helper Scripts - Dependencies
+# projectHITs v4 Helper Dependencies
+# Install with: pip install -r requirements.txt
+
+# DOCX parsing and manipulation
+python-docx>=0.8.11
+
+# PDF analysis and reading
+pdfplumber>=0.9.0
+PyPDF2>=3.0.0
+
+# Optional: Document conversion (pandoc CLI should be installed separately)
+# pypandoc>=1.5  # Python wrapper for pandoc
+
+# Optional: LaTeX PDF generation
+# texfot>=0.12  # Used in helper scripts via subprocess
+
+# Development/Testing
+pytest>=7.0
+pytest-cov>=4.0

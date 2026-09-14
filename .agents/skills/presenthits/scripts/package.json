@@ -1,0 +1,14 @@
+{
+  "name": "presenthits-scripts",
+  "version": "1.0.0",
+  "description": "Helper scripts for the presenthits skill (HTML-to-PPTX conversion).",
+  "private": true,
+  "type": "commonjs",
+  "main": "html-to-pptx-converter.js",
+  "scripts": {
+    "convert": "node html-to-pptx-converter.js"
+  },
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
+  }
+}
