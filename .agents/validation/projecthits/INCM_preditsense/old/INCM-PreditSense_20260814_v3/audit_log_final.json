@@ -1,0 +1,560 @@
+{
+  "timestamp": "2026-08-14T17:19:26.636911",
+  "template": "examples/projectHITs/Project_Charter_TabularAI_Cegid_v6.docx",
+  "output": "results/projectHITs/INCM-PreditSense_20260814_v1/INCM-PreditSense_Charter_Final.docx",
+  "replacements": [
+    {
+      "type": "paragraph_run",
+      "old": "TabularAI",
+      "new": "INCM-PreditSense",
+      "original_text": "TabularAI",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Tabular",
+      "new": "Predictive Maintenance",
+      "original_text": "Tabulares",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Tabular",
+      "new": "Predictive Maintenance",
+      "original_text": " Tabulares (Tabular Foundation ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Tabular",
+      "new": "Predictive Maintenance",
+      "original_text": "Tabulares (",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Tabular",
+      "new": "Predictive Maintenance",
+      "original_text": "Tabulares",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA/DA Server",
+      "original_text": "SAP-RPT-1-OSS, ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA/DA Server",
+      "original_text": " (SAP-RPT-1-OSS, ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "A Cegid deverá validar",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Tabular",
+      "new": "Predictive Maintenance",
+      "original_text": "Tabulares (",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": " da própria Cegid ou públicos",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA/DA Server",
+      "original_text": " com arquiteturas distintas (SAP-RPT-1-OSS, ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA/DA Server",
+      "original_text": "tabulares (SAP-RPT-1-OSS, ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Os datasets a serem utilizados por este estudo devem ser fornecidos pela Cegid, sejam eles datasets privados da Cegid ou públicos.",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Technical Readiness Level",
+      "new": "Data Maturity + Infrastructure Validation",
+      "original_text": "Technical Readiness Level (TRL)",
+      "location": "Table[0].Row[0].Cell[0]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[1].Row[1].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA/DA Server",
+      "original_text": "do modelo SAP-RPT-1-OSS ",
+      "location": "Table[2].Row[3].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[3].Row[1].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA/DA Server",
+      "original_text": " com arquiteturas distintas (SAP-RPT-1-OSS, ",
+      "location": "Table[3].Row[2].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[3].Row[2].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA/DA Server",
+      "original_text": " (SAP-RPT-1-OSS, ",
+      "location": "Table[3].Row[3].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[3].Row[3].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[3].Row[4].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[3].Row[4].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "4 meses",
+      "new": "3 meses",
+      "original_text": "(5,4 meses)",
+      "location": "Table[4].Row[3].Cell[5]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA/DA Server",
+      "original_text": " SAP-RPT-1-OSS",
+      "location": "Table[4].Row[6].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabPFN v2.5",
+      "new": "Python Data Science",
+      "original_text": ", TabPFN v2.5",
+      "location": "Table[4].Row[6].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabICL v2",
+      "new": "HTML Dashboard",
+      "original_text": " e TabICL v2",
+      "location": "Table[4].Row[6].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA/DA Server",
+      "original_text": " SAP-RPT-1-OSS",
+      "location": "Table[4].Row[6].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabPFN v2.5",
+      "new": "Python Data Science",
+      "original_text": ", TabPFN v2.5 e TabICL v2",
+      "location": "Table[4].Row[6].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabICL v2",
+      "new": "HTML Dashboard",
+      "original_text": ", TabPFN v2.5 e TabICL v2",
+      "location": "Table[4].Row[6].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[4].Row[7].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "a Cegid",
+      "location": "Table[5].Row[2].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[6].Row[2].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[6].Row[3].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[6].Row[4].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[6].Row[5].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[6].Row[5].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[8].Row[1].Cell[0]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[8].Row[1].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[9].Row[1].Cell[5]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[9].Row[4].Cell[5]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[10].Row[1].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA/DA Server",
+      "original_text": "Modelos de bibliotecas open-source (SAP-RPT-1-OSS, TabPFN v2.5, TabICL v2)",
+      "location": "Table[10].Row[2].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabPFN v2.5",
+      "new": "Python Data Science",
+      "original_text": "Modelos de bibliotecas open-source (SAP-RPT-1-OSS, TabPFN v2.5, TabICL v2)",
+      "location": "Table[10].Row[2].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabICL v2",
+      "new": "HTML Dashboard",
+      "original_text": "Modelos de bibliotecas open-source (SAP-RPT-1-OSS, TabPFN v2.5, TabICL v2)",
+      "location": "Table[10].Row[2].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[10].Row[3].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "DTx-Cegid-DTx |",
+      "location": "Table[10].Row[4].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[10].Row[4].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[13].Row[2].Cell[0]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[14].Row[1].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[14].Row[3].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[14].Row[4].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[15].Row[0].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[15].Row[0].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "original_text": "Cegid",
+      "location": "Table[15].Row[0].Cell[1]"
+    }
+  ],
+  "errors": [],
+  "status": "Document saved successfully",
+  "statistics": {
+    "paragraphs_processed": 124,
+    "tables_processed": 16,
+    "replacements_made": 78
+  }
+}

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechnoPhage & DTx: AI Symbiosis Strategic Framework</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            margin: 0;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-out;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem;
+            box-sizing: border-box;
+            transform: scale(0.98);
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+            z-index: 10;
+        }
+
+        .text-gradient {
+            background: linear-gradient(90deg, #38bdf8, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header-border {
+            border-bottom: 2px solid #0ea5e9;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        .slide-content {
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #nav-controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid #334155;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.2s;
+            backdrop-filter: blur(4px);
+            font-weight: 600;
+        }
+
+        .nav-btn:hover {
+            background: rgba(14, 165, 233, 0.2);
+            border-color: #0ea5e9;
+        }
+
+        #progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0ea5e9, #10b981);
+            width: 0%;
+            transition: width 0.3s ease;
+            z-index: 50;
+        }
+
+        .stage-card {
+            background: rgba(15, 23, 42, 0.8);
+            border-left: 4px solid;
+            padding: 20px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .stage-1 { border-left-color: #0ea5e9; }
+        .stage-2 { border-left-color: #6366f1; }
+        .stage-3 { border-left-color: #10b981; }
+    </style>
+</head>
+<body>
+    <div id="progress-bar"></div>
+    <div id="nav-controls">
+        <button class="nav-btn" onclick="prevSlide()">← Prev</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <!-- SLIDE 1: TITLE -->
+    <div class="slide active">
+        <div class="slide-content items-center text-center">
+            <h2 class="text-2xl text-sky-400 font-semibold tracking-widest uppercase mb-4">TechnoPhage & DTx</h2>
+            <h1 class="text-6xl font-bold mb-6 text-gradient pb-2">AI Symbiosis Strategic Framework</h1>
+            <p class="text-2xl text-slate-300 font-light mb-8">Biologics Discovery & Closed-Loop AI</p>
+            <div class="w-24 h-1 bg-gradient-to-r from-sky-400 to-emerald-400 mx-auto rounded-full mb-8"></div>
+            <p class="text-slate-400 max-w-3xl text-lg">
+                High-performance computational architecture for VHH & Bacteriophages
+            </p>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: EXECUTIVE SUMMARY -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold header-border">Executive Summary</h2>
+            <div class="grid grid-cols-2 gap-12 mt-8">
+                <div>
+                    <h3 class="text-3xl font-semibold mb-4 text-sky-400">The TechnoPhage Advantage</h3>
+                    <p class="text-xl text-slate-300 leading-relaxed">Not competing on brute-force compute — Big Pharma has more GPUs. We build an ultra-specialized biophysical closed-loop engine.</p>
+                </div>
+                <div class="bg-slate-800/50 p-8 rounded-xl border border-slate-700">
+                    <h4 class="text-xl font-bold text-sky-300 mb-4 uppercase tracking-wide">Key Differentiator</h4>
+                    <p class="text-slate-300">Closed-loop integration between computational design and experimental validation creates an insurmountable competitive moat.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: THREE STAGES OVERVIEW -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold header-border">Three Evolutionary Stages</h2>
+            <div class="grid grid-cols-3 gap-6 mt-8">
+                <div class="stage-card stage-1">
+                    <h3 class="text-xl font-bold text-sky-300 mb-3">Stage I: Proof of Value</h3>
+                    <p class="text-sm text-slate-300"><strong>The Seed</strong></p>
+                    <p class="text-xs text-slate-400 mt-2">Historical dataset validation using computational grants. Zero financial risk, demonstrable predictive capacity.</p>
+                </div>
+                <div class="stage-card stage-2">
+                    <h3 class="text-xl font-bold text-indigo-300 mb-3">Stage II: Industrialization</h3>
+                    <p class="text-sm text-slate-300"><strong>The Muscle</strong></p>
+                    <p class="text-xs text-slate-400 mt-2">Active DMTA loop & MLOps powered by high-performance computing. 10k candidates/day throughput.</p>
+                </div>
+                <div class="stage-card stage-3">
+                    <h3 class="text-xl font-bold text-emerald-300 mb-3">Stage III: Systemic Innovation</h3>
+                    <p class="text-sm text-slate-300"><strong>The Symbiont</strong></p>
+                    <p class="text-xs text-slate-400 mt-2">Closed-loop active learning & autopoietic automation. Self-sustaining digital-organic ecosystem.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: STAGE I WORKFLOW -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold header-border">Stage I: Proof of Value</h2>
+            <div class="flex justify-center mt-8">
+                <div class="w-full max-w-2xl bg-slate-900 border border-slate-700 rounded-xl p-6 font-mono text-sm shadow-2xl">
+                    <div class="text-center p-2 bg-slate-800 rounded text-sky-300 mb-2">Inputs: Target ID & VHH Library</div>
+                    <div class="text-center text-sky-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-slate-800 rounded mb-2">AlphaFold3 Simulation</div>
+                    <div class="text-center text-sky-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-slate-800 rounded mb-2">Feature Extraction → Inverse Design</div>
+                    <div class="text-center text-sky-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-slate-800 rounded mb-2">Novelty Filter</div>
+                    <div class="text-center text-sky-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-slate-800 rounded text-emerald-300">In-Silico Molecular Dynamics</div>
+                    <div class="text-center text-sky-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-sky-900/50 rounded border border-sky-700 text-white">Wet-Lab: Synthesis & Assay</div>
+                    <div class="text-center text-emerald-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-emerald-900/40 rounded border border-emerald-700 text-emerald-200">└─ Retrain Model</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: STAGE I METRICS -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold header-border">Stage I: Data & Telemetry</h2>
+            <div class="grid grid-cols-3 gap-8 mt-8">
+                <div class="bg-slate-800/50 p-6 rounded-lg border border-slate-700">
+                    <h3 class="text-xl font-semibold text-sky-400 mb-4">Base Ingestion</h3>
+                    <ul class="space-y-3 text-slate-300 text-sm">
+                        <li>✓ <strong>Source:</strong> Public Datasets</li>
+                        <li>✓ <strong>Status:</strong> Validated</li>
+                        <li>✓ <strong>Risk:</strong> Zero Exposure</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-800/50 p-6 rounded-lg border border-slate-700">
+                    <h3 class="text-xl font-semibold text-sky-400 mb-4">Predictive Model</h3>
+                    <ul class="space-y-3 text-slate-300 text-sm">
+                        <li>🎯 <strong>Accuracy:</strong> 80%+</li>
+                        <li>⚡ <strong>Confidence:</strong> 60%+</li>
+                        <li>🔬 <strong>Approach:</strong> Bayesian Adaptation</li>
+                    </ul>
+                </div>
+                <div class="bg-emerald-900/20 p-6 rounded-lg border border-emerald-700">
+                    <h3 class="text-xl font-semibold text-emerald-400 mb-4">Success Criteria</h3>
+                    <ul class="space-y-3 text-slate-300 text-sm">
+                        <li>✅ Metrics Validated</li>
+                        <li>✅ Predictive Power Confirmed</li>
+                        <li>✅ Ready for Industrialization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: STAGE II WORKFLOW -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold header-border">Stage II: Industrialization</h2>
+            <div class="flex justify-center mt-8">
+                <div class="w-full max-w-2xl bg-slate-900 border border-indigo-900/50 rounded-xl p-6 font-mono text-sm shadow-2xl">
+                    <div class="text-center p-2 bg-slate-800 rounded text-indigo-300 mb-2">Active Inputs: Sequences & MPO Targets</div>
+                    <div class="text-center text-indigo-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-slate-800 rounded mb-2">High-Throughput Folding</div>
+                    <div class="text-center text-indigo-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-slate-800 rounded mb-2">Generative Design Optimization</div>
+                    <div class="text-center text-indigo-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-slate-800 rounded mb-2">Multi-Objective Filtering</div>
+                    <div class="text-center text-indigo-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-slate-800 rounded text-sky-300">In-Silico Simulation</div>
+                    <div class="text-center text-indigo-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-indigo-900/50 rounded border border-indigo-700 text-white">Wet-Lab Shortlist Synthesis</div>
+                    <div class="text-center text-indigo-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-sky-900/40 rounded border border-sky-700 text-sky-200">└─ Automated MLOps Retraining</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: STAGE II INFRASTRUCTURE -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold header-border">Stage II: Multi-Objective Optimization</h2>
+            <div class="grid grid-cols-3 gap-8 mt-8">
+                <div class="bg-slate-800/50 p-6 rounded-lg border border-slate-700">
+                    <h3 class="text-xl font-semibold text-indigo-400 mb-4">MPO Balancing</h3>
+                    <ul class="space-y-3 text-slate-300 text-sm">
+                        <li>🎯 <strong>Affinity (Kd):</strong> >80% optimal</li>
+                        <li>✓ <strong>Developability:</strong> >80% acceptable</li>
+                        <li>⚡ <strong>Synthesizability:</strong> Fast-track</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-800/50 p-6 rounded-lg border border-slate-700">
+                    <h3 class="text-xl font-semibold text-indigo-400 mb-4">HPC Infrastructure</h3>
+                    <ul class="space-y-3 text-slate-300 text-sm">
+                        <li><strong class="text-2xl text-indigo-400">10k</strong></li>
+                        <li>candidates/day throughput</li>
+                        <li>✓ CI/CD pipelines active</li>
+                    </ul>
+                </div>
+                <div class="bg-indigo-900/20 p-6 rounded-lg border border-indigo-700">
+                    <h3 class="text-xl font-semibold text-indigo-400 mb-4">Output Quality</h3>
+                    <ul class="space-y-3 text-slate-300 text-sm">
+                        <li>✅ 10 Top Candidates/cycle</li>
+                        <li>✅ All MPO targets met</li>
+                        <li>✅ Production-ready</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: STAGE III ECOSYSTEM -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold header-border">Stage III: Systemic Innovation</h2>
+            <div class="flex justify-center mt-8">
+                <div class="w-full max-w-2xl bg-slate-900 border border-emerald-900/50 rounded-xl p-6 font-mono text-sm shadow-2xl">
+                    <div class="text-center p-2 bg-slate-800 rounded text-emerald-300 mb-2">Pathogen Surveillance Stream</div>
+                    <div class="text-center text-emerald-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-slate-800 rounded mb-2">Knowledge Graph Ingestion</div>
+                    <div class="text-center text-emerald-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-slate-800 rounded mb-2">Autonomous Generative Engine</div>
+                    <div class="text-center text-emerald-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-slate-800 rounded mb-2">GMP Protocol Validation</div>
+                    <div class="text-center text-emerald-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-emerald-900/50 rounded border border-emerald-700 text-white">TechnoPhage Plant Synthesis</div>
+                    <div class="text-center text-emerald-400 font-bold my-1">↓</div>
+                    <div class="text-center p-2 bg-emerald-900/40 rounded border border-emerald-700 text-emerald-200">🔄 Self-Sustaining Ecosystem</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: COMPETITIVE ADVANTAGE -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold header-border">Why TechnoPhage Wins</h2>
+            <div class="space-y-5 mt-8 max-w-4xl w-full">
+                <div class="bg-emerald-900/20 border-l-4 border-emerald-500 p-5 rounded">
+                    <p class="text-emerald-300 font-bold">🎯 Specialization</p>
+                    <p class="text-slate-300 text-sm">Ultra-focused on VHH & Bacteriophages</p>
+                </div>
+                <div class="bg-cyan-900/20 border-l-4 border-cyan-500 p-5 rounded">
+                    <p class="text-cyan-300 font-bold">🔐 Wet-Lab Integration</p>
+                    <p class="text-slate-300 text-sm">Proprietary validation data moat</p>
+                </div>
+                <div class="bg-indigo-900/20 border-l-4 border-indigo-500 p-5 rounded">
+                    <p class="text-indigo-300 font-bold">🔄 Closed-Loop System</p>
+                    <p class="text-slate-300 text-sm">Digital-organic symbiosis</p>
+                </div>
+                <div class="bg-emerald-900/20 border-l-4 border-emerald-500 p-5 rounded">
+                    <p class="text-emerald-300 font-bold">💰 Capital Efficiency</p>
+                    <p class="text-slate-300 text-sm">Stage I requires zero capital risk</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 10: INVESTMENT THESIS -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold header-border">Investment Thesis</h2>
+            <div class="grid grid-cols-3 gap-6 mt-8">
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 hover:border-sky-500 transition-colors">
+                    <h4 class="text-cyan-400 font-bold mb-4 uppercase tracking-wider">Stage I (Seed)</h4>
+                    <div class="space-y-3 text-slate-300 text-sm">
+                        <div><strong>Investment:</strong> Minimal</div>
+                        <div><strong>Risk:</strong> None</div>
+                        <div><strong>Outcome:</strong> Scientific Validation</div>
+                    </div>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 hover:border-indigo-500 transition-colors">
+                    <h4 class="text-indigo-400 font-bold mb-4 uppercase tracking-wider">Stage II (Series A)</h4>
+                    <div class="space-y-3 text-slate-300 text-sm">
+                        <div><strong>Investment:</strong> $X M</div>
+                        <div><strong>Risk:</strong> Controlled</div>
+                        <div><strong>Outcome:</strong> 10k/day capacity</div>
+                    </div>
+                </div>
+                <div class="bg-emerald-950/20 p-6 rounded-xl border border-emerald-700 hover:border-emerald-500 transition-colors shadow-lg">
+                    <h4 class="text-emerald-400 font-bold mb-4 uppercase tracking-wider">Stage III (Series B+)</h4>
+                    <div class="space-y-3 text-slate-300 text-sm">
+                        <div><strong>Investment:</strong> $Y M</div>
+                        <div><strong>Risk:</strong> Mitigated</div>
+                        <div><strong>Outcome:</strong> Self-sustaining</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 11: ROI TRAJECTORY -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold header-border">Value Creation Across Stages</h2>
+            <div class="bg-slate-800/50 p-8 rounded-xl border border-slate-700 mt-8 max-w-4xl w-full">
+                <div class="grid grid-cols-3 gap-6 text-center">
+                    <div class="bg-slate-900 p-6 rounded">
+                        <p class="text-2xl font-bold text-sky-400 mb-2">Stage I</p>
+                        <p class="text-xs text-slate-400">Seed Phase</p>
+                        <p class="text-sm text-slate-300 mt-4">Low Cost</p>
+                        <p class="text-xs text-slate-500">Minimal Investment</p>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <p class="text-2xl font-bold text-slate-400">→</p>
+                    </div>
+                    <div class="bg-slate-900 p-6 rounded">
+                        <p class="text-2xl font-bold text-indigo-400 mb-2">Stage II</p>
+                        <p class="text-xs text-slate-400">Factory Phase</p>
+                        <p class="text-sm text-slate-300 mt-4">Medium Cost</p>
+                        <p class="text-xs text-slate-500">R&D Investment</p>
+                    </div>
+                    <div></div>
+                    <div class="flex items-center justify-center">
+                        <p class="text-2xl font-bold text-slate-400">→</p>
+                    </div>
+                    <div class="bg-emerald-900/20 p-6 rounded border border-emerald-700">
+                        <p class="text-2xl font-bold text-emerald-400 mb-2">Stage III</p>
+                        <p class="text-xs text-slate-400">Ecosystem Phase</p>
+                        <p class="text-sm text-slate-300 mt-4">High Value</p>
+                        <p class="text-xs text-slate-400">Operational Revenue</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 12: NEXT STEPS -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2 class="text-4xl font-bold header-border">Next Steps</h2>
+            <div class="space-y-6 mt-8 max-w-4xl w-full">
+                <div class="bg-slate-800 rounded-lg p-5 border-l-4 border-sky-400">
+                    <p class="text-sky-300 font-bold">Immediate (0-6 months)</p>
+                    <ul class="text-sm text-slate-300 space-y-1 ml-4 mt-2">
+                        <li>✓ Secure computational resources</li>
+                        <li>✓ Validate predictive metrics</li>
+                        <li>✓ Establish wet-lab partnership</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-800 rounded-lg p-5 border-l-4 border-indigo-400">
+                    <p class="text-indigo-300 font-bold">Medium-Term (12-18 months)</p>
+                    <ul class="text-sm text-slate-300 space-y-1 ml-4 mt-2">
+                        <li>→ Build HPC infrastructure</li>
+                        <li>→ Automate MLOps pipelines</li>
+                        <li>→ Demonstrate 10x improvements</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-800 rounded-lg p-5 border-l-4 border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                    <p class="text-emerald-300 font-bold">Long-Term (24+ months)</p>
+                    <ul class="text-sm text-slate-300 space-y-1 ml-4 mt-2">
+                        <li>🚀 Deploy GMP manufacturing</li>
+                        <li>🚀 Activate surveillance</li>
+                        <li>🚀 Launch commercial production</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 13: CLOSING -->
+    <div class="slide">
+        <div class="slide-content items-center text-center">
+            <h2 class="text-7xl font-bold mb-8 text-white tracking-tight">TechnoPhage & DTx</h2>
+            <div class="w-32 h-1 bg-gradient-to-r from-sky-400 to-emerald-400 rounded-full mx-auto mb-8"></div>
+            <p class="text-2xl text-slate-400 italic max-w-3xl">
+                Closed-Loop AI Symbiosis: Building the future of biologics discovery through radical integration of computational design and wet-lab validation.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress-bar');
+        let currentSlide = 0;
+
+        function updateSlides() {
+            slides.forEach((slide, index) => {
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+            
+            const progress = (currentSlide / (slides.length - 1)) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlides();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlides();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        updateSlides();
+    </script>
+</body>
+</html>

@@ -1,0 +1,450 @@
+{
+  "timestamp": "2026-08-14T15:36:12.847525",
+  "template": "my/agentic_instructions/examples/projectHITs/Project_Charter_TabularAI_Cegid_v6.docx",
+  "output": "my/agentic_instructions/results/projectHITs/INCM_PreditSense_Charter_2026-08-14.docx",
+  "replacements": [
+    {
+      "type": "paragraph_run",
+      "old": "TabularAI",
+      "new": "INCM-PreditSense",
+      "original_text": "TabularAI",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Project",
+      "new": "INCM-PreditSense — Prototipagem de Manutenção Preditiva em Linha de Selagem/Laminagem",
+      "original_text": "Project Charter",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "A Cegid deverá validar",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": " da própria Cegid ou públicos",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Os datasets a serem utilizados por este estudo devem ser fornecidos pela Cegid, sejam eles datasets privados da Cegid ou públicos.",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Project",
+      "new": "INCM-PreditSense — Prototipagem de Manutenção Preditiva em Linha de Selagem/Laminagem",
+      "original_text": "Project Charter",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Project",
+      "new": "INCM-PreditSense — Prototipagem de Manutenção Preditiva em Linha de Selagem/Laminagem",
+      "original_text": ": deve ser formalmente aprovado através da assinatura dos principais representantes das entidades envolvidas. A aprovação do Project Charter determina que ambas as partes concordam plenamente com todo o conteúdo expresso no documento assinado por eles.",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Project",
+      "new": "INCM-PreditSense — Prototipagem de Manutenção Preditiva em Linha de Selagem/Laminagem",
+      "original_text": "Project Status",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Project",
+      "new": "INCM-PreditSense — Prototipagem de Manutenção Preditiva em Linha de Selagem/Laminagem",
+      "original_text": "Project Charter validado e aprovado por:  ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[1].Row[1].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[3].Row[1].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[3].Row[2].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[3].Row[3].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[3].Row[4].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[3].Row[4].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Project",
+      "new": "INCM-PreditSense — Prototipagem de Manutenção Preditiva em Linha de Selagem/Laminagem",
+      "original_text": "Project Charter.",
+      "location": "Table[4].Row[2].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[4].Row[7].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "a Cegid",
+      "location": "Table[5].Row[2].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[6].Row[2].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[6].Row[3].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[6].Row[4].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[6].Row[5].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[6].Row[5].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[8].Row[1].Cell[0]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[8].Row[1].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[9].Row[1].Cell[5]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[9].Row[4].Cell[5]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[10].Row[1].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[10].Row[3].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "DTx-Cegid-DTx |",
+      "location": "Table[10].Row[4].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[10].Row[4].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[13].Row[2].Cell[0]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[14].Row[1].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Project",
+      "new": "INCM-PreditSense — Prototipagem de Manutenção Preditiva em Linha de Selagem/Laminagem",
+      "original_text": " Project Status ",
+      "location": "Table[14].Row[3].Cell[0]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[14].Row[3].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[14].Row[4].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[15].Row[0].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[15].Row[0].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM — Instituto Nacional da Moeda e do Câmbio",
+      "original_text": "Cegid",
+      "location": "Table[15].Row[0].Cell[1]"
+    }
+  ],
+  "errors": [
+    "Parse failed: 'ParagraphFormat' object has no attribute 'outline_level'"
+  ],
+  "status": "Document saved successfully",
+  "statistics": {
+    "paragraphs_processed": 0,
+    "tables_processed": 0,
+    "replacements_made": 62
+  }
+}

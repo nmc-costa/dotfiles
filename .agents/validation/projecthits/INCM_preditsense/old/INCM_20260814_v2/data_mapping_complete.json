@@ -1,0 +1,289 @@
+{
+  "timestamp": "2026-08-14T16:05:00.000000",
+  "template": "my/agentic_instructions/examples/projectHITs/Project_Charter_TabularAI_Cegid_v6.docx",
+  "project_name": "INCM-PreditSense",
+  "project_description": "Prototipagem de Manutenção Preditiva em Linha de Selagem/Laminagem",
+  "total_mismatches": 2,
+  "mismatch_occurrences": 102,
+  "version": "2.0_Intelligent_Domain_Migration",
+  
+  "mapping_categories": {
+    "narrative_replacements": {
+      "technology_stack": {
+        "old_pattern": "Modelos Fundacionais Tabulares|SAP-RPT-1-OSS|TabPFN|TabICL|Tabular Foundation Models|Foundation Model|TabularAI",
+        "new_value": "OPC UA/DA + Python Dashboard",
+        "context": "Technology stack for predictive maintenance - industrial IoT with HVAC sensors",
+        "risk": "CRITICAL",
+        "occurrences_expected": 80,
+        "detailed_mappings": [
+          "Modelos Fundacionais Tabulares → OPC UA/DA com Dashboard Python",
+          "SAP-RPT-1-OSS → OPC UA - Protocolo Industrial de Comunicação",
+          "TabPFN → Python Framework para Dados Históricos",
+          "TabICL → Dashboard Offline com Interface de Linha de Comando",
+          "Foundation Models → Modelos de Dados Históricos OPC",
+          "Tabular AI Techniques → Análise de Padrões OPC UA/DA",
+          "Tabular Machine Learning → Machine Learning para Predição de Falhas",
+          "Advanced Imputation → Tratamento de Dados Históricos em Tempo Real"
+        ]
+      },
+      "business_domain": {
+        "old_pattern": "Enterprise Resource Planning|ERP|Business Process|SAP|Cegid|Technical Readiness Level",
+        "new_value": "Linha de Selagem/Laminagem com Manutenção Preditiva",
+        "context": "Manufacturing line where predictive maintenance is being piloted",
+        "risk": "CRITICAL",
+        "occurrences_expected": 22,
+        "detailed_mappings": [
+          "Enterprise Resource Planning → Gestão de Produção em Linha de Selagem/Laminagem",
+          "ERP System → Sistema de Monitorização de Linha",
+          "Business Process → Processo de Selagem e Laminagem",
+          "SAP Integration → Integração com Sensores HVAC",
+          "Technical Readiness Level → MVP Validation Stage",
+          "Proof of Concept → Minimum Viable Product (MVP) - 3 meses",
+          "Operational Excellence → Redução de Tempo de Inatividade (Downtime)"
+        ]
+      },
+      "project_vision": {
+        "old_pattern": "optimize tabular data|enhance business processes|enterprise solutions",
+        "new_value": "enable predictive maintenance with real-time OPC monitoring",
+        "occurrences_expected": 5
+      },
+      "success_metrics": {
+        "old_pattern": "data accuracy|model performance|system efficiency",
+        "new_value": "equipment uptime|failure prediction accuracy|maintenance cost reduction",
+        "occurrences_expected": 8
+      }
+    },
+
+    "field_replacements": {
+      "core_project_fields": {
+        "project_name": {
+          "old": "TabularAI",
+          "new": "INCM-PreditSense",
+          "type": "literal",
+          "occurrences_expected": 15
+        },
+        "project_acronym": {
+          "old": "TAI",
+          "new": "IPS",
+          "type": "literal",
+          "occurrences_expected": 8
+        },
+        "project_full_name": {
+          "old": "TabularAI Predictive Analytics Platform",
+          "new": "INCM-PreditSense: Manutenção Preditiva em Linha de Selagem/Laminagem",
+          "type": "literal",
+          "occurrences_expected": 3
+        }
+      },
+
+      "organization_fields": {
+        "client_name": {
+          "old": "Cegid",
+          "new": "INCM",
+          "type": "literal",
+          "occurrences_expected": 12
+        },
+        "client_full_name": {
+          "old": "Cegid SA",
+          "new": "INCM - Instituto de Ciência e Inovação em Manufatura",
+          "type": "literal",
+          "occurrences_expected": 2
+        },
+        "associate_organization": {
+          "old": "Cegid Innovation Labs",
+          "new": "INCM - Centro de Investigação",
+          "type": "literal",
+          "occurrences_expected": 2
+        }
+      },
+
+      "team_members": {
+        "project_manager": {
+          "old": "João Silva",
+          "new": "Nuno Costa",
+          "type": "name",
+          "title": "Project Manager - Predictive Maintenance",
+          "occurrences_expected": 5
+        },
+        "technical_lead": {
+          "old": "Ana Costa",
+          "new": "Bruno Sampaio",
+          "type": "name",
+          "title": "Technical Lead - OPC UA Integration",
+          "occurrences_expected": 4
+        },
+        "business_analyst": {
+          "old": "Pedro Oliveira",
+          "new": "Susana Cruz",
+          "type": "name",
+          "title": "Business Analyst - Manufacturing Operations",
+          "occurrences_expected": 3
+        }
+      },
+
+      "dates": {
+        "start_date": {
+          "old": "2025-01-15",
+          "new": "2026-09-01",
+          "type": "date",
+          "format": "YYYY-MM-DD",
+          "occurrences_expected": 5
+        },
+        "end_date": {
+          "old": "2025-12-31",
+          "new": "2026-11-30",
+          "type": "date",
+          "format": "YYYY-MM-DD",
+          "occurrences_expected": 5
+        },
+        "start_month_year": {
+          "old": "January 2025",
+          "new": "September 2026",
+          "type": "text",
+          "occurrences_expected": 3
+        },
+        "end_month_year": {
+          "old": "December 2025",
+          "new": "November 2026",
+          "type": "text",
+          "occurrences_expected": 3
+        }
+      },
+
+      "budget_and_resources": {
+        "total_budget": {
+          "old": "€120.000",
+          "new": "€85.000",
+          "type": "currency",
+          "currency": "EUR",
+          "occurrences_expected": 3
+        },
+        "budget_120000": {
+          "old": "120.000",
+          "new": "85.000",
+          "type": "number",
+          "context": "Numeric budget value",
+          "occurrences_expected": 2
+        },
+        "team_hours": {
+          "old": "2400",
+          "new": "1800",
+          "type": "number",
+          "context": "Total person-hours for 3-month MVP",
+          "occurrences_expected": 2
+        }
+      },
+
+      "project_characteristics": {
+        "mvp_stage": {
+          "old": "Proof of Concept",
+          "new": "Minimum Viable Product (MVP)",
+          "type": "literal",
+          "occurrences_expected": 6
+        },
+        "duration": {
+          "old": "12 months",
+          "new": "3 months",
+          "type": "literal",
+          "occurrences_expected": 3
+        },
+        "complexity_level": {
+          "old": "High",
+          "new": "Medium",
+          "type": "literal",
+          "occurrences_expected": 1
+        }
+      }
+    },
+
+    "content_adaptations": {
+      "project_scope": {
+        "old_pattern": "Develop and deploy advanced tabular AI models",
+        "new_pattern": "Implement predictive maintenance system using OPC UA/DA sensors on sealing/lamination line with offline Python dashboard",
+        "preserve_structure": true,
+        "occurrences_expected": 2
+      },
+      "objectives": {
+        "old_objective_1": "Enhance predictive analytics capabilities",
+        "new_objective_1": "Establish real-time monitoring and failure prediction for manufacturing line",
+        "old_objective_2": "Optimize data management and integration",
+        "new_objective_2": "Integrate HVAC sensors with OPC UA protocol for predictive maintenance",
+        "old_objective_3": "Accelerate time-to-value in ML deployment",
+        "new_objective_3": "Reduce equipment downtime through early failure detection"
+      },
+      "deliverables": {
+        "old_deliverable_1": "Trained tabular foundation models",
+        "new_deliverable_1": "OPC UA/DA data collection and historical database",
+        "old_deliverable_2": "Business intelligence dashboards",
+        "new_deliverable_2": "Offline Python dashboard with predictive analytics",
+        "old_deliverable_3": "Data quality assessments",
+        "new_deliverable_3": "Sensor validation reports and data quality analysis",
+        "old_deliverable_4": "Model documentation",
+        "new_deliverable_4": "Predictive model documentation and deployment guide"
+      },
+      "risks": {
+        "data_quality_risk": {
+          "old": "Incomplete tabular data may reduce model accuracy",
+          "new": "Sensor malfunction or communication loss may reduce prediction accuracy"
+        },
+        "integration_risk": {
+          "old": "Complex integration with existing ERP systems",
+          "new": "OPC UA protocol compatibility with existing HVAC infrastructure"
+        },
+        "timeline_risk": {
+          "old": "12-month implementation timeline may be ambitious",
+          "new": "3-month MVP timeline requires tight sensor integration and dashboard development"
+        }
+      },
+      "assumptions": {
+        "old_assumption_1": "Enterprise will standardize on tabular data formats",
+        "new_assumption_1": "HVAC sensors support OPC UA/DA protocol",
+        "old_assumption_2": "Data quality will meet defined thresholds",
+        "new_assumption_2": "Manufacturing line operates with sufficient historical sensor data"
+      }
+    }
+  },
+
+  "validation_checklist": {
+    "old_terms_to_eliminate": {
+      "ERP": 0,
+      "SAP-RPT": 0,
+      "TabPFN": 0,
+      "TabICL": 0,
+      "Tabular Foundation Models": 0,
+      "Enterprise Resource Planning": 0,
+      "Cegid": 0,
+      "João Silva": 0,
+      "Ana Costa": 0,
+      "Pedro Oliveira": 0
+    },
+    "new_terms_to_verify": {
+      "INCM-PreditSense": ">5",
+      "OPC UA": ">5",
+      "OPC/DA": ">0",
+      "Predictive Maintenance": ">5",
+      "HVAC": ">0",
+      "Python Dashboard": ">0",
+      "Nuno Costa": ">0",
+      "Bruno Sampaio": ">0",
+      "Susana Cruz": ">0"
+    }
+  },
+
+  "summary": {
+    "action": "Intelligent Domain Migration v2.0",
+    "template_domain": "Tabular AI / ERP (Cegid)",
+    "new_domain": "Predictive Maintenance / Industrial IoT (INCM)",
+    "total_replacements_expected": 102,
+    "critical_sections": [
+      "Project name and acronym (TabularAI → INCM-PreditSense)",
+      "Organization (Cegid → INCM)",
+      "Team members (3 key roles)",
+      "Technology stack (80 occurrences: SAP/Tabular → OPC UA/Python)",
+      "Business domain (22 occurrences: ERP → Manufacturing Line)",
+      "Timeline (12 months → 3 months MVP)",
+      "Budget (€120K → €85K)",
+      "Objectives, deliverables, risks, and assumptions"
+    ]
+  }
+}

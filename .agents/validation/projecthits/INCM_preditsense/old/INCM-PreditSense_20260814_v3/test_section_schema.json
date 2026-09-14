@@ -1,0 +1,301 @@
+{
+  "timestamp": "2026-08-14T17:07:14.489221",
+  "template": "/home/user/github/my/agentic_instructions/examples/projectHITs/Project_Charter_TabularAI_Cegid_v6.docx",
+  "total_sections": 21,
+  "sections": [
+    {
+      "id": 1,
+      "heading": "",
+      "level": 1,
+      "classification": "ADAPTIVE",
+      "reason": "Generic content that may apply to multiple projects",
+      "metadata": {
+        "paragraph_count": 0,
+        "list_items": 0,
+        "words_estimate": 0,
+        "has_tables": false
+      },
+      "content_preview": ""
+    },
+    {
+      "id": 2,
+      "heading": "Motivação & Problemática",
+      "level": 1,
+      "classification": "REGENERATE",
+      "reason": "Content is methodology/context-specific to project domain",
+      "metadata": {
+        "paragraph_count": 1,
+        "list_items": 0,
+        "words_estimate": 121,
+        "has_tables": false
+      },
+      "content_preview": "A Cegid, enquanto fornecedor líder de soluções ERP (Enterprise Resource Planning) na Europa, gere gr"
+    },
+    {
+      "id": 3,
+      "heading": "Resultados Tecnológicos Esperados",
+      "level": 1,
+      "classification": "REGENERATE",
+      "reason": "Content is methodology/context-specific to project domain",
+      "metadata": {
+        "paragraph_count": 7,
+        "list_items": 5,
+        "words_estimate": 174,
+        "has_tables": false
+      },
+      "content_preview": "O projeto tem como objetivo desenvolver uma Prova de Conceito (PoC)(TRL ), com base em Modelos Funda O DTx desenvolva:"
+    },
+    {
+      "id": 4,
+      "heading": "Estado de Arte e Estado da Prática ",
+      "level": 1,
+      "classification": "ADAPTIVE",
+      "reason": "Generic content that may apply to multiple projects",
+      "metadata": {
+        "paragraph_count": 1,
+        "list_items": 0,
+        "words_estimate": 159,
+        "has_tables": false
+      },
+      "content_preview": "Os Modelos Fundacionais Tabulares (TFMs) representam um avanço recente no domínio da inteligência ar"
+    },
+    {
+      "id": 5,
+      "heading": "Características Inovadoras",
+      "level": 1,
+      "classification": "ADAPTIVE",
+      "reason": "Generic content that may apply to multiple projects",
+      "metadata": {
+        "paragraph_count": 0,
+        "list_items": 0,
+        "words_estimate": 0,
+        "has_tables": false
+      },
+      "content_preview": ""
+    },
+    {
+      "id": 6,
+      "heading": "Pressupostos:",
+      "level": 1,
+      "classification": "ADAPTIVE",
+      "reason": "Generic content that may apply to multiple projects",
+      "metadata": {
+        "paragraph_count": 22,
+        "list_items": 0,
+        "words_estimate": 567,
+        "has_tables": false
+      },
+      "content_preview": "Esta proposta foi planeada com base nos pressupostos abaixo, pelo que o incumprimento de qualquer um Relativamente aos Recursos Humanos:"
+    },
+    {
+      "id": 7,
+      "heading": "Não Incluído",
+      "level": 1,
+      "classification": "ADAPTIVE",
+      "reason": "Generic content that may apply to multiple projects",
+      "metadata": {
+        "paragraph_count": 10,
+        "list_items": 6,
+        "words_estimate": 126,
+        "has_tables": false
+      },
+      "content_preview": "As seguintes funcionalidades encontram-se fora do âmbito do resultado do Projeto concebido para este Ações de industrialização e/ou certificação."
+    },
+    {
+      "id": 8,
+      "heading": "Cronograma do Projeto e Estimativa de Horas Planeadas",
+      "level": 1,
+      "classification": "VARIABLE",
+      "reason": "Heading contains VARIABLE keyword (project name, team, dates)",
+      "metadata": {
+        "paragraph_count": 0,
+        "list_items": 0,
+        "words_estimate": 0,
+        "has_tables": false
+      },
+      "content_preview": ""
+    },
+    {
+      "id": 9,
+      "heading": "Plano de Trabalho do Projeto – Gestão e Desenvolvimento ",
+      "level": 2,
+      "classification": "VARIABLE",
+      "reason": "Heading contains VARIABLE keyword (project name, team, dates)",
+      "metadata": {
+        "paragraph_count": 0,
+        "list_items": 0,
+        "words_estimate": 0,
+        "has_tables": false
+      },
+      "content_preview": ""
+    },
+    {
+      "id": 10,
+      "heading": "Entregáveis (relatórios técnicos do trabalho realizado)",
+      "level": 2,
+      "classification": "ADAPTIVE",
+      "reason": "Generic content that may apply to multiple projects",
+      "metadata": {
+        "paragraph_count": 0,
+        "list_items": 0,
+        "words_estimate": 0,
+        "has_tables": false
+      },
+      "content_preview": ""
+    },
+    {
+      "id": 11,
+      "heading": "Marcos (um marco é um evento significativo no projeto que marca a evolução do desenvolvimento e conquistas intermediárias e finais do projeto)",
+      "level": 2,
+      "classification": "VARIABLE",
+      "reason": "Heading contains VARIABLE keyword (project name, team, dates)",
+      "metadata": {
+        "paragraph_count": 0,
+        "list_items": 0,
+        "words_estimate": 0,
+        "has_tables": false
+      },
+      "content_preview": ""
+    },
+    {
+      "id": 12,
+      "heading": "Disseminação e Valorização dos Resultados ",
+      "level": 2,
+      "classification": "ADAPTIVE",
+      "reason": "Generic content that may apply to multiple projects",
+      "metadata": {
+        "paragraph_count": 0,
+        "list_items": 0,
+        "words_estimate": 0,
+        "has_tables": false
+      },
+      "content_preview": ""
+    },
+    {
+      "id": 13,
+      "heading": "Plano de Transição Tecnológico para o Associado  ",
+      "level": 1,
+      "classification": "ADAPTIVE",
+      "reason": "Generic content that may apply to multiple projects",
+      "metadata": {
+        "paragraph_count": 9,
+        "list_items": 0,
+        "words_estimate": 96,
+        "has_tables": false
+      },
+      "content_preview": "Principais requisitos a assegurar no plano de transição tecnológico do Associado. O TPO deve:"
+    },
+    {
+      "id": 14,
+      "heading": "Riscos do Projeto – Técnicos e de Gestão ",
+      "level": 1,
+      "classification": "VARIABLE",
+      "reason": "Heading contains VARIABLE keyword (project name, team, dates)",
+      "metadata": {
+        "paragraph_count": 0,
+        "list_items": 0,
+        "words_estimate": 0,
+        "has_tables": false
+      },
+      "content_preview": ""
+    },
+    {
+      "id": 15,
+      "heading": "Orçamento",
+      "level": 1,
+      "classification": "RIGID",
+      "reason": "Heading contains RIGID keyword (budget, table, approval)",
+      "metadata": {
+        "paragraph_count": 0,
+        "list_items": 0,
+        "words_estimate": 0,
+        "has_tables": false
+      },
+      "content_preview": ""
+    },
+    {
+      "id": 16,
+      "heading": "Custos do Associado ",
+      "level": 2,
+      "classification": "ADAPTIVE",
+      "reason": "Generic content that may apply to multiple projects",
+      "metadata": {
+        "paragraph_count": 0,
+        "list_items": 0,
+        "words_estimate": 0,
+        "has_tables": false
+      },
+      "content_preview": ""
+    },
+    {
+      "id": 17,
+      "heading": "Planificação de esforço dos recursos humanos do DTx",
+      "level": 2,
+      "classification": "ADAPTIVE",
+      "reason": "Generic content that may apply to multiple projects",
+      "metadata": {
+        "paragraph_count": 0,
+        "list_items": 0,
+        "words_estimate": 0,
+        "has_tables": false
+      },
+      "content_preview": ""
+    },
+    {
+      "id": 18,
+      "heading": "Quota da Cegid ",
+      "level": 2,
+      "classification": "ADAPTIVE",
+      "reason": "Generic content that may apply to multiple projects",
+      "metadata": {
+        "paragraph_count": 0,
+        "list_items": 0,
+        "words_estimate": 0,
+        "has_tables": false
+      },
+      "content_preview": ""
+    },
+    {
+      "id": 19,
+      "heading": "Políticas Básicas de Governação – Recomendações Básicas para facilitar uma comunicação eficiente entre os parceiros, reduzir conflitos e estabelecer as responsabilidades de ambas as partes.",
+      "level": 1,
+      "classification": "REGENERATE",
+      "reason": "Content is methodology/context-specific to project domain",
+      "metadata": {
+        "paragraph_count": 7,
+        "list_items": 0,
+        "words_estimate": 732,
+        "has_tables": false
+      },
+      "content_preview": "Project Charter: deve ser formalmente aprovado através da assinatura dos principais representantes d Steering Committee: composto pelos Diretores do Projeto, tem como objetivo garantir o acordo comum "
+    },
+    {
+      "id": 20,
+      "heading": " Observações Finais",
+      "level": 1,
+      "classification": "ADAPTIVE",
+      "reason": "Generic content that may apply to multiple projects",
+      "metadata": {
+        "paragraph_count": 3,
+        "list_items": 0,
+        "words_estimate": 85,
+        "has_tables": false
+      },
+      "content_preview": "Ambas as partes concordam em manter a confidencialidade sobre as informações técnicas, comerciais e  Eventuais disputas serão resolvidas por negociação entre as partes e, se necessário, por mediação o"
+    },
+    {
+      "id": 21,
+      "heading": "Project Charter validado e aprovado por:  ",
+      "level": 1,
+      "classification": "ADAPTIVE",
+      "reason": "Generic content that may apply to multiple projects",
+      "metadata": {
+        "paragraph_count": 0,
+        "list_items": 0,
+        "words_estimate": 0,
+        "has_tables": false
+      },
+      "content_preview": ""
+    }
+  ]
+}

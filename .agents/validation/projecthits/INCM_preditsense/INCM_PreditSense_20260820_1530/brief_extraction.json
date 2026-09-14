@@ -1,0 +1,188 @@
+{
+  "project_name": "INCM-PreditSense",
+  "project_code": "INCM-PreditSense",
+  "associate": "INCM (Portuguese Institute for Occupational Safety and Health)",
+  "dtx_team": "DTx - Data Science & Machine Learning (DSML) + Data Engineering (DAE)",
+  "pm": "Nuno Costa (DSML Coordinator)",
+  "goal_main": "Reduce scrap/refugo via predictive maintenance approach",
+  "goal_detail": "Develop offline prototype (WP1) → real-time alarmistics (WP2) → predictive maintenance model (WP3)",
+  "target_machine": "Sealing/lamination machine (fim de processo / end-of-line)",
+  "target_line": "Production line at INCM facility",
+  "sensors": {
+    "environmental": "4x Temp/Humidity sensors",
+    "location": "Last/final production room",
+    "location_detail": "[TODO: Exact locations - ceiling, near HVAC, distance to seal chamber?]",
+    "machine_data": "Machine states, alarms, temperature, JobName, OK/NOK quality tags"
+  },
+  "timeline": {
+    "wp1_duration": "3 months (Sep-Nov 2026)",
+    "wp1_contingency": "4-5 months if complexity",
+    "wp1_end": "2026-11-30",
+    "wp2_start": "After WP1 ✅ complete",
+    "wp2_duration": "8-12 months",
+    "wp3_start": "After WP2 ✅ + 6-12mo historical",
+    "wp3_duration": "8-12 months"
+  },
+  "wp1_phases": [
+    {
+      "phase": "Pre-Project Validation",
+      "end": "2026-09-01",
+      "desc": "P0/P1 requirements confirmed"
+    },
+    {
+      "phase": "Data Acquisition + OPC Setup",
+      "end": "2026-10-15",
+      "desc": "Extração histórico + OPC server live"
+    },
+    {
+      "phase": "Data Understanding & Profiling",
+      "end": "2026-10-31",
+      "desc": "Análise exploratória + qualidade"
+    },
+    {
+      "phase": "Dashboard Offline",
+      "end": "2026-11-15",
+      "desc": "KPIs validated"
+    },
+    {
+      "phase": "Human-in-the-Loop Pilot",
+      "end": "2026-11-30",
+      "desc": "≥500 annotations from operators"
+    },
+    {
+      "phase": "WP1 Gate Review",
+      "end": "2026-12-15",
+      "desc": "Formal approval for WP2"
+    }
+  ],
+  "critical_blockers": [
+    {
+      "id": "B1",
+      "item": "OPC Specs (DA vs UA)",
+      "deadline": "2026-08-25",
+      "impact": "±2-4 weeks timeline"
+    },
+    {
+      "id": "B2",
+      "item": "SME Point of Contact + SLA (≥20%)",
+      "deadline": "2026-08-25",
+      "impact": "Literature: 85% fail without SME"
+    },
+    {
+      "id": "B3",
+      "item": "Historical Data Availability Confirm",
+      "deadline": "2026-09-01",
+      "impact": "WP1 inviable without data"
+    },
+    {
+      "id": "B4",
+      "item": "Stage-Gate Logic Acceptance",
+      "deadline": "2026-09-01",
+      "impact": "Scope control"
+    }
+  ],
+  "risks_tech": [
+    {
+      "id": "TR1",
+      "desc": "Data Quality / Insufficient Historical",
+      "sev": "HIGH",
+      "prob": "HIGH",
+      "miti": "Early validation by Sep 1"
+    },
+    {
+      "id": "TR2",
+      "desc": "OPC Complexity (UA vs DA)",
+      "sev": "MEDIUM",
+      "prob": "HIGH",
+      "miti": "Decision by Aug 25"
+    },
+    {
+      "id": "TR3",
+      "desc": "Temporal Sync (PLC ↔ Sensor)",
+      "sev": "MEDIUM",
+      "prob": "MEDIUM",
+      "miti": "±10ms precision requirement"
+    },
+    {
+      "id": "TR4",
+      "desc": "Network Connectivity",
+      "sev": "MEDIUM",
+      "prob": "MEDIUM",
+      "miti": "Early assessment"
+    }
+  ],
+  "risks_mgmt": [
+    {
+      "id": "MR1",
+      "desc": "SME Unavailability (<20%)",
+      "sev": "CRITICAL",
+      "prob": "HIGH",
+      "miti": "Formal SLA contract"
+    },
+    {
+      "id": "MR2",
+      "desc": "DTx DAE Resource Constraints",
+      "sev": "HIGH",
+      "prob": "MEDIUM",
+      "miti": "OPC responsibility decision by Aug 25"
+    },
+    {
+      "id": "MR3",
+      "desc": "Stage-Gate Breach",
+      "sev": "MEDIUM",
+      "prob": "MEDIUM",
+      "miti": "Explicit contract clause"
+    },
+    {
+      "id": "MR4",
+      "desc": "Scope Creep",
+      "sev": "MEDIUM",
+      "prob": "HIGH",
+      "miti": "Change control process"
+    }
+  ],
+  "deliverables": [
+    {
+      "id": "D1.1",
+      "name": "Data Requirements Specification",
+      "date": "2026-09-15"
+    },
+    {
+      "id": "D1.2",
+      "name": "OPC Server Architecture & Setup",
+      "date": "2026-10-15"
+    },
+    {
+      "id": "D1.3",
+      "name": "Historical Data Extraction Report",
+      "date": "2026-10-31"
+    },
+    {
+      "id": "D1.4",
+      "name": "Dashboard Prototype (Offline)",
+      "date": "2026-11-15"
+    },
+    {
+      "id": "D1.5",
+      "name": "Human-in-the-Loop Pilot Report",
+      "date": "2026-11-30"
+    },
+    {
+      "id": "D1.6",
+      "name": "WP1 Gate Review",
+      "date": "2026-12-15"
+    }
+  ],
+  "assumptions": {
+    "incm_must_validate": "Data availability, OPC topology, sensor locations, SME contact",
+    "dtx_responsible": "OPC setup (pending approval), Data analysis, dashboard, ML model",
+    "collaboration": "Data sharing (INCM → DTx), domain validation (INCM SME), deployment (both)"
+  },
+  "out_of_scope": [
+    "Industrialization/certification",
+    "Additional sensor installation/repositioning",
+    "Replication to other production lines",
+    "Post-delivery maintenance support",
+    "Software licensing for commercialization"
+  ]
+}

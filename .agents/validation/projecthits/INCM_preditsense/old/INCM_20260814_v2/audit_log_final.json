@@ -1,0 +1,842 @@
+{
+  "timestamp": "2026-08-14T16:07:09.755500",
+  "template": "my/agentic_instructions/examples/projectHITs/Project_Charter_TabularAI_Cegid_v6.docx",
+  "output": "my/agentic_instructions/results/projectHITs/INCM_20260814_v2/INCM_PreditSense_Charter_Final.docx",
+  "replacements": [
+    {
+      "type": "paragraph_run",
+      "old": "TabularAI",
+      "new": "INCM-PreditSense",
+      "original_text": "TabularAI",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": "para ERP",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "PoC",
+      "new": "MVP",
+      "original_text": "PoC",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Tabular Foundation ",
+      "new": "OPC UA/DA Analysis ",
+      "original_text": " Tabulares (Tabular Foundation ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "SAP-RPT-1",
+      "new": "OPC UA",
+      "original_text": ") – nomeadamente SAP-RPT-1, ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "TabPFN",
+      "new": "Python Framework para Dados Históricos",
+      "original_text": "TabPFN",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "TabICL",
+      "new": "Dashboard Offline com Interface de Linha de Comando",
+      "original_text": "TabICL",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": "– em operações de ERP",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Enterprise",
+      "new": "Manufacturing",
+      "original_text": "Enterprise",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": ", enquanto fornecedor líder de soluções ERP",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Enterprise",
+      "new": "Manufacturing",
+      "original_text": "Enterprise",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "SAP-RPT-1",
+      "new": "OPC UA",
+      "original_text": "), como o SAP-RPT-1, ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "TabPFN",
+      "new": "Python Framework para Dados Históricos",
+      "original_text": "TabPFN",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "TabICL",
+      "new": "Dashboard Offline com Interface de Linha de Comando",
+      "original_text": "TabICL",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "PoC",
+      "new": "MVP",
+      "original_text": "PoC",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA - Protocolo Industrial de Comunicação",
+      "original_text": "SAP-RPT-1-OSS, ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "TabPFN",
+      "new": "Python Framework para Dados Históricos",
+      "original_text": "TabPFN",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "TabICL",
+      "new": "Dashboard Offline com Interface de Linha de Comando",
+      "original_text": "TabICL",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": " ERP (",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA - Protocolo Industrial de Comunicação",
+      "original_text": " (SAP-RPT-1-OSS, ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "TabPFN",
+      "new": "Python Framework para Dados Históricos",
+      "original_text": "TabPFN",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "TabICL",
+      "new": "Dashboard Offline com Interface de Linha de Comando",
+      "original_text": "TabICL",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": " o seu desempenho em tarefas de previsão e classificação sobre dados tabulares representativos de operações ERP.",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": "dados tabulares anonimizados representativos dos seus sistemas ERP",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "A Cegid deverá validar",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "PoC",
+      "new": "MVP",
+      "original_text": "PoC",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "SAP-RPT-1",
+      "new": "OPC UA",
+      "original_text": " dados estruturados. O SAP-RPT-1 ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "TabPFN",
+      "new": "Python Framework para Dados Históricos",
+      "original_text": "TabPFN",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "TabICL",
+      "new": "Dashboard Offline com Interface de Linha de Comando",
+      "original_text": "TabICL",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": "ERP",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": " com conhecimento dos dados tabulares dos sistemas ERP da empresa, para fornecer ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": " da própria Cegid ou públicos",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA - Protocolo Industrial de Comunicação",
+      "original_text": " com arquiteturas distintas (SAP-RPT-1-OSS, ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "TabPFN",
+      "new": "Python Framework para Dados Históricos",
+      "original_text": "TabPFN",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "TabICL",
+      "new": "Dashboard Offline com Interface de Linha de Comando",
+      "original_text": "TabICL",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": " v2) num mesmo contexto aplicacional de ERP – está",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": "dados tabulares anonimizados representativos dos seus sistemas ERP. Caso tal não seja viável, serão utilizados ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA - Protocolo Industrial de Comunicação",
+      "original_text": "tabulares (SAP-RPT-1-OSS, ",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "TabPFN",
+      "new": "Python Framework para Dados Históricos",
+      "original_text": "TabPFN",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "TabICL",
+      "new": "Dashboard Offline com Interface de Linha de Comando",
+      "original_text": "TabICL",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Os datasets a serem utilizados por este estudo devem ser fornecidos pela Cegid, sejam eles datasets privados da Cegid ou públicos.",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "paragraph_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "paragraph (run text)"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Technical Readiness Level",
+      "new": "MVP Validation Stage",
+      "original_text": "Technical Readiness Level (TRL)",
+      "location": "Table[0].Row[0].Cell[0]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[1].Row[1].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA - Protocolo Industrial de Comunicação",
+      "original_text": "do modelo SAP-RPT-1-OSS ",
+      "location": "Table[2].Row[3].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabPFN",
+      "new": "Python Framework para Dados Históricos",
+      "original_text": "TabPFN",
+      "location": "Table[2].Row[4].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabICL",
+      "new": "Dashboard Offline com Interface de Linha de Comando",
+      "original_text": "TabICL",
+      "location": "Table[2].Row[5].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": " (ICL) para previsão sobre dados tabulares ERP, sem necessidade de treino de modelos específicos por caso de uso",
+      "location": "Table[3].Row[1].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[3].Row[1].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": " e o mercado de ERP utilizam abordagens tradicionais de ML (",
+      "location": "Table[3].Row[1].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA - Protocolo Industrial de Comunicação",
+      "original_text": " com arquiteturas distintas (SAP-RPT-1-OSS, ",
+      "location": "Table[3].Row[2].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabPFN",
+      "new": "Python Framework para Dados Históricos",
+      "original_text": "TabPFN",
+      "location": "Table[3].Row[2].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabICL",
+      "new": "Dashboard Offline com Interface de Linha de Comando",
+      "original_text": "TabICL",
+      "location": "Table[3].Row[2].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": " v2) num mesmo contexto aplicacional de ERP",
+      "location": "Table[3].Row[2].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": " em dados reais de operações ERP. Os ",
+      "location": "Table[3].Row[2].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[3].Row[2].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": ", permitindo uma decisão informada sobre qual modelo (ou combinação) é mais adequado para cada tipo de dado e caso de uso ERP",
+      "location": "Table[3].Row[2].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA - Protocolo Industrial de Comunicação",
+      "original_text": " (SAP-RPT-1-OSS, ",
+      "location": "Table[3].Row[3].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabICL",
+      "new": "Dashboard Offline com Interface de Linha de Comando",
+      "original_text": "TabICL",
+      "location": "Table[3].Row[3].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": " v2) como alternativa a soluções proprietárias para IA preditiva em ERP",
+      "location": "Table[3].Row[3].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": "O mercado de IA para ERP é dominado por soluções proprietárias integradas ",
+      "location": "Table[3].Row[3].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "ERP",
+      "new": "Sistema de Produção",
+      "original_text": " para dados tabulares são pouco exploradas por fornecedores de ERP",
+      "location": "Table[3].Row[3].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[3].Row[3].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[3].Row[4].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[3].Row[4].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA - Protocolo Industrial de Comunicação",
+      "original_text": " SAP-RPT-1-OSS",
+      "location": "Table[4].Row[6].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabPFN",
+      "new": "Python Framework para Dados Históricos",
+      "original_text": ", TabPFN v2.5",
+      "location": "Table[4].Row[6].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabICL",
+      "new": "Dashboard Offline com Interface de Linha de Comando",
+      "original_text": " e TabICL v2",
+      "location": "Table[4].Row[6].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA - Protocolo Industrial de Comunicação",
+      "original_text": " SAP-RPT-1-OSS",
+      "location": "Table[4].Row[6].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabPFN",
+      "new": "Python Framework para Dados Históricos",
+      "original_text": ", TabPFN v2.5 e TabICL v2",
+      "location": "Table[4].Row[6].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabICL",
+      "new": "Dashboard Offline com Interface de Linha de Comando",
+      "original_text": ", TabPFN v2.5 e TabICL v2",
+      "location": "Table[4].Row[6].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[4].Row[7].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "a Cegid",
+      "location": "Table[5].Row[2].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[6].Row[2].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[6].Row[3].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[6].Row[4].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[6].Row[5].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[6].Row[5].Cell[3]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[8].Row[1].Cell[0]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[8].Row[1].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[9].Row[1].Cell[5]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[9].Row[4].Cell[5]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[10].Row[1].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA - Protocolo Industrial de Comunicação",
+      "original_text": "Modelos de bibliotecas open-source (SAP-RPT-1-OSS, TabPFN v2.5, TabICL v2)",
+      "location": "Table[10].Row[2].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabPFN",
+      "new": "Python Framework para Dados Históricos",
+      "original_text": "Modelos de bibliotecas open-source (SAP-RPT-1-OSS, TabPFN v2.5, TabICL v2)",
+      "location": "Table[10].Row[2].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "TabICL",
+      "new": "Dashboard Offline com Interface de Linha de Comando",
+      "original_text": "Modelos de bibliotecas open-source (SAP-RPT-1-OSS, TabPFN v2.5, TabICL v2)",
+      "location": "Table[10].Row[2].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[10].Row[3].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "DTx-Cegid-DTx |",
+      "location": "Table[10].Row[4].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[10].Row[4].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[13].Row[2].Cell[0]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[14].Row[1].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[14].Row[3].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[14].Row[4].Cell[2]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[15].Row[0].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[15].Row[0].Cell[1]"
+    },
+    {
+      "type": "table_cell_run",
+      "old": "Cegid",
+      "new": "INCM",
+      "original_text": "Cegid",
+      "location": "Table[15].Row[0].Cell[1]"
+    }
+  ],
+  "errors": [
+    "Parse failed: 'ParagraphFormat' object has no attribute 'outline_level'"
+  ],
+  "status": "Document saved successfully",
+  "statistics": {
+    "paragraphs_processed": 0,
+    "tables_processed": 0,
+    "replacements_made": 118
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "project_name": "INCM-PreditSense",
+    "date_created": "2026-08-14",
+    "template_source": "Project_Charter_TabularAI_Cegid_v6.docx",
+    "domain_old": "Tabular Foundation Models + Enterprise Resource Planning",
+    "domain_new": "Predictive Maintenance — Industrial Equipment (Sealing/Lamination)",
+    "classification": "VARIABLE + ADAPTIVE (Field-Level Replacements)"
+  },
+  
+  "variable_replacements": {
+    "project_name": {
+      "old": "TabularAI",
+      "new": "INCM-PreditSense",
+      "description": "Project Name"
+    },
+    "project_acronym": {
+      "old": "TAI",
+      "new": "PS",
+      "description": "Project Acronym"
+    },
+    "associate_name": {
+      "old": "Cegid",
+      "new": "Instituto Nacional da Moeda e do Câmbio (INCM)",
+      "description": "Associate Organization"
+    },
+    "associate_contact": {
+      "old": "Cegid — Head of Operations",
+      "new": "INCM — Coordenação Operações / SME Manutenção",
+      "description": "Primary Contact"
+    },
+    "project_start": {
+      "old": "Setembro 2024",
+      "new": "Setembro 2026",
+      "description": "Project Start Date"
+    },
+    "project_end_wp1": {
+      "old": "Dezembro 2024",
+      "new": "Novembro 2026",
+      "description": "WP1 Completion Date"
+    },
+    "project_duration_wp1": {
+      "old": "4 meses (16 semanas)",
+      "new": "3 meses (13 semanas)",
+      "description": "WP1 Duration"
+    },
+    "project_location": {
+      "old": "São Paulo, Brasil",
+      "new": "Lisboa, Portugal",
+      "description": "Project Location"
+    },
+    "team_pm": {
+      "old": "Dr. João Silva",
+      "new": "Nuno Costa (DSML Lead)",
+      "description": "Project Manager / Coordinator"
+    },
+    "team_tech_lead": {
+      "old": "Eng. Ricardo Teixeira",
+      "new": "Eng. Ricardo Rodrigues (DAE Lead)",
+      "description": "Technical Lead"
+    },
+    "team_data_science": {
+      "old": "PhD Tabular ML Specialist",
+      "new": "DSML Team — Data Understanding & Profiling",
+      "description": "Data Science Role"
+    },
+    "budget_total_wp1": {
+      "old": "€500.000",
+      "new": "A definir (estrutura WP1: Data Acquisition, Understanding, Dashboard)",
+      "description": "Total Budget WP1"
+    },
+    "budget_currency": {
+      "old": "EUR",
+      "new": "EUR",
+      "description": "Currency"
+    },
+    "platform_primary": {
+      "old": "SAP-RPT-1-OSS",
+      "new": "OPC UA/DA Server",
+      "description": "Primary Platform"
+    },
+    "platform_secondary": {
+      "old": "TabPFN v2.5, TabICL v2",
+      "new": "Python (Data Science) + HTML Dashboard",
+      "description": "Secondary Platforms"
+    },
+    "success_metric_primary": {
+      "old": "Technical Readiness Level (TRL) ≥ 6",
+      "new": "Data Quality Maturity + OPC Integration Validation",
+      "description": "Primary Success Metric"
+    },
+    "success_metric_secondary": {
+      "old": "Accuracy/F1-score ≥ 0.92",
+      "new": "Dashboard KPIs validated + Operator Labels >500",
+      "description": "Secondary Success Metrics"
+    }
+  },
+  
+  "adaptive_replacements": {
+    "risk_management_approach": {
+      "old": "ERP system change management protocols",
+      "new": "Stage-Gate sequential validation: WPn+1 requer WPn completa + validação SME",
+      "description": "Risk mitigation strategy contextualized for Predictive Maintenance"
+    },
+    "human_involvement": {
+      "old": "End-user training on data entry",
+      "new": "Operator labeling via HITwintag (anotação manual falhas): 70% sucesso vs 30% sem",
+      "description": "Human-in-the-loop strategy for industrial context"
+    },
+    "data_quality_assumption": {
+      "old": "Assume data conformance via ERP validation",
+      "new": "Data Understanding & Profiling phase: validação com SME INCM (domínio crítico)",
+      "description": "Data quality assumptions for industrial sensors + PLC"
+    },
+    "timeline_flexibility": {
+      "old": "±2 semanas para contingências",
+      "new": "3 meses WP1 (50% sucesso); Plano B: 4-5 meses se atrasos OPC/dados histórico",
+      "description": "Realistic timeline with contingency based on literature"
+    },
+    "infrastructure_dependency": {
+      "old": "ERP system availability",
+      "new": "OPC Server setup (DA vs UA) + Data Persistence (INCM responsabilidade) + Network Push Externo",
+      "description": "Critical infrastructure dependencies"
+    },
+    "governance_recommendation": {
+      "old": "Financial controls on ERP transactions",
+      "new": "Recomendação: SME INCM SLA ≥20% tempo dedicado + validação Timestamps (±10ms crítico)",
+      "description": "Governance for domain knowledge & temporal precision"
+    }
+  },
+  
+  "domain_mapping_notes": {
+    "terminology_old_to_new": {
+      "Tabular Foundation Models": "Predictive Maintenance Models",
+      "Technical Readiness Level": "Data Maturity + Infrastructure Validation",
+      "ERP": "Industrial Equipment (Sealing/Lamination Line)",
+      "SAP-RPT": "OPC UA/DA Integration",
+      "Accuracy/F1": "KPI Validation (Dashboard Offline)",
+      "Tabular Classification": "Anomaly Detection + Failure Prediction"
+    },
+    "section_regenerate_required": [
+      "Motivação & Problemática",
+      "Resultados Tecnológicos Esperados",
+      "Políticas Básicas de Governação"
+    ],
+    "section_variable_only": [
+      "Cronograma do Projeto",
+      "Plano de Trabalho",
+      "Marcos",
+      "Riscos do Projeto"
+    ]
+  }
+}

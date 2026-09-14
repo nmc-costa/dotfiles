@@ -105,8 +105,8 @@ The agent reflects the project's reality:
 
 Located in `examples/` (canonical anonymized example) and `../../validation/projecthits/client-examples/` (real client deliverable, unchanged):
 - `template_project_charter_pt.md` — Portuguese template
-- `20250207 Template Project Charter_ENG.docx` — English DOCX template
-- `example_project_data.json` — Sample data for auto-fill
+- `20250207_Template_Project_Charter_ENG.docx` / `20250207_Template_Project_Charter_PT.docx` — DOCX templates (EN/PT)
+- `example_project_data.json` — Sample data for auto-fill (client name anonymized to "ClientCo"/"Acme Corporation" — the real deliverable this was derived from is preserved, unchanged, in `../../validation/projecthits/client-examples/`)
 
 ---
 

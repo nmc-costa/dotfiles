@@ -1,0 +1,374 @@
+{
+  "project_metadata": {
+    "designation": {
+      "field_type": "VARIABLE",
+      "template_placeholder": "<Designação do Projeto>",
+      "replacement": "INCM-PreditSense WP1 – Data Foundation for Predictive Maintenance",
+      "confidence": 10,
+      "rationale": "Direct project name replacement. Simple text substitution."
+    },
+    "start_date": {
+      "field_type": "VARIABLE",
+      "template_placeholder": "[Start Date]",
+      "replacement": "Setembro 2026",
+      "confidence": 10,
+      "rationale": "Fixed project timeline per brief."
+    },
+    "end_date": {
+      "field_type": "VARIABLE",
+      "template_placeholder": "[End Date]",
+      "replacement": "Novembro 2026",
+      "confidence": 10,
+      "rationale": "3-month WP1 scope."
+    },
+    "budget": {
+      "field_type": "VARIABLE",
+      "template_placeholder": "[Budget]",
+      "replacement": "€85.000",
+      "confidence": 10,
+      "rationale": "Exact budget from project brief."
+    }
+  },
+  "sections": {
+    "section_01_motivacao": {
+      "heading": "Motivação & Problemática",
+      "field_type": "REGENERATE",
+      "current_content": "ERP/Tabular domain business case",
+      "required_rewrite": true,
+      "confidence": 3,
+      "rationale": "Domain mismatch. Template discusses ERP/ML features. Must rewrite for industrial IoT/predictive maintenance context. Focus on INCM manufacturing sealing/laminating equipment challenges.",
+      "key_topics": [
+        "Current manufacturing downtime rates",
+        "Lack of predictive capability in production lines",
+        "Sensor data availability (OPC infrastructure gap)",
+        "Business case: maintenance cost reduction through prediction"
+      ]
+    },
+    "section_02_resultados": {
+      "heading": "Resultados Tecnológicos Esperados",
+      "field_type": "REGENERATE",
+      "current_content": "Tabular models, feature engineering outputs",
+      "required_rewrite": true,
+      "confidence": 4,
+      "rationale": "Template shows ML prototypes for tabular data. Replace with WP1 specific outputs: historical data archive, OPC server configuration, offline dashboard prototype, data quality assessment report.",
+      "key_topics": [
+        "Historical production data archive (cleaned, validated)",
+        "OPC UA/DA server configuration documentation",
+        "Offline analytics dashboard (KPI prototype)",
+        "Data profiling report with sensor coverage analysis"
+      ]
+    },
+    "section_03_estado_arte": {
+      "heading": "Estado de Arte e Estado da Prática",
+      "field_type": "REGENERATE",
+      "current_content": "Tabular ML literature review",
+      "required_rewrite": true,
+      "confidence": 3,
+      "rationale": "Must refocus on industrial IoT, OPC standards, predictive maintenance literature, SCADA systems, not tabular feature engineering.",
+      "key_topics": [
+        "OPC UA standard (IEC 62541)",
+        "Industrial IoT data acquisition best practices",
+        "Predictive maintenance frameworks (CBM, RUL estimation)",
+        "Literature: 85% PdM projects fail without domain expertise (SME dependency)",
+        "Data quality requirements for manufacturing analytics"
+      ]
+    },
+    "section_04_inovacao": {
+      "heading": "Características Inovadoras",
+      "field_type": "ADAPTIVE",
+      "current_content": "Feature engineering, ML model innovation",
+      "required_rewrite": true,
+      "confidence": 5,
+      "rationale": "Partially preserves structure but replaces content. Innovation for INCM: real-time data integration from heterogeneous sensors, offline KPI dashboarding for sealing/laminating-specific metrics.",
+      "key_topics": [
+        "Integration of legacy sensors with modern OPC infrastructure",
+        "Custom KPI dashboarding for laminating process control",
+        "Feasibility of predictive models on WP1 data foundation"
+      ]
+    },
+    "section_05_pressupostos": {
+      "heading": "Pressupostos",
+      "field_type": "ADAPTIVE",
+      "current_content": "Template assumptions (availability of clean data, etc.)",
+      "required_rewrite": true,
+      "confidence": 6,
+      "rationale": "Keep structure, update assumptions to WP1 realities. Critical: SME availability ≥20%, OPC specs confirmed before Sept 1, DAE infrastructure completion.",
+      "key_topics": [
+        "INCM SME availability (20% minimum)",
+        "OPC server specifications finalized by Sept 1",
+        "DAE (DTX partner) delivers production data infrastructure",
+        "Python/Jupyter stack available for analytics"
+      ]
+    },
+    "section_06_cronograma": {
+      "heading": "Cronograma do Projeto e Estimativa de Horas",
+      "field_type": "REGENERATE",
+      "current_content": "Generic 12-month project phases",
+      "required_rewrite": true,
+      "confidence": 4,
+      "rationale": "Must reflect 3-month WP1 tight timeline. Phase gates: Data Acquisition (Sept-Mid Oct), Data Understanding (Mid Oct-Early Nov), Presentation & Validation (Late Nov). Include OPC setup buffer (3-4 weeks for UA, 1-2 for DA).",
+      "key_topics": [
+        "Month 1 (Sept): OPC setup, historical data extraction, baseline quality assessment",
+        "Month 2 (Oct): Data profiling, cleaning, domain variable identification",
+        "Month 3 (Nov): Dashboard development, KPI validation, handover to WP2"
+      ]
+    },
+    "section_07_plano_trabalho": {
+      "heading": "Plano de Trabalho – Gestão e Desenvolvimento",
+      "field_type": "REGENERATE",
+      "current_content": "ML development workstreams (feature engineering, modeling)",
+      "required_rewrite": true,
+      "confidence": 4,
+      "rationale": "Replace with WP1 activities: OPC Server Setup, Historical Data Retrieval, Data Quality Assessment, Dashboard Development, SME Validation Sessions.",
+      "key_topics": [
+        "WP1.1: OPC Infrastructure Assessment & Setup",
+        "WP1.2: Historical Data Extraction & Archival",
+        "WP1.3: Data Profiling & Quality Analysis",
+        "WP1.4: Offline Dashboard Development",
+        "WP1.5: Knowledge Transfer & WP2 Readiness"
+      ]
+    },
+    "section_08_entregaveis": {
+      "heading": "Entregáveis",
+      "field_type": "REGENERATE",
+      "current_content": "ML model prototypes, trained models",
+      "required_rewrite": true,
+      "confidence": 5,
+      "rationale": "WP1 deliverables are data-focused. Replace with: Data Archive (S3/local), OPC Configuration Doc, Dashboard Code/Binary, Data Quality Report, WP2 Readiness Assessment.",
+      "key_topics": [
+        "D1.1: Historical Production Data Archive (validated)",
+        "D1.2: OPC Server Configuration & Test Results",
+        "D1.3: Offline Analytics Dashboard (Python/Dash)",
+        "D1.4: Data Profiling & Quality Assessment Report",
+        "D1.5: WP2 Transition Document"
+      ]
+    },
+    "section_09_marcos": {
+      "heading": "Marcos",
+      "field_type": "ADAPTIVE",
+      "current_content": "Generic milestone structure",
+      "required_rewrite": true,
+      "confidence": 6,
+      "rationale": "Keep table structure, replace milestone dates and names. Critical milestones: OPC Setup Complete (End Sept), Data Quality Baseline (Mid Oct), Dashboard MVP (End Oct), Final Validation (Mid Nov).",
+      "key_topics": [
+        "M1: OPC Specifications Confirmed (Sept 1)",
+        "M2: First Historical Data Extract (Sept 15)",
+        "M3: Data Quality Assessment Complete (Oct 31)",
+        "M4: Dashboard MVP Demo (Oct 31)",
+        "M5: Project Closure & WP2 Readiness (Nov 30)"
+      ]
+    },
+    "section_10_disseminacao": {
+      "heading": "Disseminação e Valorização",
+      "field_type": "ADAPTIVE",
+      "current_content": "ML publications, conference submissions",
+      "required_rewrite": true,
+      "confidence": 5,
+      "rationale": "WP1 is prototype/foundation phase. Dissemination is limited. Focus on internal INCM/DTX knowledge base, not external publications. Keep structure, minimize content.",
+      "key_topics": [
+        "Internal technical documentation",
+        "INCM internal training on OPC/data architecture",
+        "Readiness for WP2 dissemination (real-time systems)"
+      ]
+    },
+    "section_11_transicao": {
+      "heading": "Plano de Transição Tecnológico",
+      "field_type": "REGENERATE",
+      "current_content": "ERP system deployment, feature integration",
+      "required_rewrite": true,
+      "confidence": 3,
+      "rationale": "Complete rewrite. WP1 transition is to WP2 real-time alarmistics. Must detail: Data infrastructure handover, Dashboard migration path, SME knowledge base.",
+      "key_topics": [
+        "Transition from offline analysis to real-time streaming (WP2)",
+        "Infrastructure requirements for WP2",
+        "Knowledge base for predictive models",
+        "SME continuity from WP1 to WP2"
+      ]
+    },
+    "section_12_riscos": {
+      "heading": "Riscos do Projeto",
+      "field_type": "REGENERATE",
+      "current_content": "Generic technical/project risks",
+      "required_rewrite": true,
+      "confidence": 4,
+      "rationale": "Replace with WP1-specific risks: SME unavailability (HIGH), OPC infrastructure delays (HIGH), data quality issues (MEDIUM), tight timeline (MEDIUM). Add mitigation strategies.",
+      "key_topics": [
+        "R1: SME availability <20% → Project fails (Mitigation: steering committee oversight)",
+        "R2: OPC specs not finalized by Sept 1 (Mitigation: escalation protocol)",
+        "R3: Data quality issues prevent analytics (Mitigation: early profiling)",
+        "R4: 3-month timeline is aggressive (Mitigation: parallel WP2 prep)"
+      ]
+    },
+    "section_13_orcamento": {
+      "heading": "Orçamento",
+      "field_type": "VARIABLE",
+      "current_content": "Template budget table",
+      "required_rewrite": true,
+      "confidence": 7,
+      "rationale": "Replace with INCM €85k allocation. Breakdown: Personnel (50%), Infrastructure/Tools (25%), External Services (15%), Contingency (10%). Must validate against 3-month effort estimate.",
+      "key_topics": [
+        "Personnel: ~€42.5k (3 FTE × 3 months)",
+        "Infrastructure/Tools: ~€21k (OPC, cloud storage, analytics tools)",
+        "External Services: ~€12.75k (DTX support, data engineering)",
+        "Contingency: €8.75k (10%)"
+      ]
+    },
+    "section_14_governacao": {
+      "heading": "Políticas Básicas de Governação",
+      "field_type": "ADAPTIVE",
+      "current_content": "Generic governance template",
+      "required_rewrite": true,
+      "confidence": 6,
+      "rationale": "Keep governance structure (steering committee, decision gates), update for INCM-DTX partnership. Key: Decision protocol for OPC choice, escalation for SME issues.",
+      "key_topics": [
+        "Steering committee: INCM ops + DTX tech lead",
+        "Weekly sync meetings",
+        "OPC decision gate (Sept 1)",
+        "Data quality acceptance criteria"
+      ]
+    },
+    "section_15_propriedade": {
+      "heading": "Direitos de Propriedade",
+      "field_type": "ADAPTIVE",
+      "current_content": "Generic IP/data ownership template",
+      "required_rewrite": true,
+      "confidence": 7,
+      "rationale": "Update for INCM-DTX context. INCM owns production data, DTX owns methodology/dashboard code. Keep structure, update stakeholder references.",
+      "key_topics": [
+        "INCM: owns all production data, manufacturing knowledge",
+        "DTX: retains methodology, reusable analytics components",
+        "Shared: dashboard IP (co-owned during WP1-3)"
+      ]
+    },
+    "section_16_observacoes": {
+      "heading": "Observações Finais",
+      "field_type": "ADAPTIVE",
+      "current_content": "Recommendations for project success",
+      "required_rewrite": true,
+      "confidence": 7,
+      "rationale": "Update with WP1-specific recommendations. Emphasize: SME continuity, OPC decision by Sept 1, quick data quality wins to build momentum, WP2 readiness.",
+      "key_topics": [
+        "Ensure INCM SME commitment (≥20%)",
+        "Finalize OPC specifications immediately",
+        "Plan for quick data quality improvements (confidence building)",
+        "Prepare WP2 technical requirements document"
+      ]
+    },
+    "section_17_signatures": {
+      "heading": "Project Charter validado e aprovado",
+      "field_type": "VARIABLE",
+      "current_content": "Signature table template",
+      "required_rewrite": true,
+      "confidence": 9,
+      "rationale": "Update stakeholder names and roles for INCM-PreditSense. Replace template names with actual INCM/DTX representatives (will be placeholders if unknown).",
+      "key_topics": [
+        "INCM Sponsor Signature",
+        "INCM Project Manager",
+        "DTX Project Lead",
+        "Date of approval"
+      ]
+    }
+  },
+  "tables": {
+    "partners_table": {
+      "table_id": 1,
+      "heading": "Parceiros & Principais Contactos",
+      "field_type": "VARIABLE",
+      "rationale": "Update partner names (INCM, DTX, OPC vendor, etc.) and contacts. Simple row-by-row replacement.",
+      "confidence": 9
+    },
+    "prototipos_table": {
+      "table_id": 2,
+      "heading": "Protótipos Esperados",
+      "field_type": "REGENERATE",
+      "rationale": "Replace ML prototypes with WP1 prototypes: Dashboard, Data Archive, OPC Config. Keep TRL progression.",
+      "confidence": 5
+    },
+    "inovacao_table": {
+      "table_id": 3,
+      "heading": "Características Inovadoras",
+      "field_type": "ADAPTIVE",
+      "rationale": "Keep structure, replace innovation descriptions. Focus on WP1 innovation: heterogeneous sensor integration, offline KPI dashboarding.",
+      "confidence": 6
+    },
+    "atividades_table": {
+      "table_id": 4,
+      "heading": "Designação da Atividade (Work Breakdown Structure)",
+      "field_type": "REGENERATE",
+      "rationale": "Replace all activities with WP1 WBS: OPC Setup, Data Extraction, Data Profiling, Dashboard Dev, Validation.",
+      "confidence": 5
+    },
+    "entregaveis_table": {
+      "table_id": 5,
+      "heading": "Entregáveis",
+      "field_type": "REGENERATE",
+      "rationale": "Replace ML deliverables with WP1 deliverables: Data Archive, OPC Config Doc, Dashboard Code, Reports.",
+      "confidence": 6
+    },
+    "marcos_table": {
+      "table_id": 6,
+      "heading": "Marcos do Projeto",
+      "field_type": "REGENERATE",
+      "rationale": "Replace with WP1 milestone dates and gates (Sept 1, Sept 15, Oct 31, Nov 30).",
+      "confidence": 6
+    },
+    "recursos_table": {
+      "table_id": 7,
+      "heading": "Recursos",
+      "field_type": "VARIABLE",
+      "rationale": "Update resource types and quantities for WP1 (OPC tools, Python/analytics stack, data storage).",
+      "confidence": 7
+    },
+    "custos_table": {
+      "table_id": 10,
+      "heading": "Custos do Projeto",
+      "field_type": "VARIABLE",
+      "rationale": "Populate with €85k budget breakdown per WP1 scope.",
+      "confidence": 8
+    },
+    "riscos_table": {
+      "table_id": 9,
+      "heading": "Riscos do Projeto",
+      "field_type": "REGENERATE",
+      "rationale": "Replace with WP1 risks (SME availability, OPC delays, data quality, timeline pressure). Add impact/mitigation.",
+      "confidence": 5
+    },
+    "esforco_table": {
+      "table_id": 11,
+      "heading": "Planificação de Esforço DTx",
+      "field_type": "VARIABLE",
+      "rationale": "Allocate DTX effort across WP1 phases. ~3 FTE × 3 months = ~360 hours.",
+      "confidence": 7
+    },
+    "governacao_table": {
+      "table_id": 14,
+      "heading": "Estrutura de Governação",
+      "field_type": "VARIABLE",
+      "rationale": "Replace with INCM-DTX committee members and roles.",
+      "confidence": 8
+    },
+    "reunioes_table": {
+      "table_id": 15,
+      "heading": "Plano de Reuniões",
+      "field_type": "VARIABLE",
+      "rationale": "Update meeting schedule for WP1 (weekly steerings, bi-weekly technical, etc.).",
+      "confidence": 8
+    }
+  },
+  "summary": {
+    "total_sections": 17,
+    "variable_count": 6,
+    "adaptive_count": 8,
+    "regenerate_count": 11,
+    "domain_mismatch_severity": "HIGH",
+    "content_rewrite_percentage": 85,
+    "structure_preservation_percentage": 100,
+    "confidence_average": 6.2,
+    "critical_uncertainties": [
+      "OPC specifications (UA vs DA) - pending INCM decision",
+      "Exact INCM/DTX stakeholder names and roles",
+      "DAE (DTX partner) infrastructure completion status",
+      "Detailed budget breakdown (allocations by activity)"
+    ]
+  }
+}

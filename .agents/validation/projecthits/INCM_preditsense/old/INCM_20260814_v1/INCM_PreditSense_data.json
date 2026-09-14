@@ -1,0 +1,121 @@
+{
+  "_HEADER": "Mapeamento de dados para INCM-PreditSense Project Charter (Template: Project_Charter_TabularAI_Cegid_v6.docx)",
+  "_USAGE": "python scripts/charter_adapter.py --template [template.docx] --output results/projectHITs/INCM_Charter.docx --data results/projectHITs/INCM_PreditSense_data.json --log results/projectHITs/INCM_audit.json",
+  "_INSTRUCTIONS": "Cada par chave:valor aqui é uma substituição EXATA no template original (old → new). Não usar {{PLACEHOLDER}}.",
+  
+  "_SECTION_PROJECT_IDENTITY": "=== IDENTIDADE DO PROJETO ===",
+  "TabularAI": "INCM-PreditSense",
+  "Cegid": "INCM — Instituto Nacional da Moeda e do Câmbio",
+  "Project": "INCM-PreditSense — Prototipagem de Manutenção Preditiva em Linha de Selagem/Laminagem",
+  
+  "_SECTION_DATES": "=== DATAS ===",
+  "01/01/2025": "01/09/2026",
+  "31/12/2025": "30/11/2026",
+  "2025-01-01": "2026-09-01",
+  "2025-12-31": "2026-11-30",
+  "janeiro 2025": "setembro 2026",
+  "dezembro 2025": "novembro 2026",
+  
+  "_SECTION_BUDGET": "=== ORÇAMENTO ===",
+  "€120.000": "€85.000",
+  "€50.000": "€35.000",
+  "€30.000": "€25.000",
+  "€40.000": "€25.000",
+  
+  "_SECTION_EFFORT": "=== ESFORÇO/HORAS ===",
+  "500 horas": "800 horas",
+  "1000 dias/pessoa": "1200 dias/pessoa",
+  "1500h": "2000h",
+  
+  "_SECTION_TEAM": "=== EQUIPA ===",
+  "João Silva": "Nuno Costa",
+  "Silva, João": "Costa, Nuno",
+  "Ana Costa": "Bruno Sampaio",
+  "Costa, Ana": "Sampaio, Bruno",
+  "Pedro Oliveira": "Susana Cruz",
+  "Oliveira, Pedro": "Cruz, Susana",
+  
+  "_SECTION_ROLES": "=== ROLES ===",
+  "Project Manager": "Data Science & ML Coordinator",
+  "Arquiteto Sênior": "Data Science Lead",
+  "Engenheiro de Dados": "Data Engineer / Infrastructure",
+  
+  "_SECTION_CONTACT": "=== CONTACTO ===",
+  "joao.silva@tabularai.com": "nuno.costa@dtx.eu",
+  "silva@tabularai.com": "costa@dtx.eu",
+  "portugal@company.com": "portugal@dtxinnovation.com",
+  
+  "_SECTION_STAKEHOLDERS": "=== STAKEHOLDERS ===",
+  "stakeholder@cegid.com": "[TBD INCM Contact]",
+  "cliente@empresa.com": "incm@incm.pt",
+  
+  "_SECTION_MILESTONES": "=== MILESTONES ===",
+  "Fase 1 - Análise": "WP1 — Fundações de Dados & OPC (30 Nov 2026)",
+  "Fase 2 - Design": "WP2 — Alarmística & Real-time (8-12 meses após WP1)",
+  "Fase 3 - Implementação": "WP3 — Manutenção Preditiva (8-12 meses após WP2)",
+  "Fase 4 - Testes": "Validação Contínua & Adjust (Ao longo todas WPs)",
+  
+  "_SECTION_DELIVERABLES": "=== DELIVERABLES ===",
+  "Relatório de Análise": "Relatório Data Understanding & Profiling (histórico consolidado com análise de qualidade temporal)",
+  "Prototipo Funcional": "Dashboard Offline com KPIs (ciclos/hora, variação térmica, correlação defeitos-anomalias)",
+  "Documentação Técnica": "Documentação OPC Setup, Arquitetura Push Externo, Mapeamento PLCs, Especificações Encriptação",
+  "Plano de Testes": "Plano Testes Data Acquisition, Validação Conectividade OPC, Validação Sincronização Temporal",
+  "Anotações Operadores": "Matriz Labels Piloto (≥500 anotações operadores via HITwintag para contexto domínio)",
+  
+  "_SECTION_MACHINE_TARGET": "=== MÁQUINA ALVO ===",
+  "Máquina A": "Máquina de Selagem/Laminagem (Fim Processo)",
+  "Linha Production": "Linha de Selagem/Laminagem INCM",
+  "Sensor Coverage": "PLCs Máquina + 4 Sensores HVAC (Temperatura/Humidade)",
+  
+  "_SECTION_SCOPE": "=== SCOPE ===",
+  "Abrangência": "Dados histórico máquina selagem/laminagem + sensores ambientais. OPC setup para extração. Dashboard offline. Human-in-the-loop anotação operadores.",
+  "Fora Scope": "Modificações sensorização. Setup online real-time (é WP2). Modelos preditivos (é WP3). Alterações infraestrutura PLC existente.",
+  
+  "_SECTION_ASSUMPTIONS": "=== PRESSUPOSTOS (VALIDAR COM INCM) ===",
+  "Pressuposto 1": "SME INCM dedicado ≥20% tempo para mapeamento pré-variáveis e validação dados",
+  "Pressuposto 2": "Dados histórico disponível antes/durante Setembro 2026 (mínimo 2-3 meses precedentes)",
+  "Pressuposto 3": "Especificações OPC (DA vs UA, PLCs, topologia) clarificadas antes 25 Agosto 2026",
+  "Pressuposto 4": "Operadores INCM disponíveis para anotação manual falhas em tablet (esforço baixo, falhas infrequentes)",
+  "Pressuposto 5": "Conectividade Push Externo modelo (Cliente Local INCM → Endpoint WebServer DTX) viável",
+  
+  "_SECTION_CONSTRAINTS": "=== RESTRIÇÕES ===",
+  "Constraint 1": "Equipa DTX (DAE) tem recursos limitados até novembro 2026 — OPC setup criticidade máxima",
+  "Constraint 2": "Timeline 3 meses é agressivo; contingência 4-5 meses se complexidade aumentar ou dados atrasarem",
+  "Constraint 3": "Stage-Gate sequencial: WP2/WP3 apenas se WP1 ✅ validada (dados + OPC operacional)",
+  "Constraint 4": "Foco WP1: Data Foundation + Offline Dashboard (sem real-time). Online é WP2.",
+  
+  "_SECTION_RISKS": "=== RISCOS PRINCIPAIS ===",
+  "Risco 1": "SME INCM indisponível: 85% probabilidade falha WP1 (literatura MLOps). Mitigação: SLA formal contrato.",
+  "Risco 2": "OPC specs desconhecidas (DA vs UA): +2 a +4 semanas impacto timeline. Mitigação: Validação P0 antes 25 Ago.",
+  "Risco 3": "Dados histórico atrasam (Nov vs Set): Margem desaparece. Mitigação: Confirmação entrega ANTES 25 Ago.",
+  "Risco 4": "Infraestrutura OPC complexa (legacy, PLC desconhecido): Excede recursos DTX. Mitigação: Clareza INCM responsabilidades.",
+  "Risco 5": "Sincronização temporal inadequada (±10ms misalignment): 25% erro anomaly detection. Mitigação: Validação primeira semana.",
+  
+  "_SECTION_SUCCESS_CRITERIA": "=== CRITÉRIOS SUCESSO ===",
+  "Critério 1": "Histórico consolidado 2-3 meses, ≥95% cobertura dados, timestamps sincronizados (±10ms)",
+  "Critério 2": "OPC servidor em produção, conectividade estável, encriptação validada",
+  "Critério 3": "Dashboard offline demonstra KPIs validados (ciclos/hora, variação térmica, OK/NOK correlação)",
+  "Critério 4": "Matriz labels operacional: ≥500 anotações operadores, contexto domínio documentado",
+  "Critério 5": "Aprovação INCM: Dados qualidade, infraestrutura viável, prontidão WP2",
+  
+  "_SECTION_DEPENDENCIES": "=== DEPENDÊNCIAS ===",
+  "Depende De": "Dados histórico INCM, Especificações OPC, Disponibilidade SME, Acesso PLCs máquina",
+  "Bloqueia": "Início WP2 (Alarmística Real-time), Início WP3 (Manutenção Preditiva)",
+  
+  "_SECTION_GOVERNANCE": "=== GOVERNANCE ===",
+  "Review Cadence": "Reuniões bi-semanais (DTX + INCM) para monitorar P0/P1 validações",
+  "Stage-Gate Review": "Checkpoint fim Outubro para avaliar conformidade timeline (viável Nov 30 ou extensão?)",
+  "Change Control": "Desvios scope/timeline requerem aprovação conjunta DTX + INCM",
+  
+  "_SECTION_TOOLS_TECH": "=== TECNOLOGIA & FERRAMENTAS ===",
+  "Data Processing": "Python (Pandas, NumPy, Scikit-learn), SQL",
+  "OPC Integration": "python-opc (ou similar), TLS/SSL encryption",
+  "Dashboard": "Python (Plotly/Dash) ou Power BI, Offline HTML",
+  "Annotation Tool": "HITwintag (Nuno Costa, custom build)",
+  "Documentation": "Markdown, Confluence, Project Charter (este)",
+  
+  "_NOTES_ADAPTIVE_FIELDS": "As seguintes descrições genéricas podem ser otimizadas mas mantêm essência do template",
+  "_ADAPTIVE_NOTE_1": "Pressupostos genéricos → Adaptados ao contexto INCM mas mantêm princípios",
+  "_ADAPTIVE_NOTE_2": "Restrições genéricas MLOps → Especificadas para contexto DTX + INCM",
+  "_ADAPTIVE_NOTE_3": "Riscos genéricos MLOps → Contextualizados para selagem/laminagem + temporal sync"
+}

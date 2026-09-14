@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-08-14T15:59:31.426989",
+  "template": "my/agentic_instructions/examples/projectHITs/Project_Charter_TabularAI_Cegid_v6.docx",
+  "new_project": "incm-preditsense: prototipagem de manutenção preditiva em linha de selagem/laminagem. objetivo: vali",
+  "total_mismatches": 2,
+  "mismatch_occurrences": 102,
+  "_INSTRUCTIONS": "Fill in all [SPECIFY ...] placeholders with actual project values",
+  "mapping_categories": {
+    "narrative_replacements": {
+      "business_domain": {
+        "old": "Enterprise Resource Planning; ERP; Business Process",
+        "new": "[SPECIFY NEW BUSINESS DOMAIN]",
+        "risk": "CRITICAL",
+        "occurrences_expected": 22
+      },
+      "technology_stack": {
+        "old": "Modelos Fundacionais Tabulares; SAP-RPT-1-OSS; TabPFN; TabICL",
+        "new": "[SPECIFY NEW TECHNOLOGY/DOMAIN]",
+        "risk": "CRITICAL",
+        "occurrences_expected": 80
+      }
+    },
+    "field_replacements": {
+      "core_fields": {
+        "project_name": "[FILL: Old project name → New project name]",
+        "client_name": "[FILL: Old client/associate → New client/associate]",
+        "project_lead": "[FILL: Old PM name → New PM name]",
+        "start_date": "[FILL: Old start date → New start date]",
+        "end_date": "[FILL: Old end date → New end date]",
+        "total_budget": "[FILL: Old budget → New budget]"
+      }
+    },
+    "structural_replacements": {}
+  }
+}
