@@ -14,15 +14,13 @@ Orientações para Claude Code quando trabalha neste repositório.
 
 ```
 dotfiles/
-├── .agents/                    ← Agentes
-│   ├── skills/                 ← Skills (diagnose-crash, omarchy, etc.)
-│   └── workflows/              ← Personas e workflows (init.md, architect_html_sciml.md)
-├── .claude/                    ← Configuração Claude
-├── .vscode/                    ← Configuração VS Code
-├── .github/                    ← GitHub config (copilot-instructions.md, etc.)
+├── .agents/                    ← Agentes (skills/, workflows/, + harnesses/, instructions/, prompts/, automation/ — ver lacunas abaixo)
+├── .claude/                    ← Configuração Claude, incl. .claude/skills/ (9 skills HITs — divergem de .agents/skills/)
+├── .vscode/                    ← Configuração VS Code (settings.json contém API key — ver lacunas abaixo)
+├── .github/                    ← GitHub config, duplica grande parte de .agents/
 ├── AGENTS.md                   ← Guia completo de agentes
 ├── README.md                   ← Overview
-├── setup.sh                    ← One-click machine setup
+├── setup.sh                    ← One-click machine setup (hardcoded para nmc-costa)
 └── sync-skills.sh              ← Sincronizar skills
 ```
 
@@ -81,10 +79,7 @@ Ver `AGENTS.md` para guia completo.
 
 ## Contexto Global
 
-Ficheiros de contexto para agentes (symlinks do `~/dotfiles/`):
-- `~/.context-global.md` — Contexto geral
-- `~/claude.md` — Instruções Claude
-- `~/directory_tree.md` — Mapa de diretórios
+README.md/AGENTS.md descrevem `~/.context-global.md`, `~/claude.md`, `~/directory_tree.md` e `agent-versions.json` como symlinks/ficheiros do `~/dotfiles/`. **Nesta máquina nenhum destes existe** — não assumas que estão presentes sem verificar. A direção de sincronização (repo→sistema via symlinks, vs. sistema→repo) ainda não foi decidida como standard — ver secção seguinte.
 
 ## Setup Nova Máquina
 
@@ -106,6 +101,17 @@ Depois:
 - **Não editar skills em `~/.agents/skills/`** — sempre editar em `~/dotfiles/.agents/skills/` e sincronizar
 - **Skills são shared** — se adicionas nova skill, todos os agentes a veem
 - **Workflows em `.agents/workflows/`** — personas e inicializações
+
+## ⚠️ Lacunas Conhecidas (audit 2026-09-14)
+
+Não tratar os seguintes ficheiros/afirmações como verdade atual sem verificar primeiro:
+
+- **`AUDIT_REPORT.md` e `STANDARDS.md` têm afirmações falsas ou aspiracionais** — ex.: `AUDIT_REPORT.md` afirma "sem paths hardcoded" e "sem referências a `dtx/`", ambas contradeitas pelo conteúdo real (`.vscode/github.code-workspace`, `.github/copilot-instructions.md`). `STANDARDS.md` descreve `.copilot/`, `.gemini/`, `.cursor/`, `agent-versions.json` que não existem.
+- **Decisão de sincronização em aberto**: sistema→repo vs. repo→sistema ainda não é standard. Até estar decidido, `setup.sh`/`sync-skills.sh` podem não refletir o estado real da máquina (ex.: `~/.claude`, `~/.agents`, `~/.vscode` não são symlinks nesta máquina, apesar do que README/AGENTS.md descrevem).
+- **`.agents/` e `.github/` têm conteúdo duplicado e órfão** (harnesses/, instructions/, prompts/, automation/) com referências a um caminho `/my/agentic_instructions/...` que não existe neste repo nem em `~/Projects/agentic_instructions`. Tratar como legado até ser limpo — não usar como fonte de verdade.
+- **`.claude/skills/` (9 skills HITs) diverge do modelo documentado** de "single source of truth em `.agents/skills/`" — `.agents/skills/` só tem `diagnose-crash` e `omarchy`. As skills HITs vivem só em `.claude/skills/`, nunca sincronizadas via `sync-skills.sh`, e diferem do conteúdo equivalente em `.github/skills/`.
+- **`.vscode/settings.json` contém uma API key real** para um endpoint custom. Repo é privado/uso pessoal (risco aceite pelo dono), mas não propagar este ficheiro para outros repos, exemplos, ou contextos partilhados.
+- **`setup.sh` tem listas de repos hardcoded** (`WORK_REPOS`, `PROJECTS_REPOS`) específicas de `nmc-costa` — não é portável para outro utilizador sem editar o script diretamente.
 
 ## Documentação
 
