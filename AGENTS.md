@@ -18,15 +18,18 @@ Este repositório centraliza skills (extensões/plugins) na pasta padrão `.agen
 ```
 dotfiles/
 └── .agents/
-    └── skills/              ← Central source of truth
-        ├── diagnose-crash/
-        │   ├── SKILL.md
-        │   └── reporting.md
-        ├── omarchy/
-        │   ├── SKILL.md
-        │   └── [outros ficheiros]
-        └── [novas-skills]/
-            └── SKILL.md
+    ├── skills/                     ← Central source of truth
+    │   ├── diagnose-crash/
+    │   │   ├── SKILL.md
+    │   │   └── reporting.md
+    │   ├── omarchy/
+    │   │   ├── SKILL.md
+    │   │   └── [outros ficheiros]
+    │   └── [novas-skills]/
+    │       └── SKILL.md
+    └── workflows/                  ← Agent personas
+        ├── init.md
+        └── architect_html_sciml.md
 ```
 
 Quando sincronizas, as skills são propagadas para:

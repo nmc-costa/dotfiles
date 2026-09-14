@@ -1,16 +1,20 @@
 # dotfiles
 
-Github configuration and setup files — centralized and versioned
+Central repository for all agent configs, skills, workflows, and environment setup. Synced across machines via git for seamless collaboration with AI agents (Crush, Copilot, Gemini, Cline).
 
-This repository stores the canonical configuration files that should live in the user's home directory. Files in this repository are mirrored to the home directory using symbolic links so that changes in the repository propagate to the working environment on each machine.
+**Quick Links:**
+- **`AGENTS.md`** — AI agent setup and skills management
+- **`setup.sh`** — Automated one-click machine setup
+- **`sync-skills.sh`** — Distribute skills to all agents 
 
 
-## User context & development environment
 
-### System specifications
-- **OS:** Omarchy Linux (Quattro), based on Arch.
-- **Editors:** NeoVim (primary) and VS Code (installed via `yay -S visual-studio-code-bin`).
-- **Git account:** Single GitHub account used for personal and organization repositories.
+# Contexto do Utilizador & Ambiente de Desenvolvimento
+
+## 💻 Especificações do Sistema
+* **SO:** Omarchy Linux (Versão Quattro), baseado em Arch. Sistema opinativo (omakase).
+* **Editores Ativos:** NeoVim (nativo/eficiência máxima) e VS Code (rede de segurança visual instalado via `yay -S visual-studio-code-bin`).
+* **Conta Git:** Mesma conta do GitHub usada para repositórios pessoais e da organização.
 
 ---
 
@@ -43,18 +47,6 @@ Configuration files live in `~/dotfiles/` and are mirrored to the home directory
 ln -sf ~/dotfiles/<file> ~/<file>
 ```
 
-- Open the home folder in VS Code:
-
-```bash
-code ~
-```
-
-- NeoVim shortcuts:
-	- Enter insert mode: `i`
-	- Exit to normal mode: `Esc` or `Ctrl-[`
-	- Save and quit: `:wq` or `ZZ`
-	- Quit without saving: `:q!` or `ZQ`
-	- Undo: `u`
 
 ---
 
