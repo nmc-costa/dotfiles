@@ -1,0 +1,56 @@
+# Local environment
+.DS_Store
+.swp
+.swo
+*~
+*.swp
+*.bak
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+.idea/
+*.sublime-*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+dist/
+build/
+
+# Logs and runtime
+*.log
+.env
+.env.local
+*.pid
+
+# OS
+Thumbs.db
+node_modules/
+
+# Temporary
+temp/
+tmp/
+*.tmp
+.cache/
+
+# Agent-specific (don't track user sessions/logs)
+.claude/sessions/
+.claude/logs/
+.claude/cache/
+.agents/cache/
+.copilot/sessions/
+.cline/sessions/
+
+# But DO track core configs
+!.claude/
+!.agents/
+!.vscode/
+!.github/
