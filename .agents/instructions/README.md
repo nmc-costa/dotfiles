@@ -1,57 +1,55 @@
 # 🔗 Workspace Configuration Instructions
 
-**⚠️ All instructions are centralized in `/my/agentic_instructions/` (Hybrid C architecture)**
+**Instructions live directly in this repo, under `.agents/instructions/` — there is no external "centralized" repo.**
 
-This directory contains **references only**. For the actual instructions, see:
+This directory used to describe a "Hybrid C" architecture that pointed at `/my/agentic_instructions/`, a path that
+never existed on this machine. The real source repo was `~/Projects/agentic_instructions`; its content has now been
+merged into this repo (`dotfiles`) directly, which is the single source of truth going forward. The old repo is kept
+around only to be archived on GitHub for history — do not treat it as a live source anymore.
 
-## 📍 Centralized Location
+## 📍 Layout
 
-All workspace configuration instructions are stored in:
 ```
-/my/agentic_instructions/instructions/workspace-config/
+.agents/instructions/
+├── base-personas/        # archi.md (master persona) + related base personas
+├── task-personas/        # per-agent personas (projectHITs.md, presentHITs.md, ...)
+├── workspace-config/      # workspace-wide rules
+└── automation/            # scheduled/automated instruction sets
 ```
 
 ## 📋 What's Available
 
 | Instruction | Purpose | Location |
 |-------------|---------|----------|
-| **Daily Optimization** | Automated daily workspace optimization workflow | [`workspace-config/daily-optimization.instructions.md`](../../my/agentic_instructions/instructions/workspace-config/daily-optimization.instructions.md) |
-| **Model Routing** | Model selection rules (Haiku vs GPT-5/Gemini) | [`workspace-config/model-routing.instructions.md`](../../my/agentic_instructions/instructions/workspace-config/model-routing.instructions.md) |
-| **Token Tracking** | Token usage monitoring and routing compliance | [`workspace-config/token-tracking.instructions.md`](../../my/agentic_instructions/instructions/workspace-config/token-tracking.instructions.md) |
-| **Mermaid Diagrams** | Mermaid diagram generation rules and validation | [`workspace-config/mermaid.instructions.md`](../../my/agentic_instructions/instructions/workspace-config/mermaid.instructions.md) |
+| **Daily Optimization** | Automated daily workspace optimization workflow | [`workspace-config/daily-optimization.instructions.md`](workspace-config/daily-optimization.instructions.md) |
+| **Model Routing** | Model selection rules (Haiku vs. more expensive models) | [`workspace-config/model-routing.instructions.md`](workspace-config/model-routing.instructions.md) |
+| **Token Tracking** | Token usage monitoring and routing compliance | [`workspace-config/token-tracking.instructions.md`](workspace-config/token-tracking.instructions.md) |
+| **Mermaid Diagrams** | Mermaid diagram generation rules and validation | [`workspace-config/mermaid.instructions.md`](workspace-config/mermaid.instructions.md) |
+| **VS Code Docs Monitor** | Weekly VS Code docs change monitoring | [`automation/vscode-docs-monitor.instructions.md`](automation/vscode-docs-monitor.instructions.md) |
+| **Master Persona** | Master Architect / Weaver persona | [`base-personas/archi.md`](base-personas/archi.md) |
+| **Copilot Workspace Workflow** | Copilot-specific workspace workflow notes | [`base-personas/copilot_workspace_workflow.md`](base-personas/copilot_workspace_workflow.md) |
+| **Master Continuous Optimization** | Design-only future roadmap (NOT implemented) | [`base-personas/master-continuous-optimization.md`](base-personas/master-continuous-optimization.md) |
+| **Task Personas** | Per-agent personas | [`task-personas/`](task-personas/) |
 
-## 🏗️ Hybrid C Architecture
+## 🏗️ Current Architecture
 
-This structure follows the **Hybrid C pattern**:
-- ✅ **Single Source of Truth**: All instructions in `/my/agentic_instructions/`
-- ✅ **GitHub Compliance**: `.github/copilot-instructions.md` auto-discovered by GitHub Copilot
-- ✅ **Zero Duplication**: Only references here, no duplication
-- ✅ **Flexibility**: Easy to update, reference, or switch harnesses
+- ✅ **Single Source of Truth**: `.agents/instructions/` in this repo (`~/dotfiles`)
+- ✅ **GitHub Compliance**: `.github/copilot-instructions.md` is auto-discovered by GitHub Copilot; `.github/instructions` is a symlink to `.agents/instructions` so both tools read the same files
+- ✅ **Zero Duplication**: `.github/instructions` and `.agents/instructions` are the same files on disk (symlink), not copies
+- ⚠️ **No central REGISTRY.md**: the old repo's `REGISTRY.md` was aspirational/stale and was not carried over. Browse `.agents/skills/` and `.agents/instructions/` directly instead.
 
 ## 🔄 How It Works
 
-1. GitHub Copilot discovers `.github/copilot-instructions.md`
-2. That file points to `REGISTRY.md` in `/my/agentic_instructions/`
-3. REGISTRY.md links to all agents, harnesses, and workspace config
-4. This README points you to the actual instructions
+1. GitHub Copilot discovers `.github/copilot-instructions.md`.
+2. Claude Code, Cursor, Gemini CLI, etc. read `.agents/skills/*/SKILL.md` and `.agents/instructions/` directly.
+3. `.github/instructions` is a symlink to `.agents/instructions`, so editing either path edits the same file.
 
 ## 📝 Note for Contributors
 
-Do NOT edit files in this directory. Instead:
-
-1. Make changes in `/my/agentic_instructions/instructions/workspace-config/`
-2. The changes automatically apply (referenced here)
-3. Commit to `agentic_instructions` repo
-4. This `.github/` folder stays clean and small
-
-## 🎯 Quick Links
-
-- **Main Registry**: `/my/agentic_instructions/REGISTRY.md`
-- **Master Organization Policy**: `/my/agentic_instructions/docs/MASTER_INSTRUCTIONS_ORGANIZATION.md`
-- **All Agents**: `/my/agentic_instructions/agents/`
-- **All Harnesses**: `/my/agentic_instructions/harnesses/`
+Edit files directly in this directory (`.agents/instructions/`) — there is no other copy to keep in sync, aside from
+the `.github/instructions` symlink which always resolves here automatically.
 
 ---
 
-**Last Updated**: 2026-08-26
-**Architecture**: Hybrid C (Centralized)
+**Last Updated**: 2026-09-14
+**Architecture**: Single source of truth in `.agents/` (dead "Hybrid C" pointer to `/my/agentic_instructions/` removed)
