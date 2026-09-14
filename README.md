@@ -40,10 +40,10 @@ dotfiles/
 
 ## Integration with Agent Framework
 
-This repository (`crush-config`) is the **stable, synchronized configuration layer**. Development of new agents and skills happens in a separate repository:
+This repository (`dotfiles`) is the **stable, synchronized configuration layer**. Development of new agents and skills happens in a separate repository:
 
-- **`crush-config`** (this repo) — Pinned versions, distributed config, symlinks to skill docs
-- **`agent-framework`** — Active development of agents, skills, workflows
+- **`dotfiles`** (this repo) — Universal config for all agents, pinned versions, distributed config
+- **`agent-framework`** — Active development of agents, skills, workflows, personas
 
 ### Version Management
 

@@ -23,33 +23,34 @@ Nomenclatura, convenções e estrutura de diretórios padrão para repositórios
 
 ## 📁 ESTRUTURA DE DIRETÓRIOS
 
-### Repositório: `crush-config` (Dotfiles)
+### Repositório: `dotfiles` (Configuração Universal)
 
-**Propósito:** Configuração estável, sincronizada entre máquinas. Referencia versões específicas do framework de agentes.
+**Propósito:** Configuração estável, sincronizada entre máquinas. Universal para todos os agentes (Crush, Copilot, Gemini, Cline, etc.)
 
 ```
-crush-config/
-├── .agents/
-│   ├── skills/                          # Skills "pinned" (symlinks para docs)
+dotfiles/
+├── .agents/                     # Universal agents config
+│   ├── skills/                  # Skills (refs para agent-framework)
 │   │   ├── diagnose-crash/
 │   │   │   └── SKILL.md
 │   │   └── omarchy/
 │   │       └── SKILL.md
-│   └── workflows/                       # Agent personas (referências)
+│   └── workflows/               # Personas e workflows
 │       ├── init.md
 │       └── architect.md
-├── .claude/
-├── .vscode/
-├── .github/
-│   ├── copilot-instructions.md
-│   └── workflows/
-├── agent-versions.json                  # Pinning explícito
-├── AGENTS.md                            # Registry + status de versões
-├── CLAUDE.md                            # Contexto Claude
-├── GEMINI.md                            # Contexto Gemini
-├── README.md                            # Setup + estrutura
-├── STANDARDS.md                         # Este ficheiro
-├── AUDIT_REPORT.md                      # Compliance report
+├── .claude/                     # Crush/Claude config
+├── .copilot/                    # Copilot config
+├── .gemini/                     # Gemini config
+├── .cursor/                     # Cursor config
+├── .vscode/                     # VS Code config
+├── .github/                     # GitHub config
+├── agent-versions.json          # Pinning do agent-framework
+├── AGENTS.md                    # Registry de agentes
+├── CLAUDE.md                    # Contexto Claude
+├── GEMINI.md                    # Contexto Gemini
+├── README.md                    # Setup + estrutura
+├── STANDARDS.md                 # Este ficheiro
+├── AUDIT_REPORT.md              # Compliance report
 ├── setup.sh
 ├── sync-skills.sh
 └── test-subagents.sh
@@ -131,10 +132,11 @@ agent-framework/
 
 | Nome | Uso | Status |
 |------|-----|--------|
-| `crush-config` | Configuração universal (dotfiles) | ✅ RECOMENDADO |
+| `dotfiles` | Configuração universal (agents, config, setup) | ✅ RECOMENDADO |
 | `agent-framework` | Framework de agents + personas + skills | ✅ RECOMENDADO |
 | `agents-core` | Alternativa menor escopo | ✅ OK |
 | ❌ ~~`agentic_instructions`~~ | Inadequado (subestima escopo) | ❌ RENOMEAR |
+| ❌ ~~`crush-config`~~ | Específico só para Crush | ❌ NÃO USAR |
 | ❌ ~~`skills`~~ | Ambíguo (usar dentro de framework) | ❌ EVITAR |
 
 **Nota:** Se já tem repo chamado `agentic_instructions` com estrutura completa, **RENOMEI-A PARA `agent-framework`** — o escopo real (agents + skills + personas + harnesses) justifica.
