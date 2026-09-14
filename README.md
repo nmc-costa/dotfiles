@@ -1,57 +1,66 @@
 # dotfiles
 
-Github config and setup files
+Github configuration and setup files — centralized and versioned
 
-Serves to perserve global files 
+This repository stores the canonical configuration files that should live in the user's home directory. Files in this repository are mirrored to the home directory using symbolic links so that changes in the repository propagate to the working environment on each machine.
 
 
+## User context & development environment
 
-# Contexto do Utilizador & Ambiente de Desenvolvimento
-
-## 💻 Especificações do Sistema
-* **SO:** Omarchy Linux (Versão Quattro), baseado em Arch. Sistema opinativo (omakase).
-* **Editores Ativos:** NeoVim (nativo/eficiência máxima) e VS Code (rede de segurança visual instalado via `yay -S visual-studio-code-bin`).
-* **Conta Git:** Mesma conta do GitHub usada para repositórios pessoais e da organização.
-
----
-
-## 📐 Arquitetura de Diretórios Definida (Padrão Omarchy + IA)
-Após validação profunda da comunidade, eliminou-se a pasta intermédia `~/github`. O utilizador assumiu a raiz `~` (/home/user/) como o root de trabalho no editor (`code ~`), garantindo caminhos relativos curtos e perfeitos para portabilidade absoluta e leitura dos Agentes de IA (Claude, Copilot).
-
-* **`~/Projects/`** -> Repositórios pessoais clonados diretamente (IP própria, laboratórios e estudos).
-* **`~/Work/`** -> Repositórios profissionais/organização (Ex: `dtx-dashboard`). O Git isola as origens via `.git` interno.
-* **`~/dotfiles/`** -> O ÚNICO repositório privado no GitHub que sincroniza o ambiente entre computadores (sem cópias manuais).
+### System specifications
+- **OS:** Omarchy Linux (Quattro), based on Arch.
+- **Editors:** NeoVim (primary) and VS Code (installed via `yay -S visual-studio-code-bin`).
+- **Git account:** Single GitHub account used for personal and organization repositories.
 
 ---
 
-## 🔗 Estrutura Física de Dotfiles e Symlinks no Disco
-Os ficheiros de contexto globais e configurações reais vivem em `~/dotfiles/` e são espelhados na raiz `~` por Links Simbólicos (`symlinks`), permitindo que as extensões de IA os leiam no topo do root:
+### Directory layout (Omarchy + IA convention)
+The intermediate `~/github` directory was removed; the user uses the home directory (`~`) as the workspace root (`code ~`). This keeps relative paths short and ensures tools and AI agents can read files from the top-level workspace.
 
-* `~/dotfiles/directory_tree.md`  -->  `~/directory_tree.md` (Mapa standard guardado)
-* `~/dotfiles/.context-global.md` -->  `~/.context-global.md` (Contexto geral de IA)
-* `~/dotfiles/claude.md`          -->  `~/claude.md` (Regras globais do Claude)
-* `~/dotfiles/.claude`           -->  `~/.claude` (Configurações do Claude)
-* `~/dotfiles/.vscode`      -->  `~/.vscode` (Configurações do VS Code)
-* `~/dotfiles/.github`       -->  `~/.github` (Configurações do GitHub)
-* `~/dotfiles/.github/copilot-instructions.md`         -->  `~/.github/copilot-instructions.md` (Regras globais do Copilot)
-
-
+- `~/Projects/` — personal repositories (research, experiments).
+- `~/Work/` — professional/organization repositories.
+- `~/dotfiles/` — the single private repository that contains global environment and editor configuration files.
 
 ---
 
-## 🛠️ Comandos Práticos Aprendidos e Utilizados
-* **Criar Symlinks:** `ln -sf ~/dotfiles/ficheiro ~/ficheiro`
-* **Abrir a Raiz no VS Code:** `code ~`
-* **NeoVim (Modo de Edição):** Tecla `i` para escrever; Tecla `Esc` (ou `Ctrl + [`) para sair do modo de escrita.
-* **NeoVim (Sair e Gravar):** Comando `Shift + Z + Z` (`ZZ` - vai dormir/grava e fecha sem precisar de Enter); `:wq` como alternativa.
-* **NeoVim (Sair sem Gravar/Forçado):** Comando `Shift + Z + Q` (`ZQ`) ou `:q!`.
-* **Desfazer Ação no NeoVim:** Tecla `u` no Modo Normal.
+### Dotfiles and symlink structure
+Configuration files live in `~/dotfiles/` and are mirrored to the home directory via symbolic links so local tools and agents read the actual configuration from the top-level path:
+
+- `~/dotfiles/directory_tree.md`  -> `~/directory_tree.md`
+- `~/dotfiles/.context-global.md` -> `~/.context-global.md`
+- `~/dotfiles/claude.md`          -> `~/claude.md`
+- `~/dotfiles/.claude`            -> `~/.claude`
+- `~/dotfiles/.vscode`            -> `~/.vscode`
+- `~/dotfiles/.github`            -> `~/.github`
+- `~/dotfiles/.github/copilot-instructions.md` -> `~/.github/copilot-instructions.md`
 
 ---
 
-## 🚀 Próximos Passos Pendentes para o Próximo Chat:
-1. Criar o código de automação para o script `~/dotfiles/setup.sh` para replicar esta árvore e os symlinks num segundo computador com um único clique.
-2. Gerar o conteúdo avançado em Markdown (prompts de regras de desenvolvimento) para preencher o `claude.md` e o `copilot.md`.
-3. Iniciar a clonagem visual ou automatizada dos repositórios dentro de `Projects/` e `Work/`.
+### Useful commands
+- Create a symlink:
+
+```bash
+ln -sf ~/dotfiles/<file> ~/<file>
+```
+
+- Open the home folder in VS Code:
+
+```bash
+code ~
+```
+
+- NeoVim shortcuts:
+	- Enter insert mode: `i`
+	- Exit to normal mode: `Esc` or `Ctrl-[`
+	- Save and quit: `:wq` or `ZZ`
+	- Quit without saving: `:q!` or `ZQ`
+	- Undo: `u`
+
+---
+
+### Next steps (for the next session)
+1. Implement `~/dotfiles/setup.sh` to recreate the symlink tree on another machine automatically.
+2. Draft developer prompts and policies in Markdown to populate `claude.md` and `copilot-instructions.md`.
+3. Add an automated or guided repository-cloning workflow for `Projects/` and `Work/`.
 
 
