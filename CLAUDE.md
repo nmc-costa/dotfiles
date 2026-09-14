@@ -102,16 +102,16 @@ Depois:
 - **Skills são shared** — se adicionas nova skill, todos os agentes a veem
 - **Workflows em `.agents/workflows/`** — personas e inicializações
 
-## ⚠️ Lacunas Conhecidas (audit 2026-09-14)
+## ⚠️ Lacunas Conhecidas (audit 2026-09-14, atualizado após merge de agentic_instructions)
 
 Não tratar os seguintes ficheiros/afirmações como verdade atual sem verificar primeiro:
 
 - **`AUDIT_REPORT.md` e `STANDARDS.md` têm afirmações falsas ou aspiracionais** — ex.: `AUDIT_REPORT.md` afirma "sem paths hardcoded" e "sem referências a `dtx/`", ambas contradeitas pelo conteúdo real (`.vscode/github.code-workspace`, `.github/copilot-instructions.md`). `STANDARDS.md` descreve `.copilot/`, `.gemini/`, `.cursor/`, `agent-versions.json` que não existem.
 - **Decisão de sincronização em aberto**: sistema→repo vs. repo→sistema ainda não é standard. Até estar decidido, `setup.sh`/`sync-skills.sh` podem não refletir o estado real da máquina (ex.: `~/.claude`, `~/.agents`, `~/.vscode` não são symlinks nesta máquina, apesar do que README/AGENTS.md descrevem).
-- **`.agents/` e `.github/` têm conteúdo duplicado e órfão** (harnesses/, instructions/, prompts/, automation/) com referências a um caminho `/my/agentic_instructions/...` que não existe neste repo nem em `~/Projects/agentic_instructions`. Tratar como legado até ser limpo — não usar como fonte de verdade.
-- **`.claude/skills/` (9 skills HITs) diverge do modelo documentado** de "single source of truth em `.agents/skills/`" — `.agents/skills/` só tem `diagnose-crash` e `omarchy`. As skills HITs vivem só em `.claude/skills/`, nunca sincronizadas via `sync-skills.sh`, e diferem do conteúdo equivalente em `.github/skills/`.
 - **`.vscode/settings.json` contém uma API key real** para um endpoint custom. Repo é privado/uso pessoal (risco aceite pelo dono), mas não propagar este ficheiro para outros repos, exemplos, ou contextos partilhados. **TODO:** migrar para chezmoi+age (decidido, ainda não executado — bloqueado em `sudo pacman -S chezmoi age`, que requer password interativa).
 - **`setup.sh` tem listas de repos hardcoded** (`WORK_REPOS`, `PROJECTS_REPOS`) específicas de `nmc-costa` — não é portável para outro utilizador sem editar o script diretamente.
+
+**Resolvido nesta ronda (deixou de ser lacuna):** `.agents/` e `.github/` já não têm conteúdo duplicado/órfão — `.github/{harnesses,instructions,prompts,automation,CONTRIBUTING.md,skills/project-doc-lifecycle}` são agora symlinks para `.agents/`, e todos os paths mortos para `/my/agentic_instructions/...` e `/home/user/github/...` foram corrigidos ou substituídos por notas que documentam o bug antigo explicitamente. `.claude/skills/` também deixou de divergir de `.agents/skills/`: as 9 skills HITs (`archi`, `diagramhits`, `documenthits`, `mockuphits`, `presenthits`, `projecthits`, `reviewhits`, `simplifyhit`, `project-doc-lifecycle`) agora vivem como conteúdo real em `.agents/skills/`, com `.claude/skills/<nome>` como symlink.
 
 ## Documentação
 
