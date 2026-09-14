@@ -111,8 +111,8 @@ Located in:
 
 **Usage:**
 ```bash
-npm install pptxgenjs
-node scripts/html-to-pptx-converter.js output.html output.pptx
+cd scripts && npm install   # installs pptxgenjs from the scoped package.json here
+node html-to-pptx-converter.js output.html output.pptx
 ```
 
 ---
