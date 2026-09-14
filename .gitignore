@@ -8,7 +8,8 @@
 
 # IDE
 .vscode/*
-!.vscode/settings.json
+# settings.json contains a real API key and is managed by chezmoi+age
+# (see SECRETS.md) — it must never be committed as plaintext again.
 !.vscode/extensions.json
 !.vscode/launch.json
 !.vscode/tasks.json
