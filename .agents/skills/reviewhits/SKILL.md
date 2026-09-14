@@ -168,6 +168,12 @@ Configuration in: `config/harness-config.json`
 
 ---
 
+## 🌍 Working Language
+
+Client documents in this workspace are frequently bilingual PT/EN. Preserve the source document's language — do not translate unless explicitly asked.
+
+---
+
 ## 📚 Related Resources
 
 - **Task Persona:** [reviewHITs.md](../../instructions/task-personas/reviewHITs.md)
@@ -213,4 +219,4 @@ Provide 6-dimensional critique with specific recommendations.
 For issues:
 1. Check `.agents/skills/` (no central registry file; browse skill directories directly)
 2. Review [reviewHITs.md](../../instructions/task-personas/reviewHITs.md)
-3. Test with: `pytest tests/agents/ -v`
+3. No automated test suite for skills in this repo (the old `tests/agents/` pytest suite was mostly inert — skipped fixtures pointing at a directory that never existed here — and was not migrated); verify manually, or run `.agents/skills/simplifyhit/scripts/audit_instruction_health.py` for instruction-quality checks

@@ -141,6 +141,18 @@ Configuration in: `config/harness-config.json`
 
 ---
 
+## 📖 Fuller Variant
+
+A fuller variant of this system prompt (with more worked SciML/HTML-prototype detail) lives at [`.agents/workflows/architect_html_sciml.md`](../../workflows/architect_html_sciml.md).
+
+---
+
+## 🌍 Working Language
+
+Client documents in this workspace are frequently bilingual PT/EN. Preserve the source document's language — do not translate unless explicitly asked.
+
+---
+
 ## 📚 Related Resources
 
 - **Task Persona:** [mockupHITs.md](../../instructions/task-personas/mockupHITs.md)
@@ -193,4 +205,4 @@ For issues or enhancements:
 1. Check `.agents/skills/` (no central registry file; browse skill directories directly)
 2. Review [mockupHITs.md](../../instructions/task-personas/mockupHITs.md)
 3. Check `../../validation/presenthits/client-examples/` for interactive HTML examples
-4. Test with: `pytest tests/agents/ -v`
+4. No automated test suite for skills in this repo (the old `tests/agents/` pytest suite was mostly inert — skipped fixtures pointing at a directory that never existed here — and was not migrated); verify manually, or run `.agents/skills/simplifyhit/scripts/audit_instruction_health.py` for instruction-quality checks

@@ -177,4 +177,4 @@ For issues or enhancements:
 1. Check `.agents/skills/` (no central registry file; browse skill directories directly) for related skills
 2. Review [projectHITs.md](../../instructions/task-personas/projectHITs.md) for persona details
 3. Check `examples/` for templates
-4. Test with: `pytest tests/agents/ -v`
+4. No automated test suite for skills in this repo (the old `tests/agents/` pytest suite was mostly inert — skipped fixtures pointing at a directory that never existed here — and was not migrated); verify manually, or run `.agents/skills/simplifyhit/scripts/audit_instruction_health.py` for instruction-quality checks

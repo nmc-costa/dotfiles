@@ -144,6 +144,18 @@ Configuration in: `config/harness-config.json`
 
 ---
 
+## ⚠️ Claude Code Caveat
+
+Diagram rules also live in `.agents/instructions/workspace-config/mermaid.instructions.md`. That file lists VS Code Mermaid Language Model tools which do **not** exist in Claude Code — in Claude Code, write `.mmd` files directly and validate Mermaid syntax by hand (or via the Mermaid live editor) instead of relying on any LM tool integration.
+
+---
+
+## 🌍 Working Language
+
+Client documents in this workspace are frequently bilingual PT/EN. Preserve the source document's language — do not translate unless explicitly asked.
+
+---
+
 ## 📚 Related Resources
 
 - **Task Persona:** [diagramHITs.md](../../instructions/task-personas/diagramHITs.md)
@@ -190,4 +202,4 @@ For issues:
 1. Check `.agents/skills/` (no central registry file; browse skill directories directly)
 2. Review [diagramHITs.md](../../instructions/task-personas/diagramHITs.md)
 3. See [Mermaid Docs](https://mermaid.js.org/) for syntax
-4. Test with: `pytest tests/agents/ -v`
+4. No automated test suite for skills in this repo (the old `tests/agents/` pytest suite was mostly inert — skipped fixtures pointing at a directory that never existed here — and was not migrated); verify manually, or run `.agents/skills/simplifyhit/scripts/audit_instruction_health.py` for instruction-quality checks

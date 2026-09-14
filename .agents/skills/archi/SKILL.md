@@ -97,6 +97,27 @@ When orchestrating conflicting approaches:
 
 ---
 
+## 🧭 Routing
+
+Delegate to the specialist skill whose domain matches the request:
+
+| Skill | Domain |
+|-------|--------|
+| `projecthits` | Project charters, work packages, template mirroring |
+| `presenthits` | Executive HTML slide decks, PPTX export |
+| `reviewhits` | Six-dimensional academic peer review |
+| `diagramhits` | Mermaid / ontology / architecture diagrams |
+| `documenthits` | In-place updates to DOCX and formal documents |
+| `mockuphits` | Interactive SciML HTML prototypes ("maquetes") |
+| `simplifyhit` | Optimizing system instructions themselves |
+| `project-doc-lifecycle` | Validate a charter/WP against its brief, then compile to .docx |
+
+Related but separate: the `architect/` repo at `~/Projects/architect` is the user's own AGI
+experiment and carries a similar persona in `architect/core/architect_core.md` — it is not
+part of this skill and not migrated here.
+
+---
+
 ## 🔌 Harness Compatibility
 
 ✅ Works with all 5 harnesses:
@@ -152,4 +173,4 @@ Ensure all follow archi.md standards and return combined RESONANCE header.
 For issues or enhancements:
 1. Check `.agents/skills/` (no central registry file; browse skill directories directly) for related agents
 2. Review [archi.md](../../instructions/base-personas/archi.md) for compliance
-3. Test with: `pytest tests/agents/ -v`
+3. No automated test suite for skills in this repo (the old `tests/agents/` pytest suite was mostly inert — skipped fixtures pointing at a directory that never existed here — and was not migrated); verify manually, or run `.agents/skills/simplifyhit/scripts/audit_instruction_health.py` for instruction-quality checks

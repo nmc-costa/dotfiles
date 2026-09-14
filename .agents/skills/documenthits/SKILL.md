@@ -140,6 +140,12 @@ Configuration in: `config/harness-config.json` + `config/.harnesses/documentHITs
 
 ---
 
+## 🌍 Working Language
+
+Client documents in this workspace are frequently bilingual PT/EN. Preserve the source document's language — do not translate unless explicitly asked.
+
+---
+
 ## 📚 Related Resources
 
 - **Task Persona:** [documentHITs.md](../../instructions/task-personas/documentHITs.md)
@@ -191,4 +197,4 @@ For issues or enhancements:
 1. Check `.agents/skills/` (no central registry file; browse skill directories directly)
 2. Review [documentHITs.md](../../instructions/task-personas/documentHITs.md)
 3. Check [project-doc-lifecycle SKILL](../../skills/project-doc-lifecycle/SKILL.md)
-4. Test with: `pytest tests/agents/ -v`
+4. No automated test suite for skills in this repo (the old `tests/agents/` pytest suite was mostly inert — skipped fixtures pointing at a directory that never existed here — and was not migrated); verify manually, or run `.agents/skills/simplifyhit/scripts/audit_instruction_health.py` for instruction-quality checks
