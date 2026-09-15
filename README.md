@@ -60,7 +60,7 @@ dotfiles/
 | `GEMINI.md` | Gemini-specific context — auto-loaded by Gemini |
 | `CHEATSHEET.md` | "Where does X go", the 3-repo map, the persistent cross-session TODO list, the agile-workspace roadmap |
 | `setup.sh` | One-click machine setup: clones repos, creates symlinks, sets up agents. Run from repo root (`./setup.sh`) |
-| `sync-skills.sh` | Distributes `.agents/skills/` to `.claude/skills/`, `.github/skills/`, and optionally system-wide. Run from repo root (`./sync-skills.sh`) |
+| `sync-skills.sh` | Distributes **every** `.agents/<subdir>/` (skills, instructions, harnesses, prompts, workflows, validation, automation) to `~/.agents/<subdir>/`, plus `skills/` specifically also to `.claude/skills/` and (with `--system`) the Omarchy system location. Name kept for compatibility even though it now syncs more than skills (2026-09-15). Run from repo root (`./sync-skills.sh`) — also runs weekly via a systemd user timer, see `.agents/instructions/workspace-config/standards/` |
 | `test-subagents.sh` | Quick sanity check for subagent setup. Run from repo root (`./test-subagents.sh`) |
 | `.gitignore` | What never gets committed (real `.vscode/settings.json`, caches, logs, etc.) |
 
@@ -68,7 +68,7 @@ dotfiles/
 
 | Directory | Purpose |
 |---|---|
-| `.agents/` | **Source of truth** for all agent config: `skills/`, `instructions/`, `harnesses/`, `prompts/`, `workflows/`, `validation/`, `automation/`. Edit here, never in the synced copies. |
+| `.agents/` | **Source of truth** for all agent config: `skills/`, `instructions/`, `harnesses/`, `prompts/`, `workflows/`, `validation/`, `automation/`. Edit here, never in the synced copies. `instructions/workspace-config/standards/` holds the workspace-wide agent-orientation standard (`workspace-standards.schema.json` + `.yaml`, `RESEARCH_NOTES.md`) — every repo in this workspace has its own `docs/standards.yml` (or `standards.yml`) inheriting from it; see `CLAUDE.md`/`AGENTS.md` for the review protocol. `sync-skills.sh` distributes all of this to `~/.agents/` (and `skills/` also to `~/.claude/skills/`) — **as of 2026-09-15 this is a real, working sync, not just an organizational convention.** |
 | `.claude/` | Claude Code config; `.claude/skills/<name>` are symlinks back into `.agents/skills/<name>` |
 | `.github/` | GitHub config and CI; several subfolders (`automation/`, `CONTRIBUTING.md`, `harnesses/`, `instructions/`, `prompts/`) are symlinks into `.agents/` so Copilot/Actions read the same source of truth; `workflows/` holds real GitHub Actions (e.g. `vscode-docs-monitor.yml`) |
 | `.vscode/` | VS Code config; `settings.json` contains the real API key and is generated locally by `chezmoi apply` (gitignored) — see `docs/SECRETS.md` |
@@ -88,7 +88,6 @@ dotfiles/
 | `docs/requirements.txt` | Python deps for `scripts/monitor_vscode_docs.py` (`requests`, `beautifulsoup4`, `pyyaml`) |
 | `docs/vscode-docs-monitor.yml` | An older copy of the GitHub Actions workflow — the **active** one is `.github/workflows/vscode-docs-monitor.yml`; this copy still points at a dead path (`my/agentic_instructions/...`) from before the `agentic_instructions` merge and should not be treated as current |
 | `docs/SECRETS.md` | How the one real secret in this repo (a VS Code extension API key) is encrypted with chezmoi + age |
-| `docs/standards/` | The workspace-wide agent-orientation standard — `workspace-standards.schema.json` + `.yaml`, a validator (`scripts/validate_workspace_standards.py`), and `RESEARCH_NOTES.md` documenting the SOTA pass behind it. Every repo in this workspace has its own `docs/standards.yml` inheriting from this one. See `CLAUDE.md`/`AGENTS.md` for the review protocol. |
 
 ## Guidelines
 

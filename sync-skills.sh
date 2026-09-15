@@ -1,8 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Sync skills from dotfiles/.agents/skills/ to all locations
+# Sync ALL of dotfiles/.agents/<subdir>/ (skills, instructions, harnesses,
+# prompts, workflows, validation, automation — whatever subdirs exist) to
+# the locations other harnesses/tools read on this machine.
+#
+# Kept the name `sync-skills.sh` for backwards compatibility with existing
+# docs/muscle memory (this repo's README/CLAUDE.md/AGENTS.md/CHEATSHEET.md
+# all reference it by this name) even though it now syncs more than skills —
+# 2026-09-15, requested explicitly ("o sync tem de ser global e para tudo").
+#
 # Usage: ./sync-skills.sh [--dry-run] [--system] [--verbose]
+#   --system   also sync skills/ (only) to the Omarchy system-wide location
+#              (requires sudo) — other .agents/ subdirs have no established
+#              system-wide convention, so --system stays skills-only.
 
 DRY_RUN=0
 SYNC_SYSTEM=0
@@ -17,8 +28,8 @@ for arg in "$@"; do
   esac
 done
 
-SKILLS_SRC="$BASE_DIR/dotfiles/.agents/skills"
-AGENTS_SKILLS="$BASE_DIR/.agents/skills"
+AGENTS_SRC="$BASE_DIR/dotfiles/.agents"
+AGENTS_DEST="$BASE_DIR/.agents"
 CLAUDE_SKILLS="$BASE_DIR/.claude/skills"
 SYSTEM_SKILLS="/usr/share/omarchy/default/agents/skills"
 
@@ -32,95 +43,96 @@ error() {
   echo "[ERROR] $*" >&2
 }
 
-sync_to_location() {
-  local src=$1
-  local dest=$2
-  local location_name=$3
-  
+# Sync every item directly under $src into $dest, mirroring (removing dest
+# entries that no longer exist in src). Skill folders specifically require
+# a SKILL.md to be considered valid (unchanged from the original behavior);
+# every other .agents/ subdir syncs its full contents unconditionally.
+sync_subdir() {
+  local subdir_name=$1 src=$2 dest=$3 location_name=$4
+
   if [[ ! -d "$src" ]]; then
-    error "$src does not exist"
-    return 1
+    log "skip $subdir_name -> $location_name (source does not exist)"
+    return 0
   fi
-  
+
   if [[ $DRY_RUN -eq 1 ]]; then
     echo "(dry-run) would sync: $src -> $dest"
     return 0
   fi
-  
-  if [[ ! -d "$dest" ]]; then
+
+  if [[ "$subdir_name" == "skills" ]]; then
     mkdir -p "$dest"
-    log "created $dest"
-  fi
-  
-  # Sync each skill folder
-  for skill_dir in "$src"/*; do
-    if [[ -d "$skill_dir" ]]; then
+    for skill_dir in "$src"/*; do
+      [[ -d "$skill_dir" ]] || continue
       skill_name=$(basename "$skill_dir")
-      
-      # Check if SKILL.md exists (required)
       if [[ ! -f "$skill_dir/SKILL.md" ]]; then
         log "skip: $skill_name (missing SKILL.md)"
         continue
       fi
-      
-      log "syncing $skill_name -> $location_name"
+      log "syncing skills/$skill_name -> $location_name"
       rm -rf "$dest/$skill_name"
       cp -r "$skill_dir" "$dest/$skill_name"
-    fi
-  done
-  
-  echo "✓ synced to $location_name"
-  return 0
+    done
+  else
+    log "syncing $subdir_name/ -> $location_name"
+    rm -rf "$dest"
+    mkdir -p "$(dirname "$dest")"
+    cp -r "$src" "$dest"
+  fi
+
+  echo "✓ synced $subdir_name -> $location_name"
 }
 
 main() {
-  if [[ ! -d "$SKILLS_SRC" ]]; then
-    error "Skills source not found: $SKILLS_SRC"
+  if [[ ! -d "$AGENTS_SRC" ]]; then
+    error "Agents source not found: $AGENTS_SRC"
     exit 1
   fi
-  
-  echo "Syncing skills from: $SKILLS_SRC"
+
+  echo "Syncing .agents/ subdirs from: $AGENTS_SRC"
   echo ""
-  
-  # Sync to ~/.agents/skills (always - this is the reference)
-  log "syncing to ~/.agents/skills"
-  sync_to_location "$SKILLS_SRC" "$AGENTS_SKILLS" "~/.agents/skills" || true
-  
-  # Sync to ~/.claude/skills (if exists and different)
-  if [[ "$AGENTS_SKILLS" != "$CLAUDE_SKILLS" ]]; then
-    if [[ -d "$CLAUDE_SKILLS" ]] || [[ -L "$(dirname "$CLAUDE_SKILLS")" ]]; then
-      log "syncing to ~/.claude/skills"
-      sync_to_location "$SKILLS_SRC" "$CLAUDE_SKILLS" "~/.claude/skills" || true
+
+  for subdir in "$AGENTS_SRC"/*/; do
+    [[ -d "$subdir" ]] || continue
+    subdir_name=$(basename "$subdir")
+
+    # Always: reference copy at ~/.agents/<subdir> (the location every
+    # harness/tool on this machine is expected to point its config at).
+    sync_subdir "$subdir_name" "$subdir" "$AGENTS_DEST/$subdir_name" "~/.agents/$subdir_name" || true
+
+    # skills/ additionally mirrors to ~/.claude/skills (Claude Code's own
+    # plugin-style skill discovery location) — no other subdir has an
+    # equivalent tool-specific mirror target.
+    if [[ "$subdir_name" == "skills" ]]; then
+      if [[ -d "$CLAUDE_SKILLS" ]] || [[ -L "$(dirname "$CLAUDE_SKILLS")" ]] || [[ -d "$(dirname "$CLAUDE_SKILLS")" ]]; then
+        sync_subdir "skills" "$subdir" "$CLAUDE_SKILLS" "~/.claude/skills" || true
+      fi
     fi
-  fi
-  
-  # Sync to system defaults (optional, requires sudo)
+  done
+
+  # Sync to Omarchy system defaults (optional, requires sudo) — skills only.
   if [[ $SYNC_SYSTEM -eq 1 ]]; then
+    skills_src="$AGENTS_SRC/skills"
     if [[ ! -d "$SYSTEM_SKILLS" ]]; then
       error "System skills path not found: $SYSTEM_SKILLS"
       echo "  (omarchy system skills not installed, skipping)"
-      return 1
-    fi
-    
-    if [[ ! -w "$SYSTEM_SKILLS" ]]; then
+    elif [[ ! -w "$SYSTEM_SKILLS" ]]; then
       echo "Note: $SYSTEM_SKILLS is not writable, attempting sudo..."
       echo "This will sync skills to system-wide location (requires password)"
       echo ""
-      
       if sudo -v &>/dev/null; then
-        sync_to_location "$SKILLS_SRC" "$SYSTEM_SKILLS" "/usr/share/omarchy/default/agents/skills (sudo)" || true
+        sync_subdir "skills" "$skills_src" "$SYSTEM_SKILLS" "/usr/share/omarchy/default/agents/skills (sudo)" || true
       else
         error "sudo failed or not available, skipping system sync"
-        return 1
       fi
     else
-      sync_to_location "$SKILLS_SRC" "$SYSTEM_SKILLS" "/usr/share/omarchy/default/agents/skills" || true
+      sync_subdir "skills" "$skills_src" "$SYSTEM_SKILLS" "/usr/share/omarchy/default/agents/skills" || true
     fi
   fi
-  
+
   echo ""
   echo "Done!"
-  
+
   if [[ $DRY_RUN -eq 1 ]]; then
     echo "(dry-run mode - no changes made)"
   fi
