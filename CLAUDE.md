@@ -2,6 +2,38 @@
 
 Orientações para Claude Code quando trabalha neste repositório.
 
+## Resumo rápido
+
+```
+dotfiles/
+├── .agents/           ← Fonte de verdade: skills/, instructions/, harnesses/, prompts/, workflows/, validation/, automation/
+├── .claude/            ← Config Claude Code; .claude/skills/<nome> = symlinks para .agents/skills/<nome>
+├── .github/            ← Config GitHub + CI; várias subpastas são symlinks para .agents/
+├── .vscode/            ← Config VS Code (settings.json = API key real, gerido por chezmoi+age)
+├── .chezmoisource/     ← Source dir do chezmoi, só para .vscode/settings.json
+├── scripts/            ← Utilitários (VS Code docs monitor)
+├── docs/               ← Tudo o que não é lido automaticamente por convenção (ver índice abaixo)
+├── AGENTS.md, CLAUDE.md, GEMINI.md   ← Lidos automaticamente por cada ferramenta
+├── SECRETS.md          ← Fica na raiz (não docs/) — ver nota em README.md
+├── README.md, CHEATSHEET.md
+└── setup.sh, sync-skills.sh, test-subagents.sh
+```
+
+**Docs-chave:** `README.md` (overview + directory tree completo) · `CHEATSHEET.md` (onde vai cada coisa + TODO persistente) · `docs/STANDARDS.md` (convenções, parcialmente desatualizado) · `docs/SUBAGENTS_VERIFICATION.md` (checklist) · `docs/AUDIT_REPORT.md` (audit, parcialmente desatualizado) · `SECRETS.md` (chezmoi+age).
+
+**Trabalho em aberto** (detalhe completo em `CHEATSHEET.md` §4 e §4.1):
+
+| Item | Estado |
+|---|---|
+| Backup da chave privada age (`~/.config/chezmoi/key.txt`) | Manual, pendente |
+| Criar fine-grained PAT (github.com/settings/tokens) para `dotfiles`+`architect` | Por fazer |
+| Adotar `claude/<topico>` + PR em vez de push direto a `main` | Por fazer |
+| Rever/push dos 13 commits locais em `dotfiles` + 1 em `architect` | Por fazer |
+| Arquivar `agentic_instructions` no GitHub | Por fazer (depois do push/PR acima) |
+| Decidir direção de sincronização (repo→sistema vs. sistema→repo) | Em aberto |
+| `setup.sh` com listas de repos hardcoded (`nmc-costa`) | Conhecido, não bloqueante |
+| Repo hygiene (raiz limpa, README/CLAUDE.md com tree+índice) para `architect`, `~/Projects/notes`, `~/Work/notes` | Por fazer — `dotfiles` já feito, ver `CHEATSHEET.md` §4.2 |
+
 ## O Que É Este Repositório
 
 `~/dotfiles` é o **repositório central de configuração e sincronização** para:
@@ -30,7 +62,7 @@ Os projetos vivem **fora** de dotfiles:
 - **`~/Projects/`** — Repos pessoais (agentic_instructions, HIcode, ibots, roi_lab, etc.)
 - **`~/Work/`** — Repos profissionais (mobai, RAGFusion, sp_xai_nos, etc.)
 
-Cada um é um repositório git independente. Ver `directory_tree.md` para mapa completo.
+Cada um é um repositório git independente. Ver `docs/directory_tree.md` para mapa (parcialmente desatualizado, ver `README.md` para o directory tree atual).
 
 ## Skills Disponíveis
 
@@ -79,7 +111,7 @@ Ver `AGENTS.md` para guia completo.
 
 ## Contexto Global
 
-README.md/AGENTS.md descrevem `~/.context-global.md`, `~/claude.md`, `~/directory_tree.md` e `agent-versions.json` como symlinks/ficheiros do `~/dotfiles/`. **Nesta máquina nenhum destes existe** — não assumas que estão presentes sem verificar. A direção de sincronização (repo→sistema via symlinks, vs. sistema→repo) ainda não foi decidida como standard — ver secção seguinte.
+README.md/AGENTS.md descrevem `~/.context-global.md`, `~/claude.md`, `~/directory_tree.md` (symlink para `~/dotfiles/docs/directory_tree.md`) e `agent-versions.json` como symlinks/ficheiros do `~/dotfiles/`. **Nesta máquina nenhum destes existe** — não assumas que estão presentes sem verificar. A direção de sincronização (repo→sistema via symlinks, vs. sistema→repo) ainda não foi decidida como standard — ver secção seguinte.
 
 ## Setup Nova Máquina
 
@@ -107,7 +139,7 @@ Depois:
 
 Não tratar os seguintes ficheiros/afirmações como verdade atual sem verificar primeiro:
 
-- **`AUDIT_REPORT.md` e `STANDARDS.md` têm afirmações falsas ou aspiracionais** — ex.: `AUDIT_REPORT.md` afirma "sem paths hardcoded" e "sem referências a `dtx/`", ambas contradeitas pelo conteúdo real (`.vscode/github.code-workspace`, `.github/copilot-instructions.md`). `STANDARDS.md` descreve `.copilot/`, `.gemini/`, `.cursor/`, `agent-versions.json` que não existem.
+- **`docs/AUDIT_REPORT.md` e `docs/STANDARDS.md` têm afirmações falsas ou aspiracionais** — ex.: `docs/AUDIT_REPORT.md` afirma "sem paths hardcoded" e "sem referências a `dtx/`", ambas contradeitas pelo conteúdo real (`.vscode/github.code-workspace`, `.github/copilot-instructions.md`). `docs/STANDARDS.md` descreve `.copilot/`, `.gemini/`, `.cursor/`, `agent-versions.json` que não existem.
 - **Decisão de sincronização em aberto**: sistema→repo vs. repo→sistema ainda não é standard. Até estar decidido, `setup.sh`/`sync-skills.sh` podem não refletir o estado real da máquina (ex.: `~/.claude`, `~/.agents`, `~/.vscode` não são symlinks nesta máquina, apesar do que README/AGENTS.md descrevem).
 - **`.vscode/settings.json` contém uma API key real** para um endpoint custom. Repo é privado/uso pessoal (risco aceite pelo dono), mas não propagar este ficheiro para outros repos, exemplos, ou contextos partilhados. **TODO:** migrar para chezmoi+age (decidido, ainda não executado — bloqueado em `sudo pacman -S chezmoi age`, que requer password interativa).
 - **`setup.sh` tem listas de repos hardcoded** (`WORK_REPOS`, `PROJECTS_REPOS`) específicas de `nmc-costa` — não é portável para outro utilizador sem editar o script diretamente.
@@ -117,8 +149,8 @@ Não tratar os seguintes ficheiros/afirmações como verdade atual sem verificar
 ## Documentação
 
 - **`AGENTS.md`** — Guia completo (agentes, skills, workflows, troubleshooting)
-- **`README.md`** — Overview e estrutura
-- **`SUBAGENTS_VERIFICATION.md`** — Checklist de setup e verificação
+- **`README.md`** — Overview, directory tree e estrutura
+- **`docs/SUBAGENTS_VERIFICATION.md`** — Checklist de setup e verificação
 
 ---
 
