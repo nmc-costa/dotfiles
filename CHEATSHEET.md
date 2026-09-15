@@ -69,10 +69,14 @@ Objetivo, para cada repo: (1) raiz limpa — só `README.md` e os ficheiros que 
 | `~/Work/notes` (repo da org `DTx-DSML`, não pessoal) | `README.md` de 1 linha | Directory tree + índice no `README.md` |
 | `~/Projects/agentic_instructions` | — | **Excluído** — arquivado, não editar |
 
-- [x] `dotfiles` — feito 2026-09-15, ver branch `claude/repo-hygiene-dotfiles`
-- [ ] `~/Projects/architect`
-- [ ] `~/Projects/notes`
-- [ ] `~/Work/notes`
+- [x] `dotfiles` — feito 2026-09-15, branch `claude/repo-hygiene-dotfiles`; inclui avaliador `scripts/validate_dotfiles.sh` (raiz limpa + docs obrigatórios + tree do README a bater com o disco) e secção `## Guidelines` no README com sub-secções "For you (human)" / "For agents"
+- [x] `~/Projects/architect` — feito 2026-09-15, branch `claude/repo-hygiene-architect`
+- [x] `~/Projects/notes` — feito 2026-09-15, branch `claude/repo-hygiene-notes`
+- [x] `~/Work/notes` — feito 2026-09-15, branch `claude/repo-hygiene-worknotes`
+
+**Nota de consistência (pedida 2026-09-15, depois dos 4 feitos em paralelo por agentes independentes):** cada repo escolheu o seu próprio formato de README (títulos de secção diferentes: "Directory tree"/"Structure", "Folder index"/"Index", etc.). Isto viola o pedido de navegação horizontal — formato de README e convenção de `docs/` têm de ser **iguais** entre repos. Passagem de unificação feita manualmente (não por agente) logo a seguir a estas 4 branches, ver commit que fecha este item.
+
+- [ ] O avaliador (`scripts/validate_dotfiles.sh`) existe só no `dotfiles` por agora — replicar o mesmo tipo de check (raiz limpa + tree do README bate com o disco) para `architect`, `~/Projects/notes`, `~/Work/notes` fica por fazer, não pedido ainda.
 
 ## 5. Roadmap do "Workspace Ágil" (ordem validada nas tuas notas — `~/Projects/notes/ideas/architecture/Workspace Agil para Agentes Multiplataforma.md` §13.7)
 

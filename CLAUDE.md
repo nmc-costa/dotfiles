@@ -14,25 +14,23 @@ dotfiles/
 ├── scripts/            ← Utilitários (VS Code docs monitor)
 ├── docs/               ← Tudo o que não é lido automaticamente por convenção (ver índice abaixo)
 ├── AGENTS.md, CLAUDE.md, GEMINI.md   ← Lidos automaticamente por cada ferramenta
-├── SECRETS.md          ← Fica na raiz (não docs/) — ver nota em README.md
+├── docs/SECRETS.md     ← chezmoi+age secrets doc
 ├── README.md, CHEATSHEET.md
 └── setup.sh, sync-skills.sh, test-subagents.sh
 ```
 
-**Docs-chave:** `README.md` (overview + directory tree completo) · `CHEATSHEET.md` (onde vai cada coisa + TODO persistente) · `docs/STANDARDS.md` (convenções, parcialmente desatualizado) · `docs/SUBAGENTS_VERIFICATION.md` (checklist) · `docs/AUDIT_REPORT.md` (audit, parcialmente desatualizado) · `SECRETS.md` (chezmoi+age).
+**Docs-chave:** `README.md` (overview + directory tree completo + Guidelines para humano/agente) · `CHEATSHEET.md` (onde vai cada coisa + TODO persistente) · `docs/STANDARDS.md` (convenções, parcialmente desatualizado) · `docs/SUBAGENTS_VERIFICATION.md` (checklist) · `docs/AUDIT_REPORT.md` (audit, parcialmente desatualizado) · `docs/SECRETS.md` (chezmoi+age). **Antes de qualquer mudança estrutural, corre `./scripts/validate_dotfiles.sh`** — é o avaliador que confirma raiz limpa, docs obrigatórios presentes, e a tree deste ficheiro/README a bater com a realidade.
 
-**Trabalho em aberto** (detalhe completo em `CHEATSHEET.md` §4 e §4.1):
+**Trabalho em aberto** (detalhe completo em `CHEATSHEET.md` §4, §4.1, §4.2):
 
 | Item | Estado |
 |---|---|
 | Backup da chave privada age (`~/.config/chezmoi/key.txt`) | Manual, pendente |
-| Criar fine-grained PAT (github.com/settings/tokens) para `dotfiles`+`architect` | Por fazer |
-| Adotar `claude/<topico>` + PR em vez de push direto a `main` | Por fazer |
-| Rever/push dos 13 commits locais em `dotfiles` + 1 em `architect` | Por fazer |
-| Arquivar `agentic_instructions` no GitHub | Por fazer (depois do push/PR acima) |
+| Criar fine-grained PAT (github.com/settings/tokens) + `gh auth` | Adiado pelo dono, sem prazo — bloqueia `gh pr create` e arquivar repos via API |
+| Repo hygiene (raiz limpa, README com tree+índice+guidelines) — `dotfiles`, `architect`, `~/Projects/notes`, `~/Work/notes` | Feito em cada repo (branches `claude/repo-hygiene-*` pushed); falta unificar o formato entre os 4 e mesclar |
+| Arquivar `agentic_instructions` no GitHub | Bloqueado por `gh auth` acima |
 | Decidir direção de sincronização (repo→sistema vs. sistema→repo) | Em aberto |
-| `setup.sh` com listas de repos hardcoded (`nmc-costa`) | Conhecido, não bloqueante |
-| Repo hygiene (raiz limpa, README/CLAUDE.md com tree+índice) para `architect`, `~/Projects/notes`, `~/Work/notes` | Por fazer — `dotfiles` já feito, ver `CHEATSHEET.md` §4.2 |
+| Backlog de `~/Projects/notes/ideas/` | Só tracking, ver `CHEATSHEET.md` §4.1 — nada aprovado para construir |
 
 ## O Que É Este Repositório
 
