@@ -37,7 +37,7 @@ dotfiles/
 ├── docs/                        # Everything not auto-loaded by a tool by convention — see index below
 │   └── SECRETS.md               #   Secrets-management doc (chezmoi + age)
 ├── scripts/                     # Utility scripts (VS Code docs monitor: monitor_vscode_docs.py, setup_vscode_monitor_cron.sh)
-├── tasks/                       # Not a system yet — two kickoff prompts for future sessions: KICKOFF.md (build task-tracking), OPEN_PULL_REQUESTS.md (once gh auth is ready)
+├── tasks/                       # Task-tracking PoC: events.jsonl (log, source of truth) + tarefas.md (generated view) + append_event.py/rebuild_view.py, plus KICKOFF.md (design history) and OPEN_PULL_REQUESTS.md (once gh auth is ready)
 ├── AGENTS.md                    # General agent guide (Crush/Claude, Copilot, Gemini, Cline) — auto-read by convention
 ├── CLAUDE.md                    # Claude Code-specific context — auto-read by Claude Code
 ├── GEMINI.md                    # Gemini-specific context — auto-read by Gemini
@@ -75,7 +75,7 @@ dotfiles/
 | `.vscode/` | VS Code config; `settings.json` contains the real API key and is generated locally by `chezmoi apply` (gitignored) — see `docs/SECRETS.md` |
 | `.chezmoisource/` | Dedicated chezmoi source directory, scoped only to the one encrypted `.vscode/settings.json` — see `docs/SECRETS.md` |
 | `scripts/` | Standalone utility scripts (currently the VS Code docs monitor) |
-| `tasks/` | Not built yet — two kickoff prompts for future sessions: `KICKOFF.md` (plan+build a workspace task-tracking system) and `OPEN_PULL_REQUESTS.md` (open the PRs for this session's branches, once `gh auth` works) |
+| `tasks/` | Task-tracking PoC — `events.jsonl` (append-only log, source of truth) projected into `tarefas.md` (generated view) via `append_event.py`/`rebuild_view.py`; see `tasks/README.md`. Also still holds `KICKOFF.md` (design history) and `OPEN_PULL_REQUESTS.md` (open the PRs for this session's branches, once `gh auth` works) |
 | `docs/` | Everything not auto-loaded by convention — see table below |
 
 ### `docs/` index
