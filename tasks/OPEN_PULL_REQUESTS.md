@@ -10,7 +10,14 @@ workspace-standards.yaml`, and `CHEATSHEET.md` §7).
 ## Copy from here down into the new session
 
 Lê `~/dotfiles/CLAUDE.md` e `~/dotfiles/CHEATSHEET.md`, depois este ficheiro.
-`gh auth status` já deve estar OK — confirma primeiro. Depois abre os PRs
+`gh auth status` já deve estar OK — confirma primeiro.
+
+**Nota prática (2026-09-15):** `gh auth login` é uma credencial **por máquina**,
+não por sessão nem por repo — pode ter sido feita numa sessão só com contexto
+de `dotfiles` (ex.: por acesso remoto/limitado nessa altura) e continua válida
+aqui, mesmo que esta sessão tenha acesso aos 4 repos e essa não tivesse. Se
+`gh auth status` já disser OK mas nunca viste o login acontecer nesta sessão,
+é normal — confirma e segue em frente. Depois abre os PRs
 abaixo, **por esta ordem** (alguns repos têm branches irmãs divergentes que
 precisam de reconciliação manual, não é só clicar "merge" em todas).
 
