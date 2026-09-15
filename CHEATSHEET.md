@@ -74,7 +74,7 @@ Objetivo, para cada repo: (1) raiz limpa — só `README.md` e os ficheiros que 
 - [x] `~/Projects/notes` — feito 2026-09-15, branch `claude/repo-hygiene-notes`
 - [x] `~/Work/notes` — feito 2026-09-15, branch `claude/repo-hygiene-worknotes`
 
-**Nota de consistência (pedida 2026-09-15, depois dos 4 feitos em paralelo por agentes independentes):** cada repo escolheu o seu próprio formato de README (títulos de secção diferentes: "Directory tree"/"Structure", "Folder index"/"Index", etc.). Isto viola o pedido de navegação horizontal — formato de README e convenção de `docs/` têm de ser **iguais** entre repos. Passagem de unificação feita manualmente (não por agente) logo a seguir a estas 4 branches, ver commit que fecha este item.
+**Nota de consistência (pedida 2026-09-15, depois dos 4 feitos em paralelo por agentes independentes) — RESOLVIDA:** cada repo tinha escolhido o seu próprio formato de README (títulos diferentes: "Directory tree"/"Structure", "Folder index"/"Index"). Unificado manualmente (não por agente, para garantir consistência real) nos 4: todos usam agora `## Directory tree` → `## What's where (index)` → `## Guidelines` (com `### For you (human)` e `### For agents`) como esqueleto comum, com secções extra específicas de cada repo a seguir. Commits: `dotfiles` (nesta branch), `architect@3f4c01e`, `~/Projects/notes@a1e1377`, `~/Work/notes@eda396c`.
 
 - [ ] O avaliador (`scripts/validate_dotfiles.sh`) existe só no `dotfiles` por agora — replicar o mesmo tipo de check (raiz limpa + tree do README bate com o disco) para `architect`, `~/Projects/notes`, `~/Work/notes` fica por fazer, não pedido ainda.
 
