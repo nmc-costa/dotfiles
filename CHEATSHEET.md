@@ -53,7 +53,23 @@ A lista de tarefas que o Claude Code cria numa sessão (a ferramenta de tracking
 - [x] ~~Rever e dar `git push`/PR aos commits locais~~ — `dotfiles`: nada pendente, os 13 commits já estão em `origin/main` (push direto SSH, antes da convenção PR ficar ativa). `architect`: resolvido pelo item acima (branch enviada, falta só o PR).
 - [ ] Arquivar `agentic_instructions` no GitHub (Settings → Archive this repository) — só depois do PR de `architect` acima e de decidir se `dotfiles` deve manter push direto ou passar a usar PRs a partir de agora.
 - [ ] Decidir direção de sincronização (repo→sistema vs. sistema→repo) — em aberto, ver `CLAUDE.md` → Lacunas Conhecidas.
-- [ ] `setup.sh` com listas de repos hardcoded (`nmc-costa`) — conhecido, não bloqueante, só importa se partilhares o repo.
+- [x] ~~`setup.sh` com listas de repos hardcoded (`nmc-costa`)~~ — feito 2026-09-15: `GITHUB_USER`, `WORK_REPOS`, `PROJECTS_REPOS` agora são overridable por env var, mantendo os valores atuais como default. Não requer mudanças de comportamento nesta máquina.
+
+### 4.1 Backlog de `~/Projects/notes/ideas/` (trazido para aqui 2026-09-15, por ordem de prioridade da própria `ideas/README.md`)
+
+**Importante:** isto é tracking, não trabalho aprovado para construir. Os ficheiros de `ideas/` são visão/investigação — a maioria explicitamente "ideia por validar, nada construído" (ex.: o documento do Jarvis). Antes de qualquer um destes virar código, precisa de uma sessão de scoping contigo — não é para um agente decidir sozinho o desenho de um orquestrador pessoal ou de um plano de negócio.
+
+| Prioridade | Ideia | Ficheiro | Nota |
+|---|---|---|---|
+| 1 | Centralizar histórico de interação e meta-tasks (ledger partilhado) | `architecture/Workspace Agil para Agentes Multiplataforma.md` | Alimenta o Jarvis e o Digital Twin. Base de tudo o resto. |
+| 1 | Adotar dotfiles como control plane | idem | Já em curso nesta própria tabela (fases 1-2 do roadmap §5 abaixo). |
+| 1 | Validação `new` → `todo` para propostas de agente | idem + `agents/Agente Orquestrador - Jarvis do Diretor Humano.md` §5.3 | Regra: humano cria direto em `todo`; agente cria em `new` e pede validação. |
+| 1 | Agente Orquestrador "Jarvis" (worksheets, orçamento de interrupção, ritual diário/semanal) | `agents/Agente Orquestrador - Jarvis do Diretor Humano.md` | **Nada construído.** Documento grande (18 secções) — precisa de PoC mínima (§14 do próprio doc) antes de qualquer construção maior. |
+| 1 | Interface de captura de áudio live + transcrição local-first | `fast-prototyping/workspace-audio-interface.md` | MVP proposto, nada construído. |
+| 1 | KVM audio listener agent (monitoriza áudio do sistema+mic, transcreve, cria issues) | `agents/KVM-audio-listener-agent.md` | Mesma família da interface acima; PoC scripts-base (`scripts/route_idea.py`, `scripts/streamline-audio-poc.sh`) já existem em `notes/scripts/`. |
+| 1 | Harness > tamanho do modelo (síntese de fontes externas) | `architecture/harness-vision.md` | Próximo passo já documentado no próprio ficheiro: inserir a síntese no doc Workspace Ágil + `ideas/README.md`. Edição de docs, baixo risco — candidato fácil quando houver luz verde. |
+| 2 | Digital Twin / Socratic ROI loop | `personal/My Digitaltwin - ROI AI Factory accelaration.md` | **Plano de negócio pessoal** (spin-off fora do DTX) — sensível, não é tarefa de engenharia a despachar a um agente sem ti. |
+| 3 | Manter atualizado o transcript de referência (`20251203_the_architect_clean_html.md`) | idem | Só suporte de vocabulário; sem ação own.
 
 **Regra:** ao começar uma sessão nova, pede-lhe explicitamente para ler esta lista e criar a sua todo list interna a partir dela (ver secção 7). Ao terminar uma tarefa, o commit que a fecha tem de marcar o `[x]` aqui.
 
