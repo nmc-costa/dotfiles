@@ -37,7 +37,16 @@ não são deste trabalho.
    ```
    gh pr create --repo nmc-costa/dotfiles --base main --head claude/workspace-standards-schema \
      --title "Repo hygiene + workspace-standards schema + tasks/ kickoff" \
-     --body "Squash of this session's dotfiles work: root cleanup, validate_dotfiles.sh, the workspace-standards JSON Schema + YAML defaults (docs/standards -> .agents/instructions/workspace-config/standards/ after an owner correction), sync.sh generalized to sync all of .agents/ (was sync-skills.sh, skills-only), a weekly systemd timer running it, and tasks/ seeded with two kickoff prompts. See commit messages for full detail per change."
+     --body "Squash of this session's dotfiles work: root cleanup, validate_dotfiles.sh, the workspace-standards JSON Schema + YAML defaults (docs/standards -> .agents/instructions/workspace-config/standards/ after an owner correction), sync.sh generalized to sync all of .agents/ (was sync-skills.sh, skills-only), a weekly systemd timer running it, tasks/ seeded with two kickoff prompts, and (2026-09-15, later commit) a new developmentApproach.pocFirst workspace default. See commit messages for full detail per change."
+   ```
+1b. `claude/tasks-poc` descende de `claude/workspace-standards-schema` (ponto
+   anterior ao commit do `developmentApproach` acima, mas sem conflito —
+   toca só em `tasks/` e nas linhas de `tasks/` do README) — mergear depois
+   do passo 1:
+   ```
+   gh pr create --repo nmc-costa/dotfiles --base main --head claude/tasks-poc \
+     --title "tasks/: PoC of the task-tracking system" \
+     --body "JSONL event log (source of truth, D9/D10) + generated tarefas.md view (D12/D13 states+provenance), seeded with the 11 real open claude/* branches across all 4 repos. See commit message for the full tension-resolution reasoning (location + format)."
    ```
 2. Depois de mergeado, `claude/todo-continuation-and-notes-backlog` vai
    provavelmente conflituar em `setup.sh` (uma branch tornou os repo-lists
