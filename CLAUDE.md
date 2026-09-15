@@ -16,7 +16,7 @@ dotfiles/
 ├── AGENTS.md, CLAUDE.md, GEMINI.md   ← Lidos automaticamente por cada ferramenta
 ├── docs/SECRETS.md     ← chezmoi+age secrets doc
 ├── README.md, CHEATSHEET.md
-└── setup.sh, sync-skills.sh, test-subagents.sh
+└── setup.sh, sync.sh, test-subagents.sh
 ```
 
 **Docs-chave:** `README.md` (overview + directory tree completo + Guidelines para humano/agente) · `CHEATSHEET.md` (onde vai cada coisa + TODO persistente) · `docs/STANDARDS.md` (convenções; secções propostas/não implementadas marcadas explicitamente como tal desde 2026-09-15) · `docs/SUBAGENTS_VERIFICATION.md` (checklist) · `docs/AUDIT_REPORT.md` (audit; corrigido 2026-09-15 para refletir hardcoded paths/`dtx/` reais) · `docs/SECRETS.md` (chezmoi+age). **Antes de qualquer mudança estrutural, corre `./scripts/validate_dotfiles.sh`** — é o avaliador que confirma raiz limpa, docs obrigatórios presentes, e a tree deste ficheiro/README a bater com a realidade.
@@ -59,7 +59,7 @@ dotfiles/
 ├── AGENTS.md                   ← Guia completo de agentes
 ├── README.md                   ← Overview
 ├── setup.sh                    ← One-click machine setup (hardcoded para nmc-costa)
-└── sync-skills.sh              ← Sincronizar skills
+└── sync.sh              ← Sincronizar skills
 ```
 
 ## Projetos Reais
@@ -110,7 +110,7 @@ Skills são extensões de agentes. Localização: `~/.agents/skills/`
    git add .agents/skills/nova-skill/
    git commit -m "Add nova-skill for [propósito]"
    git push
-   ./sync-skills.sh
+   ./sync.sh
    ```
 
 Ver `AGENTS.md` para guia completo.
@@ -131,7 +131,7 @@ cd dotfiles-tmp
 
 Depois:
 ```bash
-./sync-skills.sh
+./sync.sh
 ```
 
 ## Importantes
@@ -145,7 +145,7 @@ Depois:
 
 Não tratar os seguintes ficheiros/afirmações como verdade atual sem verificar primeiro:
 
-- **Decisão de sincronização em aberto**: sistema→repo vs. repo→sistema ainda não é standard. Até estar decidido, `setup.sh`/`sync-skills.sh` podem não refletir o estado real da máquina (ex.: `~/.claude`, `~/.agents`, `~/.vscode` não são symlinks nesta máquina, apesar do que README/AGENTS.md descrevem).
+- **Decisão de sincronização em aberto**: sistema→repo vs. repo→sistema ainda não é standard. Até estar decidido, `setup.sh`/`sync.sh` podem não refletir o estado real da máquina (ex.: `~/.claude`, `~/.agents`, `~/.vscode` não são symlinks nesta máquina, apesar do que README/AGENTS.md descrevem).
 - **`.vscode/settings.json` contém uma API key real** para um endpoint custom. Repo é privado/uso pessoal (risco aceite pelo dono), mas não propagar este ficheiro para outros repos, exemplos, ou contextos partilhados. **TODO:** migrar para chezmoi+age (decidido, ainda não executado — bloqueado em `sudo pacman -S chezmoi age`, que requer password interativa).
 - **`setup.sh` tem listas de repos hardcoded** (`WORK_REPOS`, `PROJECTS_REPOS`) e o username `nmc-costa` hardcoded no `clone()` (URLs SSH/HTTPS) — não é portável para outro utilizador sem editar o script diretamente. **Nota:** existe uma correção (env vars `GITHUB_USER`/`WORK_REPOS`/`PROJECTS_REPOS`) no commit `0304d1d` da branch `claude/todo-continuation-and-notes-backlog`, mas **não está mesclada** nesta branch nem em `main` — não assumir que está resolvido até essa branch ser integrada.
 - **`.vscode/github.code-workspace` tem um path hardcoded** `"dtx/repos/sp_xai_nos"` — referência real a `dtx/` que ainda existe no repo (verificado 2026-09-15, único hit fora de conteúdo histórico/arquivado).

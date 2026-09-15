@@ -15,7 +15,7 @@ gitignored — see `.gitignore`).
   a dedicated chezmoi source directory, scoped to this one file, so chezmoi
   never touches anything else in the repo (`.agents/`, `.claude/`, `setup.sh`,
   etc. are untouched by chezmoi and keep working exactly as before via
-  `setup.sh`/`sync-skills.sh`).
+  `setup.sh`/`sync.sh`).
 - chezmoi's *destination* directory is set to `~/dotfiles` itself (not
   `$HOME`), so `chezmoi apply` writes the decrypted file directly to
   `~/dotfiles/.vscode/settings.json` — which is what the existing

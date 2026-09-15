@@ -104,9 +104,9 @@ setup_agent_symlinks "vscode"
 if [[ -d "$BASE_DIR/dotfiles/.agents/skills" ]]; then
   echo "info: Syncing skills from dotfiles/.agents/skills..."
   if [[ $DRY_RUN -eq 1 ]]; then
-    "$BASE_DIR/dotfiles/sync-skills.sh" --dry-run || true
+    "$BASE_DIR/dotfiles/sync.sh" --dry-run || true
   else
-    "$BASE_DIR/dotfiles/sync-skills.sh" || true
+    "$BASE_DIR/dotfiles/sync.sh" || true
   fi
 fi
 

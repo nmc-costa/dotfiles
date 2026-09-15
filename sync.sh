@@ -5,12 +5,12 @@ set -euo pipefail
 # prompts, workflows, validation, automation — whatever subdirs exist) to
 # the locations other harnesses/tools read on this machine.
 #
-# Kept the name `sync-skills.sh` for backwards compatibility with existing
+# Kept the name `sync.sh` for backwards compatibility with existing
 # docs/muscle memory (this repo's README/CLAUDE.md/AGENTS.md/CHEATSHEET.md
 # all reference it by this name) even though it now syncs more than skills —
 # 2026-09-15, requested explicitly ("o sync tem de ser global e para tudo").
 #
-# Usage: ./sync-skills.sh [--dry-run] [--system] [--verbose]
+# Usage: ./sync.sh [--dry-run] [--system] [--verbose]
 #   --system   also sync skills/ (only) to the Omarchy system-wide location
 #              (requires sudo) — other .agents/ subdirs have no established
 #              system-wide convention, so --system stays skills-only.
@@ -35,7 +35,7 @@ SYSTEM_SKILLS="/usr/share/omarchy/default/agents/skills"
 
 log() {
   if [[ $VERBOSE -eq 1 ]]; then
-    echo "[sync-skills] $*"
+    echo "[sync] $*"
   fi
 }
 

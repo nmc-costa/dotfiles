@@ -46,7 +46,7 @@ dotfiles/
 ├── CHEATSHEET.md                # Tracker persistente
 ├── README.md                    # Setup + estrutura
 ├── setup.sh
-├── sync-skills.sh
+├── sync.sh
 └── test-subagents.sh
 ```
 
@@ -410,7 +410,7 @@ ln -sf ~/agent-framework/skills/data-analyzer/SKILL.md \
    - Testa localmente
    - Atualiza agent-versions.json
    - git commit, push
-   - ./sync-skills.sh propagates
+   - ./sync.sh propagates
 
 4. Outras máquinas
    - git pull
@@ -474,7 +474,7 @@ crush-config: Pin data-analyzer v2.0.0 from agent-framework
 
 ```bash
 # Em crush-config
-./sync-skills.sh              # Copia docs/referencias
+./sync.sh              # Copia docs/referencias
 ./setup.sh                    # Cria symlinks, instala versions
 npm install @crush/agent-framework@2.1.0  # Pin versão
 ```

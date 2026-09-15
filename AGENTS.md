@@ -70,13 +70,13 @@ Quando sincronizas, as skills são propagadas para:
    ```
 5. Sincroniza:
    ```bash
-   ./sync-skills.sh
+   ./sync.sh
    ```
    Opções:
-   - `./sync-skills.sh` — Sincroniza para `~/.agents/skills/` e `~/.claude/skills/`
-   - `./sync-skills.sh --system` — Também copia para `/usr/share/omarchy/default/agents/skills/` (requer sudo)
-   - `./sync-skills.sh --dry-run` — Simula sem fazer mudanças
-   - `./sync-skills.sh --verbose` — Mostra detalhes da sincronização
+   - `./sync.sh` — Sincroniza para `~/.agents/skills/` e `~/.claude/skills/`
+   - `./sync.sh --system` — Também copia para `/usr/share/omarchy/default/agents/skills/` (requer sudo)
+   - `./sync.sh --dry-run` — Simula sem fazer mudanças
+   - `./sync.sh --verbose` — Mostra detalhes da sincronização
 
 ### Adicionar Nova Skill e Propagar (Fluxo Completo)
 
@@ -102,14 +102,14 @@ git commit -m "Add nova-skill for [propósito]"
 git push
 
 # 4. Sincroniza para agentes locais
-./sync-skills.sh
+./sync.sh
 
 # 5. (Opcional) Sincroniza também para sistema
-./sync-skills.sh --system
+./sync.sh --system
 
 # 6. Na outra máquina: pull + sync
 cd ~/dotfiles && git pull
-./sync-skills.sh
+./sync.sh
 ```
 
 ## Variáveis de Contexto para Agentes
@@ -165,7 +165,7 @@ cd dotfiles-tmp
 ```bash
 cd ~/dotfiles
 git pull
-./setup.sh      # Executa symlinks + sync-skills.sh
+./setup.sh      # Executa symlinks + sync.sh
 ```
 
 ## Troubleshooting
@@ -178,10 +178,10 @@ ls ~/.claude/skills/
 
 # Sincroniza manualmente
 cd ~/dotfiles
-./sync-skills.sh --verbose
+./sync.sh --verbose
 
 # Ou para sistema (requer sudo)
-./sync-skills.sh --system
+./sync.sh --system
 ```
 
 ### Symlinks Rotos

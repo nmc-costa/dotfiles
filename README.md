@@ -10,7 +10,7 @@ cd ~
 git clone https://github.com/nmc-costa/dotfiles.git dotfiles-tmp
 cd dotfiles-tmp
 ./setup.sh --dotfiles      # Clone repos, create symlinks, setup agents
-./sync-skills.sh           # Distribute skills to all agents
+./sync.sh           # Distribute skills to all agents
 ```
 
 ## Directory tree
@@ -43,7 +43,7 @@ dotfiles/
 ├── CHEATSHEET.md                # Living "where does X go" reference + persistent TODO list
 ├── README.md                    # This file
 ├── setup.sh                     # One-click machine setup (run from root)
-├── sync-skills.sh               # Synchronize skills to all agents (run from root)
+├── sync.sh               # Synchronize skills to all agents (run from root)
 ├── test-subagents.sh            # Verification test script (run from root)
 └── .gitignore
 ```
@@ -60,7 +60,7 @@ dotfiles/
 | `GEMINI.md` | Gemini-specific context — auto-loaded by Gemini |
 | `CHEATSHEET.md` | "Where does X go", the 3-repo map, the persistent cross-session TODO list, the agile-workspace roadmap |
 | `setup.sh` | One-click machine setup: clones repos, creates symlinks, sets up agents. Run from repo root (`./setup.sh`) |
-| `sync-skills.sh` | Distributes **every** `.agents/<subdir>/` (skills, instructions, harnesses, prompts, workflows, validation, automation) to `~/.agents/<subdir>/`, plus `skills/` specifically also to `.claude/skills/` and (with `--system`) the Omarchy system location. Name kept for compatibility even though it now syncs more than skills (2026-09-15). Run from repo root (`./sync-skills.sh`) — also runs weekly via a systemd user timer, see `.agents/instructions/workspace-config/standards/` |
+| `sync.sh` | Distributes **every** `.agents/<subdir>/` (skills, instructions, harnesses, prompts, workflows, validation, automation) to `~/.agents/<subdir>/`, plus `skills/` specifically also to `.claude/skills/` and (with `--system`) the Omarchy system location. Name kept for compatibility even though it now syncs more than skills (2026-09-15). Run from repo root (`./sync.sh`) — also runs weekly via a systemd user timer, see `.agents/instructions/workspace-config/standards/` |
 | `test-subagents.sh` | Quick sanity check for subagent setup. Run from repo root (`./test-subagents.sh`) |
 | `.gitignore` | What never gets committed (real `.vscode/settings.json`, caches, logs, etc.) |
 
@@ -68,7 +68,7 @@ dotfiles/
 
 | Directory | Purpose |
 |---|---|
-| `.agents/` | **Source of truth** for all agent config: `skills/`, `instructions/`, `harnesses/`, `prompts/`, `workflows/`, `validation/`, `automation/`. Edit here, never in the synced copies. `instructions/workspace-config/standards/` holds the workspace-wide agent-orientation standard (`workspace-standards.schema.json` + `.yaml`, `RESEARCH_NOTES.md`) — every repo in this workspace has its own `docs/standards.yml` (or `standards.yml`) inheriting from it; see `CLAUDE.md`/`AGENTS.md` for the review protocol. `sync-skills.sh` distributes all of this to `~/.agents/` (and `skills/` also to `~/.claude/skills/`) — **as of 2026-09-15 this is a real, working sync, not just an organizational convention.** |
+| `.agents/` | **Source of truth** for all agent config: `skills/`, `instructions/`, `harnesses/`, `prompts/`, `workflows/`, `validation/`, `automation/`. Edit here, never in the synced copies. `instructions/workspace-config/standards/` holds the workspace-wide agent-orientation standard (`workspace-standards.schema.json` + `.yaml`, `RESEARCH_NOTES.md`) — every repo in this workspace has its own `docs/standards.yml` (or `standards.yml`) inheriting from it; see `CLAUDE.md`/`AGENTS.md` for the review protocol. `sync.sh` distributes all of this to `~/.agents/` (and `skills/` also to `~/.claude/skills/`) — **as of 2026-09-15 this is a real, working sync, not just an organizational convention.** |
 | `.claude/` | Claude Code config; `.claude/skills/<name>` are symlinks back into `.agents/skills/<name>` |
 | `.github/` | GitHub config and CI; several subfolders (`automation/`, `CONTRIBUTING.md`, `harnesses/`, `instructions/`, `prompts/`) are symlinks into `.agents/` so Copilot/Actions read the same source of truth; `workflows/` holds real GitHub Actions (e.g. `vscode-docs-monitor.yml`) |
 | `.vscode/` | VS Code config; `settings.json` contains the real API key and is generated locally by `chezmoi apply` (gitignored) — see `docs/SECRETS.md` |
@@ -146,16 +146,16 @@ cd ~/dotfiles
 git add .agents/skills/my-skill/
 git commit -m "Add my-skill for [purpose]"
 git push
-./sync-skills.sh              # Distribute to ~/.agents/skills, ~/.claude/skills, etc.
+./sync.sh              # Distribute to ~/.agents/skills, ~/.claude/skills, etc.
 ```
 
 ### Synchronize Skills
 
 ```bash
-./sync-skills.sh              # Sync to user-level (.agents/skills, .claude/skills)
-./sync-skills.sh --system     # Also sync to system defaults (requires sudo)
-./sync-skills.sh --dry-run    # Simulate without making changes
-./sync-skills.sh --verbose    # Show details
+./sync.sh              # Sync to user-level (.agents/skills, .claude/skills)
+./sync.sh --system     # Also sync to system defaults (requires sudo)
+./sync.sh --dry-run    # Simulate without making changes
+./sync.sh --verbose    # Show details
 ```
 
 ## Setup and Installation
@@ -165,7 +165,7 @@ git push
 ```bash
 cd ~/dotfiles
 ./setup.sh                    # Create symlinks, clone repos, setup agents
-./sync-skills.sh              # Distribute skills
+./sync.sh              # Distribute skills
 ./test-subagents.sh           # Verify setup
 ```
 
@@ -175,7 +175,7 @@ cd ~/dotfiles
 cd ~/dotfiles
 git pull
 ./setup.sh
-./sync-skills.sh
+./sync.sh
 ```
 
 ## System Specifications
@@ -197,7 +197,7 @@ git pull
 ### Skills not appearing
 ```bash
 cd ~/dotfiles
-./sync-skills.sh --verbose
+./sync.sh --verbose
 ls ~/.agents/skills/
 ```
 
@@ -209,7 +209,7 @@ ls ~/.agents/skills/
 ### Script errors
 ```bash
 bash -n setup.sh              # Validate bash syntax
-bash -n sync-skills.sh
+bash -n sync.sh
 ```
 
 ---

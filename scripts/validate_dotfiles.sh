@@ -26,7 +26,7 @@ echo
 echo "-- Root cleanliness --"
 
 ALLOWED_ROOT_FILES=(README.md CLAUDE.md AGENTS.md GEMINI.md CHEATSHEET.md \
-  setup.sh sync-skills.sh test-subagents.sh .gitignore)
+  setup.sh sync.sh test-subagents.sh .gitignore)
 ALLOWED_ROOT_DIRS=(.agents .chezmoisource .claude .github .vscode docs scripts .git)
 
 unexpected=0
@@ -247,16 +247,16 @@ else
   bad "setup.sh not found"
 fi
 
-if [[ -x "$REPO_ROOT/sync-skills.sh" || -f "$REPO_ROOT/sync-skills.sh" ]]; then
-  sync_out="$(bash "$REPO_ROOT/sync-skills.sh" --dry-run 2>&1)"
+if [[ -x "$REPO_ROOT/sync.sh" || -f "$REPO_ROOT/sync.sh" ]]; then
+  sync_out="$(bash "$REPO_ROOT/sync.sh" --dry-run 2>&1)"
   sync_rc=$?
   if [[ $sync_rc -eq 0 ]]; then
-    ok "./sync-skills.sh --dry-run exits 0"
+    ok "./sync.sh --dry-run exits 0"
   else
-    bad "./sync-skills.sh --dry-run exited $sync_rc: $(tr '\n' ' ' <<<"$sync_out")"
+    bad "./sync.sh --dry-run exited $sync_rc: $(tr '\n' ' ' <<<"$sync_out")"
   fi
 else
-  bad "sync-skills.sh not found"
+  bad "sync.sh not found"
 fi
 
 # --- 6. Workspace standards config is itself valid --------------------------

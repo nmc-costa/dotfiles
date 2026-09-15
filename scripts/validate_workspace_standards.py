@@ -7,10 +7,22 @@ fields present, dates parse and are self-consistent, known enums respected.
 Good enough to catch the failure mode the schema's own research notes flag
 (LLM-generated YAML with a plausible-looking but structurally wrong edit).
 
+A repo's instance file may set `extends: <path>` to a workspace-level (or
+another repo's) instance file. Resolution is block-level, not deep-merged:
+any top-level key present locally REPLACES the inherited value wholesale
+(e.g. setting your own `repoRoot` replaces the whole inherited repoRoot,
+it doesn't merge individual sub-keys) — same "closer file wins" simplicity
+as EditorConfig, chosen so a local override is never a surprise partial
+merge. By default every command below validates/prints the RESOLVED
+(merged) config, i.e. what's actually in effect for this repo — pass
+--raw to operate on the local file's own declared content only.
+
 Usage:
-  validate_workspace_standards.py <instance.yml>            # full check, prints report
+  validate_workspace_standards.py <instance.yml>            # full check on the resolved config
+  validate_workspace_standards.py <instance.yml> --resolve   # print the merged effective config as YAML
   validate_workspace_standards.py <instance.yml> --due       # exit 0 if review is due, 1 if not
   validate_workspace_standards.py <instance.yml> --quiet     # full check, no output unless it fails
+  validate_workspace_standards.py <instance.yml> --raw       # operate on the local file only, don't resolve extends
 """
 import sys
 import re
@@ -33,6 +45,38 @@ def load(path: Path):
         return yaml.safe_load(text)
     import json
     return json.loads(text)
+
+
+def resolve_extends(path: Path, seen: set | None = None) -> dict:
+    """Return the fully-merged effective config for `path`, following
+    `extends` chains. Block-level override: each top-level key in a more
+    local file replaces the corresponding key inherited from its base
+    entirely (see module docstring)."""
+    path = path.expanduser().resolve()
+    seen = seen or set()
+    if path in seen:
+        raise ValueError(f"extends cycle detected at {path}")
+    seen = seen | {path}
+
+    doc = load(path) or {}
+    extends_raw = doc.pop("extends", None)
+    if not extends_raw:
+        return doc
+
+    base_path = Path(extends_raw).expanduser()
+    if not base_path.is_absolute():
+        base_path = (path.parent / base_path).resolve()
+    if not base_path.exists():
+        # Can't resolve (e.g. dotfiles not cloned on this machine) — fall
+        # back to the local file alone rather than crashing; the missing
+        # base will surface as a warning, not a validation crash.
+        doc["_extendsUnresolved"] = str(extends_raw)
+        return doc
+
+    base = resolve_extends(base_path, seen)
+    merged = dict(base)
+    merged.update(doc)  # local keys win wholesale, per key
+    return merged
 
 
 def parse_date(s, errors, field):
@@ -118,8 +162,24 @@ def main():
         print(f"FAIL: {path} does not exist", file=sys.stderr)
         sys.exit(2)
 
-    doc = load(path)
+    raw = "--raw" in flags
+    if raw:
+        doc = load(path)
+        unresolved_note = None
+    else:
+        doc = resolve_extends(path)
+        unresolved_note = doc.pop("_extendsUnresolved", None)
+
+    if "--resolve" in flags:
+        print(f"# resolved effective config for {path}")
+        if unresolved_note:
+            print(f"# NOTE: extends target '{unresolved_note}' not found on this machine — showing local file only")
+        print(yaml.safe_dump(doc, sort_keys=False, default_flow_style=False))
+        sys.exit(0)
+
     errors = validate(doc)
+    if unresolved_note:
+        errors.insert(0, f"extends: target '{unresolved_note}' not found on this machine (dotfiles not cloned here?) — validated local file alone")
 
     if "--due" in flags:
         review = (doc or {}).get("review", {})

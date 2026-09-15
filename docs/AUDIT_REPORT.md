@@ -6,7 +6,7 @@
 ## Checklist Verification
 
 ### 1. Root Structure ✅
-- ✅ No unnecessary loose files — root holds only `README.md`, `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `CHEATSHEET.md`, `setup.sh`, `sync-skills.sh`, `test-subagents.sh`, `.gitignore`, plus the directories `.agents/`, `.chezmoisource/`, `.claude/`, `.github/`, `.vscode/`, `docs/`, `scripts/`, `.git/`
+- ✅ No unnecessary loose files — root holds only `README.md`, `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `CHEATSHEET.md`, `setup.sh`, `sync.sh`, `test-subagents.sh`, `.gitignore`, plus the directories `.agents/`, `.chezmoisource/`, `.claude/`, `.github/`, `.vscode/`, `docs/`, `scripts/`, `.git/`
 - ✅ Scripts organized properly (root + `scripts/` for utilities)
 - ✅ MDs well organized — all secondary docs (`SECRETS.md`, `STANDARDS.md`, `AUDIT_REPORT.md`, `SUBAGENTS_VERIFICATION.md`, `VSCODE_MONITOR_QUICKSTART.md`, `directory_tree.md`, `requirements.txt`, `vscode-docs-monitor.yml`) live in `docs/`, not root
 - ✅ `.gitignore` present and comprehensive
@@ -29,7 +29,7 @@
 
 ### 4. Scripts ⚠️
 - ✅ `setup.sh` — syntax valid (`bash -n` OK)
-- ✅ `sync-skills.sh` — syntax valid
+- ✅ `sync.sh` — syntax valid
 - ✅ `test-subagents.sh` — syntax valid, executable
 - ✅ `scripts/validate_dotfiles.sh` — syntax valid (new this round; also `bash -n`-checks every `*.sh` in the repo, see §9)
 - ❌ **`setup.sh` hardcodes `WORK_REPOS`, `PROJECTS_REPOS`, and the GitHub username `nmc-costa`** directly in the `clone()` function's SSH/HTTPS URLs (`git@github.com:nmc-costa/$repo.git`) — not portable to another user without editing the script. **Note:** a fix making these overridable via `GITHUB_USER`/`WORK_REPOS`/`PROJECTS_REPOS` environment variables exists in commit `0304d1d` on branch `claude/todo-continuation-and-notes-backlog`, but that fix is **not present on this branch** (`claude/repo-hygiene-dotfiles`) or on `main` — do not assume it's merged until that branch lands.
@@ -48,7 +48,7 @@
 - ❌ **Hardcoded paths DO exist**: `.vscode/github.code-workspace` (see above) and `setup.sh`'s hardcoded `nmc-costa`/`WORK_REPOS`/`PROJECTS_REPOS` (see §4). Historical/archival content under `.agents/validation/projecthits/**/old/**` also contains old `/home/user/github/...` paths, but these are dated snapshots documenting past work (some files even document the dead-path bug explicitly), not live config.
 
 ### 7. Instruções ✅
-- ✅ `setup.sh` and `sync-skills.sh` documented with flags
+- ✅ `setup.sh` and `sync.sh` documented with flags
 - ✅ Error messages helpful and descriptive
 
 ### 8. Links and References ⚠️
@@ -58,7 +58,7 @@
 `scripts/validate_dotfiles.sh` now includes, in addition to the structural checks:
 - `bash -n` syntax check on every `*.sh` file in the repo
 - A relative markdown-link checker across all tracked `.md` files
-- A dry-run smoke test of `./setup.sh --dry-run` and `./sync-skills.sh --dry-run`
+- A dry-run smoke test of `./setup.sh --dry-run` and `./sync.sh --dry-run`
 
 Run `./scripts/validate_dotfiles.sh` for current pass/fail counts — do not rely on this report for that; it is a point-in-time snapshot, the script is live.
 
@@ -117,7 +117,7 @@ dotfiles/
 ├── GEMINI.md
 ├── README.md
 ├── setup.sh          ⚠️ hardcoded repo lists/username, see §4
-├── sync-skills.sh    ✅ verified
+├── sync.sh    ✅ verified
 └── test-subagents.sh ✅ verified
 ```
 
@@ -133,7 +133,7 @@ cd ~/dotfiles
 
 # Validate syntax individually
 bash -n setup.sh
-bash -n sync-skills.sh
+bash -n sync.sh
 bash -n test-subagents.sh
 bash -n scripts/validate_dotfiles.sh
 
@@ -144,7 +144,7 @@ grep -rn "dtx/" .vscode/*.code-workspace   # currently 1 hit: github.code-worksp
 ## Sign-Off
 
 ⚠️ **Repository is usable, but not fully "clean" by this report's own historical claims.** Structure and docs are organized and honest about gaps; two concrete items remain open (§ "Issues Still Open"). Ready for:
-- New machine setup: `./setup.sh --dotfiles && ./sync-skills.sh` (works, but the target user must currently be `nmc-costa` or the script must be edited first)
+- New machine setup: `./setup.sh --dotfiles && ./sync.sh` (works, but the target user must currently be `nmc-costa` or the script must be edited first)
 - Skill management: add to `.agents/skills/` and sync
 
 ---
