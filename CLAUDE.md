@@ -21,6 +21,14 @@ dotfiles/
 
 **Docs-chave:** `README.md` (overview + directory tree completo + Guidelines para humano/agente) · `CHEATSHEET.md` (onde vai cada coisa + TODO persistente) · `docs/STANDARDS.md` (convenções; secções propostas/não implementadas marcadas explicitamente como tal desde 2026-09-15) · `docs/SUBAGENTS_VERIFICATION.md` (checklist) · `docs/AUDIT_REPORT.md` (audit; corrigido 2026-09-15 para refletir hardcoded paths/`dtx/` reais) · `docs/SECRETS.md` (chezmoi+age). **Antes de qualquer mudança estrutural, corre `./scripts/validate_dotfiles.sh`** — é o avaliador que confirma raiz limpa, docs obrigatórios presentes, e a tree deste ficheiro/README a bater com a realidade.
 
+## Standards do workspace (novo, 2026-09-15)
+
+`docs/standards/workspace-standards.yaml` + `workspace-standards.schema.json` definem os defaults que **todos** os repos deste workspace devem seguir (raiz limpa, secções obrigatórias no README, língua técnica=inglês, etc.) — cada repo tem a sua própria instância em `docs/standards.yml` que herda destes defaults e só declara desvios. `docs/standards/RESEARCH_NOTES.md` documenta a investigação SOTA que informou o desenho (nem tudo tem prova — o campo do diagrama no README é preferência do dono, não SOTA, e está marcado como tal).
+
+**Revisão periódica (implícita, corre em background):** um hook `SessionStart` (`~/.claude/hooks/workspace-standards-review-check.sh`) verifica `review.nextDue` a cada sessão nova do Claude Code e, se estiver atrasada, injeta um lembrete forte no contexto — não bloqueia a sessão, mas espera-se que o agente trate disso antes de mais trabalho substancial, a menos que o pedido da sessão seja claramente estreito e não relacionado. Para harnesses sem hooks (Copilot, Gemini CLI, etc.), o mesmo protocolo está descrito aqui em prosa — lê `review.nextDue` em `docs/standards/workspace-standards.yaml` no início de uma sessão e aplica a mesma regra.
+
+Sempre que editares `workspace-standards.yaml`/`.schema.json`, corre `python3 scripts/validate_workspace_standards.py docs/standards/workspace-standards.yaml` antes de committer — YAML gerado por LLM tem mais tendência a erros de indentação do que JSON, por isso a validação não é opcional aqui.
+
 **Trabalho em aberto** (detalhe completo em `CHEATSHEET.md` §4, §4.1, §4.2):
 
 | Item | Estado |

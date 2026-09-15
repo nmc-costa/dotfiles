@@ -259,6 +259,21 @@ else
   bad "sync-skills.sh not found"
 fi
 
+# --- 6. Workspace standards config is itself valid --------------------------
+echo
+echo "-- Workspace standards config --"
+if [[ -f "$REPO_ROOT/docs/standards/workspace-standards.yaml" ]]; then
+  if python3 "$REPO_ROOT/scripts/validate_workspace_standards.py" \
+      "$REPO_ROOT/docs/standards/workspace-standards.yaml" --quiet >/tmp/validate_ws_standards.$$ 2>&1; then
+    ok "docs/standards/workspace-standards.yaml passes its own schema checks"
+  else
+    bad "docs/standards/workspace-standards.yaml: $(tr '\n' ' ' </tmp/validate_ws_standards.$$)"
+  fi
+  rm -f /tmp/validate_ws_standards.$$
+else
+  bad "docs/standards/workspace-standards.yaml not found"
+fi
+
 # --- Summary ----------------------------------------------------------------
 echo
 echo "=== $PASS passed, $FAIL failed ==="

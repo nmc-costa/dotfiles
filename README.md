@@ -88,6 +88,7 @@ dotfiles/
 | `docs/requirements.txt` | Python deps for `scripts/monitor_vscode_docs.py` (`requests`, `beautifulsoup4`, `pyyaml`) |
 | `docs/vscode-docs-monitor.yml` | An older copy of the GitHub Actions workflow — the **active** one is `.github/workflows/vscode-docs-monitor.yml`; this copy still points at a dead path (`my/agentic_instructions/...`) from before the `agentic_instructions` merge and should not be treated as current |
 | `docs/SECRETS.md` | How the one real secret in this repo (a VS Code extension API key) is encrypted with chezmoi + age |
+| `docs/standards/` | The workspace-wide agent-orientation standard — `workspace-standards.schema.json` + `.yaml`, a validator (`scripts/validate_workspace_standards.py`), and `RESEARCH_NOTES.md` documenting the SOTA pass behind it. Every repo in this workspace has its own `docs/standards.yml` inheriting from this one. See `CLAUDE.md`/`AGENTS.md` for the review protocol. |
 
 ## Guidelines
 

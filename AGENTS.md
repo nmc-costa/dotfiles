@@ -2,6 +2,16 @@
 
 Orientações para agentes de IA (Crush/Claude, Copilot, Gemini) trabalharem neste repositório.
 
+## Workspace standards (todos os repos, não só este)
+
+`docs/standards/workspace-standards.yaml` define os defaults obrigatórios para **todos** os repos deste workspace (raiz limpa, README com secções fixas, língua técnica=inglês). Todo o agente, em qualquer ferramenta, deve:
+
+1. No início de uma sessão neste workspace, ler `review.nextDue` em `~/dotfiles/docs/standards/workspace-standards.yaml`.
+2. Se a data já passou, tratar isso como um lembrete forte (não um bloqueio absoluto) para fazer a revisão SOTA descrita em `review.sourcesToRecheck` antes de trabalho substancial não relacionado, propor as mudanças numa branch `claude/...`+PR (nunca commit direto a `main`), e atualizar `review.lastReviewed`/`nextDue`.
+3. Correr `python3 scripts/validate_workspace_standards.py docs/standards/workspace-standards.yaml` depois de qualquer edição a esse ficheiro, antes de commit.
+
+(Claude Code tem isto automatizado via hook `SessionStart` — ver `CLAUDE.md`. Outras ferramentas seguem este protocolo em prosa, aqui.)
+
 ## Agentes Disponíveis
 
 | Agente | Localização Config | Quando Usar |
