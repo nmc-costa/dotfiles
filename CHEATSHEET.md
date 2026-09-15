@@ -57,6 +57,23 @@ A lista de tarefas que o Claude Code cria numa sessão (a ferramenta de tracking
 
 **Regra:** ao começar uma sessão nova, pede-lhe explicitamente para ler esta lista e criar a sua todo list interna a partir dela (ver secção 7). Ao terminar uma tarefa, o commit que a fecha tem de marcar o `[x]` aqui.
 
+### 4.2 Repo hygiene / tracking e organização (pedido 2026-09-15)
+
+Objetivo, para cada repo: (1) raiz limpa — só `README.md` e os ficheiros que ferramentas de agente leem automaticamente por convenção (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.clinerules`, etc.) ficam na raiz, o resto de `.md` solto vai para `docs/`; (2) `README.md` com directory tree atual, índice do que está em cada pasta, e uma tabela-resumo de tarefas/estado; (3) estrutura de diretórios validada contra a melhor prática pesquisada online para o tipo de repo.
+
+| Repo | Estado antes (auditado 2026-09-15) | Tarefa |
+|---|---|---|
+| `dotfiles` | Raiz com 10 `.md` soltos + `README.md`; sem directory tree nem tabela-resumo no `README.md`/`CLAUDE.md` | Mover para `docs/` tudo o que não seja lido automaticamente por ferramenta; directory tree + índice + tabela-resumo no `README.md` e no `CLAUDE.md` |
+| `~/Projects/architect` | `README.md` é na verdade o prompt de ativação da persona "Architect", não documentação de repo; ficheiros soltos na raiz | Criar `README.md` real com directory tree + índice; mover soltos para `docs/` |
+| `~/Projects/notes` | `README.md` de 1 linha, sem índice das pastas | Directory tree + índice no `README.md` |
+| `~/Work/notes` (repo da org `DTx-DSML`, não pessoal) | `README.md` de 1 linha | Directory tree + índice no `README.md` |
+| `~/Projects/agentic_instructions` | — | **Excluído** — arquivado, não editar |
+
+- [x] `dotfiles` — feito 2026-09-15, ver branch `claude/repo-hygiene-dotfiles`
+- [ ] `~/Projects/architect`
+- [ ] `~/Projects/notes`
+- [ ] `~/Work/notes`
+
 ## 5. Roadmap do "Workspace Ágil" (ordem validada nas tuas notas — `~/Projects/notes/ideas/architecture/Workspace Agil para Agentes Multiplataforma.md` §13.7)
 
 Não saltar fases — cada uma é pré-requisito da seguinte. O otimizador autónomo ("OS vivo") é a **última**, não a primeira.
