@@ -88,9 +88,23 @@ sessionHygiene:
   # generalizes (read CLAUDE.md+CHEATSHEET.md, rebuild a todo list from a
   # persistent doc, mark items done in that doc not just in-session).
 
+developmentApproach:
+  pocFirst: true
+  appliesTo:
+    - "new subsystems or tools (e.g. tasks/ event-log tracker, 2026-09-15)"
+    - "schema/standards changes with unproven real-world fit"
+    - "automation (cron/systemd/GitHub Actions) — never as the first step, always after a working manual PoC"
+  exceptions:
+    - "single-line fixes, typos, obvious corrections"
+    - "tasks with fully specified, unambiguous requirements and no architectural decision left open"
+  # Added 2026-09-15, generalizing from how tasks/ itself got built in this
+  # same session: 3 Plan agents synthesized into a resolved design, then an
+  # 11-task PoC seeded with real data (not invented examples), deliberately
+  # leaving automation/scale out — iterate only once the PoC proves solid.
+
 validation:
   script: scripts/validate_workspace_standards.py
-  command: "./scripts/validate_workspace_standards.py docs/standards/workspace-standards.yaml"
+  command: "./scripts/validate_workspace_standards.py .agents/instructions/workspace-config/standards/workspace-standards.yaml"
 
 review:
   cadenceDays: 7

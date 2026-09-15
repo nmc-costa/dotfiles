@@ -107,6 +107,27 @@
         }
       }
     },
+    "developmentApproach": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pocFirst": {
+          "type": "boolean",
+          "default": true,
+          "description": "Non-trivial tasks (new subsystems, tools, schema/policy changes with unproven real-world fit) start as a minimal, end-to-end-working PoC before broader implementation — validated by hand where automated verification isn't there yet — then iterate and harden only after the PoC proves the core assumption. Don't build the full system speculatively. Precedent: the tasks/ event-log tracker itself (2026-09-15) shipped as an 11-task PoC seeded with real branch data, not a complete system, on the first pass."
+        },
+        "appliesTo": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "What this applies to, so it isn't read as 'plan everything to death.'"
+        },
+        "exceptions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "When to skip the PoC step and go straight to the real implementation."
+        }
+      }
+    },
     "validation": {
       "type": "object",
       "additionalProperties": false,
