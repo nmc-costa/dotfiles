@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Minimal workspace bootstrap: create dirs, clone repos, optional dotfiles
-BASE_DIR="${1:-$HOME}"
+BASE_DIR="$HOME"
 DRY_RUN=0
 DO_DOTFILES=0
 
@@ -10,6 +10,8 @@ for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY_RUN=1 ;;
     --dotfiles) DO_DOTFILES=1 ;;
+    --*) echo "unknown flag: $arg" >&2; exit 1 ;;
+    *) BASE_DIR="$arg" ;;
   esac
 done
 
