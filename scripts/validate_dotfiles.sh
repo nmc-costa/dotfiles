@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # Evaluator: checks that ~/dotfiles is actually organized the way README.md
 # and CLAUDE.md claim — clean root, key guideline docs present, and the
-# directory tree in README.md matches the real filesystem.
+# directory tree in README.md matches the real filesystem. Also runs real
+# functional smoke tests (not just structure): every *.sh syntax-checks,
+# every relative markdown link resolves, and the two entrypoint scripts
+# actually run cleanly in --dry-run mode.
 #
 # Exit 0 = repo is in the state a human or an agent can rely on.
 # Exit 1 = something in here is lying; read the FAIL lines above the summary.
@@ -122,6 +125,138 @@ else
     done < <(find . -maxdepth 1 -mindepth 1 -not -name '.git')
     [[ $missing_from_tree -eq 0 ]] && ok "every root entry on disk is mentioned in README.md's tree"
   fi
+fi
+
+# --- 5. Syntax-check every shell script in the repo -----------------------
+echo
+echo "-- Shell syntax (bash -n) --"
+if command -v git >/dev/null 2>&1 && git -C "$REPO_ROOT" rev-parse --git-dir >/dev/null 2>&1; then
+  mapfile -t sh_files < <(git -C "$REPO_ROOT" ls-files '*.sh')
+else
+  mapfile -t sh_files < <(find "$REPO_ROOT" -name '*.sh' -not -path '*/.git/*' | sed "s#^$REPO_ROOT/##")
+fi
+
+if [[ ${#sh_files[@]} -eq 0 ]]; then
+  bad "no *.sh files found to syntax-check (unexpected)"
+else
+  for f in "${sh_files[@]}"; do
+    if bash -n "$REPO_ROOT/$f" 2>/tmp/validate_dotfiles_syntax_err; then
+      ok "bash -n $f"
+    else
+      bad "bash -n $f — $(tr '\n' ' ' </tmp/validate_dotfiles_syntax_err)"
+    fi
+  done
+  rm -f /tmp/validate_dotfiles_syntax_err
+fi
+
+# --- 6. Broken relative markdown links -------------------------------------
+echo
+echo "-- Relative markdown links --"
+if command -v python3 >/dev/null 2>&1; then
+  if command -v git >/dev/null 2>&1 && git -C "$REPO_ROOT" rev-parse --git-dir >/dev/null 2>&1; then
+    mapfile -t md_files < <(git -C "$REPO_ROOT" ls-files '*.md')
+  else
+    mapfile -t md_files < <(find "$REPO_ROOT" -name '*.md' -not -path '*/.git/*' | sed "s#^$REPO_ROOT/##")
+  fi
+
+  link_report="$(REPO_ROOT="$REPO_ROOT" python3 - "${md_files[@]}" <<'PYEOF'
+import os, re, sys
+
+repo_root = os.environ["REPO_ROOT"]
+md_files = sys.argv[1:]
+link_re = re.compile(r'\]\(([^)]+)\)')
+broken = []
+checked = 0
+
+for rel in md_files:
+    full = os.path.join(repo_root, rel)
+    try:
+        with open(full, encoding="utf-8", errors="replace") as fh:
+            lines = fh.readlines()
+    except OSError:
+        continue
+    # Resolve symlinks (e.g. .github/CONTRIBUTING.md -> ../.agents/CONTRIBUTING.md)
+    # so relative links are checked against the file's real physical directory,
+    # not the directory of the symlink that points at it.
+    link_dir = os.path.dirname(os.path.realpath(full))
+    in_fence = False
+    for lineno, line in enumerate(lines, start=1):
+        if line.lstrip().startswith('```'):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            # Skip links inside fenced code blocks — these are usually
+            # illustrative examples/templates (e.g. "{skill-name}"
+            # placeholders), not real links to check.
+            continue
+        for m in link_re.finditer(line):
+            target = m.group(1).strip()
+            if not target:
+                continue
+            # drop an optional "title" after a space, and surrounding <>
+            target = target.split(' ', 1)[0].strip('<>')
+            if not target:
+                continue
+            if target.startswith(('http://', 'https://', 'mailto:', '#')):
+                continue
+            if target.startswith('//'):
+                continue
+            # strip in-page anchor from a path#anchor link
+            path_part = target.split('#', 1)[0]
+            if not path_part:
+                continue
+            checked += 1
+            resolved = os.path.normpath(os.path.join(link_dir, path_part))
+            if not os.path.exists(resolved):
+                broken.append(f"{rel}:{lineno}: broken link '{target}' -> resolves to {os.path.relpath(resolved, repo_root)}")
+
+print(f"CHECKED={checked}")
+for b in broken:
+    print(f"BROKEN={b}")
+PYEOF
+)"
+
+  checked_count="$(grep -c '^CHECKED=' <<<"$link_report" | head -1)"
+  checked_n="$(grep '^CHECKED=' <<<"$link_report" | cut -d= -f2)"
+  broken_lines="$(grep '^BROKEN=' <<<"$link_report" | sed 's/^BROKEN=//')"
+
+  if [[ -z "$broken_lines" ]]; then
+    ok "all relative markdown links resolve (${checked_n:-0} links checked across ${#md_files[@]} tracked .md files)"
+  else
+    while IFS= read -r line; do
+      [[ -z "$line" ]] && continue
+      bad "markdown link: $line"
+    done <<<"$broken_lines"
+  fi
+else
+  bad "python3 not available — cannot run the markdown link checker"
+fi
+
+# --- 7. Dry-run smoke test of the entrypoint scripts ------------------------
+echo
+echo "-- Dry-run smoke test --"
+if [[ -x "$REPO_ROOT/setup.sh" || -f "$REPO_ROOT/setup.sh" ]]; then
+  setup_out="$(bash "$REPO_ROOT/setup.sh" --dry-run 2>&1)"
+  setup_rc=$?
+  if [[ $setup_rc -eq 0 ]]; then
+    ok "./setup.sh --dry-run exits 0"
+  else
+    bad "./setup.sh --dry-run exited $setup_rc: $(tr '\n' ' ' <<<"$setup_out")"
+  fi
+else
+  bad "setup.sh not found"
+fi
+
+if [[ -x "$REPO_ROOT/sync-skills.sh" || -f "$REPO_ROOT/sync-skills.sh" ]]; then
+  sync_out="$(bash "$REPO_ROOT/sync-skills.sh" --dry-run 2>&1)"
+  sync_rc=$?
+  if [[ $sync_rc -eq 0 ]]; then
+    ok "./sync-skills.sh --dry-run exits 0"
+  else
+    bad "./sync-skills.sh --dry-run exited $sync_rc: $(tr '\n' ' ' <<<"$sync_out")"
+  fi
+else
+  bad "sync-skills.sh not found"
 fi
 
 # --- Summary ----------------------------------------------------------------

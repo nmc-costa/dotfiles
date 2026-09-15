@@ -80,8 +80,8 @@ dotfiles/
 
 | File | Purpose |
 |---|---|
-| `docs/STANDARDS.md` | Naming conventions and structure standards (partly aspirational/stale — see `CLAUDE.md` known gaps) |
-| `docs/AUDIT_REPORT.md` | Compliance/standards audit report (contains claims contradicted by current state — see `CLAUDE.md` known gaps) |
+| `docs/STANDARDS.md` | Naming conventions and structure standards (aspirational sections explicitly marked `[PROPOSTO — não implementado]` as of 2026-09-15; not silently presented as current anymore) |
+| `docs/AUDIT_REPORT.md` | Compliance/standards audit report (corrected 2026-09-15 — now accurately reports the hardcoded-path/`dtx/` findings instead of denying them; see `CLAUDE.md` known gaps for what's still actually open) |
 | `docs/SUBAGENTS_VERIFICATION.md` | Verification checklist for agent/subagent setup |
 | `docs/VSCODE_MONITOR_QUICKSTART.md` | Quickstart guide for the VS Code docs monitor automation |
 | `docs/directory_tree.md` | An older, narrower directory-tree doc (home-directory level, partly superseded by this README) |
@@ -96,7 +96,7 @@ dotfiles/
 - **Start here, then `CHEATSHEET.md`.** This README is the map; `CHEATSHEET.md` is the living "where does X go" + persistent TODO list — check it before starting new work, and expect it to change often.
 - **Real repos on this machine:** `~/dotfiles` (this one), `~/Projects/architect`, `~/Projects/notes`, `~/Work/notes`, `~/Projects/agentic_instructions` (archived, read-only — see `CHEATSHEET.md` §3). If you're looking for `~/Work/mobai`, `~/Work/RAGFusion`, etc. — those are in `setup.sh`'s repo lists but **not cloned on this machine**; don't assume they exist without checking.
 - **`~/.agents`, `~/.claude`, `~/.vscode`, `~/.github` are NOT symlinks on this machine**, despite what older docs in this repo may still imply — see `CLAUDE.md`'s "Known Gaps" section. `setup.sh` can create them, but the sync direction (repo→system vs. system→repo) is an open decision, not yet standard. Don't trust a claim of "it's symlinked" here without running `readlink -f <path>` first.
-- **Before deleting or rewriting a doc, check `git log` for it** — several docs here (`docs/STANDARDS.md`, `docs/AUDIT_REPORT.md`) are known to contain stale/aspirational claims, flagged rather than silently fixed, because the fix is a content decision, not a hygiene one.
+- **Before deleting or rewriting a doc, check `git log` for it.** `docs/STANDARDS.md` and `docs/AUDIT_REPORT.md` used to contain stale/false claims presented as current fact; both were corrected in place 2026-09-15 (proposed sections now labeled, audit findings now accurate) rather than deleted — check `CLAUDE.md`'s known gaps for what's still genuinely open in the repo itself.
 - **There is no separate `agent-framework` repo or `agent-versions.json` on this machine.** An earlier version of this README described one; that content was removed as inaccurate for the current setup, not because the idea is rejected — if you want that separation, it needs to be built, not assumed.
 
 ### For agents (Claude Code and others)
@@ -106,7 +106,7 @@ dotfiles/
 - **Root stays clean.** Only `README.md` and files a tool auto-loads by convention (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.gitignore`) plus root-run scripts belong at top level. Anything else you create — a report, an audit, a new doc — goes in `docs/`. `scripts/validate_dotfiles.sh` (see below) enforces this; run it before considering a change here "done."
 - **Any structural change to `.agents/` (new skill, new harness, a resolved TODO) must update `CHEATSHEET.md` in the same commit** — this is a hard rule stated in `CLAUDE.md`, not a suggestion.
 - **Don't push to `main` directly.** Work on a `claude/<topic>` branch, push it, leave the PR for the human to open/merge — `gh` is not authenticated in most sessions here, so you generally can't open the PR yourself; give the compare URL `git push` prints instead.
-- **Treat `docs/STANDARDS.md` and `docs/AUDIT_REPORT.md` content with suspicion** — they're known to contain claims contradicted by the current repo state (see `CLAUDE.md` known gaps). Verify before repeating a claim from them.
+- **`docs/STANDARDS.md` and `docs/AUDIT_REPORT.md` were corrected 2026-09-15** to stop misrepresenting proposed structure as current and to accurately report the repo's real hardcoded-path/`dtx/` findings — still verify before repeating a specific claim from them, since they document open/proposed work by nature, but they no longer contain claims flatly contradicted by the repo (see `CLAUDE.md` known gaps for what remains genuinely open).
 
 ## Project Repositories
 
