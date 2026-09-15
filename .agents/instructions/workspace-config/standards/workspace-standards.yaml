@@ -62,6 +62,16 @@ language:
   technical: en
   userFacing: auto   # this workspace's actual practice has been Portuguese
 
+sessionHygiene:
+  suggestNewSessionWhen:
+    - "the current task has reached a natural conclusion and what's next is a largely independent task"
+    - "the session has run through many rounds of agent dispatch / tool calls and context is large relative to what the next task actually needs"
+    - "the user is about to ask for something unrelated to what filled most of the current session"
+  mustOfferKickoffPrompt: true
+  # See CHEATSHEET.md §7 in dotfiles for the concrete worked pattern this
+  # generalizes (read CLAUDE.md+CHEATSHEET.md, rebuild a todo list from a
+  # persistent doc, mark items done in that doc not just in-session).
+
 validation:
   script: scripts/validate_workspace_standards.py
   command: "./scripts/validate_workspace_standards.py docs/standards/workspace-standards.yaml"

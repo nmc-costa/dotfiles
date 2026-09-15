@@ -10,6 +10,8 @@ Orientações para agentes de IA (Crush/Claude, Copilot, Gemini) trabalharem nes
 2. Se a data já passou, tratar isso como um lembrete forte (não um bloqueio absoluto) para fazer a revisão SOTA descrita em `review.sourcesToRecheck` antes de trabalho substancial não relacionado, propor as mudanças numa branch `claude/...`+PR (nunca commit direto a `main`), e atualizar `review.lastReviewed`/`nextDue`.
 3. Correr `python3 scripts/validate_workspace_standards.py .agents/instructions/workspace-config/standards/workspace-standards.yaml` depois de qualquer edição a esse ficheiro, antes de commit.
 
+**Higiene de sessão (`sessionHygiene`, 2026-09-15):** quando a sessão atual chega a uma conclusão natural, ou já foi através de muitas rondas de dispatch de agentes/tool calls com contexto grande face ao que a próxima tarefa precisa, ou o pedido seguinte não tem relação com o que encheu a sessão até agora — sugere proativamente começar sessão nova, e **dá sempre um prompt de arranque pronto a copiar** (não digas só "devias começar sessão nova"). O padrão concreto está em `CHEATSHEET.md` §7 deste repo: ler `CLAUDE.md`+`CHEATSHEET.md`, reconstruir a todo list a partir de um doc persistente, e escrever aí (não só na sessão) quando algo fica feito.
+
 (Claude Code tem isto automatizado via hook `SessionStart` — ver `CLAUDE.md`. Outras ferramentas seguem este protocolo em prosa, aqui.)
 
 ## Agentes Disponíveis

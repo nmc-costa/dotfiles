@@ -91,6 +91,22 @@
       },
       "description": "technical = docs/code comments/commit messages. userFacing = content meant for the repo owner directly (this workspace's convention has been Portuguese)."
     },
+    "sessionHygiene": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "suggestNewSessionWhen": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Heuristics an agent should watch for to proactively suggest ending the current session and starting a fresh one, rather than the owner deciding this alone. Token-optimization rationale: resuming a long session (--resume/--continue) reloads its full history, which costs far more than starting fresh with a short, well-written kickoff prompt."
+        },
+        "mustOfferKickoffPrompt": {
+          "type": "boolean",
+          "default": true,
+          "description": "When suggesting a new session, the agent must hand back a short, copy-pasteable prompt to start that next session with (pointing at whatever persistent doc/file carries the state — e.g. CHEATSHEET.md, a tasks/ tracker, a kickoff file), not just say 'you should start a new session.'"
+        }
+      }
+    },
     "validation": {
       "type": "object",
       "additionalProperties": false,
