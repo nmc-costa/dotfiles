@@ -37,6 +37,7 @@ dotfiles/
 ├── docs/                        # Everything not auto-loaded by a tool by convention — see index below
 │   └── SECRETS.md               #   Secrets-management doc (chezmoi + age)
 ├── scripts/                     # Utility scripts (VS Code docs monitor: monitor_vscode_docs.py, setup_vscode_monitor_cron.sh)
+├── tasks/                       # Workspace-wide task tracking — not built yet, see tasks/KICKOFF.md
 ├── AGENTS.md                    # General agent guide (Crush/Claude, Copilot, Gemini, Cline) — auto-read by convention
 ├── CLAUDE.md                    # Claude Code-specific context — auto-read by Claude Code
 ├── GEMINI.md                    # Gemini-specific context — auto-read by Gemini
@@ -74,6 +75,7 @@ dotfiles/
 | `.vscode/` | VS Code config; `settings.json` contains the real API key and is generated locally by `chezmoi apply` (gitignored) — see `docs/SECRETS.md` |
 | `.chezmoisource/` | Dedicated chezmoi source directory, scoped only to the one encrypted `.vscode/settings.json` — see `docs/SECRETS.md` |
 | `scripts/` | Standalone utility scripts (currently the VS Code docs monitor) |
+| `tasks/` | Workspace-wide task-tracking system — **not built yet**, `tasks/KICKOFF.md` is the planning/implementation prompt for a future session |
 | `docs/` | Everything not auto-loaded by convention — see table below |
 
 ### `docs/` index

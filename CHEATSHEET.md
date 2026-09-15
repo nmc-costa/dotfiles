@@ -54,6 +54,9 @@ A lista de tarefas que o Claude Code cria numa sessão (a ferramenta de tracking
 - [ ] Arquivar `agentic_instructions` no GitHub (Settings → Archive this repository) — só depois do push/PR acima.
 - [ ] Decidir direção de sincronização (repo→sistema vs. sistema→repo) — em aberto, ver `CLAUDE.md` → Lacunas Conhecidas.
 - [ ] `setup.sh` com listas de repos hardcoded (`nmc-costa`) — conhecido, não bloqueante, só importa se partilhares o repo.
+- [ ] **Sistema de tracking de tarefas em `tasks/`** (pedido 2026-09-15) — base do "Workspace Ágil". Planeamento + implementação ainda não começaram; o prompt de arranque está em `tasks/KICKOFF.md`, pronto a colar numa sessão nova com orquestração de agentes.
+
+**⚠️ Nota de divergência (2026-09-15):** este ficheiro tem histórico fragmentado entre branches irmãs — `claude/todo-continuation-and-notes-backlog` (que reconciliou esta lista com a realidade, ex.: os 13 commits acima já foram enviados) e a cadeia `claude/repo-hygiene-dotfiles` → `claude/workspace-standards-schema` (onde este `tasks/KICKOFF.md` foi acrescentado) não partilham a mesma base. Reconciliar ao fazer merge — não confiar cegamente no texto acima dos itens já marcados `[x]` nalguma das branches sem verificar primeiro.
 
 **Regra:** ao começar uma sessão nova, pede-lhe explicitamente para ler esta lista e criar a sua todo list interna a partir dela (ver secção 7). Ao terminar uma tarefa, o commit que a fecha tem de marcar o `[x]` aqui.
 

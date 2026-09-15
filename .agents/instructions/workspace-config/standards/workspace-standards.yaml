@@ -29,10 +29,26 @@ repoRoot:
     - CLAUDE.md
     - AGENTS.md
     - GEMINI.md
+    - CHEATSHEET.md
+    - setup.sh
+    - sync.sh
+    - test-subagents.sh
     - .gitignore
   allowedDirs:
+    - .agents
+    - .chezmoisource
+    - .claude
+    - .github
+    - .vscode
     - docs
+    - scripts
+    - tasks
   docsDir: docs/
+  # Kept in sync by hand with scripts/validate_dotfiles.sh's ALLOWED_ROOT_FILES/
+  # ALLOWED_ROOT_DIRS (2026-09-15: found these two lists had drifted apart —
+  # this file only listed docs/, the script enforced the real fuller list).
+  # This is dotfiles' OWN repoRoot — other repos declare their own, different,
+  # list (dotfiles-shaped defaults don't fit e.g. architect or notes).
 
 agentEntrypoints:
   canonical: AGENTS.md
