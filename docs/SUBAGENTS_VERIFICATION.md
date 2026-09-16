@@ -43,7 +43,7 @@ Esperado:
 Para sincronizar:
 ```bash
 cd ~/dotfiles
-./sync-skills.sh --verbose
+./sync.sh --verbose
 ```
 
 ## Workflows Disponíveis
@@ -84,7 +84,7 @@ Quando fazer spin (ativar) de um novo subagente:
 
 2. **Sincronizar skills:**
    ```bash
-   ~/dotfiles/sync-skills.sh
+   ~/dotfiles/sync.sh
    ```
 
 3. **Verificar acesso:**
@@ -104,7 +104,7 @@ Quando fazer spin (ativar) de um novo subagente:
 - [ ] Pasta `.agents/` existe e é symlink
 - [ ] `.agents/skills/` contém skills (diagnose-crash, omarchy)
 - [ ] `.agents/workflows/` contém workflows (init.md, architect_html_sciml.md)
-- [ ] `sync-skills.sh` executa sem erros: `./sync-skills.sh --dry-run`
+- [ ] `sync.sh` executa sem erros: `./sync.sh --dry-run`
 - [ ] Todos os MDs root (`README.md`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`) mencionam `.agents/`
 - [ ] Não existe pasta `.agent/` (foi migrada para `.agents/`)
 - [ ] `setup.sh` cria symlinks corretamente: `./setup.sh --dry-run`

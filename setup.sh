@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Minimal workspace bootstrap: create dirs, clone repos, optional dotfiles
-BASE_DIR="${1:-$HOME}"
+BASE_DIR="$HOME"
 DRY_RUN=0
 DO_DOTFILES=0
 
@@ -10,14 +10,19 @@ for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY_RUN=1 ;;
     --dotfiles) DO_DOTFILES=1 ;;
+    --*) echo "unknown flag: $arg" >&2; exit 1 ;;
+    *) BASE_DIR="$arg" ;;
   esac
 done
 
 WORK_DIR="$BASE_DIR/Work"
 PROJECTS_DIR="$BASE_DIR/Projects"
 
-WORK_REPOS=(codebase mobai RAGFusion sp_xai_nos technopage wondercube)
-PROJECTS_REPOS=(architect agentic_instructions notes HIcode HITnode HITtwintag ibots roi_lab)
+# Override on another machine/user via env, e.g.:
+#   GITHUB_USER=someone WORK_REPOS="repo1 repo2" PROJECTS_REPOS="repo3" ./setup.sh
+GITHUB_USER="${GITHUB_USER:-nmc-costa}"
+read -ra WORK_REPOS <<< "${WORK_REPOS:-codebase mobai RAGFusion sp_xai_nos technopage wondercube}"
+read -ra PROJECTS_REPOS <<< "${PROJECTS_REPOS:-architect agentic_instructions notes HIcode HITnode HITtwintag ibots roi_lab}"
 
 echo "Base dir: $BASE_DIR"
 if [[ $DRY_RUN -eq 1 ]]; then
@@ -28,8 +33,8 @@ fi
 
 clone(){
   local repo=$1 target=$2
-  local ssh="git@github.com:nmc-costa/$repo.git"
-  local https="https://github.com/nmc-costa/$repo.git"
+  local ssh="git@github.com:$GITHUB_USER/$repo.git"
+  local https="https://github.com/$GITHUB_USER/$repo.git"
   if [[ $DRY_RUN -eq 1 ]]; then
     echo "(dry) would clone $ssh -> $target"
     return
@@ -43,7 +48,7 @@ clone(){
     return
   fi
   if [[ -n "${GITHUB_TOKEN:-}" ]]; then
-    git clone "https://${GITHUB_TOKEN}@github.com/nmc-costa/$repo.git" "$target" && { echo "cloned via token: $repo"; return; } || true
+    git clone "https://${GITHUB_TOKEN}@github.com/$GITHUB_USER/$repo.git" "$target" && { echo "cloned via token: $repo"; return; } || true
   fi
   git clone "$https" "$target" && echo "cloned via HTTPS: $repo" || echo "failed: $repo"
 }
@@ -55,7 +60,7 @@ if [[ $DO_DOTFILES -eq 1 ]]; then
   if [[ $DRY_RUN -eq 1 ]]; then
     echo "(dry) would setup bare dotfiles from https://github.com/nmc-costa/dotfiles"
   else
-    git clone --bare https://github.com/nmc-costa/dotfiles.git "$HOME/.cfg" || echo "dotfiles clone failed or already present"
+    git clone --bare "https://github.com/$GITHUB_USER/dotfiles.git" "$HOME/.cfg" || echo "dotfiles clone failed or already present"
     echo "Add: alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME' to your shell rc, then run: config checkout"
   fi
 fi
@@ -102,9 +107,9 @@ setup_agent_symlinks "vscode"
 if [[ -d "$BASE_DIR/dotfiles/.agents/skills" ]]; then
   echo "info: Syncing skills from dotfiles/.agents/skills..."
   if [[ $DRY_RUN -eq 1 ]]; then
-    "$BASE_DIR/dotfiles/sync-skills.sh" --dry-run || true
+    "$BASE_DIR/dotfiles/sync.sh" --dry-run || true
   else
-    "$BASE_DIR/dotfiles/sync-skills.sh" || true
+    "$BASE_DIR/dotfiles/sync.sh" || true
   fi
 fi
 

@@ -2,6 +2,18 @@
 
 Orientações para agentes de IA (Crush/Claude, Copilot, Gemini) trabalharem neste repositório.
 
+## Workspace standards (todos os repos, não só este)
+
+`.agents/instructions/workspace-config/standards/workspace-standards.yaml` define os defaults obrigatórios para **todos** os repos deste workspace (raiz limpa, README com secções fixas, língua técnica=inglês). Todo o agente, em qualquer ferramenta, deve:
+
+1. No início de uma sessão neste workspace, ler `review.nextDue` em `~/dotfiles/.agents/instructions/workspace-config/standards/workspace-standards.yaml`.
+2. Se a data já passou, tratar isso como um lembrete forte (não um bloqueio absoluto) para fazer a revisão SOTA descrita em `review.sourcesToRecheck` antes de trabalho substancial não relacionado, propor as mudanças numa branch `claude/...`+PR (nunca commit direto a `main`), e atualizar `review.lastReviewed`/`nextDue`.
+3. Correr `python3 scripts/validate_workspace_standards.py .agents/instructions/workspace-config/standards/workspace-standards.yaml` depois de qualquer edição a esse ficheiro, antes de commit.
+
+**Higiene de sessão (`sessionHygiene`, 2026-09-15):** quando a sessão atual chega a uma conclusão natural, ou já foi através de muitas rondas de dispatch de agentes/tool calls com contexto grande face ao que a próxima tarefa precisa, ou o pedido seguinte não tem relação com o que encheu a sessão até agora — sugere proativamente começar sessão nova, e **dá sempre um prompt de arranque pronto a copiar** (não digas só "devias começar sessão nova"). O padrão concreto está em `CHEATSHEET.md` §7 deste repo: ler `CLAUDE.md`+`CHEATSHEET.md`, reconstruir a todo list a partir de um doc persistente, e escrever aí (não só na sessão) quando algo fica feito.
+
+(Claude Code tem isto automatizado via hook `SessionStart` — ver `CLAUDE.md`. Outras ferramentas seguem este protocolo em prosa, aqui.)
+
 ## Agentes Disponíveis
 
 | Agente | Localização Config | Quando Usar |
@@ -60,13 +72,13 @@ Quando sincronizas, as skills são propagadas para:
    ```
 5. Sincroniza:
    ```bash
-   ./sync-skills.sh
+   ./sync.sh
    ```
    Opções:
-   - `./sync-skills.sh` — Sincroniza para `~/.agents/skills/` e `~/.claude/skills/`
-   - `./sync-skills.sh --system` — Também copia para `/usr/share/omarchy/default/agents/skills/` (requer sudo)
-   - `./sync-skills.sh --dry-run` — Simula sem fazer mudanças
-   - `./sync-skills.sh --verbose` — Mostra detalhes da sincronização
+   - `./sync.sh` — Sincroniza para `~/.agents/skills/` e `~/.claude/skills/`
+   - `./sync.sh --system` — Também copia para `/usr/share/omarchy/default/agents/skills/` (requer sudo)
+   - `./sync.sh --dry-run` — Simula sem fazer mudanças
+   - `./sync.sh --verbose` — Mostra detalhes da sincronização
 
 ### Adicionar Nova Skill e Propagar (Fluxo Completo)
 
@@ -92,14 +104,14 @@ git commit -m "Add nova-skill for [propósito]"
 git push
 
 # 4. Sincroniza para agentes locais
-./sync-skills.sh
+./sync.sh
 
 # 5. (Opcional) Sincroniza também para sistema
-./sync-skills.sh --system
+./sync.sh --system
 
 # 6. Na outra máquina: pull + sync
 cd ~/dotfiles && git pull
-./sync-skills.sh
+./sync.sh
 ```
 
 ## Variáveis de Contexto para Agentes
@@ -155,7 +167,7 @@ cd dotfiles-tmp
 ```bash
 cd ~/dotfiles
 git pull
-./setup.sh      # Executa symlinks + sync-skills.sh
+./setup.sh      # Executa symlinks + sync.sh
 ```
 
 ## Troubleshooting
@@ -168,10 +180,10 @@ ls ~/.claude/skills/
 
 # Sincroniza manualmente
 cd ~/dotfiles
-./sync-skills.sh --verbose
+./sync.sh --verbose
 
 # Ou para sistema (requer sudo)
-./sync-skills.sh --system
+./sync.sh --system
 ```
 
 ### Symlinks Rotos

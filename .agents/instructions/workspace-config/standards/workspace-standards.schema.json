@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/nmc-costa/dotfiles/docs/standards/workspace-standards.schema.json",
+  "title": "Workspace Standards",
+  "description": "Shape of a repo's agent-orientation config. Scoped to STRUCTURE and POLICY METADATA only — never repo-specific prose. AGENTS.md/CLAUDE.md/GEMINI.md stay free-form Markdown on purpose (that's the actual AAIF spec for AGENTS.md: no required fields, any headings); this schema exists because nothing in the AGENTS.md/llms.txt/agent-manifest ecosystem covers 'what structural conventions should every repo in this personal workspace follow, and when was that policy last checked against current practice' — see docs/standards/RESEARCH_NOTES.md for the survey that confirmed the gap (2026-09-15).",
+  "type": "object",
+  "required": ["schemaVersion", "review"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semver of this schema. Bump minor when adding optional fields, major when changing required fields or semantics."
+    },
+    "extends": {
+      "type": "string",
+      "description": "Path (repo-relative, home-relative '~/...', or informational) to the workspace-level defaults instance this repo inherits from. Present only in per-repo instance files, absent in the workspace-level defaults file itself (dotfiles' own instance). A repo's own fields OVERRIDE the inherited value for that key; unset fields inherit as-is — same 'closer file wins' inheritance EditorConfig and GitHub's org-wide .github community-health-files both use."
+    },
+    "repoRole": {
+      "type": "string",
+      "enum": ["workspace-control-plane", "personal-project", "org-project", "archived"],
+      "description": "What kind of repo this is. 'archived' repos are exempt from validation and review (read-only, historical)."
+    },
+    "repoRoot": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allowedFiles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Filenames permitted at repo root. Convention: README.md always; tool-convention entrypoints (CLAUDE.md, AGENTS.md, GEMINI.md, .clinerules) that a harness auto-loads only from root; .gitignore; scripts genuinely meant to be invoked from root."
+        },
+        "allowedDirs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "docsDir": {
+          "type": "string",
+          "default": "docs/",
+          "description": "Where everything NOT auto-loaded by convention goes. Everything else at root is a hygiene violation."
+        }
+      }
+    },
+    "agentEntrypoints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "canonical": {
+          "type": "string",
+          "enum": ["AGENTS.md", "CLAUDE.md"],
+          "description": "Which root file is the source of truth when more than one exists. AGENTS.md is the cross-tool (AAIF-governed) standard read by 30+ tools; CLAUDE.md/GEMINI.md are tool-specific and may be thin pointers to it, or carry genuinely tool-specific instructions (e.g. hook/skill notes that only make sense in Claude Code)."
+        },
+        "present": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "readme": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requiredSections": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Section headings README.md must contain, checked by name (not exact wording). Established this session across 4 repos; not sourced from external SOTA (research 2026-09-15 found no formal README-for-agents standard) — this workspace's own convention."
+        },
+        "diagram": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "required": { "type": "boolean" },
+            "type": {
+              "type": "string",
+              "enum": ["mermaid-flowchart", "mermaid-mindmap", "none"]
+            },
+            "note": {
+              "type": "string",
+              "description": "Honesty flag: the 2026-09-15 research pass found NO established community/vendor convention recommending a diagram for agent-context-efficiency (Aider's repo-map and AGENTS.md's plain prose are the actual practiced patterns). This field exists because the workspace owner asked for it specifically, not because it's SOTA — keep it optional/low-priority relative to the prose sections above, and revisit if a future review still finds no supporting evidence."
+            }
+          }
+        }
+      }
+    },
+    "language": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "technical": { "type": "string", "default": "en" },
+        "userFacing": { "type": "string", "default": "auto" }
+      },
+      "description": "technical = docs/code comments/commit messages. userFacing = content meant for the repo owner directly (this workspace's convention has been Portuguese)."
+    },
+    "sessionHygiene": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "suggestNewSessionWhen": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Heuristics an agent should watch for to proactively suggest ending the current session and starting a fresh one, rather than the owner deciding this alone. Token-optimization rationale: resuming a long session (--resume/--continue) reloads its full history, which costs far more than starting fresh with a short, well-written kickoff prompt."
+        },
+        "mustOfferKickoffPrompt": {
+          "type": "boolean",
+          "default": true,
+          "description": "When suggesting a new session, the agent must hand back a short, copy-pasteable prompt to start that next session with (pointing at whatever persistent doc/file carries the state — e.g. CHEATSHEET.md, a tasks/ tracker, a kickoff file), not just say 'you should start a new session.'"
+        }
+      }
+    },
+    "developmentApproach": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pocFirst": {
+          "type": "boolean",
+          "default": true,
+          "description": "Non-trivial tasks (new subsystems, tools, schema/policy changes with unproven real-world fit) start as a minimal, end-to-end-working PoC before broader implementation — validated by hand where automated verification isn't there yet — then iterate and harden only after the PoC proves the core assumption. Don't build the full system speculatively. Precedent: the tasks/ event-log tracker itself (2026-09-15) shipped as an 11-task PoC seeded with real branch data, not a complete system, on the first pass."
+        },
+        "appliesTo": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "What this applies to, so it isn't read as 'plan everything to death.'"
+        },
+        "exceptions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "When to skip the PoC step and go straight to the real implementation."
+        }
+      }
+    },
+    "communityFirst": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "principle": {
+          "type": "string",
+          "description": "Before building anything non-trivial, check what the community already maintains well and prefer reusing/integrating with adjustments over building from scratch. Only build what genuinely doesn't exist. Applies bidirectionally with developmentApproach.pocFirst: check before a PoC, compare again after — this workspace's projects stay deliberately 'never quite finished,' evolving alongside what the community publishes."
+        },
+        "rankingMetrics": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "What to weigh when comparing candidates, e.g. stars, maintenance-recency, community-size. None of these alone is decisive — a starred-but-abandoned repo loses to an active smaller one."
+        },
+        "index": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "cadence": {
+              "type": "string",
+              "enum": ["manual", "daily"],
+              "description": "manual = run by hand (PoC stage, per developmentApproach.pocFirst — prove the mechanism's useful before automating it). daily = a scheduled job keeps snapshots current; only move to this once manual runs have shown real value."
+            },
+            "topics": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Which topics get indexed. Kept as a pointer here, not inlined — the real list lives in community-index/topics.yaml so it can grow without touching this schema-governed file."
+            },
+            "storageLocation": {
+              "type": "string",
+              "description": "Where topic definitions and generated snapshots live."
+            }
+          }
+        },
+        "exceptions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "When it's fine to skip the community check — e.g. a landscape scan already confirmed nothing covers this exact design."
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "script": { "type": "string" },
+        "command": { "type": "string" }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cadenceDays", "lastReviewed"],
+      "properties": {
+        "cadenceDays": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "How often (in days) this config should be re-checked against current community/vendor practice. Modeled on Renovate's schedule field — this is a personal workspace, not a package registry, so a coarse cadence (weekly-ish) is the right grain, not Renovate's cron precision."
+        },
+        "lastReviewed": {
+          "type": "string",
+          "format": "date"
+        },
+        "nextDue": {
+          "type": "string",
+          "format": "date"
+        },
+        "sourcesToRecheck": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "What to re-verify each cycle: is AGENTS.md still schema-free per AAIF, has anything new emerged in the agent-workspace-config space, are the required README sections still the right ones."
+        },
+        "onDrift": {
+          "type": "string",
+          "enum": ["open-pr", "report-only"],
+          "default": "open-pr",
+          "description": "Renovate-style: propose a diff for human review, never auto-commit changes to policy."
+        }
+      }
+    }
+  }
+}
