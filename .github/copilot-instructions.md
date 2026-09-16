@@ -16,6 +16,16 @@ there. Added 2026-09-16 — this file previously had no explicit pointer to
 either, unlike Claude Code, which gets this automatically via a
 `SessionStart` hook (see `CLAUDE.md`'s "Known Gaps").
 
+**Scope note (confirmed 2026-09-16 via direct diagnostic):** this file is
+auto-loaded by GitHub Copilot Chat / Copilot in VS Code (the documented
+"repository custom instructions" feature). It is **not** read by GitHub
+Copilot CLI — that tool reported, when asked directly, that it has no
+mechanism at all for reading repository files automatically at session
+start; files are only opened on explicit request or tool call. If you're
+using Copilot CLI rather than the VS Code extension, this section does
+nothing for you — paste the kickoff prompt from `CHEATSHEET.md` §7
+manually instead, same as the `.agents/harnesses/antigravity.md` fallback.
+
 ## 🔄 Session Memory Management (/compact → /memorize → /recall)
 **Workflow for token-efficient cross-chat persistence:**
 
