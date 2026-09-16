@@ -88,13 +88,20 @@ setup_agent_symlinks() {
   fi
 
   if [[ -L "$agent_dest" ]]; then
-    echo "skip: $agent_dest already symlinked"
+    if [[ "$(readlink -f "$agent_dest")" == "$(readlink -f "$agent_src")" ]]; then
+      echo "skip: $agent_dest already symlinked correctly"
+    else
+      echo "relink: $agent_dest pointed elsewhere, updating"
+      ln -sfn "$agent_src" "$agent_dest"
+      echo "symlink: .$agent_name -> $agent_dest"
+    fi
     return
   fi
 
   if [[ -d "$agent_dest" ]]; then
-    echo "backup: moving $agent_dest to ${agent_dest}.backup"
-    mv "$agent_dest" "${agent_dest}.backup"
+    local backup="${agent_dest}.backup.$(date +%Y%m%dT%H%M%S)"
+    echo "backup: moving $agent_dest to $backup"
+    mv "$agent_dest" "$backup"
   fi
 
   ln -sf "$agent_src" "$agent_dest"
@@ -126,16 +133,28 @@ setup_agent_file_symlink() {
   mkdir -p "$BASE_DIR/.$agent_name"
 
   if [[ -L "$file_dest" ]]; then
-    echo "skip: $file_dest already symlinked"
+    if [[ "$(readlink -f "$file_dest")" == "$(readlink -f "$file_src")" ]]; then
+      echo "skip: $file_dest already symlinked correctly"
+    else
+      echo "relink: $file_dest pointed elsewhere, updating"
+      ln -sfT "$file_src" "$file_dest"
+      echo "symlink: .$agent_name/$file -> $file_dest"
+    fi
+    return
+  fi
+
+  if [[ -d "$file_dest" ]]; then
+    echo "skip: $file_dest is a directory, refusing to symlink over it (fix manually)"
     return
   fi
 
   if [[ -f "$file_dest" ]]; then
-    echo "backup: moving $file_dest to ${file_dest}.backup"
-    mv "$file_dest" "${file_dest}.backup"
+    local backup="${file_dest}.backup.$(date +%Y%m%dT%H%M%S)"
+    echo "backup: moving $file_dest to $backup"
+    mv "$file_dest" "$backup"
   fi
 
-  ln -sf "$file_src" "$file_dest"
+  ln -sfT "$file_src" "$file_dest"
   echo "symlink: .$agent_name/$file -> $file_dest"
 }
 
