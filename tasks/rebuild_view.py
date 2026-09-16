@@ -6,8 +6,7 @@ other representation (this table, a future SQLite index) is a disposable,
 rebuildable projection. Re-run this script any time events.jsonl changes.
 
 Column names are English (workspace default since 2026-09-16, see
-communityFirst/language in workspace-standards.yaml). Events written before
-that date used Portuguese payload keys (titulo, projeto, estado, ...) — the
+language.userFacing in workspace-standards.yaml). Events written before
 log is append-only, so those historical lines are never rewritten; this
 script reads either spelling (PT falls back when the EN key is absent).
 """
