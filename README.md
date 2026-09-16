@@ -37,7 +37,7 @@ dotfiles/
 ├── docs/                        # Everything not auto-loaded by a tool by convention — see index below
 │   └── SECRETS.md               #   Secrets-management doc (chezmoi + age)
 ├── scripts/                     # Utility scripts (VS Code docs monitor: monitor_vscode_docs.py, setup_vscode_monitor_cron.sh)
-├── tasks/                       # Task-tracking PoC: events.jsonl (log, source of truth) + tarefas.md (generated view) + append_event.py/rebuild_view.py, plus KICKOFF.md (design history) and OPEN_PULL_REQUESTS.md (once gh auth is ready)
+├── tasks/                       # Task-tracking PoC: events.jsonl (log, source of truth) + board.md (generated view) + append_event.py/rebuild_view.py, plus KICKOFF.md (design history)
 ├── AGENTS.md                    # General agent guide (Crush/Claude, Copilot, Gemini, Cline) — auto-read by convention
 ├── CLAUDE.md                    # Claude Code-specific context — auto-read by Claude Code
 ├── GEMINI.md                    # Gemini-specific context — auto-read by Gemini
@@ -75,14 +75,14 @@ dotfiles/
 | `.vscode/` | VS Code config; `settings.json` contains the real API key and is generated locally by `chezmoi apply` (gitignored) — see `docs/SECRETS.md` |
 | `.chezmoisource/` | Dedicated chezmoi source directory, scoped only to the one encrypted `.vscode/settings.json` — see `docs/SECRETS.md` |
 | `scripts/` | Standalone utility scripts (currently the VS Code docs monitor) |
-| `tasks/` | Task-tracking PoC — `events.jsonl` (append-only log, source of truth) projected into `tarefas.md` (generated view) via `append_event.py`/`rebuild_view.py`; see `tasks/README.md`. Also still holds `KICKOFF.md` (design history) and `OPEN_PULL_REQUESTS.md` (open the PRs for this session's branches, once `gh auth` works) |
+| `tasks/` | Task-tracking PoC — `events.jsonl` (append-only log, source of truth) projected into `board.md` (generated view) via `append_event.py`/`rebuild_view.py`; see `tasks/README.md`. Also still holds `KICKOFF.md` (design history) |
 | `docs/` | Everything not auto-loaded by convention — see table below |
 
 ### `docs/` index
 
 | File | Purpose |
 |---|---|
-| `docs/STANDARDS.md` | Naming conventions and structure standards (aspirational sections explicitly marked `[PROPOSTO — não implementado]` as of 2026-09-15; not silently presented as current anymore) |
+| `docs/STANDARDS.md` | Naming conventions and structure standards (aspirational sections explicitly marked `[PROPOSED — not implemented]` as of 2026-09-15; not silently presented as current anymore) |
 | `docs/AUDIT_REPORT.md` | Compliance/standards audit report (corrected 2026-09-15 — now accurately reports the hardcoded-path/`dtx/` findings instead of denying them; see `CLAUDE.md` known gaps for what's still actually open) |
 | `docs/SUBAGENTS_VERIFICATION.md` | Verification checklist for agent/subagent setup |
 | `docs/VSCODE_MONITOR_QUICKSTART.md` | Quickstart guide for the VS Code docs monitor automation |
@@ -188,7 +188,7 @@ git pull
 
 ## Standards and Best Practices
 
-- **Language:** English for technical documentation, Portuguese for user-facing content
+- **Language:** English, for all documentation and code (workspace default since 2026-09-16 — see `language` in `.agents/instructions/workspace-config/standards/workspace-standards.yaml`). Two narrow exemptions: real client-work output stored under `.agents/validation/<skill>/` keeps whatever language it was actually delivered in, and `tasks/events.jsonl` never rewrites historical entries.
 - **Configuration:** Never edit agent configs directly in `~/.agents/` — always modify in `~/dotfiles/.agents/` and sync
 - **Scripts:** All scripts are idempotent (safe to run multiple times)
 - **Error Handling:** Scripts validate inputs and exit gracefully on errors

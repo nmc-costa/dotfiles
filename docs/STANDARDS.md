@@ -1,85 +1,85 @@
 # STANDARDS.md
 
-Nomenclatura, convenções e estrutura de diretórios padrão para repositórios `crush-config` (dotfiles) e `agent-framework` (agentes).
+Naming, conventions, and standard directory structure for the `crush-config` (dotfiles) and `agent-framework` (agents) repositories.
 
 **Community Standards Base:** LangChain, Mem0, Anthropic, GitHub Copilot, OpenAI Skills
 
-> ⚠️ **Status (verificado 2026-09-15):** Este ficheiro mistura estrutura **real** (o que existe hoje em `~/dotfiles`) com estrutura **proposta** (convenções desenhadas mas nunca implementadas). Secções marcadas **[PROPOSTO — não implementado]** abaixo não existem nesta máquina — confirmado por `ls`/`find` no repo real. Trata o resto deste documento como aspiracional/parcialmente desatualizado até ser revisto por completo (ver `CLAUDE.md` § Lacunas Conhecidas). O repositório `agent-framework` mencionado ao longo do documento também não existe como repo separado nesta máquina — é um destino proposto, não um facto atual.
+> ⚠️ **Status (verified 2026-09-15):** This file mixes **real** structure (what actually exists today in `~/dotfiles`) with **proposed** structure (conventions designed but never implemented). Sections marked **[PROPOSED — not implemented]** below don't exist on this machine — confirmed via `ls`/`find` in the real repo. Treat the rest of this document as aspirational/partly outdated until it's fully reviewed (see `CLAUDE.md` § Known Gaps). The `agent-framework` repo mentioned throughout the document also doesn't exist as a separate repo on this machine — it's a proposed destination, not a current fact.
 
 ---
 
-## 📋 GLOSSÁRIO
+## 📋 GLOSSARY
 
-| Termo | Significado | Exemplo |
+| Term | Meaning | Example |
 |-------|------------|---------|
-| **Skill** | Capacidade/ferramenta discreta que um agente pode usar | `data-analyzer`, `web-research`, `code-reviewer` |
-| **Agent** | Persona/entidade inteligente com habilidades específicas | `architect`, `engineer`, `reviewer` |
-| **Tool** | Função/API executável (sinónimo de skill em alguns contextos) | bash, grep, file-read |
-| **Prompt** | Template de instrução/contexto | system prompt, task instruction |
-| **Instruction** | Regra específica de domínio (usa-se "prompt" em preferência) | — |
-| **Workflow** | Sequência de passos para um agente (não usar "instruction") | agent initialization, persona setup |
-| **Framework** | Sistema completo de orquestração de agentes | agent-framework |
-| **Config/Configuration** | Ficheiro de settings ou dotfiles | crush-config |
+| **Skill** | A discrete capability/tool an agent can use | `data-analyzer`, `web-research`, `code-reviewer` |
+| **Agent** | An intelligent persona/entity with specific abilities | `architect`, `engineer`, `reviewer` |
+| **Tool** | An executable function/API (synonym for skill in some contexts) | bash, grep, file-read |
+| **Prompt** | An instruction/context template | system prompt, task instruction |
+| **Instruction** | A domain-specific rule ("prompt" is preferred) | — |
+| **Workflow** | A sequence of steps for an agent (don't use "instruction") | agent initialization, persona setup |
+| **Framework** | A complete agent-orchestration system | agent-framework |
+| **Config/Configuration** | A settings file or dotfiles | crush-config |
 
 ---
 
-## 📁 ESTRUTURA DE DIRETÓRIOS
+## 📁 DIRECTORY STRUCTURE
 
-### Repositório: `dotfiles` (Configuração Universal)
+### Repository: `dotfiles` (Universal Configuration)
 
-**Propósito:** Configuração estável, sincronizada entre máquinas. Universal para todos os agentes (Crush, Copilot, Gemini, Cline, etc.)
+**Purpose:** Stable configuration, synced across machines. Universal for all agents (Crush, Copilot, Gemini, Cline, etc.)
 
-**Estrutura real atual** (verificado 2026-09-15 — ver `README.md` para a tree completa e sempre atual):
+**Current real structure** (verified 2026-09-15 — see `README.md` for the complete, always up-to-date tree):
 
 ```
 dotfiles/
 ├── .agents/                     # Universal agents config (13 skills, incl. HITs + calls2database + _templates)
-├── .claude/                     # Claude Code config (.claude/skills/ = symlinks para .agents/skills/)
+├── .claude/                     # Claude Code config (.claude/skills/ = symlinks into .agents/skills/)
 ├── .vscode/                     # VS Code config
-├── .chezmoisource/              # chezmoi source dir (só .vscode/settings.json)
-├── .github/                     # GitHub config (várias subpastas = symlinks para .agents/)
+├── .chezmoisource/              # chezmoi source dir (only .vscode/settings.json)
+├── .github/                     # GitHub config (several subfolders = symlinks into .agents/)
 ├── docs/                        # STANDARDS.md, AUDIT_REPORT.md, SECRETS.md, etc.
-├── scripts/                     # validate_dotfiles.sh e utilitários VS Code monitor
-├── AGENTS.md                    # Registry de agentes
-├── CLAUDE.md                    # Contexto Claude
-├── GEMINI.md                    # Contexto Gemini
-├── CHEATSHEET.md                # Tracker persistente
-├── README.md                    # Setup + estrutura
+├── scripts/                     # validate_dotfiles.sh and VS Code monitor utilities
+├── AGENTS.md                    # Agent registry
+├── CLAUDE.md                    # Claude context
+├── GEMINI.md                    # Gemini context
+├── CHEATSHEET.md                # Persistent tracker
+├── README.md                    # Setup + structure
 ├── setup.sh
 ├── sync.sh
 └── test-subagents.sh
 ```
 
-**Estrutura adicional [PROPOSTO — não implementado nesta máquina]:** as convenções abaixo foram desenhadas para um cenário multi-harness mais amplo mas nunca foram construídas. Não assumir que existem sem confirmar com `ls`:
+**Additional structure [PROPOSED — not implemented on this machine]:** the conventions below were designed for a broader multi-harness scenario but were never built. Don't assume they exist without confirming with `ls`:
 
 ```
 dotfiles/
-├── .copilot/                    # [PROPOSTO] Copilot config dedicado (hoje: .github/copilot-instructions.md cobre isto)
-├── .gemini/                     # [PROPOSTO] Gemini config dedicado (hoje: GEMINI.md na raiz cobre isto)
-├── .cursor/                     # [PROPOSTO] Cursor config
-├── agent-versions.json          # [PROPOSTO] Pinning do agent-framework — ver secção dedicada abaixo
+├── .copilot/                    # [PROPOSED] Dedicated Copilot config (today: .github/copilot-instructions.md covers this)
+├── .gemini/                     # [PROPOSED] Dedicated Gemini config (today: GEMINI.md at root covers this)
+├── .cursor/                     # [PROPOSED] Cursor config
+├── agent-versions.json          # [PROPOSED] agent-framework version pinning — see dedicated section below
 ```
 
-### Repositório: `agent-framework` (Desenvolvimento) — [PROPOSTO — repositório não existe nesta máquina]
+### Repository: `agent-framework` (Development) — [PROPOSED — repository doesn't exist on this machine]
 
-**Nota:** Tudo nesta secção descreve um repositório separado, `agent-framework`, que **não existe** em `~/Projects/` nem `~/Work/` nesta máquina (verificado 2026-09-15). É uma proposta de arquitetura, não um facto atual. O que existe hoje é `.agents/` dentro do próprio `dotfiles`, servindo como fonte de verdade única (ver estrutura real acima).
+**Note:** Everything in this section describes a separate repository, `agent-framework`, that **doesn't exist** in `~/Projects/` or `~/Work/` on this machine (verified 2026-09-15). It's an architecture proposal, not a current fact. What exists today is `.agents/` inside `dotfiles` itself, serving as the single source of truth (see the real structure above).
 
-**Propósito (proposto):** Framework completo de orquestração de agentes. Source of truth para personas, agents, skills, workflows, e multi-harness compliance enforcement.
+**Purpose (proposed):** A complete agent-orchestration framework. Source of truth for personas, agents, skills, workflows, and multi-harness compliance enforcement.
 
-**O que inclui:**
+**What it includes:**
 - Base personas (Master Architect)
 - Task-specific personas (Charter, Review, Diagram, etc.)
-- Specialized agents (7+ agents com SKILL.md)
+- Specialized agents (7+ agents with SKILL.md)
 - Multi-harness support (Copilot, Claude, Gemini, OpenAI, LiteLLM)
-- Reusable skills e prompts
+- Reusable skills and prompts
 - Central configuration
 - Compliance enforcement via CI/CD
 
 ```
 agent-framework/
-├── skills/                              # Skills "canónicas"
+├── skills/                              # "Canonical" skills
 │   ├── data-analyzer/
-│   │   ├── SKILL.md                     # Documentação completa
+│   │   ├── SKILL.md                     # Complete documentation
 │   │   ├── scripts/
 │   │   │   ├── analyzer.py
 │   │   │   └── utils.py
@@ -103,7 +103,7 @@ agent-framework/
 │   ├── init.md
 │   ├── onboarding.md
 │   └── troubleshooting.md
-├── prompts/                             # Prompt templates (opcional)
+├── prompts/                             # Prompt templates (optional)
 │   ├── system/
 │   │   └── architect-system.md
 │   └── task/
@@ -124,7 +124,7 @@ agent-framework/
 ├── CHANGELOG.md                         # Version history
 ├── AGENTS.md                            # Skills registry
 ├── README.md
-├── STANDARDS.md                         # Este ficheiro (cópia/ref)
+├── STANDARDS.md                         # This file (copy/ref)
 └── .github/
     └── workflows/
         └── release.yml                  # Publish to npm/registry
@@ -132,27 +132,27 @@ agent-framework/
 
 ---
 
-## 📝 CONVENÇÕES DE NOMENCLATURA
+## 📝 NAMING CONVENTIONS
 
-### Nomes de Repositórios
+### Repository Names
 
-| Nome | Uso | Status |
+| Name | Use | Status |
 |------|-----|--------|
-| `dotfiles` | Configuração universal (agents, config, setup) | ✅ RECOMENDADO |
-| `agent-framework` | Framework de agents + personas + skills | ✅ RECOMENDADO |
-| `agents-core` | Alternativa menor escopo | ✅ OK |
-| ❌ ~~`agentic_instructions`~~ | Inadequado (subestima escopo) | ❌ RENOMEAR |
-| ❌ ~~`crush-config`~~ | Específico só para Crush | ❌ NÃO USAR |
-| ❌ ~~`skills`~~ | Ambíguo (usar dentro de framework) | ❌ EVITAR |
+| `dotfiles` | Universal configuration (agents, config, setup) | ✅ RECOMMENDED |
+| `agent-framework` | Agents + personas + skills framework | ✅ RECOMMENDED |
+| `agents-core` | Smaller-scope alternative | ✅ OK |
+| ❌ ~~`agentic_instructions`~~ | Inadequate (undersells the scope) | ❌ RENAME |
+| ❌ ~~`crush-config`~~ | Specific to Crush only | ❌ DON'T USE |
+| ❌ ~~`skills`~~ | Ambiguous (use inside the framework instead) | ❌ AVOID |
 
-**Nota:** Se já tem repo chamado `agentic_instructions` com estrutura completa, **RENOMEI-A PARA `agent-framework`** — o escopo real (agents + skills + personas + harnesses) justifica.
+**Note:** If you already have a repo called `agentic_instructions` with a complete structure, **RENAME IT TO `agent-framework`** — the real scope (agents + skills + personas + harnesses) justifies it.
 
-### Nomes de Diretórios
-- **Kebab-case** (lowercase com hyphens): `my-skill`, `code-analyzer`, `web-research`
-- **Sem espaços ou underscores**
-- **Máximo 64 caracteres**
+### Directory Names
+- **Kebab-case** (lowercase with hyphens): `my-skill`, `code-analyzer`, `web-research`
+- **No spaces or underscores**
+- **64 characters max**
 
-Exemplos:
+Examples:
 ```
 ✅ data-processor
 ✅ nlp-pipeline
@@ -162,34 +162,34 @@ Exemplos:
 ❌ Data Processor (spaces)
 ```
 
-### Nomes de Ficheiros
+### File Names
 
-| Tipo | Pattern | Exemplo |
+| Type | Pattern | Example |
 |------|---------|---------|
 | Skill doc | `SKILL.md` | `data-analyzer/SKILL.md` |
 | Agent doc | `AGENTS.md` | `agents/architect/AGENTS.md` |
 | Agent config | `config.yaml` | `agents/architect/config.yaml` |
 | Workflow | `[name].md` | `workflows/init.md` |
 | Prompt template | `.prompt.md` | `prompts/system-prompt.md` |
-| Instruction | — usar `[name].md` | `docs/best-practices.md` |
+| Instruction | — use `[name].md` | `docs/best-practices.md` |
 | Script | `[name].sh`, `[name].py` | `scripts/validate-skills.sh` |
-| Config global | `config.yaml`, `settings.json` | `config/model-config.yaml` |
+| Global config | `config.yaml`, `settings.json` | `config/model-config.yaml` |
 
-### Nomes de Skills
+### Skill Names
 
-**Format:** `kebab-case`, descritivo, máx. 64 chars
+**Format:** `kebab-case`, descriptive, 64 chars max
 
 ```
 ✅ data-analyzer
 ✅ web-research
 ✅ code-reviewer
 ✅ nlp-text-processor
-❌ skill-data-analyzer (redundante)
+❌ skill-data-analyzer (redundant)
 ❌ DataAnalyzer (camelCase)
 ❌ my_data_analyzer (underscores)
 ```
 
-### Nomes de Agents
+### Agent Names
 
 **Format:** `kebab-case`, persona/role-based
 
@@ -198,15 +198,15 @@ Exemplos:
 ✅ code-engineer
 ✅ security-validator
 ✅ project-manager
-❌ Agent (demasiado genérico)
+❌ Agent (too generic)
 ❌ my_architect (underscores)
 ```
 
 ---
 
-## 📄 ESTRUTURA DE SKILL.md
+## 📄 SKILL.md STRUCTURE
 
-Padrão emergente da comunidade (Agent Skills Spec):
+Emerging community pattern (Agent Skills Spec):
 
 ```markdown
 # Skill Name
@@ -217,7 +217,7 @@ Longer paragraph explaining what this skill does, when to use it, and what value
 
 ## Triggers
 
-Palavras-chave que activam a skill quando o agente as deteta:
+Keywords that activate the skill when the agent detects them:
 - trigger-word-1
 - trigger-word-2
 - "multi-word trigger"
@@ -261,7 +261,7 @@ How this skill is implemented, dependencies, etc.
 - External links
 ```
 
-**Opcional: YAML Frontmatter** (emergindo como standard)
+**Optional: YAML Frontmatter** (emerging as a standard)
 
 ```yaml
 ---
@@ -280,9 +280,9 @@ estimated-cost: medium
 
 ---
 
-## 📄 ESTRUTURA DE AGENTS.md
+## 📄 AGENTS.md STRUCTURE
 
-**Propósito:** Registry de agentes e skills disponíveis.
+**Purpose:** Registry of available agents and skills.
 
 ```markdown
 # Agents Registry
@@ -316,13 +316,13 @@ estimated-cost: medium
 
 ---
 
-## 📄 ESTRUTURA DE ARQUIVO agent-versions.json [PROPOSTO — não implementado]
+## 📄 agent-versions.json FILE STRUCTURE [PROPOSED — not implemented]
 
-**Status:** Este ficheiro não existe em `~/dotfiles` nesta máquina (verificado 2026-09-15, `agent-versions.json` MISSING na raiz). A secção abaixo descreve o design proposto, não um ficheiro real. Não referenciar `agent-versions.json` como se existisse noutra documentação sem esta ressalva.
+**Status:** This file doesn't exist in `~/dotfiles` on this machine (verified 2026-09-15, `agent-versions.json` MISSING at root). The section below describes the proposed design, not a real file. Don't reference `agent-versions.json` as if it existed in other documentation without this caveat.
 
-**Localização (proposta):** `crush-config/agent-versions.json`
+**Location (proposed):** `crush-config/agent-versions.json`
 
-**Propósito:** Pinning explícito de versões para reprodutibilidade entre máquinas.
+**Purpose:** Explicit version pinning for cross-machine reproducibility.
 
 ```json
 {
@@ -358,11 +358,11 @@ estimated-cost: medium
 
 ---
 
-## 🔗 LINKING ENTRE REPOSITÓRIOS [PROPOSTO — pressupõe o repositório `agent-framework` que não existe]
+## 🔗 LINKING BETWEEN REPOSITORIES [PROPOSED — assumes the `agent-framework` repo, which doesn't exist]
 
-### Padrão Recomendado: NPM Packages + Symlinks (Docs)
+### Recommended Pattern: NPM Packages + Symlinks (Docs)
 
-**agent-framework** publica como npm:
+**agent-framework** publishes as an npm package:
 ```json
 {
   "name": "@crush/agent-framework",
@@ -376,75 +376,75 @@ estimated-cost: medium
 }
 ```
 
-**crush-config** referencia versão específica:
+**crush-config** references a specific version:
 ```bash
-# .agents/skills/ contém symlinks para documentação
+# .agents/skills/ contains symlinks to documentation
 ln -sf ~/agent-framework/skills/data-analyzer/SKILL.md \
        ~/crush-config/.agents/skills/data-analyzer-ref.md
 
-# agent-versions.json pina a versão
+# agent-versions.json pins the version
 "data-analyzer": "2.0.0"
 
-# AGENTS.md documenta o status
+# AGENTS.md documents the status
 ## data-analyzer v2.0.0
 - Status: Pinned in crush-config
 - Location: @crush/agent-framework/skills/data-analyzer
 ```
 
-### Fluxo de Atualização
+### Update Flow
 
 ```
-1. Desenvolvimento em agent-framework/
-   - Cria feature branch
-   - Atualiza SKILL.md, testa
-   - Merge para main
-   - CI publica v2.1.1
+1. Development in agent-framework/
+   - Create a feature branch
+   - Update SKILL.md, test
+   - Merge to main
+   - CI publishes v2.1.1
 
-2. Notificação automática
-   - GitHub issue criada em crush-config
+2. Automatic notification
+   - A GitHub issue is created in crush-config
    - "New agent-framework: 2.1.1 available"
 
-3. Upgrade manual em crush-config
-   - Maintainer avalia CHANGELOG
+3. Manual upgrade in crush-config
+   - Maintainer reviews the CHANGELOG
    - npm install @crush/agent-framework@2.1.1
-   - Testa localmente
-   - Atualiza agent-versions.json
+   - Tests locally
+   - Updates agent-versions.json
    - git commit, push
    - ./sync.sh propagates
 
-4. Outras máquinas
+4. Other machines
    - git pull
-   - ./setup.sh (lê agent-versions.json)
-   - Automáticamente usa v2.1.1
+   - ./setup.sh (reads agent-versions.json)
+   - Automatically uses v2.1.1
 ```
 
 ---
 
-## ✅ CHECKLIST DE CONFORMIDADE
+## ✅ COMPLIANCE CHECKLIST
 
-### Ao Criar Nova Skill
+### When Creating a New Skill
 
-- [ ] Nome em kebab-case (máx. 64 chars)
-- [ ] Directório em `agent-framework/skills/<name>/`
-- [ ] `SKILL.md` presente com seções obrigatórias
-- [ ] Triggers documentados
-- [ ] Exemplos de uso incluídos
-- [ ] Scripts em `scripts/` subdirectório
-- [ ] Referências em `references/` subdirectório
-- [ ] Tests em `tests/` subdirectório
-- [ ] Version em `package.json` atualizada
-- [ ] CHANGELOG.md atualizado
-- [ ] Registado em `AGENTS.md`
+- [ ] Name in kebab-case (64 chars max)
+- [ ] Directory at `agent-framework/skills/<name>/`
+- [ ] `SKILL.md` present with required sections
+- [ ] Triggers documented
+- [ ] Usage examples included
+- [ ] Scripts in a `scripts/` subdirectory
+- [ ] References in a `references/` subdirectory
+- [ ] Tests in a `tests/` subdirectory
+- [ ] Version updated in `package.json`
+- [ ] CHANGELOG.md updated
+- [ ] Registered in `AGENTS.md`
 
-### Ao Atualizar crush-config
+### When Updating crush-config
 
-- [ ] `agent-versions.json` atualizado *(só aplicável quando este ficheiro proposto existir — ver secção acima)*
-- [ ] `AGENTS.md` reflete versões pinned
-- [ ] Symlinks apontam para local correto
-- [ ] `./test-subagents.sh` passa
-- [ ] `./scripts/validate_dotfiles.sh` passa
-- [ ] AUDIT_REPORT.md refeito
-- [ ] README.md actualizado com datas
+- [ ] `agent-versions.json` updated *(only applicable once this proposed file exists — see the section above)*
+- [ ] `AGENTS.md` reflects pinned versions
+- [ ] Symlinks point to the right location
+- [ ] `./test-subagents.sh` passes
+- [ ] `./scripts/validate_dotfiles.sh` passes
+- [ ] AUDIT_REPORT.md redone
+- [ ] README.md updated with dates
 
 ### Git Commits
 
@@ -458,30 +458,30 @@ crush-config: Pin data-analyzer v2.0.0 from agent-framework
 
 ---
 
-## 🔄 SINCRONIZAÇÃO
+## 🔄 SYNCHRONIZATION
 
-### Quando Sincronizar
+### When to Sync
 
-| Mudança | Sincroniza Imediatamente? | Nota |
+| Change | Sync Immediately? | Note |
 |---------|---------------------------|------|
-| Patch version (2.1.0 → 2.1.1) | ✅ Sim | Bug fixes |
-| Minor version (2.1.0 → 2.2.0) | ⏳ Avalia | Novas features |
-| Major version (2.1.0 → 3.0.0) | ❌ Planejar | Breaking changes |
-| Doc updates | ✅ Sim | Sem impacto funcional |
-| Bug fix em skill já pinned | ✅ Sim | Mesmo major.minor |
+| Patch version (2.1.0 → 2.1.1) | ✅ Yes | Bug fixes |
+| Minor version (2.1.0 → 2.2.0) | ⏳ Assess | New features |
+| Major version (2.1.0 → 3.0.0) | ❌ Plan it | Breaking changes |
+| Doc updates | ✅ Yes | No functional impact |
+| Bug fix in an already-pinned skill | ✅ Yes | Same major.minor |
 
-### Scripts de Sincronização
+### Sync Scripts
 
 ```bash
-# Em crush-config
-./sync.sh              # Copia docs/referencias
-./setup.sh                    # Cria symlinks, instala versions
-npm install @crush/agent-framework@2.1.0  # Pin versão
+# In crush-config
+./sync.sh              # Copy docs/references
+./setup.sh                    # Create symlinks, install versions
+npm install @crush/agent-framework@2.1.0  # Pin version
 ```
 
 ---
 
-## 📚 REFERÊNCIAS
+## 📚 REFERENCES
 
 - **LangChain Standard:** github.com/langchain-ai/langchain (monorepo pattern)
 - **Mem0 Pattern:** github.com/mem0ai/mem0 (plugin registry)
@@ -491,17 +491,17 @@ npm install @crush/agent-framework@2.1.0  # Pin versão
 
 ---
 
-## 📌 NOTAS FINAIS
+## 📌 FINAL NOTES
 
-1. **Manter Separado [PROPOSTO]:** `crush-config`/`dotfiles` (estável) vs `agent-framework` (dev) — hoje ambos vivem juntos em `dotfiles/.agents/`, não separados
-2. **Semântica Clara:** Skills/Agents, não "instructions"
-3. **Versioning [PROPOSTO]:** SemVer em `agent-framework`, explicit pinning em `crush-config` — sem `agent-versions.json` nem SemVer aplicado hoje
-4. **Documentação:** SKILL.md é o padrão (com opcional YAML frontmatter) — isto já é seguido pelas skills reais em `.agents/skills/`
-5. **Linking [PROPOSTO]:** NPM packages + symlinks para docs (não submodules) — hoje usa-se symlinks diretos dentro do mesmo repo (`.claude/skills/<nome>` → `.agents/skills/<nome>`, `.github/{harnesses,instructions,prompts,automation}` → `.agents/`), sem npm/packages
-6. **Compliance:** Use `test-subagents.sh`, `./scripts/validate_dotfiles.sh` e `AUDIT_REPORT.md` regularmente
+1. **Keep Separate [PROPOSED]:** `crush-config`/`dotfiles` (stable) vs. `agent-framework` (dev) — today both live together in `dotfiles/.agents/`, not separated
+2. **Clear Semantics:** Skills/Agents, not "instructions"
+3. **Versioning [PROPOSED]:** SemVer in `agent-framework`, explicit pinning in `crush-config` — no `agent-versions.json` and no SemVer applied today
+4. **Documentation:** SKILL.md is the standard (with optional YAML frontmatter) — this is already followed by the real skills in `.agents/skills/`
+5. **Linking [PROPOSED]:** NPM packages + symlinks for docs (not submodules) — today direct symlinks inside the same repo are used instead (`.claude/skills/<name>` → `.agents/skills/<name>`, `.github/{harnesses,instructions,prompts,automation}` → `.agents/`), no npm/packages
+6. **Compliance:** Use `test-subagents.sh`, `./scripts/validate_dotfiles.sh`, and `AUDIT_REPORT.md` regularly
 
 ---
 
-**Última Atualização:** 2026-09-15 (revisão de precisão — secções aspiracionais marcadas `[PROPOSTO]`; conteúdo de convenções/nomenclatura não alterado)
-**Baseado em:** Pesquisa comunitária (LangChain, Mem0, Anthropic, GitHub)
-**Mantido por:** nmc-costa
+**Last Updated:** 2026-09-15 (accuracy revision — aspirational sections marked `[PROPOSED]`; naming/convention content unchanged)
+**Based on:** Community research (LangChain, Mem0, Anthropic, GitHub)
+**Maintained by:** nmc-costa

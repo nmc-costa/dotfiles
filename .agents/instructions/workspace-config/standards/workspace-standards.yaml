@@ -76,7 +76,17 @@ readme:
 
 language:
   technical: en
-  userFacing: auto   # this workspace's actual practice has been Portuguese
+  userFacing: en
+  # Changed 2026-09-16 from `auto` (this workspace's earlier practice had
+  # been Portuguese) to a firm `en` default at the owner's request: all
+  # documentation and code in dotfiles/ should be English going forward.
+  # Two exemptions, not violations: (1) real client-work output stored
+  # under .agents/validation/<skill>/ keeps whatever language it was
+  # actually delivered in (e.g. a Portuguese client's project charter);
+  # (2) tasks/events.jsonl is an append-only log — historical entries
+  # written in Portuguese stay as-is (rewriting a written line breaks the
+  # log's own D9/D10 invariant), only new entries follow the English
+  # default going forward.
 
 sessionHygiene:
   suggestNewSessionWhen:
@@ -104,30 +114,29 @@ developmentApproach:
 
 communityFirst:
   principle: >
-    Antes de construir algo não-trivial, procurar o que a comunidade já
-    mantém bem feito (GitHub, registos de pacotes) e preferir reutilizar/
-    integrar com os ajustes necessários em vez de construir do zero. Só
-    programar o que genuinamente não existe. Aplica-se nos dois sentidos
-    com developmentApproach.pocFirst: antes de uma PoC, verificar o que já
-    existe; depois de uma PoC, comparar outra vez — os projetos deste
-    workspace ficam deliberadamente "sempre por acabar", evoluindo com o
-    que a comunidade publica.
+    Before building anything non-trivial, check what the community already
+    maintains well (GitHub, package registries) and prefer reusing/
+    integrating with the necessary adjustments over building from scratch.
+    Only write what genuinely doesn't exist yet. Applies bidirectionally
+    with developmentApproach.pocFirst: check before a PoC, compare again
+    after — this workspace's projects stay deliberately "never quite
+    finished," evolving alongside what the community publishes.
   rankingMetrics: [stars, maintenance-recency, community-size]
   index:
-    cadence: manual   # PoC first (pocFirst) — cadência diária fica para
-                       # depois de o mecanismo provar valor à mão
+    cadence: manual   # PoC first (pocFirst) — daily cadence is a later
+                       # step, only once the mechanism proves its worth by hand
     topics:
       - task-tracking-for-agents
       - repo-hygiene-schema-for-agents
       - personal-autonomous-orchestrator
     storageLocation: .agents/instructions/workspace-config/community-index/
   exceptions:
-    - "quando já se confirmou (como aqui) que nada da comunidade cobre o
-       desenho específico necessário"
-  # Added 2026-09-16, depois de um landscape scan real (ver RESEARCH_NOTES.md)
-  # comparando 3 subsistemas construídos/planeados nesta sessão com o que a
-  # comunidade já publica — mecanismo de índice é a PoC de communityFirst.index,
-  # o mesmo padrão pocFirst aplicado a si próprio.
+    - "when it's already been confirmed (as here) that nothing in the
+       community covers the specific design needed"
+  # Added 2026-09-16, after a real landscape scan (see RESEARCH_NOTES.md)
+  # comparing 3 subsystems built/planned this session against what the
+  # community already publishes — the index mechanism is itself the PoC of
+  # communityFirst.index, the same pocFirst pattern applied to itself.
 
 validation:
   script: scripts/validate_workspace_standards.py

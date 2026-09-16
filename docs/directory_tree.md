@@ -1,54 +1,54 @@
 # 🗂️ Standard Directory Tree & Environment Context
 
-Este ficheiro serve como a "fonte da verdade" para a estrutura de diretórios do sistema e fornece o contexto global necessário para que os Agentes de IA (Claude, Copilot, etc.) compreendam o ambiente de desenvolvimento, mantenham a portabilidade absoluta e utilizem caminhos relativos perfeitos.
+This file serves as the "source of truth" for the system's directory structure and provides the global context AI Agents (Claude, Copilot, etc.) need to understand the development environment, keep absolute portability, and use clean relative paths.
 
-## 📐 Filosofia do Ecossistema
-1. **Isolamento por Contexto:** O código é separado por privacidade/vida profissional (`Projects/` vs `Work/`) e não por plataforma (`github/`, `gitlab/`).
-2. **Raiz Unificada (Root):** O diretório pessoal do utilizador (`~` ou `/home/nbugz/`) é assumido como a raiz de trabalho no editor (VS Code).
-3. **Dotfiles Centralizados:** Todas as configurações globais e regras de IA vivem no repositório `~/dotfiles` e são espelhadas na raiz através de Links Simbólicos (`symlinks`).
+## 📐 Ecosystem Philosophy
+1. **Isolation by Context:** Code is separated by privacy/professional life (`Projects/` vs `Work/`), not by platform (`github/`, `gitlab/`).
+2. **Unified Root:** The user's home directory (`~` or `/home/nbugz/`) is assumed to be the working root in the editor (VS Code).
+3. **Centralized Dotfiles:** All global configs and AI rules live in the `~/dotfiles` repository and are mirrored at the root via symlinks.
 
 ---
 
-## 🗺️ Mapa Estrutural do Sistema
+## 🗺️ System Structural Map
 
 ```text
-/home/nbugz/ (~)                # RAINHA DO AMBIENTE (Abrir o VS Code aqui: code ~)
+/home/nbugz/ (~)                # ENVIRONMENT ROOT (Open VS Code here: code ~)
 │
-├── .dotfiles/                  # REPOSITÓRIO PRIVADO DE CONFIGURAÇÃO (Sincronizado via GitHub)
-│   ├── directory_tree.md       # Este ficheiro de documentação e contexto estrutural
-│   ├── .context-global.md      # Instruções de contexto gerais para as IAs
-│   ├── claude.md               # Regras e preferências específicas para o Claude
-│   ├── copilot.md              # Regras e preferências específicas para o GitHub Copilot
-│   ├── .gitconfig              # Configurações globais do Git
-│   └── setup.sh                # Script de automação para novos computadores
+├── .dotfiles/                  # PRIVATE CONFIG REPOSITORY (Synced via GitHub)
+│   ├── directory_tree.md       # This documentation/structural-context file
+│   ├── .context-global.md      # General context instructions for AIs
+│   ├── claude.md               # Claude-specific rules and preferences
+│   ├── copilot.md              # GitHub Copilot-specific rules and preferences
+│   ├── .gitconfig              # Global Git config
+│   └── setup.sh                # Automation script for new machines
 │
-├── Projects/                   # CONTEXTO PESSOAL (Iniciativas Próprias e Estudos)
-│   ├── .ai-context.md          # Contexto opcional focado apenas em projetos pessoais
-│   └── [repositorio-pessoal]/  # Repositórios clonados (O Git gere a origem de forma invisível)
+├── Projects/                   # PERSONAL CONTEXT (Own initiatives and studies)
+│   ├── .ai-context.md          # Optional context scoped to personal projects only
+│   └── [personal-repo]/        # Cloned repositories (Git manages the remote transparently)
 │       └── .git/
 │
-└── Work/                       # CONTEXTO PROFISSIONAL (Emprego e Organizações)
-    ├── .work-rules.md          # Padrões de arquitetura e regras de negócio da empresa
-    └── [repositorio-empresa]/  # Repositórios da Organização (Ex: dtx-dashboard)
+└── Work/                       # PROFESSIONAL CONTEXT (Employment and organizations)
+    ├── .work-rules.md          # Company architecture standards and business rules
+    └── [company-repo]/         # Organization repositories (e.g. dtx-dashboard)
         └── .git/
 ```
 
 ---
 
-## 🔗 Links Simbólicos Ativos (Symlinks)
-Para garantir que as extensões de IA encontram as definições na raiz (`~`), os seguintes ficheiros estão interligados:
-* `~/dotfiles/directory_tree.md`  -->  `~/.directory_tree.md` (Opcional)
+## 🔗 Active Symlinks
+To make sure AI extensions find the definitions at the root (`~`), the following files are linked:
+* `~/dotfiles/directory_tree.md`  -->  `~/.directory_tree.md` (Optional)
 * `~/dotfiles/.context-global.md` -->  `~/.context-global.md`
 * `~/dotfiles/claude.md`          -->  `~/claude.md`
 * `~/dotfiles/copilot.md`         -->  `~/copilot.md`
 
 ---
 
-## 🤖 Instruções para os Agentes de IA (Prompt de Contexto)
-> **Diretriz para a IA:** Sempre que fizer referência a caminhos de ficheiros, imports ou documentação cruzada, utilize **caminhos relativos a partir da raiz do utilizador (`~`)**. 
-> * **Projetos Pessoais:** Devem ser referenciados como `Projects/nome-do-projeto/...`
-> * **Projetos de Trabalho:** Devem ser referenciados como `Work/nome-do-projeto/...`
-> * **Configs/Regras:** Devem ser referenciadas como `.dotfiles/nome-do-ficheiro`
-> 
-> *Nunca assuma uma pasta intermédia chamada `github` ou `gitlab` na raiz dos projetos.*
-> * Para acessar os ficheiros de configuração globais, utilize os symlinks na raiz (`~`), por exemplo, `~/.context-global.md` para o contexto global.
+## 🤖 Instructions for AI Agents (Context Prompt)
+> **Directive for the AI:** Whenever referencing file paths, imports, or cross-references, use **paths relative to the user's home directory (`~`)**.
+> * **Personal Projects:** Should be referenced as `Projects/project-name/...`
+> * **Work Projects:** Should be referenced as `Work/project-name/...`
+> * **Configs/Rules:** Should be referenced as `.dotfiles/file-name`
+>
+> *Never assume an intermediate folder called `github` or `gitlab` at the projects root.*
+> * To access global config files, use the symlinks at the root (`~`), e.g. `~/.context-global.md` for the global context.

@@ -1,31 +1,31 @@
 # AGENTS.md
 
-Orientações para agentes de IA (Crush/Claude, Copilot, Gemini) trabalharem neste repositório.
+Guidance for AI agents (Crush/Claude, Copilot, Gemini) working in this repository.
 
-## Workspace standards (todos os repos, não só este)
+## Workspace standards (all repos, not just this one)
 
-`.agents/instructions/workspace-config/standards/workspace-standards.yaml` define os defaults obrigatórios para **todos** os repos deste workspace (raiz limpa, README com secções fixas, língua técnica=inglês). Todo o agente, em qualquer ferramenta, deve:
+`.agents/instructions/workspace-config/standards/workspace-standards.yaml` defines the mandatory defaults for **every** repo in this workspace (clean root, README with fixed sections, technical language = English). Every agent, on any tool, should:
 
-1. No início de uma sessão neste workspace, ler `review.nextDue` em `~/dotfiles/.agents/instructions/workspace-config/standards/workspace-standards.yaml`.
-2. Se a data já passou, tratar isso como um lembrete forte (não um bloqueio absoluto) para fazer a revisão SOTA descrita em `review.sourcesToRecheck` antes de trabalho substancial não relacionado, propor as mudanças numa branch `claude/...`+PR (nunca commit direto a `main`), e atualizar `review.lastReviewed`/`nextDue`.
-3. Correr `python3 scripts/validate_workspace_standards.py .agents/instructions/workspace-config/standards/workspace-standards.yaml` depois de qualquer edição a esse ficheiro, antes de commit.
+1. At the start of a session in this workspace, read `review.nextDue` in `~/dotfiles/.agents/instructions/workspace-config/standards/workspace-standards.yaml`.
+2. If that date has passed, treat it as a strong reminder (not an absolute block) to do the SOTA review described in `review.sourcesToRecheck` before substantial unrelated work, propose the changes on a `claude/...` branch + PR (never a direct commit to `main`), and update `review.lastReviewed`/`nextDue`.
+3. Run `python3 scripts/validate_workspace_standards.py .agents/instructions/workspace-config/standards/workspace-standards.yaml` after any edit to that file, before committing.
 
-**Higiene de sessão (`sessionHygiene`, 2026-09-15):** quando a sessão atual chega a uma conclusão natural, ou já foi através de muitas rondas de dispatch de agentes/tool calls com contexto grande face ao que a próxima tarefa precisa, ou o pedido seguinte não tem relação com o que encheu a sessão até agora — sugere proativamente começar sessão nova, e **dá sempre um prompt de arranque pronto a copiar** (não digas só "devias começar sessão nova"). O padrão concreto está em `CHEATSHEET.md` §7 deste repo: ler `CLAUDE.md`+`CHEATSHEET.md`, reconstruir a todo list a partir de um doc persistente, e escrever aí (não só na sessão) quando algo fica feito.
+**Session hygiene (`sessionHygiene`, 2026-09-15):** when the current session reaches a natural conclusion, or has already gone through many rounds of agent dispatch/tool calls with a large context relative to what the next task actually needs, or the next request is unrelated to what filled the session so far — proactively suggest starting a new session, and **always hand back a ready-to-copy kickoff prompt** (don't just say "you should start a new session"). The concrete pattern is in this repo's `CHEATSHEET.md` §7: read `CLAUDE.md`+`CHEATSHEET.md`, rebuild the todo list from a persistent doc, and — this is the part every harness should also do, not just Claude Code — check `tasks/board.md` (and `tasks/README.md` for how to append events) for the workspace's cross-session task tracker, writing there (not only in-session) when something gets done.
 
-(Claude Code tem isto automatizado via hook `SessionStart` — ver `CLAUDE.md`. Outras ferramentas seguem este protocolo em prosa, aqui.)
+(Claude Code has this automated via a `SessionStart` hook — see `CLAUDE.md`. Other tools follow this protocol in prose, here. **Known gap (2026-09-16):** this file and `CLAUDE.md` both reference `CHEATSHEET.md` §7 but neither used to mention `tasks/` explicitly, and `.github/copilot-instructions.md`/`GEMINI.md` had no startup pointer to either — see `CLAUDE.md`'s "Known Gaps" for the full finding and what's still needed to fix it for Copilot/Gemini/Antigravity.)
 
-## Agentes Disponíveis
+## Available Agents
 
-| Agente | Localização Config | Quando Usar |
+| Agent | Config Location | When to Use |
 |--------|-------------------|-------------|
-| **Crush/Claude** | `~/.claude/`, `~/.claude.json` | Desenvolvimento, análise de código, debugging, automação |
-| **Copilot** | `~/.copilot/` | Sugestões inline, completions em VS Code |
-| **Gemini** | `~/.gemini/` | Consultas rápidas, brainstorming |
-| **Cline** | `~/.cline/` | Execução de tarefas complexas multi-arquivo |
+| **Crush/Claude** | `~/.claude/`, `~/.claude.json` | Development, code analysis, debugging, automation |
+| **Copilot** | `~/.copilot/` | Inline suggestions, completions in VS Code |
+| **Gemini** | `~/.gemini/` | Quick queries, brainstorming |
+| **Cline** | `~/.cline/` | Complex multi-file task execution |
 
-## Skills Personalizadas
+## Custom Skills
 
-Este repositório centraliza skills (extensões/plugins) na pasta padrão `.agents/skills/`:
+This repository centralizes skills (extensions/plugins) in the standard `.agents/skills/` folder:
 
 ```
 dotfiles/
@@ -36,125 +36,125 @@ dotfiles/
     │   │   └── reporting.md
     │   ├── omarchy/
     │   │   ├── SKILL.md
-    │   │   └── [outros ficheiros]
-    │   └── [novas-skills]/
+    │   │   └── [other files]
+    │   └── [new-skills]/
     │       └── SKILL.md
     └── workflows/                  ← Agent personas
         ├── init.md
         └── architect_html_sciml.md
 ```
 
-Quando sincronizas, as skills são propagadas para:
-- **`~/.agents/skills/`** — Shared across agents (sempre sincronizado)
-- **`~/.claude/skills/`** — Crush-specific (se existir)
-- **`/usr/share/omarchy/default/agents/skills/`** — System-wide (opcional, requer sudo)
+When you sync, skills are propagated to:
+- **`~/.agents/skills/`** — Shared across agents (always synced)
+- **`~/.claude/skills/`** — Crush-specific (if it exists)
+- **`/usr/share/omarchy/default/agents/skills/`** — System-wide (optional, requires sudo)
 
-### Adicionar Nova Skill
+### Adding a New Skill
 
-1. Cria pasta em `dotfiles/.agents/skills/minha-skill/`
-2. Adiciona `SKILL.md` (obrigatório):
+1. Create a folder at `dotfiles/.agents/skills/my-skill/`
+2. Add `SKILL.md` (required):
    ```markdown
-   # Minha Skill
-   
-   Descrição breve do que faz.
-   
-   ## Triggers (quando usar)
-   - Palavra-chave 1
-   - Palavra-chave 2
+   # My Skill
+
+   Brief description of what it does.
+
+   ## Triggers (when to use)
+   - Keyword 1
+   - Keyword 2
    ```
-3. Adiciona outros ficheiros conforme necessário
+3. Add other files as needed
 4. Commit:
    ```bash
    cd ~/dotfiles
-   git add .agents/skills/minha-skill/
-   git commit -m "Add minha-skill for [propósito]"
+   git add .agents/skills/my-skill/
+   git commit -m "Add my-skill for [purpose]"
    git push
    ```
-5. Sincroniza:
+5. Sync:
    ```bash
    ./sync.sh
    ```
-   Opções:
-   - `./sync.sh` — Sincroniza para `~/.agents/skills/` e `~/.claude/skills/`
-   - `./sync.sh --system` — Também copia para `/usr/share/omarchy/default/agents/skills/` (requer sudo)
-   - `./sync.sh --dry-run` — Simula sem fazer mudanças
-   - `./sync.sh --verbose` — Mostra detalhes da sincronização
+   Options:
+   - `./sync.sh` — Sync to `~/.agents/skills/` and `~/.claude/skills/`
+   - `./sync.sh --system` — Also copy to `/usr/share/omarchy/default/agents/skills/` (requires sudo)
+   - `./sync.sh --dry-run` — Simulate without making changes
+   - `./sync.sh --verbose` — Show sync details
 
-### Adicionar Nova Skill e Propagar (Fluxo Completo)
+### Adding a New Skill and Propagating It (Full Flow)
 
 ```bash
-# 1. Cria skill
-mkdir -p ~/dotfiles/.agents/skills/nova-skill
-cat > ~/dotfiles/.agents/skills/nova-skill/SKILL.md <<'EOF'
-# Nova Skill
+# 1. Create the skill
+mkdir -p ~/dotfiles/.agents/skills/new-skill
+cat > ~/dotfiles/.agents/skills/new-skill/SKILL.md <<'EOF'
+# New Skill
 
-Descrição.
+Description.
 
 ## Triggers
 - keyword
 EOF
 
-# 2. Adiciona outros ficheiros (opcional)
-# cp script.sh ~/dotfiles/.agents/skills/nova-skill/
+# 2. Add other files (optional)
+# cp script.sh ~/dotfiles/.agents/skills/new-skill/
 
-# 3. Versiona no GitHub
+# 3. Version on GitHub
 cd ~/dotfiles
-git add .agents/skills/nova-skill/
-git commit -m "Add nova-skill for [propósito]"
+git add .agents/skills/new-skill/
+git commit -m "Add new-skill for [purpose]"
 git push
 
-# 4. Sincroniza para agentes locais
+# 4. Sync to local agents
 ./sync.sh
 
-# 5. (Opcional) Sincroniza também para sistema
+# 5. (Optional) Also sync to the system
 ./sync.sh --system
 
-# 6. Na outra máquina: pull + sync
+# 6. On another machine: pull + sync
 cd ~/dotfiles && git pull
 ./sync.sh
 ```
 
-## Variáveis de Contexto para Agentes
+## Context Variables for Agents
 
-### Estrutura de Diretórios
-- `~/Projects/` — Repos pessoais (estudos, IP própria)
-- `~/Work/` — Repos profissionais/organização
-- `~/dotfiles/` — Este repo (sincronização entre máquinas)
+### Directory Structure
+- `~/Projects/` — Personal repos (studies, own IP)
+- `~/Work/` — Professional/organization repos
+- `~/dotfiles/` — This repo (cross-machine synchronization)
 
-### Ficheiros de Contexto Global
+### Global Context Files
 
-| Ficheiro | Acesso | Propósito |
+| File | Access | Purpose |
 |----------|--------|----------|
-| `~/.context-global.md` | Todos os agentes | Contexto geral (estrutura, convenções, preferências) |
-| `~/claude.md` | Crush/Claude | Regras específicas para Claude |
-| `~/.github/copilot-instructions.md` | Copilot | Instruções específicas para Copilot |
-| `~/directory_tree.md` | Todos (referência) | Mapa da estrutura de diretórios |
+| `~/.context-global.md` | All agents | General context (structure, conventions, preferences) |
+| `~/claude.md` | Crush/Claude | Claude-specific rules |
+| `~/.github/copilot-instructions.md` | Copilot | Copilot-specific instructions |
+| `~/directory_tree.md` | All (reference) | Directory structure map |
 
-## Regras de Desenvolvimento por Agente
+## Per-Agent Development Rules
 
 ### Crush/Claude
-- **Lê:** `claude.md`, `.context-global.md`, `directory_tree.md`
-- **Preferências:** Análise profunda, explicações técnicas, automação script
-- **Restrições:** Sem commits automáticos sem confirmação explícita
+- **Reads:** `claude.md`, `.context-global.md`, `directory_tree.md`
+- **Preferences:** Deep analysis, technical explanations, script automation
+- **Restrictions:** No automatic commits without explicit confirmation
 
 ### Copilot
-- **Lê:** `.github/copilot-instructions.md`, `.context-global.md`
-- **Preferências:** Sugestões inline rápidas, completions de código
-- **Restrições:** Não modifica ficheiros sem intervenção
+- **Reads:** `.github/copilot-instructions.md`, `.context-global.md`
+- **Preferences:** Fast inline suggestions, code completions
+- **Restrictions:** Doesn't modify files without intervention
 
 ### Gemini
-- **Lê:** `.context-global.md`
-- **Preferências:** Brainstorming, ideação, verificação de conceitos
-- **Restrições:** Uso ocasional, não storage de contexto longo
+- **Reads:** `.context-global.md`
+- **Preferences:** Brainstorming, ideation, concept verification
+- **Restrictions:** Occasional use, no long-context storage
 
 ### Cline
-- **Lê:** Todas as instruções acima (fallback: `.context-global.md`)
-- **Preferências:** Tarefas multi-passo, refactoring, testes
-- **Restrições:** Respeita permissões de user, não modifica configs do sistema sem sudo
+- **Reads:** All instructions above (fallback: `.context-global.md`)
+- **Preferences:** Multi-step tasks, refactoring, tests
+- **Restrictions:** Respects user permissions, doesn't modify system configs without sudo
 
-## Sincronização Entre Máquinas
+## Cross-Machine Synchronization
 
-### Primeiro Setup (Nova Máquina)
+### First Setup (New Machine)
 ```bash
 cd ~
 git clone https://github.com/nmc-costa/dotfiles.git dotfiles-tmp
@@ -163,49 +163,49 @@ cd dotfiles-tmp
 # Follow on-screen instructions for config checkout
 ```
 
-### Atualizar Configs Existentes
+### Updating Existing Configs
 ```bash
 cd ~/dotfiles
 git pull
-./setup.sh      # Executa symlinks + sync.sh
+./setup.sh      # Runs symlinks + sync.sh
 ```
 
 ## Troubleshooting
 
-### Skills não aparecem após clone
+### Skills don't appear after clone
 ```bash
-# Verifica localização
+# Check location
 ls ~/.agents/skills/
 ls ~/.claude/skills/
 
-# Sincroniza manualmente
+# Sync manually
 cd ~/dotfiles
 ./sync.sh --verbose
 
-# Ou para sistema (requer sudo)
+# Or for the system (requires sudo)
 ./sync.sh --system
 ```
 
-### Symlinks Rotos
+### Broken Symlinks
 ```bash
-# Verifica
-ls -la ~/  # Procura setas vermelhas
+# Check
+ls -la ~/  # Look for red arrows
 
-# Recria manualmente
+# Recreate manually
 ln -sf ~/dotfiles/.claude ~/.claude
 ln -sf ~/dotfiles/.agents ~/.agents
 ln -sf ~/dotfiles/.vscode ~/.vscode
 
-# OU executa setup novamente
+# OR re-run setup
 ./setup.sh
 ```
 
-### Agente Não Vê Contexto
-- Verifica se `~/.context-global.md` existe (deve ser symlink)
-- Verifica permissões: `ls -la ~/.context-global.md`
-- Recarrega o agente ou reinicia a aplicação
+### Agent Can't See Context
+- Check that `~/.context-global.md` exists (should be a symlink)
+- Check permissions: `ls -la ~/.context-global.md`
+- Reload the agent or restart the application
 
 ---
 
-**Última Atualização:** 2026-09-14  
-**Mantido por:** nmc-costa
+**Last Updated:** 2026-09-14
+**Maintained by:** nmc-costa
