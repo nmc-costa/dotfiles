@@ -47,7 +47,7 @@
 - ✅ `.github/copilot-instructions.md` — **re-checked and found clean**: no `dtx/`, no hardcoded `/home/...` paths, no hardcoded username. An earlier note (in `CLAUDE.md`'s known-gaps section, dated 2026-09-14) named this file as a source of hardcoded-path/`dtx/` contradictions; that appears to have been fixed by commit `8900ac6` ("fix remaining dangling agentic_instructions/github paths repo-wide") and the older note is now itself stale — corrected in `CLAUDE.md` alongside this report.
 - ❌ **Hardcoded paths DO exist**: `.vscode/github.code-workspace` (see above) and `setup.sh`'s hardcoded `nmc-costa`/`WORK_REPOS`/`PROJECTS_REPOS` (see §4). Historical/archival content under `.agents/validation/projecthits/**/old/**` also contains old `/home/user/github/...` paths, but these are dated snapshots documenting past work (some files even document the dead-path bug explicitly), not live config.
 
-### 7. Instruções ✅
+### 7. Instructions ✅
 - ✅ `setup.sh` and `sync.sh` documented with flags
 - ✅ Error messages helpful and descriptive
 

@@ -2,10 +2,18 @@
 """Append one event to tasks/events.jsonl — the only write path into the log.
 
 Usage:
-    ./append_event.py --type tarefa.criada --actor-kind humano --actor-id nmc-costa \
-        --task-id dotfiles-workspace-standards-schema --payload '{"projeto":"dotfiles","titulo":"..."}'
+    ./append_event.py --type task.created --actor-kind human --actor-id nmc-costa \
+        --task-id dotfiles-workspace-standards-schema --payload '{"project":"dotfiles","title":"..."}'
 
-    echo '{"type": "tarefa.criada", "actor": {"kind": "agente", "id": "claude"}, ...}' | ./append_event.py --stdin
+    echo '{"type": "task.created", "actor": {"kind": "agent", "id": "claude"}, ...}' | ./append_event.py --stdin
+
+English is the default vocabulary for new events (task.created,
+task.status_changed, actor.kind human/agent/swarm, status/title/project/...
+payload keys) since 2026-09-16 — see language in workspace-standards.yaml.
+Events written before that date used the Portuguese vocabulary
+(tarefa.criada, humano/agente, estado/titulo/projeto/...); the log is
+append-only so those lines are never rewritten, and this script still
+accepts the old spellings on write for continuity — see tasks/README.md.
 
 See tasks/README.md for the event schema and the provenance/quota rule (D13).
 """
@@ -21,6 +29,13 @@ EVENTS_FILE = Path(__file__).parent / "events.jsonl"
 REQUIRED_FIELDS = ("type", "actor")
 AGENT_PROPOSAL_QUOTA = 3
 AGENT_PROPOSAL_EXPIRY_DAYS = 14
+
+# English is the current default vocabulary (since 2026-09-16); the
+# Portuguese spellings are still recognized here only so the quota/dedup
+# logic keeps working across events written before that date.
+CREATED_TYPES = ("tarefa.criada", "task.created")
+STATUS_CHANGED_TYPES = ("tarefa.estado_mudou", "task.status_changed")
+AGENT_ACTOR_KINDS = ("agente", "agent")
 
 
 def load_events():
@@ -43,7 +58,7 @@ def open_agent_proposals(events, now):
     """Agent-created tasks in state 'new' that haven't expired, keyed by fingerprint."""
     tasks = {}
     for ev in events:
-        if ev.get("type") != "tarefa.criada" or ev.get("actor", {}).get("kind") != "agente":
+        if ev.get("type") not in CREATED_TYPES or ev.get("actor", {}).get("kind") not in AGENT_ACTOR_KINDS:
             continue
         task_id = ev.get("task_id")
         if not task_id:
@@ -60,7 +75,7 @@ def open_agent_proposals(events, now):
         # "resolved" = a later tarefa.estado_mudou event exists for this task_id
         # (moved into todo = approved, or outcome marks it rejected/failed)
         later = [e for e in events if e.get("task_id") == task_id and e["ts"] > ev["ts"]]
-        if any(e.get("type") == "tarefa.estado_mudou" for e in later):
+        if any(e.get("type") in STATUS_CHANGED_TYPES for e in later):
             continue
         open_ids.add(task_id)
         fingerprints.add(fingerprint(ev.get("payload")))
@@ -84,7 +99,7 @@ def validate_and_enrich(event, events):
     event.setdefault("failure_category", None)
 
     is_agent_proposal = (
-        event["type"] == "tarefa.criada" and event["actor"]["kind"] == "agente"
+        event["type"] in CREATED_TYPES and event["actor"]["kind"] in AGENT_ACTOR_KINDS
     )
     if is_agent_proposal:
         now = datetime.datetime.fromisoformat(event["ts"])
@@ -98,9 +113,9 @@ def validate_and_enrich(event, events):
                 f"expiry {AGENT_PROPOSAL_EXPIRY_DAYS}d) — resolve existing 'new' "
                 "proposals before adding more"
             )
-        event.setdefault("estado", "new")
+        event.setdefault("status", "new")
     else:
-        event.setdefault("estado", "todo" if event["type"] == "tarefa.criada" else None)
+        event.setdefault("status", "todo" if event["type"] in CREATED_TYPES else None)
 
     return event
 
@@ -122,8 +137,8 @@ def build_event_from_args(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--stdin", action="store_true", help="read a single JSON event object from stdin")
-    parser.add_argument("--type", help="event type, e.g. tarefa.criada")
-    parser.add_argument("--actor-kind", choices=["humano", "agente", "swarm"])
+    parser.add_argument("--type", help="event type, e.g. task.created")
+    parser.add_argument("--actor-kind", choices=["human", "agent", "swarm"])
     parser.add_argument("--actor-id", help="e.g. nmc-costa, claude, session id")
     parser.add_argument("--task-id")
     parser.add_argument("--session-id")

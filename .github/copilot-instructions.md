@@ -5,6 +5,17 @@ When the user asks to create, edit, or visualize a diagram, follow the
 instructions in `.agents/instructions/workspace-config/mermaid.instructions.md`.
 <!-- mermaid-ai-skills:end -->
 
+## 📌 Session Startup (read before substantial work)
+
+At the start of a session in this repo, read `CHEATSHEET.md` (where things
+go, plus its §4 persistent cross-session TODO list) and `tasks/board.md` +
+`tasks/README.md` (the workspace's append-only task tracker). Check both
+for open/relevant work before starting something new; append an event with
+`python3 tasks/append_event.py` when you finish something worth tracking
+there. Added 2026-09-16 — this file previously had no explicit pointer to
+either, unlike Claude Code, which gets this automatically via a
+`SessionStart` hook (see `CLAUDE.md`'s "Known Gaps").
+
 ## 🔄 Session Memory Management (/compact → /memorize → /recall)
 **Workflow for token-efficient cross-chat persistence:**
 

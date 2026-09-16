@@ -1,84 +1,96 @@
 # tasks/
 
-Sistema de tracking de tarefas do workspace (PoC). Vive aqui, não num repo
-separado — decisão fixada por D2/D7 do doc "Workspace Ágil" (`Repo-Cérebro`
-= `dotfiles/`) e D11 (eventos vão para o log central do repo do workspace).
-Contexto completo das decisões: `KICKOFF.md` (o pedido original) e o plano
-que resolveu as tensões que ele deixou em aberto vive na sessão que o
-implementou — ver `notes/ideas/architecture/Workspace Agil para Agentes
-Multiplataforma.md` (D1–D18) e `notes/ideas/agents/Agente Orquestrador -
-Jarvis do Diretor Humano.md` (schema de tarefa, §5.2) para as fontes.
+Workspace task-tracking system (PoC). Lives here, not in a separate repo —
+decision fixed by D2/D7 of the "Workspace Agil" doc (`Repo-Cerebro` =
+`dotfiles/`) and D11 (events go into the workspace repo's central log).
+Full decision context: `KICKOFF.md` (the original request) and the plan
+that resolved the tensions it left open lives in the session that
+implemented it — see `notes/ideas/architecture/Workspace Agil para Agentes
+Multiplataforma.md` (D1-D18) and `notes/ideas/agents/Agente Orquestrador -
+Jarvis do Diretor Humano.md` (task schema, §5.2) as sources.
 
-## Modelo: duas camadas
+## Model: two layers
 
-1. **`events.jsonl`** — log de eventos append-only. É a **fonte de verdade**
-   (D9/D10): cada linha é um facto que aconteceu, nunca se edita uma linha
-   já escrita — uma correção é sempre um evento novo. Nunca editar à mão.
-2. **`tarefas.md`** — tabela gerada a partir do log (colunas por §5.2 do doc
-   Jarvis: id, título, projeto, estado, energia, estimativa, prazo,
-   bloqueado_por, origem, criado, tocado). É uma **vista descartável e
-   reconstruível**, nunca editada à mão — o equivalente PoC ao índice
-   SQLite/DuckDB que D9 descreve para escala maior.
+1. **`events.jsonl`** — append-only event log. It is the **source of
+   truth** (D9/D10): every line is a fact that happened, a written line is
+   never edited — a correction is always a new event. Never hand-edit.
+2. **`board.md`** — table generated from the log (columns per §5.2 of the
+   Jarvis doc: id, title, project, status, energy, estimate, deadline,
+   blocked_by, origin, created, touched). It's a **disposable, rebuildable
+   view**, never hand-edited — the PoC-scale equivalent of the
+   SQLite/DuckDB index D9 describes for larger scale.
 
-## Como usar
+## How to use
 
-Acrescentar um evento (única forma de escrever no log):
+Append an event (the only way to write to the log):
 
 ```bash
-python3 tasks/append_event.py --type tarefa.criada \
-  --actor-kind humano --actor-id nmc-costa \
-  --task-id dotfiles-minha-tarefa \
-  --payload '{"titulo":"...", "projeto":"dotfiles", "energia":"mecânica", "origem":"eu"}'
+python3 tasks/append_event.py --type task.created \
+  --actor-kind human --actor-id nmc-costa \
+  --task-id dotfiles-my-task \
+  --payload '{"title":"...", "project":"dotfiles", "energy":"mechanical", "origin":"me"}'
 
-python3 tasks/append_event.py --type tarefa.estado_mudou \
-  --actor-kind humano --actor-id nmc-costa \
-  --task-id dotfiles-minha-tarefa \
-  --payload '{"estado":"em curso"}'
+python3 tasks/append_event.py --type task.status_changed \
+  --actor-kind human --actor-id nmc-costa \
+  --task-id dotfiles-my-task \
+  --payload '{"status":"in progress"}'
 ```
 
-Regenerar a tabela depois de qualquer mudança ao log:
+Regenerate the table after any change to the log:
 
 ```bash
 python3 tasks/rebuild_view.py
 ```
 
-## Estados (D12)
+**Language note (2026-09-16):** English is the default vocabulary for new
+events — event types (`task.created`, `task.status_changed`), `actor.kind`
+(`human`/`agent`/`swarm`), and payload keys (`title`/`project`/`status`/
+`energy`/`estimate`/`deadline`/`blocked_by`/`origin`). Events written
+before that date used a Portuguese vocabulary (`tarefa.criada`,
+`humano`/`agente`, `titulo`/`projeto`/`estado`/...) — the log is
+append-only, so those historical lines are never rewritten.
+`rebuild_view.py` reads either vocabulary (falls back to the Portuguese key
+when the English one is absent), so old and new events project into the
+same `board.md` columns without loss.
 
-`new → todo → em curso → em validação → feito`, mais `deferred` como lane
-paralela (qualquer estado pode transitar para `deferred` e voltar — não é
-um passo na sequência principal). `bloqueada` e `abandonada` (enum mais
-antigo do doc Jarvis) não são estados próprios nesta PoC: "bloqueada" é
-qualquer estado com `bloqueado_por` preenchido; "abandonada" é a tarefa a
-ficar sem eventos novos, sinalizada no `tocado` (apodrecimento), sem coluna
-de estado dedicada.
+## Statuses (D12)
 
-`deferred` foi adicionado 2026-09-16, informado pelo landscape scan do
-default `communityFirst` (ver `RESEARCH_NOTES.md` em
+`new -> todo -> in progress -> in review -> done`, plus `deferred` as a
+parallel lane (any status can move to `deferred` and back — it's not a
+step in the main sequence). `blocked` and `abandoned` (the older enum from
+the Jarvis doc) aren't statuses of their own in this PoC: "blocked" is any
+status with `blocked_by` filled in; "abandoned" is a task going quiet with
+no new events, signaled by `touched` (staleness), with no dedicated status
+column.
+
+`deferred` was added 2026-09-16, informed by the `communityFirst` default's
+landscape scan (see `RESEARCH_NOTES.md` in
 `.agents/instructions/workspace-config/standards/`): `claude-task-master`
-(28k★) tem este estado no seu kanban e o nosso não tinha — cobre "aparcar
-sem cancelar" (diferente de `abandonada`, que é passiva/por apodrecimento,
-e diferente de `bloqueada`, que espera por outra tarefa). É só documentação
-+ convenção de payload — `append_event.py` já aceita `estado` livre, não há
-enum a alargar em código.
+(28k stars) has this status in its kanban and ours didn't — it covers
+"park without cancelling" (different from `abandoned`, which is
+passive/by staleness, and different from `blocked`, which is waiting on
+another task). It's documentation + payload convention only —
+`append_event.py` already accepts a free-form `status`, there's no enum to
+widen in code.
 
-**Considerado e não adotado**: a convenção `AC:BEGIN`/`AC:END` do
-`Backlog.md` (6.7k★) para delimitar critérios de aceitação dentro de um
-ficheiro longo por tarefa. Não se aplica ao desenho atual — `tarefas.md` é
-uma tabela achatada gerada a partir do log, não um ficheiro por tarefa com
-secções internas. Revisitar só se/quando uma tarefa precisar de critérios
-de aceitação com vários itens que justifiquem essa estrutura.
+**Considered and not adopted**: `Backlog.md`'s (6.7k stars) `AC:BEGIN`/
+`AC:END` convention for delimiting acceptance criteria inside a long
+per-task file. Doesn't apply to the current design — `board.md` is a flat
+table generated from the log, not one file per task with internal
+sections. Revisit only if/when a task needs multi-item acceptance criteria
+that justify that structure.
 
-## Proveniência decide a porta (D13)
+## Provenance decides the entry point (D13)
 
-Tarefa criada por um humano entra direto em `todo`. Proposta de um agente
-(`actor.kind: agente`) entra em `new`, com quota de 3 propostas abertas em
-simultâneo, expiração de 14 dias, e deduplicação por fingerprint do
-`payload` — tudo aplicado automaticamente por `append_event.py`, não por
-convenção humana (D14: script antes de regra).
+A task created by a human enters `todo` directly. A proposal from an agent
+(`actor.kind: agent`) enters `new`, with a quota of 3 simultaneously open
+proposals, a 14-day expiry, and dedup by `payload` fingerprint — all
+applied automatically by `append_event.py`, not by human convention (D14:
+script before rule).
 
-## Fora de âmbito nesta PoC
+## Out of scope for this PoC
 
-Automação (cron/systemd/GitHub Actions), índice SQLite/DuckDB, `tarefas.csv`
-(só quando `tarefas.md` passar "umas dezenas de linhas" — regra do próprio
-doc Jarvis §5.4), a persona Jarvis/orquestrador em si. Ver o histórico da
-sessão que criou isto para o raciocínio completo.
+Automation (cron/systemd/GitHub Actions), a SQLite/DuckDB index,
+`tasks.csv` (only once `board.md` passes "a few dozen lines" — the Jarvis
+doc's own §5.4 rule), the Jarvis/orchestrator persona itself. See the
+history of the session that created this for the full reasoning.

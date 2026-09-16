@@ -1,95 +1,97 @@
 # CHEATSHEET.md
 
-A forma de trabalhar neste workspace, num só sítio — para não teres de te lembrar. Atualiza esta tabela sempre que a estrutura de `.agents/` mudar (é regra, ver `CLAUDE.md`).
+How work happens in this workspace, in one place — so you don't have to remember it. Update this table whenever the `.agents/` structure changes (it's a rule, see `CLAUDE.md`).
 
-## 1. Onde vive cada coisa
+## 1. Where everything lives
 
-| Queres... | Vai a... |
+| You want to... | Go to... |
 |---|---|
-| Adicionar/editar uma skill (Claude Code, Copilot, Gemini) | `.agents/skills/<nome>/SKILL.md` — é a **única fonte real**. `.claude/skills/<nome>` e `.github/skills/<nome>` são symlinks para aqui, nunca edites lá. |
-| Adicionar/editar uma persona ou instrução | `.agents/instructions/{base-personas,task-personas,workspace-config,automation}/` |
-| Adicionar/editar um guia de harness (Claude Code, Gemini, OpenAI, LiteLLM, VS Code Copilot) | `.agents/harnesses/<nome>.md` — usa `.agents/harnesses/TEMPLATE.md` como ponto de partida |
-| Adicionar/editar um prompt reutilizável | `.agents/prompts/{chronicle,_templates}/` |
-| Guardar um output real (validação, exemplo de cliente, sessão) | `.agents/validation/<skill>/` — nunca em `.agents/skills/<skill>/examples/` (essa pasta é só para exemplos genéricos/anonimizados) |
-| Ver o estado da fusão `agentic_instructions` → `dotfiles` | `CLAUDE.md` → secção "⚠️ Lacunas Conhecidas" |
+| Add/edit a skill (Claude Code, Copilot, Gemini) | `.agents/skills/<name>/SKILL.md` — the **single real source**. `.claude/skills/<name>` and `.github/skills/<name>` are symlinks to it, never edit there. |
+| Add/edit a persona or instruction | `.agents/instructions/{base-personas,task-personas,workspace-config,automation}/` |
+| Add/edit a harness guide (Claude Code, Gemini, OpenAI, LiteLLM, VS Code Copilot) | `.agents/harnesses/<name>.md` — use `.agents/harnesses/TEMPLATE.md` as a starting point |
+| Add/edit a reusable prompt | `.agents/prompts/{chronicle,_templates}/` |
+| Store a real output (validation, client example, session) | `.agents/validation/<skill>/` — never in `.agents/skills/<skill>/examples/` (that folder is only for generic/anonymized examples) |
+| Check the state of the `agentic_instructions` → `dotfiles` merge | `CLAUDE.md` → "⚠️ Known Gaps" section |
 
-**Regra de ouro:** se editaste algo dentro de `.claude/skills/` ou `.github/skills/` diretamente, editaste um symlink partido conceptualmente — o ficheiro real está em `.agents/skills/`. Confirma com `readlink -f <caminho>` antes de editar se tiveres dúvidas.
+**Golden rule:** if you edited something inside `.claude/skills/` or `.github/skills/` directly, you edited a conceptually broken symlink — the real file is in `.agents/skills/`. Confirm with `readlink -f <path>` before editing if unsure.
 
-## 2. Adicionar uma skill nova (fluxo completo)
+## 2. Adding a new skill (full flow)
 
 ```bash
-mkdir -p ~/dotfiles/.agents/skills/nova-skill
-cat > ~/dotfiles/.agents/skills/nova-skill/SKILL.md <<'EOF'
+mkdir -p ~/dotfiles/.agents/skills/new-skill
+cat > ~/dotfiles/.agents/skills/new-skill/SKILL.md <<'EOF'
 ---
-name: nova-skill
-description: <o que faz e quando usar>
+name: new-skill
+description: <what it does and when to use it>
 ---
 EOF
 
-# symlink para os outros harnesses lerem também
-ln -s ../../.agents/skills/nova-skill ~/dotfiles/.claude/skills/nova-skill
+# symlink so other harnesses can read it too
+ln -s ../../.agents/skills/new-skill ~/dotfiles/.claude/skills/new-skill
 
 cd ~/dotfiles
-git add .agents/skills/nova-skill/ .claude/skills/nova-skill
-git commit -m "Add nova-skill for [propósito]"
+git add .agents/skills/new-skill/ .claude/skills/new-skill
+git commit -m "Add new-skill for [purpose]"
 git push
 ```
 
-## 3. Os 3 repos e o papel de cada um
+## 3. The 3 repos and each one's role
 
-| Repo | Papel | Estado |
+| Repo | Role | State |
 |---|---|---|
-| `~/dotfiles` | Repo de controlo único: config de sistema + `.agents/` (skills/instruções/harnesses/validação) como fonte de verdade | Ativo, é aqui que trabalhas daqui em diante |
-| `~/Projects/agentic_instructions` | Biblioteca original de personas/skills | **Arquivado** (conteúdo já fundido para `dotfiles/.agents/`) — não editar, só consultar histórico |
-| `~/Projects/architect` | Playground pessoal de investigação sobre a persona "The Architect"/memória/auto-avaliação | Separado, não fundido — tem um padrão de testes "vermelho por design" que vale a pena copiar para `.agents/validation/` no futuro, mas o conteúdo em si (memory/, evolution/, architect_log/) fica lá |
+| `~/dotfiles` | Single control-plane repo: system config + `.agents/` (skills/instructions/harnesses/validation) as the source of truth | Active, this is where you work going forward |
+| `~/Projects/agentic_instructions` | Original persona/skill library | Content only **partially** merged into `dotfiles/.agents/` — see `CLAUDE.md` → "⚠️ Known Gaps" for the real, verified breakdown (2026-09-16) before archiving; don't edit, history only |
+| `~/Projects/architect` | Personal research playground for the "The Architect" persona/memory/self-evaluation | Separate, not merged — has a "red by design" test pattern worth copying to `.agents/validation/` in the future, but the content itself (memory/, evolution/, architect_log/) stays there |
 
-## 4. TODO list persistente (fonte de verdade entre sessões)
+## 4. Persistent TODO list (source of truth across sessions)
 
-A lista de tarefas que o Claude Code cria numa sessão (a ferramenta de tracking interna) **não sobrevive a uma sessão nova** — só sobrevive com `--resume`/`--continue`, que recarrega tudo (o oposto de poupar tokens). Esta tabela é o substituto persistente: qualquer sessão nova lê isto, recria a sua própria todo list interna a partir daqui, e **risca aqui** (não só na sessão) quando um item fica feito.
+The task list Claude Code creates within a session (the internal tracking tool) **doesn't survive a new session** — it only survives with `--resume`/`--continue`, which reloads everything (the opposite of saving tokens). This table is the persistent substitute: any new session reads this, recreates its own internal todo list from it, and **checks it off here** (not just in-session) when an item is done.
 
-- [x] Migrar `.vscode/settings.json` (API key) para chezmoi+age — feito 2026-09-14, commit `ef2a52f`. Falta: fazer backup da chave privada (`~/.config/chezmoi/key.txt`) para um gestor de password ou cópia física — **isto é manual, ninguém o faz por ti**.
-- [x] **Autenticar `gh` CLI** — feito 2026-09-16 via login por browser, não PAT manual (método validado por pesquisa online da comunidade, não só preferência própria — ver `.agents/instructions/workspace-config/standards/RESEARCH_NOTES.md` uma vez mesclado o PR #1, `claude/workspace-standards-schema`; entretanto as fontes ficaram nesta sessão). **Este é o passo a repetir em qualquer máquina nova, é simples e rápido:**
+- [x] Migrate `.vscode/settings.json` (API key) to chezmoi+age — done 2026-09-14, commit `ef2a52f`. Still missing: back up the private key (`~/.config/chezmoi/key.txt`) to a password manager or physical copy — **this is manual, nobody does it for you**.
+- [x] **Authenticate the `gh` CLI** — done 2026-09-16 via browser login, not a manual PAT (a method validated by real community research, not just personal preference — see `.agents/instructions/workspace-config/standards/RESEARCH_NOTES.md`). **This is the step to repeat on any new machine, it's simple and fast:**
   ```bash
   gh auth login
-  # GitHub.com → SSH (protocolo git; usa as tuas chaves SSH já configuradas)
+  # GitHub.com → SSH (git protocol; uses your already-configured SSH keys)
   # Authenticate Git with your GitHub credentials? → Yes
-  # Upload your SSH public key? → No, se já estiver na conta (push já a funcionar = já está)
+  # Upload your SSH public key? → No, if it's already on the account (push already working = it's already there)
   # How would you like to authenticate GitHub CLI? → Login with a web browser
-  #   (NUNCA "Paste an authentication token" — evita ter um PAT manual para gerir/perder/expor)
-  gh auth status   # confirma: token gho_..., scopes repo+read:org(+gist)
+  #   (NEVER "Paste an authentication token" — avoids having a manual PAT to manage/lose/expose)
+  gh auth status   # confirm: token gho_..., scopes repo+read:org(+gist)
   ```
-  Token gerido pelo keyring do `gh`, nunca escrito à mão em ficheiro nenhum; revogável em `github.com/settings/applications`. Se algum dia precisares mesmo de um PAT manual (uso headless/CI, não este caso), o padrão da comunidade é `GH_TOKEN` como variável de ambiente, nunca em ficheiro de dotfiles em texto plano.
-- [x] **Adotada convenção `claude/<topico>` + PR** em vez de push direto a `main` — 12 PRs abertos com `gh pr create` (2026-09-16) cobrindo `dotfiles`(5), `architect`(2), `notes`(3), `Work/notes`(2). Lista completa + ordem de merge (há duas situações de branches irmãs divergentes — `dotfiles` e `notes`) em `tasks/OPEN_PULL_REQUESTS.md`. Mergear fica ao critério do dono, não é automático.
-- [x] Todos os commits locais deram push e têm PR aberto — nada ficou só local.
-- [ ] Arquivar `agentic_instructions` no GitHub (Settings → Archive this repository, ou `gh repo archive nmc-costa/agentic_instructions`) — já não está bloqueado (gh auth funciona), só falta o dono decidir fazer.
-- [ ] Decidir direção de sincronização (repo→sistema vs. sistema→repo) — em aberto, ver `CLAUDE.md` → Lacunas Conhecidas.
-- [ ] `setup.sh` com listas de repos hardcoded (`nmc-costa`) — conhecido, não bloqueante, só importa se partilhares o repo.
+  Token managed by `gh`'s own keyring, never hand-written to any file; revocable at `github.com/settings/applications`. If you ever genuinely need a manual PAT (headless/CI use, not this case), the community pattern is a `GH_TOKEN` environment variable, never a plaintext dotfiles file.
+- [x] **Adopted the `claude/<topic>` + PR convention** instead of pushing directly to `main` — 13 PRs opened with `gh pr create` (2026-09-16) covering `dotfiles`(6), `architect`(2), `notes`(3), `Work/notes`(2). All were reviewed and merged by the owner (2026-09-16). `tasks/OPEN_PULL_REQUESTS.md`, which tracked the list and merge order, has been removed now that its job is done (its own closing note said to do this).
+- [x] All local commits were pushed and had a PR opened — nothing stayed local-only.
+- [x] `tasks/` event log synced with reality — the 11 "open a PR" tasks were stale (`todo`) after their PRs merged; closed out via `append_event.py` (see `tasks/board.md`, PR #7).
+- [ ] Archive `agentic_instructions` on GitHub (Settings → Archive this repository, or `gh repo archive nmc-costa/agentic_instructions`) — no longer blocked (`gh auth` works), but **do this only after** resolving the still-unmerged content flagged in `CLAUDE.md` → "⚠️ Known Gaps" (2026-09-16 verification found the "already merged" claim here was overstated).
+- [ ] Decide sync direction (repo→system vs. system→repo) — open, see `CLAUDE.md` → Known Gaps.
+- [ ] `setup.sh` has hardcoded repo lists (`nmc-costa`) — known, not blocking, only matters if you share the repo.
+- [x] **Non-Claude harnesses didn't auto-read `tasks/`+`CHEATSHEET.md` on startup** (found 2026-09-16 via Copilot/Antigravity diagnostics the owner ran directly) — fixed same day: added an explicit startup pointer to `.github/copilot-instructions.md`, `GEMINI.md`, and `AGENTS.md`'s sessionHygiene section, plus a new `.agents/harnesses/antigravity.md`. Antigravity's fix is a manual kickoff-prompt substitute only — nobody has verified how it actually auto-loads project context, so its file is marked `Status: template — not yet verified` on purpose; revisit once that's confirmed.
 
-**Regra:** ao começar uma sessão nova, pede-lhe explicitamente para ler esta lista e criar a sua todo list interna a partir dela (ver secção 7). Ao terminar uma tarefa, o commit que a fecha tem de marcar o `[x]` aqui.
+**Rule:** when starting a new session, explicitly ask it to read this list and build its internal todo list from it (see section 7). When finishing a task, the commit that closes it must check the `[x]` off here.
 
-## 5. Roadmap do "Workspace Ágil" (ordem validada nas tuas notas — `~/Projects/notes/ideas/architecture/Workspace Agil para Agentes Multiplataforma.md` §13.7)
+## 5. "Agile Workspace" roadmap (order validated in your own notes — `~/Projects/notes/ideas/architecture/Workspace Agil para Agentes Multiplataforma.md` §13.7)
 
-Não saltar fases — cada uma é pré-requisito da seguinte. O otimizador autónomo ("OS vivo") é a **última**, não a primeira.
+Don't skip phases — each one is a prerequisite for the next. The autonomous optimizer ("living OS") is the **last** phase, not the first.
 
-| Fase | O quê | Estado neste workspace |
+| Phase | What | State in this workspace |
 |---|---|---|
-| 1. Ver | `agtop` + Langfuse/OTel do Claude Code | Por fazer |
-| 2. Arrumar | chezmoi + regras partilhadas + segredos | **Em curso** (TODO #1 acima) |
-| 3. Limitar | Perfis de limites por máquina, `RandomizedDelaySec` | Por fazer |
-| 4. Agendar | Manifesto `jobs/*.yaml` + systemd timers | Por fazer |
-| 5. Estruturar | Esquema comum tarefa→swarm→agente→modelo→estado | Por fazer |
-| 6. Julgar | Critérios de aceitação verificáveis | Por fazer |
-| 7. Escolher | **Routing de modelos por custo/performance** — `LiteLLM Router` (não RouteLLM, sem manutenção desde 2024). Local: Ollama + Qwen3-Coder-30B (24GB VRAM) ou Qwen3-8B (8GB). Cloud: DeepSeek V4 (barato/volume), Claude Sonnet 5 (default), Claude Opus 5 (raciocínio difícil) | Documentado, por instalar |
-| 8. Otimizar | GEPA sobre uma skill real, medindo antes/depois | Por fazer — depende de 4-6 estarem feitas; evidência independente diz que ganhos em multi-agente são instáveis, medir antes de confiar |
+| 1. See | `agtop` + Claude Code's Langfuse/OTel | To do |
+| 2. Tidy up | chezmoi + shared rules + secrets | **In progress** (TODO #1 above) |
+| 3. Limit | Per-machine limit profiles, `RandomizedDelaySec` | To do |
+| 4. Schedule | `jobs/*.yaml` manifest + systemd timers | To do |
+| 5. Structure | Common task→swarm→agent→model→state schema | To do |
+| 6. Judge | Verifiable acceptance criteria | To do |
+| 7. Choose | **Model routing by cost/performance** — `LiteLLM Router` (not RouteLLM, unmaintained since 2024). Local: Ollama + Qwen3-Coder-30B (24GB VRAM) or Qwen3-8B (8GB). Cloud: DeepSeek V4 (cheap/high-volume), Claude Sonnet 5 (default), Claude Opus 5 (hard reasoning) | Documented, not yet installed |
+| 8. Optimize | GEPA over a real skill, measuring before/after | To do — depends on 4-6 being done; independent evidence says multi-agent gains are unstable, measure before trusting |
 
-## 6. Como manter isto vivo
+## 6. Keeping this alive
 
-Esta tabela apodrece como qualquer doc estático se ninguém a atualizar. A regra fica no `CLAUDE.md`: qualquer sessão que mude a estrutura de `.agents/` (nova skill, novo harness, resolução de um TODO) atualiza esta tabela no mesmo commit — não depois, não "quando der jeito".
+This table rots like any static doc if nobody updates it. The rule lives in `CLAUDE.md`: any session that changes the `.agents/` structure (new skill, new harness, a TODO resolved) updates this table in the same commit — not later, not "whenever convenient."
 
-## 7. Saltar para sessão nova sem perder o fio (poupar tokens)
+## 7. Jumping to a new session without losing the thread (saving tokens)
 
-1. Fecha/ignora a sessão atual — não precisas de `/compact` nem de `--resume`. Abre uma sessão nova (`claude`, sem `--resume`/`--continue`, contexto limpo).
-2. Primeira mensagem, sempre:
-   > "Lê `~/dotfiles/CLAUDE.md` e `~/dotfiles/CHEATSHEET.md`. Cria uma todo list a partir da secção 4 (TODO list persistente) e continua a partir daí."
-3. A sessão nova cria a sua própria todo list interna (ferramenta de tracking do Claude Code) espelhando a secção 4 — isso mantém-na focada e visível para ti dentro dessa sessão.
-4. Quando um item fica feito, tem de ser marcado `[x]` **aqui**, na secção 4, no mesmo commit que o fecha — a todo list interna da sessão morre com ela; esta tabela é a que sobrevive.
+1. Close/ignore the current session — you don't need `/compact` or `--resume`. Open a new session (`claude`, without `--resume`/`--continue`, clean context).
+2. First message, always:
+   > "Read `~/dotfiles/CLAUDE.md` and `~/dotfiles/CHEATSHEET.md`. Build a todo list from section 4 (persistent TODO list) and continue from there."
+3. The new session builds its own internal todo list (Claude Code's tracking tool) mirroring section 4 — this keeps it focused and visible to you within that session.
+4. When an item is done, it has to be checked `[x]` **here**, in section 4, in the same commit that closes it out — the session's internal todo list dies with it; this table is what survives.

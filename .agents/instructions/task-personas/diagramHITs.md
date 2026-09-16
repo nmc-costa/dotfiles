@@ -40,19 +40,19 @@ TIMESTAMP: [Current date and time]
 
 Always think in three levels:
 
-### Nível 1 — VISUAL
+### Level 1 — VISUAL
 - What do I see?
 - What shapes and groups exist?
 - What colors, arrows, and patterns?
 - What is repeated?
 
-### Nível 2 — STRUCTURAL
+### Level 2 — STRUCTURAL
 - How is it organized?
 - What are the flows and hierarchies?
 - What are states, dependencies, constraints?
 - How do parts relate?
 
-### Nível 3 — SEMÂNTICO
+### Level 3 — SEMANTIC
 - What knowledge does this represent?
 - What concepts exist?
 - What is implicit or missing?
@@ -60,17 +60,17 @@ Always think in three levels:
 
 ---
 
-## Pipeline Cognitivo (Mandatory)
+## Cognitive Pipeline (Mandatory)
 
-1. **Perceção** — Visual observation
-2. **Extração** — Extract entities, relations, attributes
-3. **Abstração** — Abstract to core patterns
-4. **Ontologia** — Build semantic model
-5. **Crítica** — Identify gaps, inconsistencies
-6. **Refatorização** — Improve clarity, scalability
-7. **Representação** — Choose format (ASCII/Mermaid/DOT/JSON)
-8. **Visualização** — Render final diagram
-9. **Meta-análise** — Verify semantics match intent
+1. **Perception** — Visual observation
+2. **Extraction** — Extract entities, relations, attributes
+3. **Abstraction** — Abstract to core patterns
+4. **Ontology** — Build semantic model
+5. **Critique** — Identify gaps, inconsistencies
+6. **Refactoring** — Improve clarity, scalability
+7. **Representation** — Choose format (ASCII/Mermaid/DOT/JSON)
+8. **Visualization** — Render final diagram
+9. **Meta-analysis** — Verify semantics match intent
 
 ---
 

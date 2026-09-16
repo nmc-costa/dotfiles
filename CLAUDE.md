@@ -1,125 +1,128 @@
 # CLAUDE.md
 
-Orientações para Claude Code quando trabalha neste repositório.
+Guidance for Claude Code when working in this repository.
 
-## Resumo rápido
+## Quick summary
 
 ```
 dotfiles/
-├── .agents/           ← Fonte de verdade: skills/, instructions/, harnesses/, prompts/, workflows/, validation/, automation/
-├── .claude/            ← Config Claude Code; .claude/skills/<nome> = symlinks para .agents/skills/<nome>
-├── .github/            ← Config GitHub + CI; várias subpastas são symlinks para .agents/
-├── .vscode/            ← Config VS Code (settings.json = API key real, gerido por chezmoi+age)
-├── .chezmoisource/     ← Source dir do chezmoi, só para .vscode/settings.json
-├── scripts/            ← Utilitários (VS Code docs monitor)
-├── docs/               ← Tudo o que não é lido automaticamente por convenção (ver índice abaixo)
-├── AGENTS.md, CLAUDE.md, GEMINI.md   ← Lidos automaticamente por cada ferramenta
+├── .agents/           ← Source of truth: skills/, instructions/, harnesses/, prompts/, workflows/, validation/, automation/
+├── .claude/            ← Claude Code config; .claude/skills/<name> = symlinks into .agents/skills/
+├── .github/            ← GitHub + CI config; several subfolders are symlinks into .agents/
+├── .vscode/            ← VS Code config (settings.json = real API key, managed by chezmoi+age)
+├── .chezmoisource/     ← chezmoi source dir, scoped only to .vscode/settings.json
+├── scripts/            ← Utilities (VS Code docs monitor)
+├── docs/               ← Everything not auto-loaded by convention (see index below)
+├── AGENTS.md, CLAUDE.md, GEMINI.md   ← Auto-loaded by each respective tool
 ├── docs/SECRETS.md     ← chezmoi+age secrets doc
 ├── README.md, CHEATSHEET.md
 └── setup.sh, sync.sh, test-subagents.sh
 ```
 
-**Docs-chave:** `README.md` (overview + directory tree completo + Guidelines para humano/agente) · `CHEATSHEET.md` (onde vai cada coisa + TODO persistente) · `docs/STANDARDS.md` (convenções; secções propostas/não implementadas marcadas explicitamente como tal desde 2026-09-15) · `docs/SUBAGENTS_VERIFICATION.md` (checklist) · `docs/AUDIT_REPORT.md` (audit; corrigido 2026-09-15 para refletir hardcoded paths/`dtx/` reais) · `docs/SECRETS.md` (chezmoi+age). **Antes de qualquer mudança estrutural, corre `./scripts/validate_dotfiles.sh`** — é o avaliador que confirma raiz limpa, docs obrigatórios presentes, e a tree deste ficheiro/README a bater com a realidade.
+**Key docs:** `README.md` (overview + full directory tree + human/agent guidelines) · `CHEATSHEET.md` (where things go + persistent TODO) · `docs/STANDARDS.md` (conventions; proposed/not-implemented sections explicitly marked as such since 2026-09-15) · `docs/SUBAGENTS_VERIFICATION.md` (checklist) · `docs/AUDIT_REPORT.md` (audit; corrected 2026-09-15 to reflect real hardcoded paths/`dtx/`) · `docs/SECRETS.md` (chezmoi+age). **Before any structural change, run `./scripts/validate_dotfiles.sh`** — the evaluator that confirms a clean root, required docs present, and this file's/README's tree matching reality.
 
-## Standards do workspace (novo, 2026-09-15)
+## Workspace standards (added 2026-09-15)
 
-`.agents/instructions/workspace-config/standards/workspace-standards.yaml` + `workspace-standards.schema.json` definem os defaults que **todos** os repos deste workspace devem seguir (raiz limpa, secções obrigatórias no README, língua técnica=inglês, etc.) — cada repo tem a sua própria instância em `docs/standards.yml` que herda destes defaults e só declara desvios. `.agents/instructions/workspace-config/standards/RESEARCH_NOTES.md` documenta a investigação SOTA que informou o desenho (nem tudo tem prova — o campo do diagrama no README é preferência do dono, não SOTA, e está marcado como tal).
+`.agents/instructions/workspace-config/standards/workspace-standards.yaml` + `workspace-standards.schema.json` define the defaults **every** repo in this workspace must follow (clean root, required README sections, technical language = English, etc.) — each repo has its own instance in `docs/standards.yml` that inherits from these defaults and only declares deviations. `.agents/instructions/workspace-config/standards/RESEARCH_NOTES.md` documents the SOTA research that informed the design (not everything is externally sourced — the README diagram field is the owner's own preference, not SOTA, and is marked as such).
 
-**Revisão periódica (implícita, corre em background):** um hook `SessionStart` (`~/.claude/hooks/workspace-standards-review-check.sh`) verifica `review.nextDue` a cada sessão nova do Claude Code e, se estiver atrasada, injeta um lembrete forte no contexto — não bloqueia a sessão, mas espera-se que o agente trate disso antes de mais trabalho substancial, a menos que o pedido da sessão seja claramente estreito e não relacionado. Para harnesses sem hooks (Copilot, Gemini CLI, etc.), o mesmo protocolo está descrito aqui em prosa — lê `review.nextDue` em `.agents/instructions/workspace-config/standards/workspace-standards.yaml` no início de uma sessão e aplica a mesma regra.
+**Periodic review (implicit, runs in the background):** a `SessionStart` hook (`~/.claude/hooks/workspace-standards-review-check.sh`) checks `review.nextDue` at the start of every new Claude Code session and, if it's overdue, injects a strong reminder into context — it doesn't block the session, but the agent is expected to handle it before substantial further work, unless the session's request is clearly narrow and unrelated. For harnesses without hooks (Copilot, Gemini CLI, etc.), the same protocol is described here in prose — read `review.nextDue` in `.agents/instructions/workspace-config/standards/workspace-standards.yaml` at the start of a session and apply the same rule.
 
-Sempre que editares `workspace-standards.yaml`/`.schema.json`, corre `python3 scripts/validate_workspace_standards.py .agents/instructions/workspace-config/standards/workspace-standards.yaml` antes de committer — YAML gerado por LLM tem mais tendência a erros de indentação do que JSON, por isso a validação não é opcional aqui.
+Whenever you edit `workspace-standards.yaml`/`.schema.json`, run `python3 scripts/validate_workspace_standards.py .agents/instructions/workspace-config/standards/workspace-standards.yaml` before committing — LLM-generated YAML is more error-prone on indentation than JSON, so this validation isn't optional.
 
-**Trabalho em aberto** (detalhe completo em `CHEATSHEET.md` §4, §4.1, §4.2):
+**Open work** (full detail in `CHEATSHEET.md` §4):
 
-| Item | Estado |
+| Item | State |
 |---|---|
-| Backup da chave privada age (`~/.config/chezmoi/key.txt`) | Manual, pendente |
-| Criar fine-grained PAT (github.com/settings/tokens) + `gh auth` | Adiado pelo dono, sem prazo — bloqueia `gh pr create` e arquivar repos via API |
-| Repo hygiene (raiz limpa, README com tree+índice+guidelines) — `dotfiles`, `architect`, `~/Projects/notes`, `~/Work/notes` | Feito em cada repo (branches `claude/repo-hygiene-*` pushed); falta unificar o formato entre os 4 e mesclar |
-| Arquivar `agentic_instructions` no GitHub | Bloqueado por `gh auth` acima |
-| Decidir direção de sincronização (repo→sistema vs. sistema→repo) | Em aberto |
-| Backlog de `~/Projects/notes/ideas/` | Só tracking, ver `CHEATSHEET.md` §4.1 — nada aprovado para construir |
+| Back up the age private key (`~/.config/chezmoi/key.txt`) | Manual, pending |
+| Authenticate `gh` CLI | **Done 2026-09-16** via browser login (not a manual PAT) — see `CHEATSHEET.md` §4 |
+| Adopt `claude/<topic>` + PR convention instead of direct pushes to `main` | **Done 2026-09-16** — 13 PRs opened and merged across `dotfiles`, `architect`, `notes`, `Work/notes`; see `CHEATSHEET.md` §4 |
+| Repo hygiene (clean root, README with tree+index+guidelines) — `dotfiles`, `architect`, `~/Projects/notes`, `~/Work/notes` | Done and merged in all 4 repos |
+| Archive `agentic_instructions` on GitHub | No longer blocked by `gh auth` — **but see the "⚠️ Known Gaps" verified-merge-status entry below first**: the merge into `dotfiles/.agents/` is only partial, not complete as earlier claimed here |
+| Decide sync direction (repo→system vs. system→repo) | Open |
+| Non-Claude harnesses (Copilot, Gemini, Antigravity) auto-reading `tasks/`+`CHEATSHEET.md` on startup | **Fixed 2026-09-16** for Copilot/Gemini (real entrypoint files updated); Antigravity got a manual-prompt substitute only, pending verification of its real context-loading mechanism — see "⚠️ Known Gaps" below |
 
-## O Que É Este Repositório
+## What This Repository Is
 
-`~/dotfiles` é o **repositório central de configuração e sincronização** para:
-- Agentes de IA (Crush, Copilot, Gemini, Cline)
-- Skills e workflows de agentes
-- Contexto global e instruções
-- Setup e automação
+`~/dotfiles` is the **central configuration and synchronization repository** for:
+- AI agents (Crush, Copilot, Gemini, Cline)
+- Agent skills and workflows
+- Global context and instructions
+- Setup and automation
 
-## Estrutura
+## Structure
 
 ```
 dotfiles/
-├── .agents/                    ← Agentes (skills/, workflows/, + harnesses/, instructions/, prompts/, automation/ — ver lacunas abaixo)
-├── .claude/                    ← Configuração Claude, incl. .claude/skills/ (9 skills HITs — divergem de .agents/skills/)
-├── .vscode/                    ← Configuração VS Code (settings.json contém API key — ver lacunas abaixo)
-├── .github/                    ← GitHub config, duplica grande parte de .agents/
-├── AGENTS.md                   ← Guia completo de agentes
+├── .agents/                    ← Agents (skills/, workflows/, + harnesses/, instructions/, prompts/, automation/)
+├── .claude/                    ← Claude config, incl. .claude/skills/ (symlinks into .agents/skills/)
+├── .vscode/                    ← VS Code config (settings.json holds an API key — chezmoi+age managed)
+├── .github/                    ← GitHub config; several subfolders are symlinks into .agents/
+├── AGENTS.md                   ← Complete agent guide
 ├── README.md                   ← Overview
-├── setup.sh                    ← One-click machine setup (hardcoded para nmc-costa)
-└── sync.sh              ← Sincronizar skills
+├── setup.sh                    ← One-click machine setup (hardcoded for nmc-costa)
+└── sync.sh                     ← Synchronize skills
 ```
 
-## Projetos Reais
+*(Note: this section duplicates the "Quick summary" tree above from an earlier version of this file — kept for now, not yet consolidated; treat "Quick summary" at the top as the current one if they ever disagree.)*
 
-Os projetos vivem **fora** de dotfiles:
-- **`~/Projects/`** — Repos pessoais (agentic_instructions, HIcode, ibots, roi_lab, etc.)
-- **`~/Work/`** — Repos profissionais (mobai, RAGFusion, sp_xai_nos, etc.)
+## Real Projects
 
-Cada um é um repositório git independente. Ver `docs/directory_tree.md` para mapa (parcialmente desatualizado, ver `README.md` para o directory tree atual).
+Projects live **outside** dotfiles:
+- **`~/Projects/`** — Personal repos (agentic_instructions, HIcode, ibots, roi_lab, etc.)
+- **`~/Work/`** — Professional repos (mobai, RAGFusion, sp_xai_nos, etc.)
 
-## Skills Disponíveis
+Each is an independent git repository. See `docs/directory_tree.md` for a map (partly outdated, see `README.md` for the current directory tree).
 
-Skills são extensões de agentes. Localização: `~/.agents/skills/`
+## Available Skills
+
+Skills are agent extensions. Location: `~/.agents/skills/`
 
 ### diagnose-crash
-- **Propósito:** Diagnosticar crashes de programas via core dumps
+- **Purpose:** Diagnose program crashes via core dumps
 - **Triggers:** segfault, SIGABRT, coredumpctl, "why did X crash"
-- **Ver:** `~/.agents/skills/diagnose-crash/SKILL.md`
+- **See:** `~/.agents/skills/diagnose-crash/SKILL.md`
 
 ### omarchy
-- **Propósito:** Customização de Hyprland, window manager, desktop
-- **Triggers:** Hyprland, hyprctl, keybindings, temas, gaps, borders
-- **Ver:** `~/.agents/skills/omarchy/SKILL.md`
+- **Purpose:** Hyprland/window manager/desktop customization
+- **Triggers:** Hyprland, hyprctl, keybindings, themes, gaps, borders
+- **See:** `~/.agents/skills/omarchy/SKILL.md`
 
-## Adicionar Nova Skill
+## Adding a New Skill
 
-1. Cria pasta:
+1. Create the folder:
    ```bash
-   mkdir -p ~/dotfiles/.agents/skills/nova-skill
+   mkdir -p ~/dotfiles/.agents/skills/new-skill
    ```
 
-2. Adiciona `SKILL.md` (obrigatório):
+2. Add `SKILL.md` (required):
    ```markdown
-   # Nova Skill
-   
-   Descrição breve.
-   
+   # New Skill
+
+   Brief description.
+
    ## Triggers
    - keyword1
    - keyword2
    ```
 
-3. Adiciona outros ficheiros (opcional)
+3. Add other files (optional)
 
-4. Versiona e sincroniza:
+4. Version and sync:
    ```bash
    cd ~/dotfiles
-   git add .agents/skills/nova-skill/
-   git commit -m "Add nova-skill for [propósito]"
+   git add .agents/skills/new-skill/
+   git commit -m "Add new-skill for [purpose]"
    git push
    ./sync.sh
    ```
 
-Ver `AGENTS.md` para guia completo.
+See `AGENTS.md` for the full guide.
 
-## Contexto Global
+## Global Context
 
-README.md/AGENTS.md descrevem `~/.context-global.md`, `~/claude.md`, `~/directory_tree.md` (symlink para `~/dotfiles/docs/directory_tree.md`) e `agent-versions.json` como symlinks/ficheiros do `~/dotfiles/`. **Nesta máquina nenhum destes existe** — não assumas que estão presentes sem verificar. A direção de sincronização (repo→sistema via symlinks, vs. sistema→repo) ainda não foi decidida como standard — ver secção seguinte.
+README.md/AGENTS.md describe `~/.context-global.md`, `~/claude.md`, `~/directory_tree.md` (symlink to `~/dotfiles/docs/directory_tree.md`) and `agent-versions.json` as symlinks/files of `~/dotfiles/`. **None of these exist on this machine** — don't assume they're present without checking. The sync direction (repo→system via symlinks, vs. system→repo) hasn't been decided as standard yet — see the next section.
 
-## Setup Nova Máquina
+## New Machine Setup
 
 ```bash
 cd ~
@@ -129,39 +132,40 @@ cd dotfiles-tmp
 # Follow instructions for config checkout
 ```
 
-Depois:
+Then:
 ```bash
 ./sync.sh
 ```
 
-## Importantes
+## Important
 
-- **Não editar skills em `~/.agents/skills/`** — sempre editar em `~/dotfiles/.agents/skills/` e sincronizar
-- **Skills são shared** — se adicionas nova skill, todos os agentes a veem
-- **Workflows em `.agents/workflows/`** — personas e inicializações
-- **Ver `CHEATSHEET.md` para o fluxo completo** de trabalho (onde vai cada coisa, roadmap do workspace ágil, TODOs em aberto). **Regra obrigatória:** qualquer mudança à estrutura de `.agents/` (nova skill, novo harness, resolução de um TODO) tem de atualizar `CHEATSHEET.md` no mesmo commit — não deixar para depois, é assim que este ficheiro não apodrece como o `STANDARDS.md` apodreceu.
+- **Don't edit skills in `~/.agents/skills/`** — always edit in `~/dotfiles/.agents/skills/` and sync
+- **Skills are shared** — if you add a new skill, every agent sees it
+- **Workflows in `.agents/workflows/`** — personas and initializations
+- **See `CHEATSHEET.md` for the full workflow** (where things go, agile-workspace roadmap, open TODOs). **Mandatory rule:** any change to the `.agents/` structure (new skill, new harness, a resolved TODO) must update `CHEATSHEET.md` in the same commit — don't leave it for later, that's how this file avoids rotting the way `STANDARDS.md` rotted.
 
-## ⚠️ Lacunas Conhecidas (audit 2026-09-14, atualizado 2026-09-15 após correção de STANDARDS.md/AUDIT_REPORT.md)
+## ⚠️ Known Gaps (audit 2026-09-14, updated 2026-09-16 after a verified re-check of the agentic_instructions merge and a Copilot/Antigravity harness-startup diagnostic)
 
-Não tratar os seguintes ficheiros/afirmações como verdade atual sem verificar primeiro:
+Don't treat the following files/claims as current truth without checking first:
 
-- **Decisão de sincronização em aberto**: sistema→repo vs. repo→sistema ainda não é standard. Até estar decidido, `setup.sh`/`sync.sh` podem não refletir o estado real da máquina (ex.: `~/.claude`, `~/.agents`, `~/.vscode` não são symlinks nesta máquina, apesar do que README/AGENTS.md descrevem).
-- **`.vscode/settings.json` contém uma API key real** para um endpoint custom. Repo é privado/uso pessoal (risco aceite pelo dono), mas não propagar este ficheiro para outros repos, exemplos, ou contextos partilhados. **TODO:** migrar para chezmoi+age (decidido, ainda não executado — bloqueado em `sudo pacman -S chezmoi age`, que requer password interativa).
-- **`setup.sh` tem listas de repos hardcoded** (`WORK_REPOS`, `PROJECTS_REPOS`) e o username `nmc-costa` hardcoded no `clone()` (URLs SSH/HTTPS) — não é portável para outro utilizador sem editar o script diretamente. **Nota:** existe uma correção (env vars `GITHUB_USER`/`WORK_REPOS`/`PROJECTS_REPOS`) no commit `0304d1d` da branch `claude/todo-continuation-and-notes-backlog`, mas **não está mesclada** nesta branch nem em `main` — não assumir que está resolvido até essa branch ser integrada.
-- **`.vscode/github.code-workspace` tem um path hardcoded** `"dtx/repos/sp_xai_nos"` — referência real a `dtx/` que ainda existe no repo (verificado 2026-09-15, único hit fora de conteúdo histórico/arquivado).
+- **Sync direction still open**: system→repo vs. repo→system isn't standard yet. Until decided, `setup.sh`/`sync.sh` may not reflect the machine's real state (e.g. `~/.claude`, `~/.agents`, `~/.vscode` are not symlinks on this machine, despite what README/AGENTS.md describe).
+- **`.vscode/settings.json` contains a real API key** for a custom endpoint. The repo is private/personal use (a risk the owner accepts), but don't propagate this file to other repos, examples, or shared contexts. **TODO:** migrate to chezmoi+age (decided, not yet executed — blocked on `sudo pacman -S chezmoi age`, which needs an interactive password).
+- **`setup.sh` has hardcoded repo lists** (`WORK_REPOS`, `PROJECTS_REPOS`) and the `nmc-costa` username hardcoded in `clone()` (SSH/HTTPS URLs) — not portable to another user without editing the script directly. **Note:** a fix exists (env vars `GITHUB_USER`/`WORK_REPOS`/`PROJECTS_REPOS`) in commit `0304d1d` on branch `claude/todo-continuation-and-notes-backlog`, but **isn't merged** into that branch's target or `main` — don't assume it's resolved until that branch lands.
+- **`.vscode/github.code-workspace` has a hardcoded path** `"dtx/repos/sp_xai_nos"` — a real reference to `dtx/` still in the repo (verified 2026-09-15, the only hit outside historical/archived content).
+- **`agentic_instructions` → `dotfiles` merge is only partial, verified 2026-09-16 (previous claim here was overstated)**: genuinely merged/ported are the 6 HITs persona skills + `archi` (adapted from `architect`), `instructions/{base-personas,task-personas,workspace-config,automation}`, the harness guides, `prompts/chronicle/*`, `memories/CURRENT_SESSION.md` (byte-identical), and `calls2database`/`project-doc-lifecycle`/`simplifyHIT`. **Not merged, and not yet judged obsolete-or-worth-porting**: `.copilot-instructions` (a 13.8KB Copilot enforcement blueprint — but see note below, it turned out to be a CRISP-ML(Q) ML-pipeline coding standard unrelated to this repo's scope, not a dotfiles gap), the `tests/agents/*.py` pytest compliance suite (same CRISP-ML(Q) scope, likely also out of scope for dotfiles), and `docs/_ARCHITECTURE/`, `docs/_INTRO/`, `docs/_REFERENCE/`, `docs/_STATUS/` (confirmed obsolete: these are the old repo's own centralized-vs-distributed architecture debate, referencing a `/home/user/github/my/agentic_instructions/` path that was never real on this machine — dotfiles' current single-control-plane design is the actual, working resolution of that exact debate). `scripts/deploy-agentic-framework.sh`/`heartbeat.py`/`setup/quickstart_optimize.py` are tied to that same old deployment model, superseded by `setup.sh`/`sync.sh`. `REGISTRY.md` and `config/.harnesses/*.json` look like deliberate improvements-over, not losses (the JSON harness configs contained fictional fields like a made-up `api.anthropic.com/v1/claude-code` endpoint). **Bottom line: archiving `agentic_instructions` is safe whenever the owner decides to (archiving doesn't delete — full history stays readable), but don't repeat "it's already fully merged" as fact.**
+- **Non-Claude harnesses weren't wired to auto-read `tasks/`+`CHEATSHEET.md` on startup — fixed 2026-09-16** (found via direct Copilot/Antigravity diagnostics the owner ran): `.github/copilot-instructions.md` had no explicit "on startup, read tasks/ and CHEATSHEET.md" instruction (the protocol only existed as convention/documentation, `CHEATSHEET.md` §7's kickoff-prompt template, never an automatic instruction in the Copilot entrypoint file); `GEMINI.md` pointed only to `README.md`/`AGENTS.md`, never `CHEATSHEET.md` or `tasks/`; `AGENTS.md` referenced `CHEATSHEET.md` §7 but had zero mentions of `tasks/`; and there was no `.agents/harnesses/antigravity.md` at all. Fixed by adding an explicit startup pointer to `.github/copilot-instructions.md`, `GEMINI.md`, and `AGENTS.md`'s sessionHygiene section, plus a new `.agents/harnesses/antigravity.md` with a manual kickoff-prompt substitute (its **Status: template — not yet verified**, since nobody has confirmed how Antigravity actually auto-loads project context; don't treat that file's mechanics as real until someone checks). Claude Code alone gets this automatically via a real `SessionStart` hook.
 
-- **Skills `omarchy`/`diagnose-crash` verificadas byte-a-byte** contra `/usr/share/omarchy/default/agents/skills/{omarchy,diagnose-crash}` em 2026-09-16 (`diff -rq`, sem output — continuam idênticas). O único gap real encontrado (subsistema `omarchy agent`/lançador, documentado só em `omarchy.org/manual/ai/`, não nos ficheiros vendored) está coberto por `.agents/skills/omarchy/LOCAL_ADDENDUM.md`, que também regista o standard de manifesto de plugins e o trade-off VoxClaude vs. `omarchy-voice` para voz→agente.
+**Resolved this round (no longer a gap):**
+- `.agents/` and `.github/` no longer have duplicated/orphaned content — `.github/{harnesses,instructions,prompts,automation,CONTRIBUTING.md,skills/project-doc-lifecycle}` are now symlinks into `.agents/`, and every dead path to `/my/agentic_instructions/...` and `/home/user/github/...` was fixed or replaced with a note explicitly documenting the old bug. `.claude/skills/` also stopped diverging from `.agents/skills/`: the 9 HITs skills (`archi`, `diagramhits`, `documenthits`, `mockuphits`, `presenthits`, `projecthits`, `reviewhits`, `simplifyhit`, `project-doc-lifecycle`) now live as real content in `.agents/skills/`, with `.claude/skills/<name>` as a symlink.
+- `docs/AUDIT_REPORT.md` and `docs/STANDARDS.md` no longer contain false claims presented as current truth. `AUDIT_REPORT.md` was rewritten (2026-09-15) to accurately report that `dtx/` and hardcoded paths **do** exist (see above) instead of denying it — `.github/copilot-instructions.md`, which the earlier note also flagged as a source of contradiction, was re-verified and is clean (fixed in commit `8900ac6`, before this round). `STANDARDS.md` was rewritten to mark `.copilot/`, `.gemini/`, `.cursor/`, `agent-versions.json`, and the `agent-framework` repo as **`[PROPOSED — not implemented]`** instead of presenting them as current structure. Both files still need a critical read (they document open work by nature), but no longer lie about the repo's current state.
+- Skills `omarchy`/`diagnose-crash` verified byte-for-byte against `/usr/share/omarchy/default/agents/skills/{omarchy,diagnose-crash}` on 2026-09-16 (`diff -rq`, no output — still identical). The one real gap found (the `omarchy agent` launcher subsystem, documented only in `omarchy.org/manual/ai/`, not in the vendored files) is covered by `.agents/skills/omarchy/LOCAL_ADDENDUM.md`, which also records the plugin manifest standard and the VoxClaude vs. `omarchy-voice` trade-off for voice-to-agent.
 
-**Resolvido nesta ronda (deixou de ser lacuna):**
-- `.agents/` e `.github/` já não têm conteúdo duplicado/órfão — `.github/{harnesses,instructions,prompts,automation,CONTRIBUTING.md,skills/project-doc-lifecycle}` são agora symlinks para `.agents/`, e todos os paths mortos para `/my/agentic_instructions/...` e `/home/user/github/...` foram corrigidos ou substituídos por notas que documentam o bug antigo explicitamente. `.claude/skills/` também deixou de divergir de `.agents/skills/`: as 9 skills HITs (`archi`, `diagramhits`, `documenthits`, `mockuphits`, `presenthits`, `projecthits`, `reviewhits`, `simplifyhit`, `project-doc-lifecycle`) agora vivem como conteúdo real em `.agents/skills/`, com `.claude/skills/<nome>` como symlink.
-- `docs/AUDIT_REPORT.md` e `docs/STANDARDS.md` já não contêm afirmações falsas apresentadas como verdade atual. `AUDIT_REPORT.md` foi reescrito (2026-09-15) para reportar com precisão que **existem** `dtx/` e paths hardcoded (ver acima) em vez de negar isso — `.github/copilot-instructions.md`, que a nota anterior também apontava como fonte de contradição, foi re-verificado e está limpo (corrigido no commit `8900ac6`, antes desta ronda). `STANDARDS.md` foi reescrito para marcar `.copilot/`, `.gemini/`, `.cursor/`, `agent-versions.json` e o repositório `agent-framework` como **`[PROPOSTO — não implementado]`** em vez de os apresentar como estrutura atual. Ambos os ficheiros continuam a precisar de leitura crítica (documentam trabalho em aberto por natureza), mas já não mentem sobre o estado atual do repo.
+## Documentation
 
-## Documentação
-
-- **`AGENTS.md`** — Guia completo (agentes, skills, workflows, troubleshooting)
-- **`README.md`** — Overview, directory tree e estrutura
-- **`docs/SUBAGENTS_VERIFICATION.md`** — Checklist de setup e verificação
+- **`AGENTS.md`** — Complete guide (agents, skills, workflows, troubleshooting)
+- **`README.md`** — Overview, directory tree, and structure
+- **`docs/SUBAGENTS_VERIFICATION.md`** — Setup and verification checklist
 
 ---
 
-**Para projectos específicos:** Ver repos em `~/Projects/` ou `~/Work/` — cada um tem seu próprio `CLAUDE.md`.
+**For project-specific work:** see repos in `~/Projects/` or `~/Work/` — each has its own `CLAUDE.md`.

@@ -1,19 +1,19 @@
 # SUBAGENTS_VERIFICATION.md
 
-Checklist de verificação para garantir que todos os subagentes têm acesso à informação correta do dotfiles.
+Verification checklist to ensure every subagent has access to the correct dotfiles information.
 
-## Agentes Configurados
+## Configured Agents
 
 - ✅ **Crush/Claude** — `~/.claude/`
 - ✅ **Copilot** — `~/.copilot/`
 - ✅ **Gemini** — `~/.gemini/`
 - ✅ **Cline** — `~/.cline/`
 
-## Ficheiros de Contexto Global (Symlinks)
+## Global Context Files (Symlinks)
 
-Todos os agentes devem ter acesso a:
+Every agent should have access to:
 
-| Ficheiro | Localização | Status | Verificação |
+| File | Location | Status | Verification |
 |----------|------------|--------|-------------|
 | `directory_tree.md` | `~/dotfiles/directory_tree.md` → `~/directory_tree.md` | ⏳ | `ls -la ~/directory_tree.md` |
 | `.context-global.md` | `~/dotfiles/.context-global.md` → `~/.context-global.md` | ⏳ | `ls -la ~/.context-global.md` |
@@ -24,101 +24,101 @@ Todos os agentes devem ter acesso a:
 | `.github/` | `~/dotfiles/.github/` → `~/.github/` | ✅ | `ls -la ~/.github/` |
 
 **Status:**
-- ✅ = Confirmado funcionar
-- ⏳ = A verificar (devem existir em dotfiles)
-- ❌ = Falta criar
+- ✅ = Confirmed working
+- ⏳ = To verify (should exist in dotfiles)
+- ❌ = Still needs creating
 
-## Skills Disponíveis
+## Available Skills
 
-Skills em `~/.agents/skills/`:
+Skills in `~/.agents/skills/`:
 
 ```bash
 ls ~/.agents/skills/
 ```
 
-Esperado:
+Expected:
 - ✅ `diagnose-crash/` — SKILL.md + reporting.md
 - ✅ `omarchy/` — SKILL.md + hyprland.md + theming.md + ...
 
-Para sincronizar:
+To sync:
 ```bash
 cd ~/dotfiles
 ./sync.sh --verbose
 ```
 
-## Workflows Disponíveis
+## Available Workflows
 
-Workflows em `~/.agents/workflows/`:
+Workflows in `~/.agents/workflows/`:
 
 ```bash
 ls ~/.agents/workflows/
 ```
 
-Esperado:
-- ✅ `init.md` — Inicialização de novo agente
-- ✅ `architect_html_sciml.md` — Persona para Architect
+Expected:
+- ✅ `init.md` — New-agent initialization
+- ✅ `architect_html_sciml.md` — Persona for Architect
 
-## Documentação Raiz
+## Root Documentation
 
-Todos os MDs no root do dotfiles devem estar atualizados:
+Every root-level `.md` in dotfiles should be up to date:
 
-| Ficheiro | Última Atualização | Status |
+| File | Last Update | Status |
 |----------|-------------------|--------|
-| `README.md` | Estrutura e setup | ✅ Atualizado |
-| `AGENTS.md` | Skills em `.agents/` | ✅ Atualizado |
-| `CLAUDE.md` | Contexto dotfiles | ✅ Atualizado |
-| `GEMINI.md` | Contexto dotfiles | ✅ Atualizado |
-| `VSCODE_MONITOR_QUICKSTART.md` | Legacy (verificar) | ⏳ |
-| `directory_tree.md` | Mapa de diretórios | ⏳ Verificar se existe |
+| `README.md` | Structure and setup | ✅ Updated |
+| `AGENTS.md` | Skills in `.agents/` | ✅ Updated |
+| `CLAUDE.md` | dotfiles context | ✅ Updated |
+| `GEMINI.md` | dotfiles context | ✅ Updated |
+| `VSCODE_MONITOR_QUICKSTART.md` | Legacy (verify) | ⏳ |
+| `directory_tree.md` | Directory map | ⏳ Verify it exists |
 
-## Spin de Subagentes
+## Spinning Up Subagents
 
-Quando fazer spin (ativar) de um novo subagente:
+When to spin up (activate) a new subagent:
 
-1. **Copiar contexto global:**
+1. **Copy global context:**
    ```bash
    ln -sf ~/dotfiles/.claude ~/.claude
    ln -sf ~/dotfiles/.agents ~/.agents
    ln -sf ~/dotfiles/.vscode ~/.vscode
    ```
 
-2. **Sincronizar skills:**
+2. **Sync skills:**
    ```bash
    ~/dotfiles/sync.sh
    ```
 
-3. **Verificar acesso:**
+3. **Verify access:**
    ```bash
    ls ~/.agents/skills/
    cat ~/.agents/skills/diagnose-crash/SKILL.md
    ```
 
-4. **Testar skill trigger:**
+4. **Test skill trigger:**
    ```bash
-   # Agente deve reconhecer keywords
-   # Ex: "segfault" deve ativar diagnose-crash skill
+   # The agent should recognize keywords
+   # e.g. "segfault" should activate the diagnose-crash skill
    ```
 
-## Checklist de Setup Completo
+## Full Setup Checklist
 
-- [ ] Pasta `.agents/` existe e é symlink
-- [ ] `.agents/skills/` contém skills (diagnose-crash, omarchy)
-- [ ] `.agents/workflows/` contém workflows (init.md, architect_html_sciml.md)
-- [ ] `sync.sh` executa sem erros: `./sync.sh --dry-run`
-- [ ] Todos os MDs root (`README.md`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`) mencionam `.agents/`
-- [ ] Não existe pasta `.agent/` (foi migrada para `.agents/`)
-- [ ] `setup.sh` cria symlinks corretamente: `./setup.sh --dry-run`
+- [ ] `.agents/` folder exists and is a symlink
+- [ ] `.agents/skills/` contains skills (diagnose-crash, omarchy)
+- [ ] `.agents/workflows/` contains workflows (init.md, architect_html_sciml.md)
+- [ ] `sync.sh` runs without errors: `./sync.sh --dry-run`
+- [ ] Every root `.md` (`README.md`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`) mentions `.agents/`
+- [ ] No `.agent/` folder exists (it was migrated to `.agents/`)
+- [ ] `setup.sh` creates symlinks correctly: `./setup.sh --dry-run`
 
-## Como Usar Este Documento
+## How to Use This Document
 
-1. Executar todas as verificações acima
-2. Marcar status de cada item
-3. Se algum falhar, consultar secção correspondente em `AGENTS.md` ou `README.md`
-4. Fazer commit de qualquer ajuste: `git add -A && git commit -m "Fix [subagent] setup"`
+1. Run all the checks above
+2. Mark the status of each item
+3. If anything fails, check the matching section in `AGENTS.md` or `README.md`
+4. Commit any fix: `git add -A && git commit -m "Fix [subagent] setup"`
 
 ---
 
-**Última Atualização:** 2026-09-14  
-**Mantido por:** nmc-costa
+**Last Updated:** 2026-09-14
+**Maintained by:** nmc-costa
 
-Quando novos subagentes forem adicionados, atualizar este ficheiro com suas localizações de config.
+When new subagents are added, update this file with their config locations.
