@@ -1,0 +1,48 @@
+{
+  "slug": "task-tracking-for-agents",
+  "query": "ai agent task tracker kanban in:name,description",
+  "note": "Compared against dotfiles' own tasks/ event-log PoC (2026-09-15). Closest matches found: Backlog.md (flat-file git-native kanban) and claude-task-master \u2014 neither does append-only JSONL + generated view, see RESEARCH_NOTES.md for the full verdict.",
+  "generated_at": "2026-09-16T13:13:22Z",
+  "top_repos": [
+    {
+      "full_name": "rookedsysc/kanvibe",
+      "html_url": "https://github.com/rookedsysc/kanvibe",
+      "description": "Keyboard-first desktop Kanban workspace for AI coding agents with embedded terminals, git worktrees, and hook-driven task tracking.",
+      "stars": 142,
+      "pushed_at": "2026-09-16T03:23:34Z",
+      "language": "TypeScript"
+    },
+    {
+      "full_name": "Phil200727/contextops",
+      "html_url": "https://github.com/Phil200727/contextops",
+      "description": "A lightweight, file-based Kanban engine for orchestrating AI coding agents \u2014 plan, assign, and review tasks through a local board, with full context tracking in plain Markdown/YAML files.",
+      "stars": 8,
+      "pushed_at": "2026-07-26T08:31:54Z",
+      "language": "Python"
+    },
+    {
+      "full_name": "LeonY117/kanban-tui",
+      "html_url": "https://github.com/LeonY117/kanban-tui",
+      "description": "Terminal kanban board and task tracker for humans and AI agents",
+      "stars": 4,
+      "pushed_at": "2026-08-16T20:06:00Z",
+      "language": "Go"
+    },
+    {
+      "full_name": "atharva1727/AI-Multi-Agent-Swarm-System",
+      "html_url": "https://github.com/atharva1727/AI-Multi-Agent-Swarm-System",
+      "description": "AI-powered multi-agent workflow automation system using Kanban-based task orchestration, dependency tracking, and intelligent agent collaboration.",
+      "stars": 3,
+      "pushed_at": "2026-07-05T16:08:11Z",
+      "language": null
+    },
+    {
+      "full_name": "trustopsuk-hub/OpenClawManager",
+      "html_url": "https://github.com/trustopsuk-hub/OpenClawManager",
+      "description": "A comprehensive dashboard for managing OpenClaw AI agent deployments, featuring real-time monitoring, Kanban task management, financial tracking, and agent hierarchy visualization. \u00b7 Built with Manus",
+      "stars": 3,
+      "pushed_at": "2026-07-17T13:51:11Z",
+      "language": "TypeScript"
+    }
+  ]
+}
