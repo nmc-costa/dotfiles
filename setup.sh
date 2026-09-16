@@ -145,7 +145,15 @@ echo "=== Setting up agents and skills ==="
 # Setup agent symlinks
 setup_agent_symlinks "agents"
 setup_agent_symlinks "vscode"
+
+# All four of these mix versioned config with live runtime state
+# (credentials/session DBs/logs/caches) the same way ~/.claude/ does —
+# confirmed per-tool 2026-09-16 (see CLAUDE.md's Known Gaps). File-level
+# only, never the directory.
 setup_agent_file_symlink "claude" "CLAUDE.md"
+setup_agent_file_symlink "gemini" "GEMINI.md"
+setup_agent_file_symlink "codex" "AGENTS.md"
+setup_agent_file_symlink "copilot" "copilot-instructions.md"
 
 # Sync skills from dotfiles/.agents/skills/ location
 if [[ -d "$BASE_DIR/dotfiles/.agents/skills" ]]; then
