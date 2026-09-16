@@ -1,0 +1,48 @@
+{
+  "slug": "personal-autonomous-orchestrator",
+  "query": "personal ai orchestrator automation in:name,description",
+  "note": "Scouted ahead of writing the \"Jarvis\" orchestrator persona (not yet built). Closest match: khoj (self-hosted, scheduled personal automations) \u2014 solves a different problem (RAG + email digests, no git-as-datastore, no structured write-back), see RESEARCH_NOTES.md.",
+  "generated_at": "2026-09-16T13:13:22Z",
+  "top_repos": [
+    {
+      "full_name": "outlookceo/DragonZagent",
+      "html_url": "https://github.com/outlookceo/DragonZagent",
+      "description": "DragonZagent is a Windows-first personal AI agent workbench for chat, visual Agent Cluster orchestration, local tools, Office workflows, automations, and opt-in ecosystem gateways such as WeChat and Telegram.",
+      "stars": 13,
+      "pushed_at": "2026-05-29T07:52:04Z",
+      "language": "Python"
+    },
+    {
+      "full_name": "scrunchds/Command-Center",
+      "html_url": "https://github.com/scrunchds/Command-Center",
+      "description": "A personal operational OS and AI multi-agent orchestration plugin for Obsidian. Features interview-driven onboarding, multi-provider model routing, local Pi ReAct engine, hybrid vault RAG, persistent memory, native workflows, and headless automation.",
+      "stars": 8,
+      "pushed_at": "2026-09-03T04:00:21Z",
+      "language": "TypeScript"
+    },
+    {
+      "full_name": "Code-and-Sorts/CopilotChef",
+      "html_url": "https://github.com/Code-and-Sorts/CopilotChef",
+      "description": "A VS Code extension that turns GitHub Copilot into your personal sous-chef \ud83d\udc68\u200d\ud83c\udf73\u2014whipping up advanced workflow orchestration, task management, and automation tools. Serve up streamlined AI-assisted development with customizable recipes for your go-to coding dishes.",
+      "stars": 5,
+      "pushed_at": "2025-06-19T16:05:42Z",
+      "language": "TypeScript"
+    },
+    {
+      "full_name": "mp3exe86-dev/JensHQ",
+      "html_url": "https://github.com/mp3exe86-dev/JensHQ",
+      "description": "Personal AI automation ecosystem \u2014 Telegram bots, RasPi services, local AI (Ollama) and Claude orchestration",
+      "stars": 4,
+      "pushed_at": "2026-05-05T10:31:18Z",
+      "language": "Python"
+    },
+    {
+      "full_name": "samarth-maheshwari-dev/Personal-Ai-ASISTANT",
+      "html_url": "https://github.com/samarth-maheshwari-dev/Personal-Ai-ASISTANT",
+      "description": "\ud83e\udd16 AI-powered desktop assistant built with \u269b\ufe0f React, \ud83d\udda5\ufe0f Electron, \u26a1 FastAPI, and \ud83e\udde0 Ollama \u2014 combining \ud83d\udcac natural-language interaction, \ud83d\udd04 multi-model AI orchestration, \ud83c\udf99\ufe0f speech, and \ud83e\ude9f Windows automation.",
+      "stars": 2,
+      "pushed_at": "2026-08-12T11:40:34Z",
+      "language": "Python"
+    }
+  ]
+}

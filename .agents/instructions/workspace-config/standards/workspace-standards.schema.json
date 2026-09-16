@@ -128,6 +128,46 @@
         }
       }
     },
+    "communityFirst": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "principle": {
+          "type": "string",
+          "description": "Before building anything non-trivial, check what the community already maintains well and prefer reusing/integrating with adjustments over building from scratch. Only build what genuinely doesn't exist. Applies bidirectionally with developmentApproach.pocFirst: check before a PoC, compare again after — this workspace's projects stay deliberately 'never quite finished,' evolving alongside what the community publishes."
+        },
+        "rankingMetrics": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "What to weigh when comparing candidates, e.g. stars, maintenance-recency, community-size. None of these alone is decisive — a starred-but-abandoned repo loses to an active smaller one."
+        },
+        "index": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "cadence": {
+              "type": "string",
+              "enum": ["manual", "daily"],
+              "description": "manual = run by hand (PoC stage, per developmentApproach.pocFirst — prove the mechanism's useful before automating it). daily = a scheduled job keeps snapshots current; only move to this once manual runs have shown real value."
+            },
+            "topics": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Which topics get indexed. Kept as a pointer here, not inlined — the real list lives in community-index/topics.yaml so it can grow without touching this schema-governed file."
+            },
+            "storageLocation": {
+              "type": "string",
+              "description": "Where topic definitions and generated snapshots live."
+            }
+          }
+        },
+        "exceptions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "When it's fine to skip the community check — e.g. a landscape scan already confirmed nothing covers this exact design."
+        }
+      }
+    },
     "validation": {
       "type": "object",
       "additionalProperties": false,

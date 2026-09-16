@@ -55,3 +55,76 @@ optional, not just at review time.
 
 Full agent transcript / sources available on request; not reproduced here to
 keep this file short enough to actually get re-read next cycle.
+
+## 2026-09-16 — communityFirst landscape scan (first real application)
+
+First real use of the `communityFirst` default just added to this schema:
+before/after comparing 3 subsystems this workspace built or is about to
+build against what the community already maintains. Surface scan used the
+public GitHub Search API (unauthenticated, confirmed accessible — 60
+req/hour); see `community-index/snapshots/*.json` and `SUMMARY.md` for the
+raw automated data behind this, and `community-index/topics.yaml` for the
+exact queries. Three follow-up deep dives (real READMEs/docs, not just
+star-count metadata) were done after the owner asked not to stop at
+surface metrics.
+
+**Task tracking (`tasks/` event-log PoC, 2026-09-15)**: closest matches are
+`Backlog.md` (~6.7k★, flat-file git-native kanban) and `claude-task-master`
+(~28k★). Neither does append-only JSONL + generated view — both keep
+mutable state in files, which the log was designed to avoid. Two concrete
+patterns worth borrowing though:
+- `claude-task-master`'s **`deferred` state** — our kanban (D12) has no
+  "parked without cancelling" state; added to `tasks/README.md` this round.
+- `Backlog.md`'s **`AC:BEGIN`/`AC:END` anchor convention** for acceptance
+  criteria inside a long per-task file — **does not apply yet** to our
+  desenho (a flat table, not one long file per task with multi-item
+  acceptance criteria). Registered as "considered, not adopted" in
+  `tasks/README.md` rather than silently ignored.
+Verdict: building the PoC was reasonable given the specific append-only
+design; revisit when it matures further.
+
+**Repo-hygiene schema (`workspace-standards.schema.json` + `.yaml`)**:
+`AGENTS.md` (~24k★) standardizes content, `Repolinter` (~465★, github
+todogroup) standardizes file presence via rules (`file-existence`,
+`json-schema-passes`) with real `extends` support — genuinely overlaps the
+"chata" (boring) half of `validate_workspace_standards.py`. But nothing
+found combines JSON-Schema + `extends` + a drift-vs-SOTA review cycle that
+opens a PR — the half that's actually interesting here. Verdict: not worth
+the dependency just to swap the easy half; keep the custom script, and
+register the comparison here instead of silently skipping it (per
+`communityFirst.principle`'s "compare, don't skip" requirement).
+
+**Personal orchestrator ("Jarvis", not yet built)**: `khoj` (~37k★,
+self-hostable) is the closest existing project — real scheduled personal
+automations. Deep-dive confirmed it solves a genuinely different problem:
+RAG over personal notes + automation *summaries delivered by email*, no
+git-as-datastore, no structured write-back to a task file. Verdict:
+building Jarvis separately remains the right call; `khoj` is filed as a
+candidate for a *different*, not-yet-planned project (a conversational
+assistant over notes), not a substitute for Jarvis.
+
+**Omarchy voice-to-agent (surfaced while auditing the Omarchy gap, not
+originally a `communityFirst` topic, but the same discipline applies)**:
+`wombatoperator/omarchy-voice` (~166★, active — the project behind the
+owner's own "I BUILT JARVIS IN OMARCHY" video) is a general desktop
+assistant dependent on OpenAI's cloud for STT; not in the official Omarchy
+plugin marketplace, no `manifest.json`. **VoxClaude**, by contrast, is
+already an *approved, official* Omarchy Shell Plugin Marketplace entry
+(issue #6050) built specifically to voice-launch Claude Code sessions using
+the native offline `voxtype` (Whisper local) — no cloud dependency, but
+**no multi-agent flexibility** (Claude Code only). This is `communityFirst`
+working as intended: something already exists, is official, and fits the
+"talk to an agent" need — recommend installing VoxClaude over building
+anything, with the multi-agent-vs-Claude-only trade-off left to the owner
+(see `.agents/skills/omarchy/LOCAL_ADDENDUM.md`).
+
+**Omarchy plugin standard, validated online (not just inferred from local
+vendored files)**: `omarchy.org/manual/shell-plugins/` and
+`plugins.omarchy.org/develop.html` confirm 6 official plugin `kinds`
+(`bar-widget`, `panel`, `overlay`, `menu`, `service`, `bar`), a
+`clone --edit` → `validate` + `qmllint` → marketplace-issue-form workflow,
+and the sanctioned heavy-logic pattern (thin QML front-end + real user
+systemd service backend) — confirmed against a real plugin under review
+("Omarchy Google Calendar", issue #6846). `omarchy-voice` does not follow
+this format (plain `install.sh`, no manifest) — noted so future work
+targets the real manifest system, not that shape.
