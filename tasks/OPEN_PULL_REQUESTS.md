@@ -46,7 +46,26 @@ não são deste trabalho.
    ```
    gh pr create --repo nmc-costa/dotfiles --base main --head claude/tasks-poc \
      --title "tasks/: PoC of the task-tracking system" \
-     --body "JSONL event log (source of truth, D9/D10) + generated tarefas.md view (D12/D13 states+provenance), seeded with the 11 real open claude/* branches across all 4 repos. See commit message for the full tension-resolution reasoning (location + format)."
+     --body "JSONL event log (source of truth, D9/D10) + generated tarefas.md view (D12/D13 states+provenance), seeded with the 11 real open claude/* branches across all 4 repos, plus (2026-09-16, later commit) a deferred kanban state and a note on why Backlog.md's AC:BEGIN/END anchors weren't adopted. See commit messages for the full reasoning."
+   ```
+1c. `claude/community-index-poc` descende de `claude/workspace-standards-schema`
+   (mesmo ponto que 1b, sem overlap com `tasks-poc` — toca no schema/yaml de
+   `communityFirst`, `community-index/` novo, e `RESEARCH_NOTES.md`) —
+   independente de 1b, pode mergear em qualquer ordem depois do passo 1:
+   ```
+   gh pr create --repo nmc-costa/dotfiles --base main --head claude/community-index-poc \
+     --title "Add communityFirst default + community-index PoC" \
+     --body "New workspace-standards default: check what the community already maintains before building non-trivial subsystems, applied bidirectionally with developmentApproach.pocFirst. PoC of communityFirst.index: index_topics.py queries the public GitHub Search API (unauthenticated, manual cadence) for 3 real topics, with real snapshots committed. RESEARCH_NOTES.md records this session's actual landscape-scan verdicts (tasks/ vs. Backlog.md/claude-task-master, the hygiene schema vs. AGENTS.md/Repolinter, the Jarvis orchestrator vs. khoj, omarchy-voice vs. VoxClaude). See commit message for full detail."
+   ```
+1d. `claude/omarchy-agent-launcher-gap` descende de `claude/workspace-standards-schema`
+   (mesmo ponto que 1b/1c, sem overlap — toca só em
+   `.agents/skills/omarchy/LOCAL_ADDENDUM.md` novo e uma nota em `CLAUDE.md`)
+   — independente das outras duas, pode mergear em qualquer ordem depois do
+   passo 1:
+   ```
+   gh pr create --repo nmc-costa/dotfiles --base main --head claude/omarchy-agent-launcher-gap \
+     --title "Document the omarchy agent-launcher gap in a local addendum" \
+     --body "The vendored omarchy/diagnose-crash skill files (re-verified byte-identical to /usr/share/omarchy, 2026-09-16) don't cover the omarchy agent launcher subsystem (9+-agent launcher, default agent, Super+Shift+Ctrl+A, Agents Panel, crash-capture integration) documented at omarchy.org/manual/ai/. LOCAL_ADDENDUM.md is new and additive, never touches the 6 vendored files. Also documents the official plugin manifest standard and a VoxClaude-vs-omarchy-voice trade-off for voice-to-agent, left as an open question for the owner. See commit message for full detail."
    ```
 2. Depois de mergeado, `claude/todo-continuation-and-notes-backlog` vai
    provavelmente conflituar em `setup.sh` (uma branch tornou os repo-lists
