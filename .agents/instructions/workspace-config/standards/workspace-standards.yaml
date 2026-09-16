@@ -1,0 +1,145 @@
+# Workspace-level defaults — the canonical policy every repo in this personal
+# workspace inherits from, unless its own docs/standards.yml overrides a key.
+#
+# Validate this file: ./scripts/validate_workspace_standards.py docs/standards/workspace-standards.yaml
+# Schema: ./workspace-standards.schema.json
+#
+# Origin: designed 2026-09-15, informed by a SOTA research pass (see
+# RESEARCH_NOTES.md in this folder) rather than invented from nothing. Key
+# findings that shaped this file:
+#   - AGENTS.md is deliberately schema-free prose (AAIF spec) — this file
+#     never tries to formalize AGENTS.md's own content, only repo structure
+#     and review policy around it.
+#   - No existing standard covers this problem (repo-structure conventions
+#     for agent orientation + a self-reviewing cadence). Closest analogs:
+#     GitHub's org-wide .github community-health-file inheritance model,
+#     EditorConfig's declarative shape, Renovate's $schema + PR-on-drift
+#     pattern — all borrowed from below, none of them a direct fit.
+#   - The README "diagram for agents" requirement was NOT found to be an
+#     established convention anywhere researched — it's the owner's own
+#     preference, kept but marked low-priority/optional, not sourced as SOTA.
+
+schemaVersion: "1.0.0"
+
+repoRole: workspace-control-plane
+
+repoRoot:
+  allowedFiles:
+    - README.md
+    - CLAUDE.md
+    - AGENTS.md
+    - GEMINI.md
+    - CHEATSHEET.md
+    - setup.sh
+    - sync.sh
+    - test-subagents.sh
+    - .gitignore
+  allowedDirs:
+    - .agents
+    - .chezmoisource
+    - .claude
+    - .github
+    - .vscode
+    - docs
+    - scripts
+    - tasks
+  docsDir: docs/
+  # Kept in sync by hand with scripts/validate_dotfiles.sh's ALLOWED_ROOT_FILES/
+  # ALLOWED_ROOT_DIRS (2026-09-15: found these two lists had drifted apart —
+  # this file only listed docs/, the script enforced the real fuller list).
+  # This is dotfiles' OWN repoRoot — other repos declare their own, different,
+  # list (dotfiles-shaped defaults don't fit e.g. architect or notes).
+
+agentEntrypoints:
+  canonical: AGENTS.md
+  present:
+    - AGENTS.md
+    - CLAUDE.md
+    - GEMINI.md
+
+readme:
+  requiredSections:
+    - "Directory tree"
+    - "What's where (index)"
+    - "Guidelines"
+  diagram:
+    required: false
+    type: mermaid-flowchart
+    note: >
+      Optional. Not backed by external SOTA as of the 2026-09-15 research
+      pass (no vendor/community convention recommends this for agent
+      context-efficiency) — kept because the workspace owner asked for it.
+      A short Mermaid flowchart of the repo's big-picture task/module
+      hierarchy, when present, goes directly under "Directory tree" in
+      README.md. Don't treat its absence as a hygiene violation; treat its
+      presence as a nice-to-have.
+
+language:
+  technical: en
+  userFacing: auto   # this workspace's actual practice has been Portuguese
+
+sessionHygiene:
+  suggestNewSessionWhen:
+    - "the current task has reached a natural conclusion and what's next is a largely independent task"
+    - "the session has run through many rounds of agent dispatch / tool calls and context is large relative to what the next task actually needs"
+    - "the user is about to ask for something unrelated to what filled most of the current session"
+  mustOfferKickoffPrompt: true
+  # See CHEATSHEET.md §7 in dotfiles for the concrete worked pattern this
+  # generalizes (read CLAUDE.md+CHEATSHEET.md, rebuild a todo list from a
+  # persistent doc, mark items done in that doc not just in-session).
+
+developmentApproach:
+  pocFirst: true
+  appliesTo:
+    - "new subsystems or tools (e.g. tasks/ event-log tracker, 2026-09-15)"
+    - "schema/standards changes with unproven real-world fit"
+    - "automation (cron/systemd/GitHub Actions) — never as the first step, always after a working manual PoC"
+  exceptions:
+    - "single-line fixes, typos, obvious corrections"
+    - "tasks with fully specified, unambiguous requirements and no architectural decision left open"
+  # Added 2026-09-15, generalizing from how tasks/ itself got built in this
+  # same session: 3 Plan agents synthesized into a resolved design, then an
+  # 11-task PoC seeded with real data (not invented examples), deliberately
+  # leaving automation/scale out — iterate only once the PoC proves solid.
+
+communityFirst:
+  principle: >
+    Antes de construir algo não-trivial, procurar o que a comunidade já
+    mantém bem feito (GitHub, registos de pacotes) e preferir reutilizar/
+    integrar com os ajustes necessários em vez de construir do zero. Só
+    programar o que genuinamente não existe. Aplica-se nos dois sentidos
+    com developmentApproach.pocFirst: antes de uma PoC, verificar o que já
+    existe; depois de uma PoC, comparar outra vez — os projetos deste
+    workspace ficam deliberadamente "sempre por acabar", evoluindo com o
+    que a comunidade publica.
+  rankingMetrics: [stars, maintenance-recency, community-size]
+  index:
+    cadence: manual   # PoC first (pocFirst) — cadência diária fica para
+                       # depois de o mecanismo provar valor à mão
+    topics:
+      - task-tracking-for-agents
+      - repo-hygiene-schema-for-agents
+      - personal-autonomous-orchestrator
+    storageLocation: .agents/instructions/workspace-config/community-index/
+  exceptions:
+    - "quando já se confirmou (como aqui) que nada da comunidade cobre o
+       desenho específico necessário"
+  # Added 2026-09-16, depois de um landscape scan real (ver RESEARCH_NOTES.md)
+  # comparando 3 subsistemas construídos/planeados nesta sessão com o que a
+  # comunidade já publica — mecanismo de índice é a PoC de communityFirst.index,
+  # o mesmo padrão pocFirst aplicado a si próprio.
+
+validation:
+  script: scripts/validate_workspace_standards.py
+  command: "./scripts/validate_workspace_standards.py .agents/instructions/workspace-config/standards/workspace-standards.yaml"
+
+review:
+  cadenceDays: 7
+  lastReviewed: "2026-09-15"
+  nextDue: "2026-09-22"
+  sourcesToRecheck:
+    - "https://agents.md — is AGENTS.md still schema-free / any new official fields"
+    - "https://aaif.io/projects/agents-md — AAIF governance changes"
+    - "General search: 'AI agent repo workspace standard 2026' — has anything shipped that should replace this schema"
+    - "This workspace's own required README sections — still the right ones, or has practice moved"
+  onDrift: open-pr

@@ -4,6 +4,8 @@ Nomenclatura, convenções e estrutura de diretórios padrão para repositórios
 
 **Community Standards Base:** LangChain, Mem0, Anthropic, GitHub Copilot, OpenAI Skills
 
+> ⚠️ **Status (verificado 2026-09-15):** Este ficheiro mistura estrutura **real** (o que existe hoje em `~/dotfiles`) com estrutura **proposta** (convenções desenhadas mas nunca implementadas). Secções marcadas **[PROPOSTO — não implementado]** abaixo não existem nesta máquina — confirmado por `ls`/`find` no repo real. Trata o resto deste documento como aspiracional/parcialmente desatualizado até ser revisto por completo (ver `CLAUDE.md` § Lacunas Conhecidas). O repositório `agent-framework` mencionado ao longo do documento também não existe como repo separado nesta máquina — é um destino proposto, não um facto atual.
+
 ---
 
 ## 📋 GLOSSÁRIO
@@ -27,38 +29,42 @@ Nomenclatura, convenções e estrutura de diretórios padrão para repositórios
 
 **Propósito:** Configuração estável, sincronizada entre máquinas. Universal para todos os agentes (Crush, Copilot, Gemini, Cline, etc.)
 
+**Estrutura real atual** (verificado 2026-09-15 — ver `README.md` para a tree completa e sempre atual):
+
 ```
 dotfiles/
-├── .agents/                     # Universal agents config
-│   ├── skills/                  # Skills (refs para agent-framework)
-│   │   ├── diagnose-crash/
-│   │   │   └── SKILL.md
-│   │   └── omarchy/
-│   │       └── SKILL.md
-│   └── workflows/               # Personas e workflows
-│       ├── init.md
-│       └── architect.md
-├── .claude/                     # Crush/Claude config
-├── .copilot/                    # Copilot config
-├── .gemini/                     # Gemini config
-├── .cursor/                     # Cursor config
+├── .agents/                     # Universal agents config (13 skills, incl. HITs + calls2database + _templates)
+├── .claude/                     # Claude Code config (.claude/skills/ = symlinks para .agents/skills/)
 ├── .vscode/                     # VS Code config
-├── .github/                     # GitHub config
-├── agent-versions.json          # Pinning do agent-framework
+├── .chezmoisource/              # chezmoi source dir (só .vscode/settings.json)
+├── .github/                     # GitHub config (várias subpastas = symlinks para .agents/)
+├── docs/                        # STANDARDS.md, AUDIT_REPORT.md, SECRETS.md, etc.
+├── scripts/                     # validate_dotfiles.sh e utilitários VS Code monitor
 ├── AGENTS.md                    # Registry de agentes
 ├── CLAUDE.md                    # Contexto Claude
 ├── GEMINI.md                    # Contexto Gemini
+├── CHEATSHEET.md                # Tracker persistente
 ├── README.md                    # Setup + estrutura
-├── STANDARDS.md                 # Este ficheiro
-├── AUDIT_REPORT.md              # Compliance report
 ├── setup.sh
-├── sync-skills.sh
+├── sync.sh
 └── test-subagents.sh
 ```
 
-### Repositório: `agent-framework` (Desenvolvimento)
+**Estrutura adicional [PROPOSTO — não implementado nesta máquina]:** as convenções abaixo foram desenhadas para um cenário multi-harness mais amplo mas nunca foram construídas. Não assumir que existem sem confirmar com `ls`:
 
-**Propósito:** Framework completo de orquestração de agentes. Source of truth para personas, agents, skills, workflows, e multi-harness compliance enforcement.
+```
+dotfiles/
+├── .copilot/                    # [PROPOSTO] Copilot config dedicado (hoje: .github/copilot-instructions.md cobre isto)
+├── .gemini/                     # [PROPOSTO] Gemini config dedicado (hoje: GEMINI.md na raiz cobre isto)
+├── .cursor/                     # [PROPOSTO] Cursor config
+├── agent-versions.json          # [PROPOSTO] Pinning do agent-framework — ver secção dedicada abaixo
+```
+
+### Repositório: `agent-framework` (Desenvolvimento) — [PROPOSTO — repositório não existe nesta máquina]
+
+**Nota:** Tudo nesta secção descreve um repositório separado, `agent-framework`, que **não existe** em `~/Projects/` nem `~/Work/` nesta máquina (verificado 2026-09-15). É uma proposta de arquitetura, não um facto atual. O que existe hoje é `.agents/` dentro do próprio `dotfiles`, servindo como fonte de verdade única (ver estrutura real acima).
+
+**Propósito (proposto):** Framework completo de orquestração de agentes. Source of truth para personas, agents, skills, workflows, e multi-harness compliance enforcement.
 
 **O que inclui:**
 - Base personas (Master Architect)
@@ -310,9 +316,11 @@ estimated-cost: medium
 
 ---
 
-## 📄 ESTRUTURA DE ARQUIVO agent-versions.json
+## 📄 ESTRUTURA DE ARQUIVO agent-versions.json [PROPOSTO — não implementado]
 
-**Localização:** `crush-config/agent-versions.json`
+**Status:** Este ficheiro não existe em `~/dotfiles` nesta máquina (verificado 2026-09-15, `agent-versions.json` MISSING na raiz). A secção abaixo descreve o design proposto, não um ficheiro real. Não referenciar `agent-versions.json` como se existisse noutra documentação sem esta ressalva.
+
+**Localização (proposta):** `crush-config/agent-versions.json`
 
 **Propósito:** Pinning explícito de versões para reprodutibilidade entre máquinas.
 
@@ -350,7 +358,7 @@ estimated-cost: medium
 
 ---
 
-## 🔗 LINKING ENTRE REPOSITÓRIOS
+## 🔗 LINKING ENTRE REPOSITÓRIOS [PROPOSTO — pressupõe o repositório `agent-framework` que não existe]
 
 ### Padrão Recomendado: NPM Packages + Symlinks (Docs)
 
@@ -402,7 +410,7 @@ ln -sf ~/agent-framework/skills/data-analyzer/SKILL.md \
    - Testa localmente
    - Atualiza agent-versions.json
    - git commit, push
-   - ./sync-skills.sh propagates
+   - ./sync.sh propagates
 
 4. Outras máquinas
    - git pull
@@ -430,10 +438,11 @@ ln -sf ~/agent-framework/skills/data-analyzer/SKILL.md \
 
 ### Ao Atualizar crush-config
 
-- [ ] `agent-versions.json` atualizado
+- [ ] `agent-versions.json` atualizado *(só aplicável quando este ficheiro proposto existir — ver secção acima)*
 - [ ] `AGENTS.md` reflete versões pinned
 - [ ] Symlinks apontam para local correto
 - [ ] `./test-subagents.sh` passa
+- [ ] `./scripts/validate_dotfiles.sh` passa
 - [ ] AUDIT_REPORT.md refeito
 - [ ] README.md actualizado com datas
 
@@ -465,7 +474,7 @@ crush-config: Pin data-analyzer v2.0.0 from agent-framework
 
 ```bash
 # Em crush-config
-./sync-skills.sh              # Copia docs/referencias
+./sync.sh              # Copia docs/referencias
 ./setup.sh                    # Cria symlinks, instala versions
 npm install @crush/agent-framework@2.1.0  # Pin versão
 ```
@@ -484,15 +493,15 @@ npm install @crush/agent-framework@2.1.0  # Pin versão
 
 ## 📌 NOTAS FINAIS
 
-1. **Manter Separado:** `crush-config` (estável) vs `agent-framework` (dev)
+1. **Manter Separado [PROPOSTO]:** `crush-config`/`dotfiles` (estável) vs `agent-framework` (dev) — hoje ambos vivem juntos em `dotfiles/.agents/`, não separados
 2. **Semântica Clara:** Skills/Agents, não "instructions"
-3. **Versioning:** SemVer em `agent-framework`, explicit pinning em `crush-config`
-4. **Documentação:** SKILL.md é o padrão (com opcional YAML frontmatter)
-5. **Linking:** NPM packages + symlinks para docs (não submodules)
-6. **Compliance:** Use `test-subagents.sh` e AUDIT_REPORT.md regularmente
+3. **Versioning [PROPOSTO]:** SemVer em `agent-framework`, explicit pinning em `crush-config` — sem `agent-versions.json` nem SemVer aplicado hoje
+4. **Documentação:** SKILL.md é o padrão (com opcional YAML frontmatter) — isto já é seguido pelas skills reais em `.agents/skills/`
+5. **Linking [PROPOSTO]:** NPM packages + symlinks para docs (não submodules) — hoje usa-se symlinks diretos dentro do mesmo repo (`.claude/skills/<nome>` → `.agents/skills/<nome>`, `.github/{harnesses,instructions,prompts,automation}` → `.agents/`), sem npm/packages
+6. **Compliance:** Use `test-subagents.sh`, `./scripts/validate_dotfiles.sh` e `AUDIT_REPORT.md` regularmente
 
 ---
 
-**Última Atualização:** 2026-09-14  
-**Baseado em:** Pesquisa comunitária (LangChain, Mem0, Anthropic, GitHub)  
+**Última Atualização:** 2026-09-15 (revisão de precisão — secções aspiracionais marcadas `[PROPOSTO]`; conteúdo de convenções/nomenclatura não alterado)
+**Baseado em:** Pesquisa comunitária (LangChain, Mem0, Anthropic, GitHub)
 **Mantido por:** nmc-costa

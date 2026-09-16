@@ -1,0 +1,34 @@
+# Topics tracked by the community-index PoC (communityFirst.index in
+# workspace-standards.yaml). Each entry becomes one search against the
+# public GitHub Search API (unauthenticated, 60 req/hour — enough at this
+# scale) via index_topics.py.
+#
+# Seeded 2026-09-16 with the three real subsystems compared during this
+# session's landscape scan (see RESEARCH_NOTES.md for the verdicts) — not
+# invented examples. Add a topic here whenever a new non-trivial subsystem
+# is about to be built, per communityFirst.principle.
+
+topics:
+  - slug: task-tracking-for-agents
+    query: "ai agent task tracker kanban in:name,description"
+    note: >
+      Compared against dotfiles' own tasks/ event-log PoC (2026-09-15).
+      Closest matches found: Backlog.md (flat-file git-native kanban) and
+      claude-task-master — neither does append-only JSONL + generated view,
+      see RESEARCH_NOTES.md for the full verdict.
+
+  - slug: repo-hygiene-schema-for-agents
+    query: "agent standards schema in:name,description"
+    note: >
+      Compared against workspace-standards.schema.json + .yaml. Closest
+      matches: AGENTS.md (content standard, not structure/policy schema)
+      and Repolinter (file-existence + json-schema-passes rules, no
+      extends-based inheritance or drift-vs-SOTA review cycle).
+
+  - slug: personal-autonomous-orchestrator
+    query: "personal ai orchestrator automation in:name,description"
+    note: >
+      Scouted ahead of writing the "Jarvis" orchestrator persona (not yet
+      built). Closest match: khoj (self-hosted, scheduled personal
+      automations) — solves a different problem (RAG + email digests, no
+      git-as-datastore, no structured write-back), see RESEARCH_NOTES.md.

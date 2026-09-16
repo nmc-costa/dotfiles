@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Minimal workspace bootstrap: create dirs, clone repos, optional dotfiles
-BASE_DIR="${1:-$HOME}"
+BASE_DIR="$HOME"
 DRY_RUN=0
 DO_DOTFILES=0
 
@@ -10,6 +10,8 @@ for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY_RUN=1 ;;
     --dotfiles) DO_DOTFILES=1 ;;
+    --*) echo "unknown flag: $arg" >&2; exit 1 ;;
+    *) BASE_DIR="$arg" ;;
   esac
 done
 
@@ -105,9 +107,9 @@ setup_agent_symlinks "vscode"
 if [[ -d "$BASE_DIR/dotfiles/.agents/skills" ]]; then
   echo "info: Syncing skills from dotfiles/.agents/skills..."
   if [[ $DRY_RUN -eq 1 ]]; then
-    "$BASE_DIR/dotfiles/sync-skills.sh" --dry-run || true
+    "$BASE_DIR/dotfiles/sync.sh" --dry-run || true
   else
-    "$BASE_DIR/dotfiles/sync-skills.sh" || true
+    "$BASE_DIR/dotfiles/sync.sh" || true
   fi
 fi
 
