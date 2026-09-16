@@ -48,14 +48,38 @@ git push
 A lista de tarefas que o Claude Code cria numa sessão (a ferramenta de tracking interna) **não sobrevive a uma sessão nova** — só sobrevive com `--resume`/`--continue`, que recarrega tudo (o oposto de poupar tokens). Esta tabela é o substituto persistente: qualquer sessão nova lê isto, recria a sua própria todo list interna a partir daqui, e **risca aqui** (não só na sessão) quando um item fica feito.
 
 - [x] Migrar `.vscode/settings.json` (API key) para chezmoi+age — feito 2026-09-14, commit `ef2a52f`. Falta: fazer backup da chave privada (`~/.config/chezmoi/key.txt`) para um gestor de password ou cópia física — **isto é manual, ninguém o faz por ti**.
-- [ ] **Criar fine-grained PAT** em github.com/settings/tokens, scoped só a `dotfiles`+`architect` (`Contents: read/write`, `Pull requests: read/write`), com expiração (ex.: 90 dias). Um token por máquina chega — não é preciso um por agente/ferramenta. Depois: `gh auth login --with-token < token.txt` + `gh auth setup-git`.
+- [ ] **Criar fine-grained PAT** em github.com/settings/tokens, scoped só a `dotfiles`+`architect` (`Contents: read/write`, `Pull requests: read/write`), com expiração (ex.: 90 dias). Um token por máquina chega — não é preciso um por agente/ferramenta. Depois: `gh auth login --with-token < token.txt` + `gh auth setup-git`. **Depois disto (sessão nova, não resume — ver `tasks/OPEN_PULL_REQUESTS.md`):** abrir os PRs de todas as branches `claude/*` desta ronda, nos 4 repos.
 - [ ] **Adotar convenção `claude/<topico>` + PR** em vez de push direto a `main` — depois do PAT criado, mudar `architect`'s remote de SSH para HTTPS (`git remote set-url origin https://github.com/nmc-costa/architect.git`), criar branch, dar push da branch, abrir PR com `gh pr create` para os 13 commits de `dotfiles` e o 1 de `architect` que ainda estão só locais.
 - [ ] Rever e dar `git push`/PR aos commits locais em `dotfiles` (13 commits) e `architect` (1 commit) — nada foi enviado ainda para o remoto; o push direto falhou por falta de credenciais no sandbox, agora resolve-se via os dois itens acima.
 - [ ] Arquivar `agentic_instructions` no GitHub (Settings → Archive this repository) — só depois do push/PR acima.
 - [ ] Decidir direção de sincronização (repo→sistema vs. sistema→repo) — em aberto, ver `CLAUDE.md` → Lacunas Conhecidas.
 - [ ] `setup.sh` com listas de repos hardcoded (`nmc-costa`) — conhecido, não bloqueante, só importa se partilhares o repo.
+- [ ] **Sistema de tracking de tarefas em `tasks/`** (pedido 2026-09-15) — base do "Workspace Ágil". Planeamento + implementação ainda não começaram; o prompt de arranque está em `tasks/KICKOFF.md`, pronto a colar numa sessão nova com orquestração de agentes.
+
+**⚠️ Nota de divergência (2026-09-15):** este ficheiro tem histórico fragmentado entre branches irmãs — `claude/todo-continuation-and-notes-backlog` (que reconciliou esta lista com a realidade, ex.: os 13 commits acima já foram enviados) e a cadeia `claude/repo-hygiene-dotfiles` → `claude/workspace-standards-schema` (onde este `tasks/KICKOFF.md` foi acrescentado) não partilham a mesma base. Reconciliar ao fazer merge — não confiar cegamente no texto acima dos itens já marcados `[x]` nalguma das branches sem verificar primeiro.
 
 **Regra:** ao começar uma sessão nova, pede-lhe explicitamente para ler esta lista e criar a sua todo list interna a partir dela (ver secção 7). Ao terminar uma tarefa, o commit que a fecha tem de marcar o `[x]` aqui.
+
+### 4.2 Repo hygiene / tracking e organização (pedido 2026-09-15)
+
+Objetivo, para cada repo: (1) raiz limpa — só `README.md` e os ficheiros que ferramentas de agente leem automaticamente por convenção (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.clinerules`, etc.) ficam na raiz, o resto de `.md` solto vai para `docs/`; (2) `README.md` com directory tree atual, índice do que está em cada pasta, e uma tabela-resumo de tarefas/estado; (3) estrutura de diretórios validada contra a melhor prática pesquisada online para o tipo de repo.
+
+| Repo | Estado antes (auditado 2026-09-15) | Tarefa |
+|---|---|---|
+| `dotfiles` | Raiz com 10 `.md` soltos + `README.md`; sem directory tree nem tabela-resumo no `README.md`/`CLAUDE.md` | Mover para `docs/` tudo o que não seja lido automaticamente por ferramenta; directory tree + índice + tabela-resumo no `README.md` e no `CLAUDE.md` |
+| `~/Projects/architect` | `README.md` é na verdade o prompt de ativação da persona "Architect", não documentação de repo; ficheiros soltos na raiz | Criar `README.md` real com directory tree + índice; mover soltos para `docs/` |
+| `~/Projects/notes` | `README.md` de 1 linha, sem índice das pastas | Directory tree + índice no `README.md` |
+| `~/Work/notes` (repo da org `DTx-DSML`, não pessoal) | `README.md` de 1 linha | Directory tree + índice no `README.md` |
+| `~/Projects/agentic_instructions` | — | **Excluído** — arquivado, não editar |
+
+- [x] `dotfiles` — feito 2026-09-15, branch `claude/repo-hygiene-dotfiles`; inclui avaliador `scripts/validate_dotfiles.sh` (raiz limpa + docs obrigatórios + tree do README a bater com o disco) e secção `## Guidelines` no README com sub-secções "For you (human)" / "For agents"
+- [x] `~/Projects/architect` — feito 2026-09-15, branch `claude/repo-hygiene-architect`
+- [x] `~/Projects/notes` — feito 2026-09-15, branch `claude/repo-hygiene-notes`
+- [x] `~/Work/notes` — feito 2026-09-15, branch `claude/repo-hygiene-worknotes`
+
+**Nota de consistência (pedida 2026-09-15, depois dos 4 feitos em paralelo por agentes independentes) — RESOLVIDA:** cada repo tinha escolhido o seu próprio formato de README (títulos diferentes: "Directory tree"/"Structure", "Folder index"/"Index"). Unificado manualmente (não por agente, para garantir consistência real) nos 4: todos usam agora `## Directory tree` → `## What's where (index)` → `## Guidelines` (com `### For you (human)` e `### For agents`) como esqueleto comum, com secções extra específicas de cada repo a seguir. Commits: `dotfiles` (nesta branch), `architect@3f4c01e`, `~/Projects/notes@a1e1377`, `~/Work/notes@eda396c`.
+
+- [ ] O avaliador (`scripts/validate_dotfiles.sh`) existe só no `dotfiles` por agora — replicar o mesmo tipo de check (raiz limpa + tree do README bate com o disco) para `architect`, `~/Projects/notes`, `~/Work/notes` fica por fazer, não pedido ainda.
 
 ## 5. Roadmap do "Workspace Ágil" (ordem validada nas tuas notas — `~/Projects/notes/ideas/architecture/Workspace Agil para Agentes Multiplataforma.md` §13.7)
 

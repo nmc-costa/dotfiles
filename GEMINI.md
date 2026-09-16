@@ -9,8 +9,8 @@ Instruções para Gemini quando trabalha neste repositório.
 - **Agentes:** Configurações do Crush, Copilot, Gemini, Cline em `.agents/`
 - **Skills:** Extensões de agentes em `.agents/skills/`
 - **Workflows:** Personas e workflows em `.agents/workflows/`
-- **Contexto:** `AGENTS.md`, `CLAUDE.md`, `directory_tree.md`
-- **Automação:** `setup.sh`, `sync-skills.sh`
+- **Contexto:** `AGENTS.md`, `CLAUDE.md`, `docs/directory_tree.md`
+- **Automação:** `setup.sh`, `sync.sh`
 
 ## Estrutura de Projeto
 
@@ -31,7 +31,7 @@ Cada projeto é um repositório git independente com seu próprio remoto.
 
 - Não editar skills diretamente em `~/.agents/skills/` — sempre editar em `~/dotfiles/.agents/skills/` e sincronizar
 - Para workflows pessoais: usar `~/.agents/workflows/` (symlink para `~/dotfiles/.agents/workflows/`)
-- Para nuevas skills: adicionar a `~/dotfiles/.agents/skills/` e fazer `git commit + ./sync-skills.sh`
+- Para nuevas skills: adicionar a `~/dotfiles/.agents/skills/` e fazer `git commit + ./sync.sh`
 
 ## Documentação Completa
 
