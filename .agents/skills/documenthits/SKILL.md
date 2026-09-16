@@ -1,3 +1,8 @@
+---
+name: documenthits
+description: "documentHITs Agent - Document Update Architect"
+---
+
 # 📝 documentHITs Agent - Document Update Architect
 
 **Status:** ✅ Active  

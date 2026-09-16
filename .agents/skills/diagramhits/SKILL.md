@@ -1,3 +1,8 @@
+---
+name: diagramhits
+description: "diagramHITs Agent - Diagram Architect"
+---
+
 # 🎨 diagramHITs Agent - Diagram Architect
 
 **Status:** ✅ Active  

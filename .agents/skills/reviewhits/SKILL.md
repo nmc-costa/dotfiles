@@ -1,3 +1,8 @@
+---
+name: reviewhits
+description: "reviewHITs Agent - Peer Review Architect"
+---
+
 # 👁️ reviewHITs Agent - Peer Review Architect
 
 **Status:** ✅ Active  

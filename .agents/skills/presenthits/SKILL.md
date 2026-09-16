@@ -1,3 +1,8 @@
+---
+name: presenthits
+description: "presentHITs Agent - Executive Slide Architect"
+---
+
 # 🎨 presentHITs Agent - Executive Slide Architect
 
 **Status:** ✅ Active  

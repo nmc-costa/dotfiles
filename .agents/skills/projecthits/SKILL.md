@@ -1,3 +1,8 @@
+---
+name: projecthits
+description: "projectHITs Agent - Charter Architect (v4)"
+---
+
 # 📋 projectHITs Agent - Charter Architect (v4)
 
 **Status:** ✅ Active  

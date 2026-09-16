@@ -1,3 +1,8 @@
+---
+name: mockuphits
+description: "mockupHITs Agent - SciML Mockup Architect"
+---
+
 # 🧬 mockupHITs Agent - SciML Mockup Architect
 
 **Status:** ✅ Active  

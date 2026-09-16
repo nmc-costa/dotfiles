@@ -1,3 +1,8 @@
+---
+name: archi
+description: "Architect Agent - Meta-Orchestrator"
+---
+
 # 🎭 Architect Agent - Meta-Orchestrator
 
 **Status:** ✅ Active  
