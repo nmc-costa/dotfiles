@@ -48,10 +48,20 @@ git push
 A lista de tarefas que o Claude Code cria numa sessão (a ferramenta de tracking interna) **não sobrevive a uma sessão nova** — só sobrevive com `--resume`/`--continue`, que recarrega tudo (o oposto de poupar tokens). Esta tabela é o substituto persistente: qualquer sessão nova lê isto, recria a sua própria todo list interna a partir daqui, e **risca aqui** (não só na sessão) quando um item fica feito.
 
 - [x] Migrar `.vscode/settings.json` (API key) para chezmoi+age — feito 2026-09-14, commit `ef2a52f`. Falta: fazer backup da chave privada (`~/.config/chezmoi/key.txt`) para um gestor de password ou cópia física — **isto é manual, ninguém o faz por ti**.
-- [ ] **Criar fine-grained PAT** em github.com/settings/tokens, scoped só a `dotfiles`+`architect` (`Contents: read/write`, `Pull requests: read/write`), com expiração (ex.: 90 dias). Um token por máquina chega — não é preciso um por agente/ferramenta. Depois: `gh auth login --with-token < token.txt` + `gh auth setup-git`.
-- [ ] **Adotar convenção `claude/<topico>` + PR** em vez de push direto a `main` — depois do PAT criado, mudar `architect`'s remote de SSH para HTTPS (`git remote set-url origin https://github.com/nmc-costa/architect.git`), criar branch, dar push da branch, abrir PR com `gh pr create` para os 13 commits de `dotfiles` e o 1 de `architect` que ainda estão só locais.
-- [ ] Rever e dar `git push`/PR aos commits locais em `dotfiles` (13 commits) e `architect` (1 commit) — nada foi enviado ainda para o remoto; o push direto falhou por falta de credenciais no sandbox, agora resolve-se via os dois itens acima.
-- [ ] Arquivar `agentic_instructions` no GitHub (Settings → Archive this repository) — só depois do push/PR acima.
+- [x] **Autenticar `gh` CLI** — feito 2026-09-16 via login por browser, não PAT manual (método validado por pesquisa online da comunidade, não só preferência própria — ver `.agents/instructions/workspace-config/standards/RESEARCH_NOTES.md` uma vez mesclado o PR #1, `claude/workspace-standards-schema`; entretanto as fontes ficaram nesta sessão). **Este é o passo a repetir em qualquer máquina nova, é simples e rápido:**
+  ```bash
+  gh auth login
+  # GitHub.com → SSH (protocolo git; usa as tuas chaves SSH já configuradas)
+  # Authenticate Git with your GitHub credentials? → Yes
+  # Upload your SSH public key? → No, se já estiver na conta (push já a funcionar = já está)
+  # How would you like to authenticate GitHub CLI? → Login with a web browser
+  #   (NUNCA "Paste an authentication token" — evita ter um PAT manual para gerir/perder/expor)
+  gh auth status   # confirma: token gho_..., scopes repo+read:org(+gist)
+  ```
+  Token gerido pelo keyring do `gh`, nunca escrito à mão em ficheiro nenhum; revogável em `github.com/settings/applications`. Se algum dia precisares mesmo de um PAT manual (uso headless/CI, não este caso), o padrão da comunidade é `GH_TOKEN` como variável de ambiente, nunca em ficheiro de dotfiles em texto plano.
+- [x] **Adotada convenção `claude/<topico>` + PR** em vez de push direto a `main` — 12 PRs abertos com `gh pr create` (2026-09-16) cobrindo `dotfiles`(5), `architect`(2), `notes`(3), `Work/notes`(2). Lista completa + ordem de merge (há duas situações de branches irmãs divergentes — `dotfiles` e `notes`) em `tasks/OPEN_PULL_REQUESTS.md`. Mergear fica ao critério do dono, não é automático.
+- [x] Todos os commits locais deram push e têm PR aberto — nada ficou só local.
+- [ ] Arquivar `agentic_instructions` no GitHub (Settings → Archive this repository, ou `gh repo archive nmc-costa/agentic_instructions`) — já não está bloqueado (gh auth funciona), só falta o dono decidir fazer.
 - [ ] Decidir direção de sincronização (repo→sistema vs. sistema→repo) — em aberto, ver `CLAUDE.md` → Lacunas Conhecidas.
 - [ ] `setup.sh` com listas de repos hardcoded (`nmc-costa`) — conhecido, não bloqueante, só importa se partilhares o repo.
 
