@@ -38,7 +38,7 @@ Whenever you edit `workspace-standards.yaml`/`.schema.json`, run `python3 script
 | Adopt `claude/<topic>` + PR convention instead of direct pushes to `main` | **Done 2026-09-16** — 13 PRs opened and merged across `dotfiles`, `architect`, `notes`, `Work/notes`; see `CHEATSHEET.md` §4 |
 | Repo hygiene (clean root, README with tree+index+guidelines) — `dotfiles`, `architect`, `~/Projects/notes`, `~/Work/notes` | Done and merged in all 4 repos |
 | Archive `agentic_instructions` on GitHub | No longer blocked by `gh auth` — **but see the "⚠️ Known Gaps" verified-merge-status entry below first**: the merge into `dotfiles/.agents/` is only partial, not complete as earlier claimed here |
-| Decide sync direction (repo→system vs. system→repo) | Open |
+| Decide sync direction (repo→system vs. system→repo) | **Resolved 2026-09-16**: no automatic system→repo sync — a global learning enters this repo via the `claude/<topic>` + PR convention, same as any other change. Separately, `setup_agent_symlinks()` in `setup.sh` was found to whole-directory-symlink `~/.claude` (which mixes versioned config with live runtime state, `.credentials.json` included, not covered by `.gitignore`'s `.claude/{sessions,logs,cache}/` entries) — fixed to a file-level symlink (`setup_agent_file_symlink`) for `CLAUDE.md` only |
 | Non-Claude harnesses (Copilot, Gemini, Antigravity) auto-reading `tasks/`+`CHEATSHEET.md` on startup | **Fixed 2026-09-16** for Copilot/Gemini (real entrypoint files updated); Antigravity got a manual-prompt substitute only, pending verification of its real context-loading mechanism — see "⚠️ Known Gaps" below |
 
 ## What This Repository Is
@@ -120,7 +120,7 @@ See `AGENTS.md` for the full guide.
 
 ## Global Context
 
-README.md/AGENTS.md describe `~/.context-global.md`, `~/claude.md`, `~/directory_tree.md` (symlink to `~/dotfiles/docs/directory_tree.md`) and `agent-versions.json` as symlinks/files of `~/dotfiles/`. **None of these exist on this machine** — don't assume they're present without checking. The sync direction (repo→system via symlinks, vs. system→repo) hasn't been decided as standard yet — see the next section.
+README.md/AGENTS.md describe `~/.context-global.md`, `~/claude.md`, `~/directory_tree.md` (symlink to `~/dotfiles/docs/directory_tree.md`) and `agent-versions.json` as symlinks/files of `~/dotfiles/`. **None of these exist on this machine** — don't assume they're present without checking. The sync direction question is resolved (repo→system, via `sync.sh`'s copy and `setup.sh`'s symlinks; never system→repo automatically) — see the next section and the Open work table above.
 
 ## New Machine Setup
 
@@ -148,7 +148,7 @@ Then:
 
 Don't treat the following files/claims as current truth without checking first:
 
-- **Sync direction still open**: system→repo vs. repo→system isn't standard yet. Until decided, `setup.sh`/`sync.sh` may not reflect the machine's real state (e.g. `~/.claude`, `~/.agents`, `~/.vscode` are not symlinks on this machine, despite what README/AGENTS.md describe).
+- **Sync direction resolved 2026-09-16**: repo→system only (via `sync.sh`'s copy and `setup.sh`'s symlinks); no automatic system→repo path — a global learning enters via `claude/<topic>` + PR, same as any other change. Note `setup.sh`/`sync.sh` still may not reflect the machine's real state (e.g. `~/.claude`, `~/.agents`, `~/.vscode` are not symlinks on this machine yet, despite what README/AGENTS.md describe) — that's a "hasn't been run/applied here" gap, not an open design question anymore. Also fixed this round: `setup_agent_symlinks()` used to whole-directory-symlink `~/.claude`, which mixes versioned config with live runtime state (`.credentials.json`, sessions, logs, caches — none of it covered by `.gitignore`'s narrower entries); it now uses a new `setup_agent_file_symlink()` to link only `CLAUDE.md`, leaving the rest of `~/.claude/` real and untouched.
 - **`.vscode/settings.json` contains a real API key** for a custom endpoint. The repo is private/personal use (a risk the owner accepts), but don't propagate this file to other repos, examples, or shared contexts. **TODO:** migrate to chezmoi+age (decided, not yet executed — blocked on `sudo pacman -S chezmoi age`, which needs an interactive password).
 - **`setup.sh` has hardcoded repo lists** (`WORK_REPOS`, `PROJECTS_REPOS`) and the `nmc-costa` username hardcoded in `clone()` (SSH/HTTPS URLs) — not portable to another user without editing the script directly. **Note:** a fix exists (env vars `GITHUB_USER`/`WORK_REPOS`/`PROJECTS_REPOS`) in commit `0304d1d` on branch `claude/todo-continuation-and-notes-backlog`, but **isn't merged** into that branch's target or `main` — don't assume it's resolved until that branch lands.
 - **`.vscode/github.code-workspace` has a hardcoded path** `"dtx/repos/sp_xai_nos"` — a real reference to `dtx/` still in the repo (verified 2026-09-15, the only hit outside historical/archived content).

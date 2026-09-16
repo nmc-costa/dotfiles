@@ -46,6 +46,22 @@ tmp/
 .claude/sessions/
 .claude/logs/
 .claude/cache/
+# Defense-in-depth: ~/.claude/ is only ever file-symlinked (CLAUDE.md), never
+# whole-directory (see setup.sh), so none of this should ever land under
+# dotfiles/.claude/ — these entries just make sure a future mistake can't
+# commit live runtime state, credentials included.
+.claude/.credentials.json
+.claude/history.jsonl
+.claude/daemon.log
+.claude/daemon.lock
+.claude/daemon.status.json
+.claude/.last-cleanup
+.claude/shell-snapshots/
+.claude/session-env/
+.claude/file-history/
+.claude/jobs/
+.claude/backups/
+.claude/projects/
 .agents/cache/
 .copilot/sessions/
 .cline/sessions/
