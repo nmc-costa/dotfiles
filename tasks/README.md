@@ -44,11 +44,29 @@ python3 tasks/rebuild_view.py
 
 ## Estados (D12)
 
-`new → todo → em curso → em validação → feito`. `bloqueada` e `abandonada`
-(enum mais antigo do doc Jarvis) não são estados próprios nesta PoC:
-"bloqueada" é qualquer estado com `bloqueado_por` preenchido; "abandonada"
-é a tarefa a ficar sem eventos novos, sinalizada no `tocado` (apodrecimento),
-sem coluna de estado dedicada.
+`new → todo → em curso → em validação → feito`, mais `deferred` como lane
+paralela (qualquer estado pode transitar para `deferred` e voltar — não é
+um passo na sequência principal). `bloqueada` e `abandonada` (enum mais
+antigo do doc Jarvis) não são estados próprios nesta PoC: "bloqueada" é
+qualquer estado com `bloqueado_por` preenchido; "abandonada" é a tarefa a
+ficar sem eventos novos, sinalizada no `tocado` (apodrecimento), sem coluna
+de estado dedicada.
+
+`deferred` foi adicionado 2026-09-16, informado pelo landscape scan do
+default `communityFirst` (ver `RESEARCH_NOTES.md` em
+`.agents/instructions/workspace-config/standards/`): `claude-task-master`
+(28k★) tem este estado no seu kanban e o nosso não tinha — cobre "aparcar
+sem cancelar" (diferente de `abandonada`, que é passiva/por apodrecimento,
+e diferente de `bloqueada`, que espera por outra tarefa). É só documentação
++ convenção de payload — `append_event.py` já aceita `estado` livre, não há
+enum a alargar em código.
+
+**Considerado e não adotado**: a convenção `AC:BEGIN`/`AC:END` do
+`Backlog.md` (6.7k★) para delimitar critérios de aceitação dentro de um
+ficheiro longo por tarefa. Não se aplica ao desenho atual — `tarefas.md` é
+uma tabela achatada gerada a partir do log, não um ficheiro por tarefa com
+secções internas. Revisitar só se/quando uma tarefa precisar de critérios
+de aceitação com vários itens que justifiquem essa estrutura.
 
 ## Proveniência decide a porta (D13)
 
