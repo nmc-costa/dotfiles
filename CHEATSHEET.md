@@ -48,52 +48,24 @@ git push
 A lista de tarefas que o Claude Code cria numa sessão (a ferramenta de tracking interna) **não sobrevive a uma sessão nova** — só sobrevive com `--resume`/`--continue`, que recarrega tudo (o oposto de poupar tokens). Esta tabela é o substituto persistente: qualquer sessão nova lê isto, recria a sua própria todo list interna a partir daqui, e **risca aqui** (não só na sessão) quando um item fica feito.
 
 - [x] Migrar `.vscode/settings.json` (API key) para chezmoi+age — feito 2026-09-14, commit `ef2a52f`. Falta: fazer backup da chave privada (`~/.config/chezmoi/key.txt`) para um gestor de password ou cópia física — **isto é manual, ninguém o faz por ti**.
-- [ ] **Criar fine-grained PAT** em github.com/settings/tokens?type=beta, scoped só a `dotfiles`+`architect` (`Contents: read/write`, `Pull requests: read/write`), com expiração (ex.: 90 dias). Um token por máquina chega. Depois: `gh auth login --with-token < token.txt` (correr tu mesmo, ex. via `! gh auth login --with-token < ~/token.txt`, para o token nunca aparecer numa conversa com o agente) + `gh auth setup-git`. **Status 2026-09-15: adiado pelo dono — sem prazo, será feito quando houver tempo.** Até lá, tudo o que precisa de `gh` (PR create, repo archive) fica bloqueado; push por SSH continua a funcionar normalmente.
-- [x] ~~Adotar convenção `claude/<topico>` + PR~~ — SSH já autentica sem problemas (não é preciso mudar remote para HTTPS, isso só seria necessário se a autenticação fosse só via PAT/HTTPS). Estado 2026-09-15: `dotfiles` já tinha os 13 commits pendentes enviados diretamente para `main` antes desta convenção ser aplicada (histórico, não há o que retroactivamente mover para PR). `architect`: o commit pendente (`2172fe0`, "close .env leak gap and add missing google-generativeai dependency") foi movido para a branch `claude/env-leak-fix` (criada e enviada, `main` local voltou a espelhar `origin/main`) — falta abrir o PR, bloqueado por `gh auth` (item acima). URL manual entretanto: https://github.com/nmc-costa/architect/pull/new/claude/env-leak-fix
-- [x] ~~Rever e dar `git push`/PR aos commits locais~~ — `dotfiles`: nada pendente, os 13 commits já estão em `origin/main` (push direto SSH, antes da convenção PR ficar ativa). `architect`: resolvido pelo item acima (branch enviada, falta só o PR).
-- [ ] Arquivar `agentic_instructions` no GitHub (Settings → Archive this repository) — só depois do PR de `architect` acima e de decidir se `dotfiles` deve manter push direto ou passar a usar PRs a partir de agora.
+- [x] **Autenticar `gh` CLI** — feito 2026-09-16 via login por browser, não PAT manual (método validado por pesquisa online da comunidade, não só preferência própria — ver `.agents/instructions/workspace-config/standards/RESEARCH_NOTES.md` uma vez mesclado o PR #1, `claude/workspace-standards-schema`; entretanto as fontes ficaram nesta sessão). **Este é o passo a repetir em qualquer máquina nova, é simples e rápido:**
+  ```bash
+  gh auth login
+  # GitHub.com → SSH (protocolo git; usa as tuas chaves SSH já configuradas)
+  # Authenticate Git with your GitHub credentials? → Yes
+  # Upload your SSH public key? → No, se já estiver na conta (push já a funcionar = já está)
+  # How would you like to authenticate GitHub CLI? → Login with a web browser
+  #   (NUNCA "Paste an authentication token" — evita ter um PAT manual para gerir/perder/expor)
+  gh auth status   # confirma: token gho_..., scopes repo+read:org(+gist)
+  ```
+  Token gerido pelo keyring do `gh`, nunca escrito à mão em ficheiro nenhum; revogável em `github.com/settings/applications`. Se algum dia precisares mesmo de um PAT manual (uso headless/CI, não este caso), o padrão da comunidade é `GH_TOKEN` como variável de ambiente, nunca em ficheiro de dotfiles em texto plano.
+- [x] **Adotada convenção `claude/<topico>` + PR** em vez de push direto a `main` — 12 PRs abertos com `gh pr create` (2026-09-16) cobrindo `dotfiles`(5), `architect`(2), `notes`(3), `Work/notes`(2). Lista completa + ordem de merge (há duas situações de branches irmãs divergentes — `dotfiles` e `notes`) em `tasks/OPEN_PULL_REQUESTS.md`. Mergear fica ao critério do dono, não é automático.
+- [x] Todos os commits locais deram push e têm PR aberto — nada ficou só local.
+- [ ] Arquivar `agentic_instructions` no GitHub (Settings → Archive this repository, ou `gh repo archive nmc-costa/agentic_instructions`) — já não está bloqueado (gh auth funciona), só falta o dono decidir fazer.
 - [ ] Decidir direção de sincronização (repo→sistema vs. sistema→repo) — em aberto, ver `CLAUDE.md` → Lacunas Conhecidas.
-- [x] ~~`setup.sh` com listas de repos hardcoded (`nmc-costa`)~~ — feito 2026-09-15: `GITHUB_USER`, `WORK_REPOS`, `PROJECTS_REPOS` agora são overridable por env var, mantendo os valores atuais como default. Não requer mudanças de comportamento nesta máquina.
-- [ ] **Sistema de tracking de tarefas em `tasks/`** (pedido 2026-09-15) — base do "Workspace Ágil". Planeamento + implementação ainda não começaram; o prompt de arranque está em `tasks/KICKOFF.md`, pronto a colar numa sessão nova com orquestração de agentes.
-
-### 4.1 Backlog de `~/Projects/notes/ideas/` (trazido para aqui 2026-09-15, por ordem de prioridade da própria `ideas/README.md`)
-
-**Importante:** isto é tracking, não trabalho aprovado para construir. Os ficheiros de `ideas/` são visão/investigação — a maioria explicitamente "ideia por validar, nada construído" (ex.: o documento do Jarvis). Antes de qualquer um destes virar código, precisa de uma sessão de scoping contigo — não é para um agente decidir sozinho o desenho de um orquestrador pessoal ou de um plano de negócio.
-
-| Prioridade | Ideia | Ficheiro | Nota |
-|---|---|---|---|
-| 1 | Centralizar histórico de interação e meta-tasks (ledger partilhado) | `architecture/Workspace Agil para Agentes Multiplataforma.md` | Alimenta o Jarvis e o Digital Twin. Base de tudo o resto. |
-| 1 | Adotar dotfiles como control plane | idem | Já em curso nesta própria tabela (fases 1-2 do roadmap §5 abaixo). |
-| 1 | Validação `new` → `todo` para propostas de agente | idem + `agents/Agente Orquestrador - Jarvis do Diretor Humano.md` §5.3 | Regra: humano cria direto em `todo`; agente cria em `new` e pede validação. |
-| 1 | Agente Orquestrador "Jarvis" (worksheets, orçamento de interrupção, ritual diário/semanal) | `agents/Agente Orquestrador - Jarvis do Diretor Humano.md` | **Nada construído.** Documento grande (18 secções) — precisa de PoC mínima (§14 do próprio doc) antes de qualquer construção maior. |
-| 1 | Interface de captura de áudio live + transcrição local-first | `fast-prototyping/workspace-audio-interface.md` | MVP proposto, nada construído. |
-| 1 | KVM audio listener agent (monitoriza áudio do sistema+mic, transcreve, cria issues) | `agents/KVM-audio-listener-agent.md` | Mesma família da interface acima; PoC scripts-base (`scripts/route_idea.py`, `scripts/streamline-audio-poc.sh`) já existem em `notes/scripts/`. |
-| 1 | Harness > tamanho do modelo (síntese de fontes externas) | `architecture/harness-vision.md` | Próximo passo já documentado no próprio ficheiro: inserir a síntese no doc Workspace Ágil + `ideas/README.md`. Edição de docs, baixo risco — candidato fácil quando houver luz verde. |
-| 2 | Digital Twin / Socratic ROI loop | `personal/My Digitaltwin - ROI AI Factory accelaration.md` | **Plano de negócio pessoal** (spin-off fora do DTX) — sensível, não é tarefa de engenharia a despachar a um agente sem ti. |
-| 3 | Manter atualizado o transcript de referência (`20251203_the_architect_clean_html.md`) | idem | Só suporte de vocabulário; sem ação own.
+- [ ] `setup.sh` com listas de repos hardcoded (`nmc-costa`) — conhecido, não bloqueante, só importa se partilhares o repo.
 
 **Regra:** ao começar uma sessão nova, pede-lhe explicitamente para ler esta lista e criar a sua todo list interna a partir dela (ver secção 7). Ao terminar uma tarefa, o commit que a fecha tem de marcar o `[x]` aqui.
-
-### 4.2 Repo hygiene / tracking e organização (pedido 2026-09-15)
-
-Objetivo, para cada repo: (1) raiz limpa — só `README.md` e os ficheiros que ferramentas de agente leem automaticamente por convenção (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.clinerules`, etc.) ficam na raiz, o resto de `.md` solto vai para `docs/`; (2) `README.md` com directory tree atual, índice do que está em cada pasta, e uma tabela-resumo de tarefas/estado; (3) estrutura de diretórios validada contra a melhor prática pesquisada online para o tipo de repo.
-
-| Repo | Estado antes (auditado 2026-09-15) | Tarefa |
-|---|---|---|
-| `dotfiles` | Raiz com 10 `.md` soltos + `README.md`; sem directory tree nem tabela-resumo no `README.md`/`CLAUDE.md` | Mover para `docs/` tudo o que não seja lido automaticamente por ferramenta; directory tree + índice + tabela-resumo no `README.md` e no `CLAUDE.md` |
-| `~/Projects/architect` | `README.md` é na verdade o prompt de ativação da persona "Architect", não documentação de repo; ficheiros soltos na raiz | Criar `README.md` real com directory tree + índice; mover soltos para `docs/` |
-| `~/Projects/notes` | `README.md` de 1 linha, sem índice das pastas | Directory tree + índice no `README.md` |
-| `~/Work/notes` (repo da org `DTx-DSML`, não pessoal) | `README.md` de 1 linha | Directory tree + índice no `README.md` |
-| `~/Projects/agentic_instructions` | — | **Excluído** — arquivado, não editar |
-
-- [x] `dotfiles` — feito 2026-09-15, branch `claude/repo-hygiene-dotfiles`; inclui avaliador `scripts/validate_dotfiles.sh` (raiz limpa + docs obrigatórios + tree do README a bater com o disco) e secção `## Guidelines` no README com sub-secções "For you (human)" / "For agents"
-- [x] `~/Projects/architect` — feito 2026-09-15, branch `claude/repo-hygiene-architect`
-- [x] `~/Projects/notes` — feito 2026-09-15, branch `claude/repo-hygiene-notes`
-- [x] `~/Work/notes` — feito 2026-09-15, branch `claude/repo-hygiene-worknotes`
-
-**Nota de consistência (pedida 2026-09-15, depois dos 4 feitos em paralelo por agentes independentes) — RESOLVIDA:** cada repo tinha escolhido o seu próprio formato de README (títulos diferentes: "Directory tree"/"Structure", "Folder index"/"Index"). Unificado manualmente (não por agente, para garantir consistência real) nos 4: todos usam agora `## Directory tree` → `## What's where (index)` → `## Guidelines` (com `### For you (human)` e `### For agents`) como esqueleto comum, com secções extra específicas de cada repo a seguir. Commits: `dotfiles` (nesta branch), `architect@3f4c01e`, `~/Projects/notes@a1e1377`, `~/Work/notes@eda396c`.
-
-- [ ] O avaliador (`scripts/validate_dotfiles.sh`) existe só no `dotfiles` por agora — replicar o mesmo tipo de check (raiz limpa + tree do README bate com o disco) para `architect`, `~/Projects/notes`, `~/Work/notes` fica por fazer, não pedido ainda.
 
 ## 5. Roadmap do "Workspace Ágil" (ordem validada nas tuas notas — `~/Projects/notes/ideas/architecture/Workspace Agil para Agentes Multiplataforma.md` §13.7)
 
