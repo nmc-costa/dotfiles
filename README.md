@@ -21,9 +21,10 @@ dotfiles/
 │   ├── AGENT.md                #   Agent registry/overview
 │   ├── CONTRIBUTING.md
 │   ├── automation/             #   Automation checklists (e.g. chronicle-daily-checklist.md)
-│   ├── harnesses/               #   Per-harness guides (claude-code, gemini, litellm, openai, vscode-copilot)
+│   ├── harnesses/               #   Per-harness guides (antigravity, claude-code, gemini, litellm, openai, vscode-copilot)
 │   ├── instructions/            #   base-personas/, task-personas/, workspace-config/, automation/
 │   ├── prompts/                 #   Reusable prompts (chronicle/, _templates/)
+│   ├── rules/                   #   Tool-agnostic rules auto-discovered via the .agents/rules/*.md convention (e.g. Antigravity) — see session-startup.md
 │   ├── skills/                  #   Agent skills — 1 real copy per skill (archi, diagnose-crash, omarchy, projecthits, ...)
 │   ├── validation/               #   Real validation outputs, keyed by skill
 │   └── workflows/                #   Agent personas / init workflows
@@ -77,8 +78,13 @@ dotfiles/
 
 | Directory | Purpose |
 |---|---|
+<<<<<<< HEAD
 | `.agents/` | **Source of truth** for all agent config: `skills/`, `instructions/`, `harnesses/`, `prompts/`, `workflows/`, `validation/`, `automation/`. Edit here, never in the synced copies. `instructions/workspace-config/standards/` holds the workspace-wide agent-orientation standard (`workspace-standards.schema.json` + `.yaml`, `RESEARCH_NOTES.md`) — every repo in this workspace has its own `docs/standards.yml` (or `standards.yml`) inheriting from it; see `CLAUDE.md`/`AGENTS.md` for the review protocol. `sync.sh` distributes all of this to `~/.agents/` (and `skills/` also to `~/.claude/skills/`) — **as of 2026-09-15 this is a real, working sync, not just an organizational convention.** |
 | `.claude/` | Claude Code config; `.claude/skills/<name>` are symlinks back into `.agents/skills/<name>`, and `.claude/CLAUDE.md` is the one real, versioned file of Claude Code's global config — see "Global per-tool instructions files" below |
+=======
+| `.agents/` | **Source of truth** for all agent config: `skills/`, `instructions/`, `harnesses/`, `prompts/`, `workflows/`, `validation/`, `automation/`, `rules/` (tool-agnostic rules some harnesses auto-discover via a `.agents/rules/*.md` glob, confirmed real for Antigravity 2026-09-16). Edit here, never in the synced copies. `instructions/workspace-config/standards/` holds the workspace-wide agent-orientation standard (`workspace-standards.schema.json` + `.yaml`, `RESEARCH_NOTES.md`) — every repo in this workspace has its own `docs/standards.yml` (or `standards.yml`) inheriting from it; see `CLAUDE.md`/`AGENTS.md` for the review protocol. `sync.sh` distributes all of this to `~/.agents/` (and `skills/` also to `~/.claude/skills/`) — **as of 2026-09-15 this is a real, working sync, not just an organizational convention.** |
+| `.claude/` | Claude Code config; `.claude/skills/<name>` are symlinks back into `.agents/skills/<name>` |
+>>>>>>> origin/main
 | `.github/` | GitHub config and CI; several subfolders (`automation/`, `CONTRIBUTING.md`, `harnesses/`, `instructions/`, `prompts/`) are symlinks into `.agents/` so Copilot/Actions read the same source of truth; `workflows/` holds real GitHub Actions (e.g. `vscode-docs-monitor.yml`) |
 | `.vscode/` | VS Code config; `settings.json` contains the real API key and is generated locally by `chezmoi apply` (gitignored) — see `docs/SECRETS.md` |
 | `.gemini/`, `.codex/`, `.copilot/` | Global config for Gemini CLI, OpenAI Codex CLI, and GitHub Copilot CLI respectively — each holds exactly one real, versioned file (`GEMINI.md`, `AGENTS.md`, `copilot-instructions.md`), same pattern as `.claude/CLAUDE.md` — see below |
