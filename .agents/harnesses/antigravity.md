@@ -1,30 +1,45 @@
 # 🔌 Antigravity Reference
 
-**Status:** template — not yet verified. This file exists to close a
-gap found 2026-09-16 (a direct Antigravity diagnostic run by the workspace
-owner found zero startup wiring to this repo's task tracker), but nobody
-has yet confirmed how Antigravity actually discovers context files in a
-repo (a project-context file it auto-loads by convention, an extension/
-skill directory, or neither). **Don't assume any of the mechanics below
-are real until someone verifies them against the actual tool** — follow
-the same discipline as `.agents/harnesses/gemini.md`, which flagged the
-same kind of uncertainty rather than inventing a plausible-sounding setup.
+**Status:** partially verified 2026-09-16, via a direct diagnostic prompt
+run against the actual tool (not inferred from docs). Confirmed real:
+Antigravity's own self-report of its directory-scan mechanism (see
+"Confirmed Discovery Mechanism" below). **Not yet resolved:** in the same
+test session, Antigravity reported reading zero files automatically at
+startup, even though it also described a mechanism that should have picked
+up `AGENTS.md`/`GEMINI.md` — it flagged this itself as conditional on the
+session starting inside the actual working tree root, and on "the top-level
+rule-injection mechanism" firing. Re-test from inside `~/dotfiles` itself
+(not a parent or unrelated directory) before trusting that the fix below is
+fully live; if it still reports nothing auto-loaded, treat this file's
+mechanism description as real but not yet actually wired for you.
 
 ---
 
-## 📌 Session Startup (the concrete fix for the 2026-09-16 gap)
+## Confirmed Discovery Mechanism (Antigravity's own self-report, 2026-09-16)
 
-Until Antigravity has a real auto-loaded entrypoint wired to this repo,
-the working substitute is a manual first message, same pattern as
-`CHEATSHEET.md` §7's Claude Code kickoff prompt:
+Two formal mechanisms, per the tool itself:
 
-> Read `~/dotfiles/CLAUDE.md`, `~/dotfiles/CHEATSHEET.md`, and
-> `~/dotfiles/tasks/board.md` + `tasks/README.md`. Build a todo list from
-> `CHEATSHEET.md` §4 (persistent TODO) and the task tracker, and continue
-> from there.
+1. **Directory/workspace rules:** walks up from the open file / working
+   directory to the repo root, looking for fixed filenames:
+   - `GEMINI.md` and `AGENTS.md`
+   - Files under `.agents/rules/*.md`
+2. **Skills/workspace-extension discovery:** looks for a fixed-name folder
+   at the repo root: `.agents/` (or `.agent/`, `_agents/`, `_agent/`).
 
-Paste this as the first message of a new Antigravity session in this repo
-until real auto-discovery is confirmed and wired below.
+**Confirmed NOT scanned for:** `CLAUDE.md`, `CHEATSHEET.md`,
+`.github/copilot-instructions.md`. Don't add pointers there expecting
+Antigravity to see them — it won't.
+
+Given this, the session-startup fix lives in three places, redundantly, so
+whichever mechanism actually fires for a given session picks it up:
+- `AGENTS.md` (sessionHygiene section)
+- `GEMINI.md` ("At the start of a session, also read")
+- `.agents/rules/session-startup.md` (dedicated, matches the
+  `.agents/rules/*.md` glob directly)
+
+No more manual first-message prompt needed *if* one of the three above is
+actually being picked up — verify with the re-test described in Status
+above before assuming it's live.
 
 ---
 
@@ -52,9 +67,11 @@ Trigger          | Skill          | Purpose
 @architect       | archi          | Meta-orchestrator, coordinates the rest
 ```
 
-If Antigravity doesn't support a native `@mention`-style skill trigger,
-fall back to intent detection on keywords in whatever project-instructions
-file it does load, the same fallback `gemini.md` proposes.
+Confirmed 2026-09-16: Antigravity discovers the `.agents/` folder by name
+for skills/extensions (see above), so `.agents/skills/` should already be
+reachable without a symlink — not yet confirmed whether it recognizes the
+`@mention` trigger syntax above or needs keyword-based intent detection
+instead (the fallback `gemini.md` also proposes).
 
 ## Discovery
 
@@ -64,18 +81,17 @@ No central `REGISTRY.md` in this repo — browse instead:
 - Instructions: [`.agents/instructions/`](../instructions/)
 - Harnesses: [`.agents/harnesses/`](.)
 
-## Deployment Checklist (fill in once Antigravity's real plumbing is confirmed)
+## Deployment Checklist
 
-- [ ] Confirm whether Antigravity auto-loads a project-context file by
-      convention (like `CLAUDE.md`/`GEMINI.md`/`.github/copilot-instructions.md`)
-      or requires explicit configuration — don't guess, check the tool's
-      actual docs/behavior
-- [ ] If it does auto-load a file, add the Session Startup pointer above
-      into that file directly (same as was done for `GEMINI.md` and
-      `.github/copilot-instructions.md` on 2026-09-16) instead of relying
-      on a manual first message
-- [ ] If it has a skill/extension directory, symlink it to `.agents/skills/`
-      rather than copying skill content
-- [ ] Master persona (`.agents/instructions/base-personas/archi.md`)
-      referenced from wherever Antigravity reads project context
-- [ ] Update this file's **Status** line once any of the above is verified
+- [x] Confirm Antigravity's real discovery mechanism — done 2026-09-16 via
+      direct diagnostic, see above
+- [x] Add the Session Startup pointer to files it actually scans
+      (`AGENTS.md`, `GEMINI.md`, `.agents/rules/session-startup.md`)
+- [ ] Re-test from inside `~/dotfiles` to confirm the pointer is actually
+      picked up automatically now (the first diagnostic showed the
+      mechanism exists but reported nothing auto-loaded in that session)
+- [ ] Confirm whether the `@mention` skill-trigger table above works as-is
+      or needs a keyword-based fallback
+- [ ] Master persona (`.agents/instructions/base-personas/archi.md`) —
+      confirm Antigravity actually reads into `.agents/instructions/` once
+      it discovers the `.agents/` folder, or only `.agents/skills/`
