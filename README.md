@@ -69,11 +69,12 @@ dotfiles/
 
 | Directory | Purpose |
 |---|---|
-| `.agents/` | **Source of truth** for all agent config: `skills/`, `instructions/`, `harnesses/`, `prompts/`, `workflows/`, `validation/`, `automation/`. Edit here, never in the synced copies. `instructions/workspace-config/standards/` holds the workspace-wide agent-orientation standard (`workspace-standards.schema.json` + `.yaml`, `RESEARCH_NOTES.md`) — every repo in this workspace has its own `docs/standards.yml` (or `standards.yml`) inheriting from it; see `CLAUDE.md`/`AGENTS.md` for the review protocol. `sync.sh` distributes all of this to `~/.agents/` (and `skills/` also to `~/.claude/skills/`) — **as of 2026-09-15 this is a real, working sync, not just an organizational convention.** |
+| `.agents/` | **Source of truth** for all agent config: `skills/`, `instructions/`, `harnesses/`, `prompts/`, `workflows/`, `validation/`, `automation/`, `providers/`. Edit here, never in the synced copies. `instructions/workspace-config/standards/` holds the workspace-wide agent-orientation standard (`workspace-standards.schema.json` + `.yaml`, `RESEARCH_NOTES.md`) — every repo in this workspace has its own `docs/standards.yml` (or `standards.yml`) inheriting from it; see `CLAUDE.md`/`AGENTS.md` for the review protocol. `providers/` is the `dtx-providers-tui` registry (custom model providers × harness adapters) — see `.agents/harnesses/PROVIDERS.md`. `sync.sh` distributes all of this to `~/.agents/` (and `skills/` also to `~/.claude/skills/`, `providers/dtx-providers-tui` also to `~/.local/bin/`) — **as of 2026-09-15 this is a real, working sync, not just an organizational convention.** |
 | `.claude/` | Claude Code config; `.claude/skills/<name>` are symlinks back into `.agents/skills/<name>` |
 | `.github/` | GitHub config and CI; several subfolders (`automation/`, `CONTRIBUTING.md`, `harnesses/`, `instructions/`, `prompts/`) are symlinks into `.agents/` so Copilot/Actions read the same source of truth; `workflows/` holds real GitHub Actions (e.g. `vscode-docs-monitor.yml`) |
 | `.vscode/` | VS Code config; `settings.json` contains the real API key and is generated locally by `chezmoi apply` (gitignored) — see `docs/SECRETS.md` |
-| `.chezmoisource/` | Dedicated chezmoi source directory, scoped only to the one encrypted `.vscode/settings.json` — see `docs/SECRETS.md` |
+| `.chezmoisource/` | Dedicated chezmoi source directory, scoped to the encrypted `.vscode/settings.json` and `.dtx-providers/secrets.env` — see `docs/SECRETS.md` |
+| `.dtx-providers/` | Decrypted `secrets.env` (chezmoi+age) plus locally-generated runtime state for the provider tooling below (`litellm-config.yaml`, `proxy.env`) — gitignored, symlinked to `~/.dtx-providers` |
 | `scripts/` | Standalone utility scripts (currently the VS Code docs monitor) |
 | `tasks/` | Task-tracking PoC — `events.jsonl` (append-only log, source of truth) projected into `board.md` (generated view) via `append_event.py`/`rebuild_view.py`; see `tasks/README.md`. Also still holds `KICKOFF.md` (design history) |
 | `docs/` | Everything not auto-loaded by convention — see table below |
@@ -89,7 +90,7 @@ dotfiles/
 | `docs/directory_tree.md` | An older, narrower directory-tree doc (home-directory level, partly superseded by this README) |
 | `docs/requirements.txt` | Python deps for `scripts/monitor_vscode_docs.py` (`requests`, `beautifulsoup4`, `pyyaml`) |
 | `docs/vscode-docs-monitor.yml` | An older copy of the GitHub Actions workflow — the **active** one is `.github/workflows/vscode-docs-monitor.yml`; this copy still points at a dead path (`my/agentic_instructions/...`) from before the `agentic_instructions` merge and should not be treated as current |
-| `docs/SECRETS.md` | How the one real secret in this repo (a VS Code extension API key) is encrypted with chezmoi + age |
+| `docs/SECRETS.md` | How the real secrets in this repo (a VS Code extension API key, the `dtx-providers` custom model API key) are encrypted with chezmoi + age |
 
 ## Guidelines
 

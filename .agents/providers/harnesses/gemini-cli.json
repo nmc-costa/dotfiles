@@ -1,0 +1,8 @@
+{
+  "id": "gemini-cli",
+  "displayName": "Gemini CLI",
+  "mode": "unsupported",
+  "configPath": "~/.gemini/settings.json",
+  "adapter": "gemini-cli.sh",
+  "notes": "Verified against docs/cli/settings.md and docs/cli/model.md in google-gemini/gemini-cli (2026-09-17): there is no base-URL/custom-provider setting at all, only model.name to pick among Google's own Gemini models. No proxy trick fixes this -- the CLI's wire format and endpoint are hardcoded to Google's API. adapter apply exits non-zero with this explanation instead of silently doing nothing."
+}

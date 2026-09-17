@@ -1,0 +1,8 @@
+{
+  "id": "crush",
+  "displayName": "Crush",
+  "mode": "native",
+  "configPath": "~/.config/crush/crushrc",
+  "adapter": "crush.sh",
+  "notes": "Native openai-compat provider via the crushrc DSL (`provider add ... --type openai-compat`, `model add ...`). $VAR is expanded by Crush itself at load time, so the literal key never has to be written to crushrc."
+}

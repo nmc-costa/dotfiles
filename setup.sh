@@ -102,6 +102,7 @@ echo "=== Setting up agents and skills ==="
 setup_agent_symlinks "claude"
 setup_agent_symlinks "agents"
 setup_agent_symlinks "vscode"
+setup_agent_symlinks "dtx-providers"
 
 # Sync skills from dotfiles/.agents/skills/ location
 if [[ -d "$BASE_DIR/dotfiles/.agents/skills" ]]; then

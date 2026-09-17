@@ -32,6 +32,7 @@ AGENTS_SRC="$BASE_DIR/dotfiles/.agents"
 AGENTS_DEST="$BASE_DIR/.agents"
 CLAUDE_SKILLS="$BASE_DIR/.claude/skills"
 SYSTEM_SKILLS="/usr/share/omarchy/default/agents/skills"
+LOCAL_BIN="$BASE_DIR/.local/bin"
 
 log() {
   if [[ $VERBOSE -eq 1 ]]; then
@@ -106,6 +107,18 @@ main() {
     if [[ "$subdir_name" == "skills" ]]; then
       if [[ -d "$CLAUDE_SKILLS" ]] || [[ -L "$(dirname "$CLAUDE_SKILLS")" ]] || [[ -d "$(dirname "$CLAUDE_SKILLS")" ]]; then
         sync_subdir "skills" "$subdir" "$CLAUDE_SKILLS" "~/.claude/skills" || true
+      fi
+    fi
+
+    # providers/ additionally puts its TUI entry point on PATH, same idea as
+    # the skills -> ~/.claude/skills mirror above.
+    if [[ "$subdir_name" == "providers" ]]; then
+      if [[ $DRY_RUN -eq 1 ]]; then
+        echo "(dry-run) would symlink: $AGENTS_DEST/providers/dtx-providers-tui -> $LOCAL_BIN/dtx-providers-tui"
+      else
+        mkdir -p "$LOCAL_BIN"
+        ln -sf "$AGENTS_DEST/providers/dtx-providers-tui" "$LOCAL_BIN/dtx-providers-tui"
+        echo "✓ symlinked dtx-providers-tui -> ~/.local/bin/dtx-providers-tui"
       fi
     fi
   done

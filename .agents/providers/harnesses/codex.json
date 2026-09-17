@@ -1,0 +1,8 @@
+{
+  "id": "codex",
+  "displayName": "Codex CLI",
+  "mode": "proxy",
+  "configPath": "~/.codex/config.toml",
+  "adapter": "codex.sh",
+  "notes": "Codex CLI's current wire_api only supports \"responses\" (/v1/responses) -- \"chat\" was removed and errors on load (see codex-rs/model-provider-info). A plain openai-compat chat/completions server like ours has to go through the shared LiteLLM proxy, which bridges /v1/responses -> /v1/chat/completions (use_chat_completions_api: true). [model_providers.<id>].env_key references an env var name, never a literal key."
+}

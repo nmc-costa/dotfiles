@@ -1,0 +1,8 @@
+{
+  "id": "claude-code",
+  "displayName": "Claude Code",
+  "mode": "proxy",
+  "configPath": "~/.local/bin/claude-<provider-id>",
+  "adapter": "claude-code.sh",
+  "notes": "Claude Code has no concept of an arbitrary custom provider -- it only speaks the Anthropic Messages API, selected globally via ANTHROPIC_BASE_URL/ANTHROPIC_AUTH_TOKEN. Rather than mutate ~/.claude/settings.json (which would silently redirect every Claude Code session on the machine), the adapter generates an opt-in ~/.local/bin/claude-<provider-id> launcher that sets those env vars only for that invocation and execs the real `claude`, wired through the shared LiteLLM proxy."
+}
