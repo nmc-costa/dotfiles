@@ -25,6 +25,8 @@ around only to be archived on GitHub for history — do not treat it as a live s
 | **Model Routing** | Model selection rules (Haiku vs. more expensive models) | [`workspace-config/model-routing.instructions.md`](workspace-config/model-routing.instructions.md) |
 | **Token Tracking** | Token usage monitoring and routing compliance | [`workspace-config/token-tracking.instructions.md`](workspace-config/token-tracking.instructions.md) |
 | **Mermaid Diagrams** | Mermaid diagram generation rules and validation | [`workspace-config/mermaid.instructions.md`](workspace-config/mermaid.instructions.md) |
+| **Machine Environment** | Standing environment facts for this machine (e.g. `sudo` has no TTY, use `pkexec`) | [`workspace-config/machine-environment.instructions.md`](workspace-config/machine-environment.instructions.md) |
+| **Proactive Memory Capture** | Persist what works from every interaction, not just corrections, without being asked | [`workspace-config/memory-capture.instructions.md`](workspace-config/memory-capture.instructions.md) |
 | **VS Code Docs Monitor** | Weekly VS Code docs change monitoring | [`automation/vscode-docs-monitor.instructions.md`](automation/vscode-docs-monitor.instructions.md) |
 | **Master Persona** | Master Architect / Weaver persona | [`base-personas/archi.md`](base-personas/archi.md) |
 | **Copilot Workspace Workflow** | Copilot-specific workspace workflow notes | [`base-personas/copilot_workspace_workflow.md`](base-personas/copilot_workspace_workflow.md) |
