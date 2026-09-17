@@ -53,7 +53,8 @@ cmd_status() {
         [[ -f $path ]] && jq -e --arg p "$p" '.provider[$p]' "$path" >/dev/null 2>&1 && wired="yes"
         ;;
       crush | codex)
-        [[ -f $path ]] && grep -qF "BEGIN dtx-providers: $p" "$path" 2>/dev/null && wired="yes"
+        # Anchored so provider id "foo" doesn't false-positive on a "foo-bar" marker.
+        [[ -f $path ]] && grep -qE "BEGIN dtx-providers: ${p}([[:space:]]|\$)" "$path" 2>/dev/null && wired="yes"
         ;;
       claude-code)
         [[ -x "$HOME/.local/bin/claude-$p" ]] && wired="yes"
@@ -72,6 +73,7 @@ cmd_add_provider() {
   local id name base_url api_key model_id model_name context output reasoning
   id=$(gum input --prompt "Provider id (slug, e.g. my-provider)> ") || exit 0
   [[ -n $id ]] || dtx_fail "id is required"
+  dtx_validate_id "$id"
   [[ -f $DTX_PROVIDERS_REGISTRY/$id.json ]] && dtx_fail "provider $id already exists"
 
   name=$(gum input --prompt "Display name> " --placeholder "$id") || exit 0
@@ -101,12 +103,15 @@ cmd_add_provider() {
     }
   ' >"$DTX_PROVIDERS_REGISTRY/$id.json"
 
-  mkdir -p "$DTX_PROVIDERS_RUNTIME"
   umask 077
+  mkdir -p "$DTX_PROVIDERS_RUNTIME"
+  chmod 700 "$DTX_PROVIDERS_RUNTIME"
   touch "$DTX_PROVIDERS_SECRETS"
-  # Replace or append the var, without ever printing the key back to the terminal.
-  grep -vq "^$env_var=" "$DTX_PROVIDERS_SECRETS" 2>/dev/null || sed -i "/^$env_var=/d" "$DTX_PROVIDERS_SECRETS"
-  printf '%s=%s\n' "$env_var" "$api_key" >>"$DTX_PROVIDERS_SECRETS"
+  # Always drop any existing line for this var first (idempotent by
+  # construction), then append -- no conditional dedup logic to get backwards.
+  # %q-escaped so the value survives `source` even with $, quotes, spaces, etc.
+  sed -i "/^$env_var=/d" "$DTX_PROVIDERS_SECRETS"
+  printf '%s=%q\n' "$env_var" "$api_key" >>"$DTX_PROVIDERS_SECRETS"
   chmod 600 "$DTX_PROVIDERS_SECRETS"
 
   echo "Wrote registry/$id.json and stored the key in $DTX_PROVIDERS_SECRETS."
@@ -129,6 +134,7 @@ cmd_add_harness() {
   local id display config_path
   id=$(gum input --prompt "Harness id (slug)> ") || exit 0
   [[ -n $id ]] || dtx_fail "id is required"
+  dtx_validate_id "$id"
   [[ -f $DTX_PROVIDERS_HARNESSES/$id.json ]] && dtx_fail "harness $id already exists"
   display=$(gum input --prompt "Display name> " --placeholder "$id") || exit 0
   config_path=$(gum input --prompt "Its native config file path> " --placeholder "~/.config/$id/config.json") || exit 0

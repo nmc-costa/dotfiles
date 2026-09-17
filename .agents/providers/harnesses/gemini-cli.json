@@ -1,8 +1,8 @@
 {
   "id": "gemini-cli",
   "displayName": "Gemini CLI",
-  "mode": "unsupported",
-  "configPath": "~/.gemini/settings.json",
+  "mode": "proxy",
+  "configPath": "~/.local/bin/gemini-<provider-id>",
   "adapter": "gemini-cli.sh",
-  "notes": "Verified against docs/cli/settings.md and docs/cli/model.md in google-gemini/gemini-cli (2026-09-17): there is no base-URL/custom-provider setting at all, only model.name to pick among Google's own Gemini models. No proxy trick fixes this -- the CLI's wire format and endpoint are hardcoded to Google's API. adapter apply exits non-zero with this explanation instead of silently doing nothing."
+  "notes": "Corrected 2026-09-17 -- an earlier version of this file said 'unsupported' based on docs/cli/settings.md and docs/cli/model.md, which was wrong: docs/reference/configuration.md documents GOOGLE_GEMINI_BASE_URL, which overrides the base URL when using gemini-api-key auth and explicitly allows plain http:// for localhost. LiteLLM's proxy exposes the real Gemini wire format at POST /v1beta/models/{model}:generateContent (litellm/proxy/google_endpoints/endpoints.py), routed through the same model_list as every other provider. Wired through the shared proxy via an opt-in ~/.local/bin/gemini-<provider-id> launcher, same pattern as claude-code.sh/codex.sh. Not yet smoke-tested end-to-end -- the google_endpoints bridge is recent LiteLLM code."
 }

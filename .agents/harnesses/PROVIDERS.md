@@ -52,14 +52,15 @@ repo — see `docs/SECRETS.md`, same identity/recipient, same
 | **Crush** | native | `crushrc` DSL (`provider add --type openai-compat`, `model add`); `$VAR` is expanded by Crush itself, config file never holds the literal key | charmbracelet/crush README.md |
 | **Codex CLI** | proxy | Its `wire_api` **only** supports `"responses"` today — `"chat"` raises `CHAT_WIRE_API_REMOVED_ERROR` (removed). A plain openai-compat chat/completions server has to go through the shared LiteLLM proxy, which bridges `/v1/responses` → `/v1/chat/completions` | `codex-rs/model-provider-info/src/lib.rs` (source, not docs) |
 | **Claude Code** | proxy | No per-provider concept at all — only a global `ANTHROPIC_BASE_URL`/`ANTHROPIC_AUTH_TOKEN`. Rather than mutate `~/.claude/settings.json` globally, the adapter writes an opt-in `~/.local/bin/claude-<provider-id>` launcher | LiteLLM docs (`tutorials/claude_responses_api`) |
-| **Gemini CLI** | **unsupported** | No base-URL / custom-provider setting exists at all — checked, not guessed | `google-gemini/gemini-cli` `docs/cli/settings.md`, `docs/cli/model.md` |
+| **Gemini CLI** | proxy | `GOOGLE_GEMINI_BASE_URL` overrides the base URL for `gemini-api-key` auth, explicitly allows plain `http://localhost`. An earlier version of this table said "unsupported" based on the wrong docs pages (`docs/cli/settings.md`/`model.md`) — corrected 2026-09-17. Not yet smoke-tested end-to-end | `google-gemini/gemini-cli` `docs/reference/configuration.md`; LiteLLM `litellm/proxy/google_endpoints/endpoints.py` |
+| **Antigravity CLI** (`agy`) | **unsupported** | No `models add`/`provider add`, no base-url/endpoint/proxy flag or env var anywhere in `agy --help`. Binary's internal protocol *does* have a `CustomModelsConfig`/`MODEL_PROVIDER_OPENAI` concept (found via `strings`), but also `TEAMS_FEATURES_OPENAI_DISABLED` — looks gated behind a Google Workspace/Antigravity Teams admin policy, not reachable locally | `agy --help`, `agy models`, `strings` on the `agy` binary (closed-source, no public docs repo) |
 
 Don't trust this table blindly as these projects evolve — it was true as of the
 verification date above. If an adapter starts failing in a way that looks like
 the upstream tool changed its config format, re-verify against the tool's
 current docs/source before assuming the adapter is just buggy.
 
-## Proxy-mode harnesses (Codex CLI, Claude Code today)
+## Proxy-mode harnesses (Codex CLI, Claude Code, Gemini CLI today)
 
 One shared local LiteLLM proxy, `dtx-litellm-proxy.service` (systemd --user,
 `127.0.0.1:4444`), generated from the *entire* provider registry by
@@ -69,11 +70,11 @@ One shared local LiteLLM proxy, `dtx-litellm-proxy.service` (systemd --user,
 Requires `litellm[proxy]` on `PATH` (not installed by this tooling —
 `pipx install "litellm[proxy]"` yourself first). `proxy/ensure-proxy.sh`
 renders the config, installs/refreshes the unit, and restarts it; it's called
-automatically by `codex.sh`/`claude-code.sh` on `apply`.
+automatically by `codex.sh`/`claude-code.sh`/`gemini-cli.sh` on `apply`.
 
 The proxy's own local master key (`~/.dtx-providers/proxy.env`,
-machine-generated, never synced) is what Codex/Claude Code present to the
-*local* proxy — the real upstream provider key lives only inside
+machine-generated, never synced) is what Codex/Claude Code/Gemini CLI present
+to the *local* proxy — the real upstream provider key lives only inside
 `litellm-config.yaml` server-side, which the proxy needs in order to actually
 talk to the provider.
 
@@ -93,7 +94,7 @@ implement it. Before writing real logic into that adapter:
 1. **Confirm, don't assume**, exactly how that harness accepts a custom
    OpenAI-compatible provider — read its actual docs or source, the same way
    the table above was built. If it doesn't support one at all, make the
-   adapter say so explicitly (see `adapters/gemini-cli.sh`) instead of
+   adapter say so explicitly (see `adapters/antigravity-cli.sh`) instead of
    silently no-op'ing.
 2. Decide `native` (writes the harness's own config format directly) vs
    `proxy` (needs `proxy/ensure-proxy.sh` because the harness's wire format

@@ -26,10 +26,19 @@ begin_mark="# BEGIN dtx-providers: $provider_id"
 end_mark="# END dtx-providers: $provider_id"
 
 strip_block() {
+  # See crush.sh's strip_block for why this is prefix-then-boundary, not ==
+  # or a bare prefix match.
   awk -v b="$begin_mark" -v e="$end_mark" '
-    $0 == b { skip = 1; next }
-    $0 == e { skip = 0; next }
+    function starts_with_marker(line, mark,    blen, rest) {
+      blen = length(mark)
+      if (substr(line, 1, blen) != mark) return 0
+      rest = substr(line, blen + 1, 1)
+      return (rest == "" || rest == " " || rest == "\t")
+    }
+    starts_with_marker($0, b) { skip = 1; begins++; next }
+    starts_with_marker($0, e) { skip = 0; ends++; next }
     !skip { print }
+    END { if (begins != ends) { print "dtx-providers: unpaired BEGIN/END marker in '"$config_path"', refusing to touch it" > "/dev/stderr"; exit 1 } }
   ' "$config_path"
 }
 

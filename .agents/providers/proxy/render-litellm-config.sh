@@ -8,6 +8,11 @@
 # own local master key, never the upstream provider keys.
 
 set -euo pipefail
+# Set before any file is created in this script -- this whole directory holds
+# secrets (proxy.env, litellm-config.yaml has literal upstream API keys), so
+# nothing here should ever depend on the caller's ambient umask.
+umask 077
+
 cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../adapters"
 source lib.sh
 
@@ -15,11 +20,11 @@ command -v jq >/dev/null || dtx_fail "jq is required"
 command -v python3 >/dev/null || dtx_fail "python3 is required (used to emit YAML safely)"
 
 mkdir -p "$DTX_PROVIDERS_RUNTIME"
+chmod 700 "$DTX_PROVIDERS_RUNTIME"
 proxy_env="$DTX_PROVIDERS_RUNTIME/proxy.env"
 
 if [[ ! -f $proxy_env ]]; then
   master_key="sk-dtx-$(head -c 24 /dev/urandom | base64 | tr -dc 'a-zA-Z0-9' | head -c 32)"
-  umask 077
   printf 'DTX_PROXY_MASTER_KEY=%s\nDTX_PROXY_PORT=4444\n' "$master_key" >"$proxy_env"
   echo "proxy: generated a new local master key at $proxy_env"
 fi
@@ -59,6 +64,5 @@ print(yaml.safe_dump(config, sort_keys=False, default_flow_style=False))
 ' <<<"$config_json" >"$DTX_PROVIDERS_RUNTIME/litellm-config.yaml.tmp" \
   || dtx_fail "python3 + pyyaml are required to render litellm-config.yaml (pip install pyyaml)"
 
-umask 077
 mv "$DTX_PROVIDERS_RUNTIME/litellm-config.yaml.tmp" "$DTX_PROVIDERS_RUNTIME/litellm-config.yaml"
 echo "proxy: rendered $DTX_PROVIDERS_RUNTIME/litellm-config.yaml from $(dtx_list_providers | wc -l) provider(s)"

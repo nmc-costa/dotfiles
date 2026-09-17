@@ -43,7 +43,15 @@ dtx_resolve_secret() {
   local env_var="$1"
   [[ -f $DTX_PROVIDERS_SECRETS ]] || dtx_fail "secrets file not found: $DTX_PROVIDERS_SECRETS (run 'chezmoi apply' first)"
   local value
-  value=$(env -i bash -c "set -a; source '$DTX_PROVIDERS_SECRETS'; printf '%s' \"\${$env_var:-}\"")
+  # env_var is passed as a positional arg, never interpolated into the script
+  # text -- a provider id/env-var-name with shell metacharacters can't inject.
+  value=$(env -i bash -c '
+    set -a
+    source "$1"
+    set +a
+    var_name="$2"
+    printf "%s" "${!var_name:-}"
+  ' _ "$DTX_PROVIDERS_SECRETS" "$env_var")
   [[ -n $value ]] || dtx_fail "$env_var not set in $DTX_PROVIDERS_SECRETS"
   printf '%s' "$value"
 }
@@ -52,8 +60,19 @@ dtx_expand_path() {
   printf '%s' "${1/#\~/$HOME}"
 }
 
+# Backs up the pristine, pre-dtx-providers state -- only ever writes the
+# .bak once, so a second apply/remove never overwrites it with an
+# already-modified version.
 dtx_backup() {
   local path="$1"
   [[ -f $path ]] || return 0
+  [[ -f "$path.dtx-providers.bak" ]] && return 0
   cp "$path" "$path.dtx-providers.bak"
+}
+
+# Enforces a safe id for anything used as a filename component (registry,
+# harnesses, adapters, generated launcher names, env var name derivation).
+dtx_validate_id() {
+  local id="$1"
+  [[ $id =~ ^[a-z0-9][a-z0-9-]*$ ]] || dtx_fail "invalid id '$id' -- must match ^[a-z0-9][a-z0-9-]*\$ (lowercase letters, digits, hyphens, can't start with a hyphen)"
 }
