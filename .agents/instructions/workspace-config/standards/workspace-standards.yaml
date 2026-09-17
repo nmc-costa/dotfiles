@@ -43,6 +43,7 @@ repoRoot:
     - docs
     - scripts
     - tasks
+    - global
   docsDir: docs/
   # Kept in sync by hand with scripts/validate_dotfiles.sh's ALLOWED_ROOT_FILES/
   # ALLOWED_ROOT_DIRS (2026-09-15: found these two lists had drifted apart —
