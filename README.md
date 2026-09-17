@@ -30,11 +30,19 @@ dotfiles/
 │   └── workflows/                #   Agent personas / init workflows
 ├── .chezmoisource/              # chezmoi source dir, scoped to one encrypted file
 │   └── dot_vscode/encrypted_settings.json.age
-├── .claude/                     # Claude Code config; .claude/skills/<name> are symlinks into .agents/skills/
+├── .claude/                     # Claude Code global config; only CLAUDE.md is real here (file-symlinked to
+│                                 #   ~/.claude/CLAUDE.md by setup.sh) — see "Global per-tool instructions files" below
 ├── .github/                     # GitHub config; automation/, CONTRIBUTING.md, harnesses/, instructions/,
 │                                 #   prompts/ are symlinks into .agents/; workflows/, skills/, workflows dir,
 │                                 #   copilot-instructions.md, and workflows/ (CI) are real here
 ├── .vscode/                     # VS Code config (settings.json holds the real API key, chezmoi-managed — see docs/SECRETS.md)
+├── .gemini/                     # Gemini CLI global config; only GEMINI.md is real here (file-symlinked to
+│                                 #   ~/.gemini/GEMINI.md by setup.sh)
+├── .codex/                      # OpenAI Codex CLI global config; only AGENTS.md is real here (file-symlinked to
+│                                 #   ~/.codex/AGENTS.md by setup.sh)
+├── .copilot/                    # GitHub Copilot CLI global config; only copilot-instructions.md is real here
+│                                 #   (file-symlinked to ~/.copilot/copilot-instructions.md by setup.sh) — distinct
+│                                 #   from .github/copilot-instructions.md above, which is project-level
 ├── docs/                        # Everything not auto-loaded by a tool by convention — see index below
 │   └── SECRETS.md               #   Secrets-management doc (chezmoi + age)
 ├── scripts/                     # Utility scripts (VS Code docs monitor: monitor_vscode_docs.py, setup_vscode_monitor_cron.sh)
@@ -70,10 +78,16 @@ dotfiles/
 
 | Directory | Purpose |
 |---|---|
+<<<<<<< HEAD
+| `.agents/` | **Source of truth** for all agent config: `skills/`, `instructions/`, `harnesses/`, `prompts/`, `workflows/`, `validation/`, `automation/`. Edit here, never in the synced copies. `instructions/workspace-config/standards/` holds the workspace-wide agent-orientation standard (`workspace-standards.schema.json` + `.yaml`, `RESEARCH_NOTES.md`) — every repo in this workspace has its own `docs/standards.yml` (or `standards.yml`) inheriting from it; see `CLAUDE.md`/`AGENTS.md` for the review protocol. `sync.sh` distributes all of this to `~/.agents/` (and `skills/` also to `~/.claude/skills/`) — **as of 2026-09-15 this is a real, working sync, not just an organizational convention.** |
+| `.claude/` | Claude Code config; `.claude/skills/<name>` are symlinks back into `.agents/skills/<name>`, and `.claude/CLAUDE.md` is the one real, versioned file of Claude Code's global config — see "Global per-tool instructions files" below |
+=======
 | `.agents/` | **Source of truth** for all agent config: `skills/`, `instructions/`, `harnesses/`, `prompts/`, `workflows/`, `validation/`, `automation/`, `rules/` (tool-agnostic rules some harnesses auto-discover via a `.agents/rules/*.md` glob, confirmed real for Antigravity 2026-09-16). Edit here, never in the synced copies. `instructions/workspace-config/standards/` holds the workspace-wide agent-orientation standard (`workspace-standards.schema.json` + `.yaml`, `RESEARCH_NOTES.md`) — every repo in this workspace has its own `docs/standards.yml` (or `standards.yml`) inheriting from it; see `CLAUDE.md`/`AGENTS.md` for the review protocol. `sync.sh` distributes all of this to `~/.agents/` (and `skills/` also to `~/.claude/skills/`) — **as of 2026-09-15 this is a real, working sync, not just an organizational convention.** |
 | `.claude/` | Claude Code config; `.claude/skills/<name>` are symlinks back into `.agents/skills/<name>` |
+>>>>>>> origin/main
 | `.github/` | GitHub config and CI; several subfolders (`automation/`, `CONTRIBUTING.md`, `harnesses/`, `instructions/`, `prompts/`) are symlinks into `.agents/` so Copilot/Actions read the same source of truth; `workflows/` holds real GitHub Actions (e.g. `vscode-docs-monitor.yml`) |
 | `.vscode/` | VS Code config; `settings.json` contains the real API key and is generated locally by `chezmoi apply` (gitignored) — see `docs/SECRETS.md` |
+| `.gemini/`, `.codex/`, `.copilot/` | Global config for Gemini CLI, OpenAI Codex CLI, and GitHub Copilot CLI respectively — each holds exactly one real, versioned file (`GEMINI.md`, `AGENTS.md`, `copilot-instructions.md`), same pattern as `.claude/CLAUDE.md` — see below |
 | `.chezmoisource/` | Dedicated chezmoi source directory, scoped only to the one encrypted `.vscode/settings.json` — see `docs/SECRETS.md` |
 | `scripts/` | Standalone utility scripts (currently the VS Code docs monitor) |
 | `tasks/` | Task-tracking PoC — `events.jsonl` (append-only log, source of truth) projected into `board.md` (generated view) via `append_event.py`/`rebuild_view.py`; see `tasks/README.md`. Also still holds `KICKOFF.md` (design history) |
@@ -91,6 +105,31 @@ dotfiles/
 | `docs/requirements.txt` | Python deps for `scripts/monitor_vscode_docs.py` (`requests`, `beautifulsoup4`, `pyyaml`) |
 | `docs/vscode-docs-monitor.yml` | An older copy of the GitHub Actions workflow — the **active** one is `.github/workflows/vscode-docs-monitor.yml`; this copy still points at a dead path (`my/agentic_instructions/...`) from before the `agentic_instructions` merge and should not be treated as current |
 | `docs/SECRETS.md` | How the one real secret in this repo (a VS Code extension API key) is encrypted with chezmoi + age |
+
+### Global per-tool instructions files
+
+Each AI coding agent that has a real, confirmed, per-user global
+instructions file (not a project-level one) gets its own directory here
+holding exactly that one file — never the tool's whole config directory,
+because those directories mix in credentials/session state/caches that
+must never enter a git repo. `setup.sh`'s `setup_agent_file_symlink`
+file-symlinks each one individually into place:
+
+| Repo file | Tool | Symlinked to |
+|---|---|---|
+| `.claude/CLAUDE.md` | Claude Code | `~/.claude/CLAUDE.md` |
+| `.gemini/GEMINI.md` | Gemini CLI | `~/.gemini/GEMINI.md` |
+| `.codex/AGENTS.md` | OpenAI Codex CLI | `~/.codex/AGENTS.md` |
+| `.copilot/copilot-instructions.md` | GitHub Copilot CLI | `~/.copilot/copilot-instructions.md` |
+
+All four are thin pointers to the actual content in
+`.agents/instructions/workspace-config/*.instructions.md` — edit there,
+not in the pointer files. GitHub Copilot's VS Code extension is different:
+it has no per-user global file, only the project-level
+`.github/copilot-instructions.md` already covered above. Don't add a
+fifth entry here for a tool without first confirming (via that tool's own
+docs) that it actually reads a fixed home-directory file — see `CLAUDE.md`
+Known Gaps for what was checked and when.
 
 ## Guidelines
 

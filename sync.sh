@@ -60,6 +60,20 @@ sync_subdir() {
     return 0
   fi
 
+  # Guard against dest resolving to the SAME physical directory as src —
+  # e.g. ~/.agents is itself a symlink into dotfiles/.agents, from
+  # setup_agent_symlinks() in setup.sh. Without this check, `rm -rf "$dest"`
+  # deletes the real source before `cp -r` can read it, cp then fails, and
+  # the `|| true` at the call site let that failure print "✓ synced" anyway.
+  # Confirmed reproducible 2026-09-16 (destroys dotfiles/.agents/<subdir>
+  # on a fresh-machine `./setup.sh` run) — this is the exact class of bug
+  # the file-level-symlink fix in this same commit exists to prevent.
+  if [[ -e "$dest" ]] && [[ "$(readlink -f "$src")" == "$(readlink -f "$dest")" ]]; then
+    log "skip $subdir_name -> $location_name (dest is the same physical directory as src — already in sync via symlink)"
+    echo "✓ already in sync (symlinked): $subdir_name -> $location_name"
+    return 0
+  fi
+
   if [[ "$subdir_name" == "skills" ]]; then
     mkdir -p "$dest"
     for skill_dir in "$src"/*; do
@@ -69,9 +83,14 @@ sync_subdir() {
         log "skip: $skill_name (missing SKILL.md)"
         continue
       fi
+      skill_dest="$dest/$skill_name"
+      if [[ -e "$skill_dest" ]] && [[ "$(readlink -f "$skill_dir")" == "$(readlink -f "$skill_dest")" ]]; then
+        log "skip skills/$skill_name -> $location_name (same physical directory)"
+        continue
+      fi
       log "syncing skills/$skill_name -> $location_name"
-      rm -rf "$dest/$skill_name"
-      cp -r "$skill_dir" "$dest/$skill_name"
+      rm -rf "$skill_dest"
+      cp -r "$skill_dir" "$skill_dest"
     done
   else
     log "syncing $subdir_name/ -> $location_name"
