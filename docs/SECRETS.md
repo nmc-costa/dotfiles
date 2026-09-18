@@ -1,12 +1,23 @@
 # Secrets Management (chezmoi + age)
 
-This repo stores one real secret: the `apiKey` inside `.vscode/settings.json`
-(used by a VS Code chat extension to talk to a custom LLM endpoint at
-`https://glm53-flash.dtx-colab.com/v1/chat/completions`). It used to be
-committed in plaintext. It is now stored **only** as an age-encrypted blob at
-`.chezmoisource/dot_vscode/encrypted_settings.json.age`, and the real
-`.vscode/settings.json` is generated locally by `chezmoi apply` (and is
-gitignored — see `.gitignore`).
+This repo stores two real secrets, both age-encrypted under
+`.chezmoisource/`, both decrypted locally by `chezmoi apply`, both gitignored:
+
+1. The `apiKey` inside `.vscode/settings.json` (used by a VS Code chat
+   extension to talk to a custom LLM endpoint at
+   `https://glm53-flash.dtx-colab.com/v1/chat/completions`). It used to be
+   committed in plaintext; now it's only at
+   `.chezmoisource/dot_vscode/encrypted_settings.json.age`.
+2. `.dtx-providers/secrets.env` — the same GLM-5.3-Flash API key (and any
+   further custom model provider keys added later via `dtx-providers-tui`),
+   consumed by the `.agents/providers/` adapters/proxy so opencode, Crush,
+   Codex CLI, and Claude Code can all use it too. Encrypted at
+   `.chezmoisource/private_dot_dtx-providers/encrypted_private_secrets.env.age`.
+   See `.agents/harnesses/PROVIDERS.md` for what consumes it.
+
+Both follow the exact same mechanism described below — this doc was written
+for secret #1 and generalizes directly to #2 (just a different source/target
+path).
 
 ## How it fits into this repo
 
@@ -91,18 +102,26 @@ On a fresh machine, after `chezmoi` and `age` are installed
    (Expand `$HOME` to your actual home directory if your chezmoi version
    doesn't expand it — check with `chezmoi doctor` afterwards.)
 
-3. Decrypt and write the real file:
+3. Decrypt and write the real files:
    ```bash
    chezmoi apply
    ```
-   This regenerates `~/dotfiles/.vscode/settings.json` with the real API key,
-   in one command, without ever putting the key in git.
+   This regenerates **both** `~/dotfiles/.vscode/settings.json` and
+   `~/dotfiles/.dtx-providers/secrets.env` with their real values, in one
+   command, without ever putting either key in git.
 
 4. Verify:
    ```bash
    chezmoi diff       # should print nothing (already in sync)
-   cat ~/dotfiles/.vscode/settings.json   # should show the real apiKey
+   cat ~/dotfiles/.vscode/settings.json     # should show the real apiKey
+   cat ~/dotfiles/.dtx-providers/secrets.env  # should show DTX_GLM53_FLASH_API_KEY=...
    ```
+
+5. Re-run `./setup.sh` (or just `ln -sf ~/dotfiles/.dtx-providers ~/.dtx-providers`)
+   if `~/.dtx-providers` didn't exist as a symlink yet — `setup.sh`'s
+   `setup_agent_symlinks` skips a target whose source didn't exist yet, so if
+   you ran `setup.sh` before this file's `chezmoi apply` ever ran, run it once
+   more.
 
 This preserves the original "copy one key, get the same LLM endpoint config
 everywhere" convenience — the one thing you now copy out-of-band is the small

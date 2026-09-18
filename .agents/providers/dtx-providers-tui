@@ -1,0 +1,204 @@
+#!/bin/bash
+# dtx-providers-tui: add/apply custom model providers across AI coding harnesses.
+# Interactive (gum) when run with no args; scriptable via subcommands otherwise.
+#
+# Registry lives in .agents/providers/{registry,harnesses}/*.json (git-tracked, no
+# secrets). Adapters in .agents/providers/adapters/*.sh know each harness's native
+# config format. See dotfiles/.agents/harnesses/PROVIDERS.md for the full picture.
+
+set -euo pipefail
+cd -- "$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")"
+source adapters/lib.sh
+
+require_gum() {
+  command -v gum >/dev/null || dtx_fail "gum is required for the interactive TUI (it ships with omarchy). Use subcommands instead: apply/remove/status/add-provider/add-harness."
+}
+
+usage() {
+  cat <<'EOF'
+Usage:
+  dtx-providers-tui                          interactive menu
+  dtx-providers-tui apply <harness> <provider>
+  dtx-providers-tui remove <harness> <provider>
+  dtx-providers-tui status
+  dtx-providers-tui add-provider
+  dtx-providers-tui add-harness
+EOF
+}
+
+cmd_apply() {
+  local harness="$1" provider="$2"
+  local adapter
+  adapter=$(jq -r .adapter <<<"$(dtx_harness_json "$harness")")
+  bash "adapters/$adapter" apply "$provider"
+}
+
+cmd_remove() {
+  local harness="$1" provider="$2"
+  local adapter
+  adapter=$(jq -r .adapter <<<"$(dtx_harness_json "$harness")")
+  bash "adapters/$adapter" remove "$provider"
+}
+
+cmd_status() {
+  printf '%-14s %-22s %-10s %s\n' "HARNESS" "MODE" "PROVIDER" "WIRED?"
+  local h p wired path mode
+  for h in $(dtx_list_harnesses); do
+    mode=$(jq -r .mode <<<"$(dtx_harness_json "$h")")
+    path=$(dtx_expand_path "$(jq -r .configPath <<<"$(dtx_harness_json "$h")")")
+    for p in $(dtx_list_providers); do
+      wired="no"
+      case "$h" in
+      opencode)
+        [[ -f $path ]] && jq -e --arg p "$p" '.provider[$p]' "$path" >/dev/null 2>&1 && wired="yes"
+        ;;
+      crush | codex)
+        # Anchored so provider id "foo" doesn't false-positive on a "foo-bar" marker.
+        [[ -f $path ]] && grep -qE "BEGIN dtx-providers: ${p}([[:space:]]|\$)" "$path" 2>/dev/null && wired="yes"
+        ;;
+      claude-code)
+        [[ -x "$HOME/.local/bin/claude-$p" ]] && wired="yes"
+        ;;
+      gemini-cli)
+        wired="unsupported"
+        ;;
+      esac
+      printf '%-14s %-22s %-10s %s\n' "$h" "$mode" "$p" "$wired"
+    done
+  done
+}
+
+cmd_add_provider() {
+  require_gum
+  local id name base_url api_key model_id model_name context output reasoning
+  id=$(gum input --prompt "Provider id (slug, e.g. my-provider)> ") || exit 0
+  [[ -n $id ]] || dtx_fail "id is required"
+  dtx_validate_id "$id"
+  [[ -f $DTX_PROVIDERS_REGISTRY/$id.json ]] && dtx_fail "provider $id already exists"
+
+  name=$(gum input --prompt "Display name> " --placeholder "$id") || exit 0
+  base_url=$(gum input --prompt "Base URL (OpenAI-compatible, e.g. https://host/v1)> ") || exit 0
+  [[ -n $base_url ]] || dtx_fail "base URL is required"
+  api_key=$(gum input --password --prompt "API key (stored encrypted, never shown again)> ") || exit 0
+  [[ -n $api_key ]] || dtx_fail "API key is required"
+  model_id=$(gum input --prompt "Model id (as the upstream server names it)> ") || exit 0
+  model_name=$(gum input --prompt "Model display name> " --placeholder "$model_id") || exit 0
+  context=$(gum input --prompt "Context window (tokens)> " --placeholder "128000") || exit 0
+  output=$(gum input --prompt "Max output tokens> " --placeholder "8192") || exit 0
+  gum confirm "Supports reasoning?" && reasoning=true || reasoning=false
+
+  local env_var
+  env_var="DTX_$(tr '[:lower:]-' '[:upper:]_' <<<"$id")_API_KEY"
+
+  jq -n \
+    --arg id "$id" --arg name "${name:-$id}" --arg baseURL "$base_url" \
+    --arg envVar "$env_var" --arg modelId "$model_id" \
+    --arg modelName "${model_name:-$model_id}" \
+    --argjson context "${context:-128000}" --argjson output "${output:-8192}" \
+    --argjson reasoning "$reasoning" '
+    {
+      id: $id, displayName: $name, type: "openai-compat", baseURL: $baseURL,
+      apiKeyEnvVar: $envVar,
+      models: [{id: $modelId, name: $modelName, reasoning: $reasoning, contextWindow: $context, maxOutput: $output}]
+    }
+  ' >"$DTX_PROVIDERS_REGISTRY/$id.json"
+
+  umask 077
+  mkdir -p "$DTX_PROVIDERS_RUNTIME"
+  chmod 700 "$DTX_PROVIDERS_RUNTIME"
+  touch "$DTX_PROVIDERS_SECRETS"
+  # Always drop any existing line for this var first (idempotent by
+  # construction), then append -- no conditional dedup logic to get backwards.
+  # %q-escaped so the value survives `source` even with $, quotes, spaces, etc.
+  sed -i "/^$env_var=/d" "$DTX_PROVIDERS_SECRETS"
+  printf '%s=%q\n' "$env_var" "$api_key" >>"$DTX_PROVIDERS_SECRETS"
+  chmod 600 "$DTX_PROVIDERS_SECRETS"
+
+  echo "Wrote registry/$id.json and stored the key in $DTX_PROVIDERS_SECRETS."
+  echo "IMPORTANT: also encrypt it into the repo so it survives a fresh machine:"
+  echo "  chezmoi add --encrypt $DTX_PROVIDERS_SECRETS   # from a shell where chezmoi's destDir/sourceDir are configured (see docs/SECRETS.md)"
+
+  if gum confirm "Apply this provider to some harnesses now?"; then
+    local chosen
+    chosen=$(dtx_list_harnesses | gum choose --no-limit --header "Apply $id to:") || exit 0
+    local h
+    while IFS= read -r h; do
+      [[ -n $h ]] || continue
+      cmd_apply "$h" "$id" || echo "  (failed for $h, see message above)"
+    done <<<"$chosen"
+  fi
+}
+
+cmd_add_harness() {
+  require_gum
+  local id display config_path
+  id=$(gum input --prompt "Harness id (slug)> ") || exit 0
+  [[ -n $id ]] || dtx_fail "id is required"
+  dtx_validate_id "$id"
+  [[ -f $DTX_PROVIDERS_HARNESSES/$id.json ]] && dtx_fail "harness $id already exists"
+  display=$(gum input --prompt "Display name> " --placeholder "$id") || exit 0
+  config_path=$(gum input --prompt "Its native config file path> " --placeholder "~/.config/$id/config.json") || exit 0
+
+  jq -n --arg id "$id" --arg name "${display:-$id}" --arg path "$config_path" '
+    {id: $id, displayName: $name, mode: "template", configPath: $path, adapter: ($id + ".sh"),
+     notes: "Not verified yet -- confirm how this harness actually loads a custom openai-compatible provider before relying on the generated adapter stub. See .agents/harnesses/TEMPLATE.md for the same rule applied to instruction harnesses."}
+  ' >"$DTX_PROVIDERS_HARNESSES/$id.json"
+
+  cat >"adapters/$id.sh" <<EOF
+#!/bin/bash
+# STATUS: template -- not verified. Fill this in after confirming, against real docs
+# or a real run, how $id actually accepts a custom openai-compatible provider (native
+# config field? env vars? a proxy, like codex.sh/claude-code.sh use? or unsupported,
+# like gemini-cli.sh?). Do not guess a mechanism you have not confirmed.
+
+set -euo pipefail
+cd -- "\$(dirname -- "\${BASH_SOURCE[0]}")"
+source lib.sh
+
+dtx_fail "$id: adapter is a template, not implemented yet -- see adapters/$id.sh"
+EOF
+  chmod +x "adapters/$id.sh"
+  echo "Wrote harnesses/$id.json and a template adapters/$id.sh -- edit the adapter before using it."
+}
+
+interactive_menu() {
+  require_gum
+  local choice
+  choice=$(gum choose --header "DTx providers / harnesses" \
+    "Status" "Add provider" "Apply provider to harnesses" "Remove provider from a harness" "Add harness" "Quit") || exit 0
+  case "$choice" in
+  Status) cmd_status ;;
+  "Add provider") cmd_add_provider ;;
+  "Apply provider to harnesses")
+    local p h chosen
+    p=$(dtx_list_providers | gum choose --header "Provider to apply") || exit 0
+    chosen=$(dtx_list_harnesses | gum choose --no-limit --header "Apply $p to:") || exit 0
+    while IFS= read -r h; do
+      [[ -n $h ]] || continue
+      cmd_apply "$h" "$p" || true
+    done <<<"$chosen"
+    ;;
+  "Remove provider from a harness")
+    local p h
+    p=$(dtx_list_providers | gum choose --header "Provider to remove") || exit 0
+    h=$(dtx_list_harnesses | gum choose --header "From harness") || exit 0
+    cmd_remove "$h" "$p"
+    ;;
+  "Add harness") cmd_add_harness ;;
+  Quit) exit 0 ;;
+  esac
+}
+
+case "${1:-}" in
+apply) cmd_apply "$2" "$3" ;;
+remove) cmd_remove "$2" "$3" ;;
+status) cmd_status ;;
+add-provider) cmd_add_provider ;;
+add-harness) cmd_add_harness ;;
+-h | --help) usage ;;
+"") interactive_menu ;;
+*)
+  usage >&2
+  exit 1
+  ;;
+esac

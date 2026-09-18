@@ -1,0 +1,8 @@
+{
+  "id": "antigravity-cli",
+  "displayName": "Antigravity CLI",
+  "mode": "unsupported",
+  "configPath": "~/.gemini/antigravity-cli/settings.json",
+  "adapter": "antigravity-cli.sh",
+  "notes": "Investigated 2026-09-17. Real binary is `agy` (~/.local/bin/agy), not `antigravity`. `agy models` lists only a closed set served by Google's own Antigravity backend (Gemini/Claude/GPT-OSS) -- no `models add`/`provider add` subcommand, and `agy --help` in full has no flag or env var for base-url/endpoint/proxy/custom-provider. `~/.gemini/antigravity-cli/settings.json` only stores `model` as a plain string from that closed list. `strings` on the agy binary shows the internal protocol DOES have a custom-model-provider concept (CustomModelsConfig, MODEL_PROVIDER_OPENAI, provider_api_key, AllowCustomModels), but also TEAMS_FEATURES_OPENAI_DISABLED, which strongly suggests it's gated behind a Google Workspace / Antigravity Teams admin policy, not exposed via local CLI/config. No accessible path found from this machine; re-open if Workspace/Teams admin access to Antigravity is ever available."
+}

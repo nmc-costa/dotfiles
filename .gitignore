@@ -14,6 +14,11 @@
 !.vscode/launch.json
 !.vscode/tasks.json
 .idea/
+
+# dtx-providers: secrets.env (chezmoi+age, see docs/SECRETS.md) plus everything
+# else here is generated locally (litellm-config.yaml embeds a real upstream API
+# key server-side, proxy.env is a locally-generated token) — never commit any of it.
+.dtx-providers/*
 *.sublime-*
 
 # Python
@@ -46,6 +51,12 @@ tmp/
 .claude/sessions/
 .claude/logs/
 .claude/cache/
+# Per Claude Code's own docs: worktrees created by the `EnterWorktree`
+# tool/`--worktree` flag land here — never commit them (2026-09-18: an
+# orphan gitlink for one of these, `curious-finding-unicorn`, got
+# committed with no .gitmodules, breaking `git submodule status` and
+# leaving a ghost empty dir on fresh clones — see git history).
+.claude/worktrees/
 # Defense-in-depth: ~/.claude/ is only ever file-symlinked (CLAUDE.md), never
 # whole-directory (see setup.sh), so none of this should ever land under
 # dotfiles/.claude/ — these entries just make sure a future mistake can't
