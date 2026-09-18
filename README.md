@@ -45,6 +45,11 @@ dotfiles/
 │                                 #   from .github/copilot-instructions.md above, which is project-level
 ├── docs/                        # Everything not auto-loaded by a tool by convention — see index below
 │   └── SECRETS.md               #   Secrets-management doc (chezmoi + age)
+├── global/                      # Root-level (`~`) context: file-symlinked as ~/CLAUDE.md, ~/AGENTS.md,
+│                                 #   ~/Projects/CLAUDE.md by setup.sh. ROOT.CLAUDE.md (→ ~/CLAUDE.md),
+│                                 #   PROJECTS.CLAUDE.md (→ ~/Projects/CLAUDE.md), WORK.CLAUDE.template.md
+│                                 #   (copy manually to ~/Work/CLAUDE.md — never symlinked, local-only,
+│                                 #   holds employer-specific content that must not enter this repo)
 ├── scripts/                     # Utility scripts (VS Code docs monitor: monitor_vscode_docs.py, setup_vscode_monitor_cron.sh)
 ├── tasks/                       # Task-tracking PoC: events.jsonl (log, source of truth) + board.md (generated view) + append_event.py/rebuild_view.py, plus KICKOFF.md (design history)
 ├── AGENTS.md                    # General agent guide (Crush/Claude, Copilot, Gemini, Cline) — auto-read by convention
