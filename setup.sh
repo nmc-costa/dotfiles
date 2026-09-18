@@ -158,6 +158,48 @@ setup_agent_file_symlink() {
   echo "symlink: .$agent_name/$file -> $file_dest"
 }
 
+# Root-level (~) CLAUDE.md/AGENTS.md coverage — arbitrary src/dest pairs
+# (different names, some nested one level, none of them a per-tool "hidden
+# dir + same filename" pair), so this doesn't fit setup_agent_symlinks or
+# setup_agent_file_symlink's fixed naming conventions. Lets Claude Code
+# (and Codex, via AGENTS.md) discover context when a session starts from
+# `~`, `~/Projects/...`, or `~/Work/...` — see global/ in this repo.
+setup_root_symlink() {
+  local src=$1 dest=$2
+
+  if [[ ! -f "$src" ]]; then
+    echo "skip: $src does not exist"
+    return
+  fi
+
+  if [[ $DRY_RUN -eq 1 ]]; then
+    echo "(dry) would symlink $src -> $dest"
+    return
+  fi
+
+  mkdir -p "$(dirname "$dest")"
+
+  if [[ -L "$dest" ]]; then
+    if [[ "$(readlink -f "$dest")" == "$(readlink -f "$src")" ]]; then
+      echo "skip: $dest already symlinked correctly"
+    else
+      echo "relink: $dest pointed elsewhere, updating"
+      ln -sfT "$src" "$dest"
+      echo "symlink: $dest"
+    fi
+    return
+  fi
+
+  if [[ -e "$dest" ]]; then
+    local backup="${dest}.backup.$(date +%Y%m%dT%H%M%S)"
+    echo "backup: moving $dest to $backup"
+    mv "$dest" "$backup"
+  fi
+
+  ln -sfT "$src" "$dest"
+  echo "symlink: $dest"
+}
+
 echo ""
 echo "=== Setting up agents and skills ==="
 
@@ -173,6 +215,14 @@ setup_agent_file_symlink "claude" "CLAUDE.md"
 setup_agent_file_symlink "gemini" "GEMINI.md"
 setup_agent_file_symlink "codex" "AGENTS.md"
 setup_agent_file_symlink "copilot" "copilot-instructions.md"
+
+# Root-level context (~, ~/Projects) — see global/ROOT.CLAUDE.md's own
+# note for why ~/Work/CLAUDE.md is NOT included here: it's copied by hand
+# from global/WORK.CLAUDE.template.md and never symlinked, since it may
+# hold employer-specific content that must never enter this repo.
+setup_root_symlink "$BASE_DIR/dotfiles/global/ROOT.CLAUDE.md" "$BASE_DIR/CLAUDE.md"
+setup_root_symlink "$BASE_DIR/dotfiles/AGENTS.md" "$BASE_DIR/AGENTS.md"
+setup_root_symlink "$BASE_DIR/dotfiles/global/PROJECTS.CLAUDE.md" "$PROJECTS_DIR/CLAUDE.md"
 
 # Sync skills from dotfiles/.agents/skills/ location
 if [[ -d "$BASE_DIR/dotfiles/.agents/skills" ]]; then
