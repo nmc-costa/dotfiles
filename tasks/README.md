@@ -90,7 +90,120 @@ script before rule).
 
 ## Out of scope for this PoC
 
-Automation (cron/systemd/GitHub Actions), a SQLite/DuckDB index,
-`tasks.csv` (only once `board.md` passes "a few dozen lines" — the Jarvis
-doc's own §5.4 rule), the Jarvis/orchestrator persona itself. See the
-history of the session that created this for the full reasoning.
+A SQLite/DuckDB index, `tasks.csv` (only once `board.md` passes "a few
+dozen lines" — the Jarvis doc's own §5.4 rule). See the history of the
+session that created this for the full reasoning.
+
+**No longer out of scope, superseded 2026-09-18:** automation
+(cron/systemd) and the Jarvis/orchestrator persona were ruled out-of-scope
+for the original PoC — that's now reversed, see the section below. The
+reversal is deliberate, not scope creep: the earlier decision assumed the
+orchestrator would have to be *built*; the 2026-09-18 research found most
+of the execution/observability engine already exists (adopted, not
+built), which is what made automating the remainder tractable.
+
+## Orchestration architecture (decided 2026-09-18, not yet implemented)
+
+This section documents an architecture **decision**, not a shipped
+feature — nothing below exists on disk yet except this description.
+Implementation is Phase 1+ of the plan; see "Status" at the end of this
+section for what's actually done.
+
+### Why this exists
+
+The owner wants multiple AI coding-agent CLIs (Claude Code, GitHub
+Copilot CLI, Gemini CLI) to be able to pick up this `tasks/` folder
+independently and in parallel — "posso dizer ao Claude Code para pegar na
+pasta tasks e voltar ao trabalho, e em paralelo dizer ao Copilot CLI para
+se focar noutras tasks" — with a real-time view (a Kanban board) of what
+every concurrent agent team is doing, so a human can glance once instead
+of babysitting every session. Full requirements, research, and rejected
+alternatives are preserved in the session that made this decision
+(2026-09-18); this section is the durable summary.
+
+### The decision: 4 layers, adopt 2 of them
+
+| Layer | What it is | Decision |
+|---|---|---|
+| **L1 — task contract** | The file format any CLI reads/writes to claim and update a task | **Build, thin.** Extends `events.jsonl` (this file's existing log) with file locking and git-ref compare-and-swap claiming (pattern from `tasksmd/tasks.md`), plus one markdown+YAML-frontmatter card per task (format adapted from `Backlog.md`/`antopolskiy/kanban-md`) |
+| **L2 — execution engine** | Spawns agents, tiers model capability per stage, isolates concurrent work | **Adopt.** Claude Code's own `Workflow` tool (`phase()`, `agent(prompt, {model, effort})`, `isolation: 'worktree'`, `parallel()`/adversarial-verify/judge-panel patterns) for the Claude side; `asheshgoplani/agent-deck` (Go, MIT, 9 CLI vendors incl. Copilot, worktree isolation w/ sparse checkout, Telegram/Slack/ntfy bridge) for Copilot/Gemini |
+| **L3 — observability** | Live view of what every agent is doing | **Adopt.** `herdr` (already installed, v0.8.2 — Rust/Ratatui terminal multiplexer, 18+ CLI integrations, `plugin pane open` for popups, `notification show`, `pane.agent_status_changed` events) + Agent Deck's fleet TUI/web dashboard + Claude Code's `claude agents --json` and `~/.claude/jobs/<id>/{state.json,timeline.jsonl}` for per-session telemetry (`detail`, sub-agent `fan[]`) |
+| **L4 — policy & escalation** | Per-phase model tiers, WIP limits, review SLA, human escalation | **Build — this is the actual gap.** A `tsk` CLI + a `tsk daemon` (systemd `--user`, separate from any interactive session so it survives session close/compaction) reading `tasks/policy.yaml`. Estimated ~600 LOC total, not a few thousand — most of the system is adopted, not written |
+
+`tuiboard` (`NazzarenoGiannelli/tuiboard`, MIT, already herdr-native) is
+the first thing to evaluate for the Kanban board UI itself before writing
+any Rust — see "Decided answers" below.
+
+### Task lifecycle (supersedes "Statuses (D12)" above, once `tsk` ships)
+
+```
+backlog -> planning -> in_progress -> review -> validation -> done
+                                         \                      ^
+                                          \-------- blocked ----/
+(deferred stays a parallel lane, unchanged from D12)
+```
+
+Migration from the current vocabulary is lossless: `new -> backlog`,
+`todo -> backlog (ready)`, `in progress -> in_progress`,
+`in review -> review`, `done`/`feito -> done`. `deferred` and
+`blocked_by`-driven `blocked` carry over unchanged.
+
+`review` and `validation` are new stages, not a renaming: `review` is an
+automated judge-panel pass (per `policy.yaml`'s `review.judges`);
+`validation` is the final sign-off, by a human or — only after the SLA
+elapses with no human action — the orchestrator model. A card's
+percentage-complete is derived from a checkpoints list on its card file,
+never from a model self-reporting a number (LLMs are known to drift a
+self-estimate toward ~90% and stall there).
+
+### Decided answers (2026-09-18)
+
+These resolve the open questions the architecture research raised. Where
+the owner gave a concrete rule beyond a simple yes/no, it's recorded
+here verbatim in intent, since it changes `policy.yaml`'s shape once
+built:
+
+- **Orchestrator = a separate systemd-user daemon**, never the
+  owner's interactive Claude Code session (a session can close or get
+  compacted; the SLA below has to survive that).
+- **Review SLA: 4 hours.** If no human acts on a card in `validation`
+  within 4h, the orchestrator model validates automatically instead.
+- **Automode budget cap: 3 sessions/day, 2 loops per agent per task.**
+  If a task exceeds 2 loops, it goes straight to `validation` and — unlike
+  the normal 4h-then-orchestrator-fallback path — **a human is the only
+  valid validator for that card**, no automatic orchestrator fallback.
+  This is a harder rule than the general SLA: it exists specifically to
+  stop a stuck agent from burning budget in a retry loop unsupervised.
+- **The owner is "the director":** whenever the main/orchestrator agent
+  is engaged by the owner, it should ask what tasks they want worked on
+  rather than silently picking its own priorities — the daemon's
+  autonomous dispatch (§L4) is for *already-approved* backlog items, not
+  a way to bypass the owner deciding what starts.
+- **TUI: evaluate `tuiboard` before writing anything in Rust.** Only
+  build a from-scratch Ratatui board if a day's trial shows `tuiboard`
+  (or contributing the kanban view to `agent-deck`) doesn't fit.
+- **`tasks/` stays inside `dotfiles/`** (per D2/D7 above) — only the
+  `tsk daemon` ever commits changes to `tasks/`, never an individual
+  agent session, to avoid the exact concurrent-working-tree collision
+  that produced a real bug in this repo's history (`tasks/` and repo code
+  are different concurrency domains: code always gets one worktree per
+  claimed task; `tasks/` itself never does).
+
+### Still open
+
+- Whether `agent-deck` and `herdr` overlap enough to only need one, or
+  are genuinely complementary (herdr = panes/TUI/notifications, Agent
+  Deck = worktree engine + notification bridge) — first thing to test.
+- `.github/copilot-instructions.md`'s "Known Gaps" claim that Copilot CLI
+  has no automatic repo-file-reading mechanism is likely stale (GitHub's
+  own docs describe `AGENTS.md`/`CLAUDE.md` support plus hooks since
+  v1.0.86, 2026-09-17) — needs re-testing before the Copilot-side adapter
+  is designed.
+
+### Status
+
+Nothing above is implemented. Next step is the de-risking spike described
+in the design session (install Agent Deck, confirm git-ref
+compare-and-swap claiming under concurrent writers, confirm a `Workflow`
+script with per-phase `model` overrides, confirm a trivial herdr plugin
+can open a popup) before any of `tsk` gets written.

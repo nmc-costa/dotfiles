@@ -90,7 +90,7 @@ dotfiles/
 | `.gemini/`, `.codex/`, `.copilot/` | Global config for Gemini CLI, OpenAI Codex CLI, and GitHub Copilot CLI respectively — each holds exactly one real, versioned file (`GEMINI.md`, `AGENTS.md`, `copilot-instructions.md`), same pattern as `.claude/CLAUDE.md` — see below |
 | `.chezmoisource/` | Dedicated chezmoi source directory, scoped only to the one encrypted `.vscode/settings.json` — see `docs/SECRETS.md` |
 | `scripts/` | Standalone utility scripts (currently the VS Code docs monitor) |
-| `tasks/` | Task-tracking PoC — `events.jsonl` (append-only log, source of truth) projected into `board.md` (generated view) via `append_event.py`/`rebuild_view.py`; see `tasks/README.md`. Also still holds `KICKOFF.md` (design history) |
+| `tasks/` | Task-tracking PoC — `events.jsonl` (append-only log, source of truth) projected into `board.md` (generated view) via `append_event.py`/`rebuild_view.py`; see `tasks/README.md`. Also still holds `KICKOFF.md` (design history). **2026-09-18: an orchestration architecture was decided** (multi-agent task board across Claude Code/Copilot CLI/Gemini CLI, backed by a `tsk` CLI+daemon — see `tasks/README.md`'s "Orchestration architecture" section) — not yet implemented, this only documents the decision |
 | `docs/` | Everything not auto-loaded by convention — see table below |
 
 ### `docs/` index
