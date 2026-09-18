@@ -206,6 +206,7 @@ echo "=== Setting up agents and skills ==="
 # Setup agent symlinks
 setup_agent_symlinks "agents"
 setup_agent_symlinks "vscode"
+setup_agent_symlinks "dtx-providers"
 
 # All four of these mix versioned config with live runtime state
 # (credentials/session DBs/logs/caches) the same way ~/.claude/ does —

@@ -1,0 +1,8 @@
+{
+  "id": "gemini-cli",
+  "displayName": "Gemini CLI",
+  "mode": "proxy",
+  "configPath": "~/.local/bin/gemini-<provider-id>",
+  "adapter": "gemini-cli.sh",
+  "notes": "Corrected 2026-09-17 -- an earlier version of this file said 'unsupported' based on docs/cli/settings.md and docs/cli/model.md, which was wrong: docs/reference/configuration.md documents GOOGLE_GEMINI_BASE_URL, which overrides the base URL when using gemini-api-key auth and explicitly allows plain http:// for localhost. LiteLLM's proxy exposes the real Gemini wire format at POST /v1beta/models/{model}:generateContent (litellm/proxy/google_endpoints/endpoints.py), routed through the same model_list as every other provider. Wired through the shared proxy via an opt-in ~/.local/bin/gemini-<provider-id> launcher, same pattern as claude-code.sh/codex.sh. Not yet smoke-tested end-to-end -- the google_endpoints bridge is recent LiteLLM code."
+}

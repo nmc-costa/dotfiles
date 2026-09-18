@@ -1,0 +1,8 @@
+{
+  "id": "opencode",
+  "displayName": "opencode",
+  "mode": "native",
+  "configPath": "~/.config/opencode/opencode.json",
+  "adapter": "opencode.sh",
+  "notes": "Native openai-compatible custom provider. apiKey supports {env:VAR} interpolation, so the literal key never has to be written to this file."
+}
