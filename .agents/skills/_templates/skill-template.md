@@ -116,9 +116,9 @@ This skill enforces:
 
 ## Dependencies
 
-- **Tool**: [`tool-name`](../../tools/{tool-name}/) — What it provides
+- **Tool**: `../../tools/{tool-name}/` — What it provides
 - **Library**: `package-name` — What it provides
-- **Skill**: [`other-skill-name`](../other-skill-name/) — What it provides
+- **Skill**: `../other-skill-name/` — What it provides
 
 ---
 

@@ -116,8 +116,8 @@ Example:
 ## Agents That Use This Tool
 
 This tool is used by:
-- [`agent-name`](../../agents/{agent-name}/) — For {capability}
-- [`agent-name-2`](../../agents/{agent-name-2}/) — For {capability}
+- `../../agents/{agent-name}/` — For {capability}
+- `../../agents/{agent-name-2}/` — For {capability}
 
 ---
 
@@ -125,7 +125,7 @@ This tool is used by:
 
 - Documentation: [Official docs](https://docs.example.com)
 - GitHub: [Repository](https://github.com/example/tool-name)
-- Examples: [`examples/`](./examples/)
+- Examples: `./examples/` (create an examples/ directory alongside the tool if desired)
 - Registry: `.agents/skills/` (no central registry file in this repo; browse skill directories directly)
 
 ---

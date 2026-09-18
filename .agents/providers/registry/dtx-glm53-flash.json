@@ -1,0 +1,16 @@
+{
+  "id": "dtx-glm53-flash",
+  "displayName": "DTx GLM-5.3-Flash",
+  "type": "openai-compat",
+  "baseURL": "https://glm53-flash.dtx-colab.com/v1",
+  "apiKeyEnvVar": "DTX_GLM53_FLASH_API_KEY",
+  "models": [
+    {
+      "id": "zai-org/GLM-5.3-Flash",
+      "name": "GLM-5.3-Flash",
+      "reasoning": true,
+      "contextWindow": 262144,
+      "maxOutput": 32768
+    }
+  ]
+}
