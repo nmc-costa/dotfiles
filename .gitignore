@@ -51,12 +51,61 @@ tmp/
 .claude/sessions/
 .claude/logs/
 .claude/cache/
+# Defense-in-depth: ~/.claude/ is only ever file-symlinked (CLAUDE.md), never
+# whole-directory (see setup.sh), so none of this should ever land under
+# dotfiles/.claude/ — these entries just make sure a future mistake can't
+# commit live runtime state, credentials included.
+.claude/.credentials.json
+.claude/history.jsonl
+.claude/daemon.log
+.claude/daemon.lock
+.claude/daemon.status.json
+.claude/.last-cleanup
+.claude/shell-snapshots/
+.claude/session-env/
+.claude/file-history/
+.claude/jobs/
+.claude/backups/
+.claude/projects/
 .agents/cache/
-.copilot/sessions/
 .cline/sessions/
+
+# Same defense-in-depth for the other harnesses whose global dirs mix
+# versioned config with live runtime state — only their one instructions
+# file is ever file-symlinked (see setup.sh), never the directory.
+.gemini/history/
+.gemini/tmp/
+.gemini/state.json
+.gemini/trustedFolders.json
+.gemini/installation_id
+.gemini/projects.json
+.codex/*.sqlite
+.codex/*.sqlite-shm
+.codex/*.sqlite-wal
+.codex/installation_id
+.codex/herdr-agent-state.sh
+.codex/tmp/
+.codex/.tmp/
+.copilot/session-store.db
+.copilot/session-store.db-shm
+.copilot/session-store.db-wal
+.copilot/logs/
+.copilot/config.json
+.copilot/command-history-state.json
+.copilot/open-sessions-state.json
+.copilot/session-state/
+.copilot/sidebar-sessions-state/
+.copilot/servers/
+.copilot/installed-plugins/
+.copilot/installed-plugins.lock
+.copilot/ide/
+.copilot/sessions/
 
 # But DO track core configs
 !.claude/
 !.agents/
 !.vscode/
 !.github/
+!.gemini/
+!.codex/
+!.copilot/

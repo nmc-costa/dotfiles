@@ -19,8 +19,9 @@ Guidance for AI agents (Crush/Claude, Copilot, Gemini) working in this repositor
 | Agent | Config Location | When to Use |
 |--------|-------------------|-------------|
 | **Crush/Claude** | `~/.claude/`, `~/.claude.json` | Development, code analysis, debugging, automation |
-| **Copilot** | `~/.copilot/` | Inline suggestions, completions in VS Code |
-| **Gemini** | `~/.gemini/` | Quick queries, brainstorming |
+| **Copilot CLI** | `~/.copilot/` | Terminal agent, own global instructions file — distinct from the VS Code extension, which reads `.github/copilot-instructions.md` per-project instead |
+| **Gemini CLI** | `~/.gemini/` | Quick queries, brainstorming |
+| **OpenAI Codex CLI** | `~/.codex/` | Terminal coding agent |
 | **Cline** | `~/.cline/` | Complex multi-file task execution |
 
 ## Custom Skills
@@ -123,32 +124,50 @@ cd ~/dotfiles && git pull
 
 ### Global Context Files
 
-| File | Access | Purpose |
+**Corrected 2026-09-16** — there is no single unified global file every
+agent reads. Each tool has its own real, per-user global instructions file
+at a fixed home-directory path (confirmed against each tool's own docs,
+not assumed), symlinked file-level (never whole-directory — see
+`setup.sh`'s `setup_agent_file_symlink` and the security fix it followed
+from) to the versioned copy in this repo:
+
+| File | Tool | Real path (symlink target) |
 |----------|--------|----------|
-| `~/.context-global.md` | All agents | General context (structure, conventions, preferences) |
-| `~/claude.md` | Crush/Claude | Claude-specific rules |
-| `~/.github/copilot-instructions.md` | Copilot | Copilot-specific instructions |
-| `~/directory_tree.md` | All (reference) | Directory structure map |
+| `dotfiles/.claude/CLAUDE.md` | Claude Code | `~/.claude/CLAUDE.md` |
+| `dotfiles/.gemini/GEMINI.md` | Gemini CLI | `~/.gemini/GEMINI.md` |
+| `dotfiles/.codex/AGENTS.md` | OpenAI Codex CLI | `~/.codex/AGENTS.md` |
+| `dotfiles/.copilot/copilot-instructions.md` | GitHub Copilot CLI | `~/.copilot/copilot-instructions.md` |
+| `.github/copilot-instructions.md` (this repo only) | GitHub Copilot (VS Code extension) | project-level, not global — auto-discovered per-repo |
+
+All five of the per-tool pointer files above just redirect to the same
+real source: `.agents/instructions/workspace-config/*.instructions.md`
+(see `.agents/instructions/README.md`). No tool here has been confirmed to
+read a plain `~/directory_tree.md`-style reference file either; don't
+assume one exists without checking.
 
 ## Per-Agent Development Rules
 
 ### Crush/Claude
-- **Reads:** `claude.md`, `.context-global.md`, `directory_tree.md`
+- **Reads:** `~/.claude/CLAUDE.md` (symlinked pointer → `.agents/instructions/workspace-config/`)
 - **Preferences:** Deep analysis, technical explanations, script automation
 - **Restrictions:** No automatic commits without explicit confirmation
 
 ### Copilot
-- **Reads:** `.github/copilot-instructions.md`, `.context-global.md`
+- **Reads:** `.github/copilot-instructions.md` (project-level, VS Code extension) or `~/.copilot/copilot-instructions.md` (global, Copilot CLI — symlinked pointer, see above)
 - **Preferences:** Fast inline suggestions, code completions
 - **Restrictions:** Doesn't modify files without intervention
 
 ### Gemini
-- **Reads:** `.context-global.md`
+- **Reads:** `~/.gemini/GEMINI.md` (symlinked pointer → `.agents/instructions/workspace-config/`)
 - **Preferences:** Brainstorming, ideation, concept verification
 - **Restrictions:** Occasional use, no long-context storage
 
+### OpenAI Codex CLI
+- **Reads:** `~/.codex/AGENTS.md` (symlinked pointer → `.agents/instructions/workspace-config/`)
+- **Restrictions:** Shares `~/.codex/` with the separate `herdr` tool's hook (`herdr-agent-state.sh`) — not part of Codex, don't edit it here
+
 ### Cline
-- **Reads:** All instructions above (fallback: `.context-global.md`)
+- **Reads:** unverified — no per-tool global file confirmed for Cline yet, don't assume `~/.cline/` follows the same pattern until checked
 - **Preferences:** Multi-step tasks, refactoring, tests
 - **Restrictions:** Respects user permissions, doesn't modify system configs without sudo
 
@@ -190,19 +209,27 @@ cd ~/dotfiles
 ```bash
 # Check
 ls -la ~/  # Look for red arrows
+readlink -f ~/.claude/CLAUDE.md   # confirm it resolves into dotfiles, not a real file
 
-# Recreate manually
-ln -sf ~/dotfiles/.claude ~/.claude
+# Recreate manually — .agents/ and .vscode/ are whole-directory (safe: pure
+# curated content / chezmoi+age-managed secret). The four per-tool
+# instructions files are FILE-LEVEL ONLY — never symlink their directories,
+# see setup.sh's setup_agent_file_symlink comment for why (their directories
+# mix in credentials/session state that must never enter this repo).
 ln -sf ~/dotfiles/.agents ~/.agents
 ln -sf ~/dotfiles/.vscode ~/.vscode
+ln -sf ~/dotfiles/.claude/CLAUDE.md ~/.claude/CLAUDE.md
+ln -sf ~/dotfiles/.gemini/GEMINI.md ~/.gemini/GEMINI.md
+ln -sf ~/dotfiles/.codex/AGENTS.md ~/.codex/AGENTS.md
+ln -sf ~/dotfiles/.copilot/copilot-instructions.md ~/.copilot/copilot-instructions.md
 
 # OR re-run setup
 ./setup.sh
 ```
 
 ### Agent Can't See Context
-- Check that `~/.context-global.md` exists (should be a symlink)
-- Check permissions: `ls -la ~/.context-global.md`
+- Check that the relevant per-tool file is a symlink into this repo (see table above), e.g. `readlink -f ~/.claude/CLAUDE.md`
+- Check permissions on the target: `ls -la .agents/instructions/workspace-config/`
 - Reload the agent or restart the application
 
 ---
