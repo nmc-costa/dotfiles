@@ -22,6 +22,21 @@ bad()  { echo "  FAIL $1"; FAIL=$((FAIL+1)); }
 echo "=== dotfiles validator (root: $REPO_ROOT) ==="
 echo
 
+# --- 0. No unresolved merge-conflict markers in tracked files -------------
+# 2026-09-18: PR #12's merge commit committed literal <<<<<<</=======/>>>>>>>
+# markers into README.md and nothing caught it until a human/agent noticed
+# by eye. Only tracked files, so _templates/ placeholders and other
+# untracked noise can't false-positive here.
+echo "-- Conflict markers --"
+conflict_hits="$(git grep -n -E '^(<<<<<<<|=======$|>>>>>>>)' -- . 2>/dev/null || true)"
+if [[ -z "$conflict_hits" ]]; then
+  ok "no unresolved merge-conflict markers in tracked files"
+else
+  while IFS= read -r line; do
+    bad "conflict marker: $line"
+  done <<< "$conflict_hits"
+fi
+
 # --- 1. Root only has the allowed files/dirs ------------------------------
 echo "-- Root cleanliness --"
 
