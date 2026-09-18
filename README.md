@@ -96,7 +96,7 @@ dotfiles/
 | `global/` | Home-directory-level `CLAUDE.md` templates: `ROOT.CLAUDE.md`/`PROJECTS.CLAUDE.md` are real symlinks to `~/CLAUDE.md`/`~/Projects/CLAUDE.md` (set up manually today, not yet by `setup.sh`); `WORK.CLAUDE.template.md` is copied and customized per machine instead — `~/Work/CLAUDE.md` stays local, not shared via dotfiles |
  origin/main
 | `scripts/` | Standalone utility scripts (currently the VS Code docs monitor) |
-| `tasks/` | Task-tracking PoC — `events.jsonl` (append-only log, source of truth) projected into `board.md` (generated view) via `append_event.py`/`rebuild_view.py`; see `tasks/README.md`. Also still holds `KICKOFF.md` (design history) |
+| `tasks/` | Task-tracking PoC — `events.jsonl` (append-only log, source of truth) projected into `board.md` (generated view) via `append_event.py`/`rebuild_view.py`; see `tasks/README.md`. Also still holds `KICKOFF.md` (design history). **2026-09-18: an orchestration architecture was decided** (multi-agent task board across Claude Code/Copilot CLI/Gemini CLI, backed by a `tsk` CLI+daemon — see `tasks/README.md`'s "Orchestration architecture" section) — not yet implemented, this only documents the decision |
 | `docs/` | Everything not auto-loaded by convention — see table below |
 
 ### `docs/` index
