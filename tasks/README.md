@@ -179,9 +179,17 @@ built:
   rather than silently picking its own priorities — the daemon's
   autonomous dispatch (§L4) is for *already-approved* backlog items, not
   a way to bypass the owner deciding what starts.
-- **TUI: evaluate `tuiboard` before writing anything in Rust.** Only
-  build a from-scratch Ratatui board if a day's trial shows `tuiboard`
-  (or contributing the kanban view to `agent-deck`) doesn't fit.
+- **TUI: evaluate `tuiboard` before writing anything in Rust — done,
+  2026-09-18, passed.** Safe (no install scripts, no hidden network calls),
+  local (plain markdown + read-only local session files), fast (~165MB
+  RSS, near-instant startup), and confirmed to correctly move a task
+  through our full 6-stage lifecycle by editing the board file directly
+  (tuiboard has no interactive move-column command — it's watch-and-render
+  only via `chokidar`, which is exactly the shape `tsk` needs). Full
+  writeup, captured states, and example files in
+  `tasks/evaluations/tuiboard/README.md`. Still no from-scratch Ratatui
+  board planned unless this candidate falls through for a reason found
+  later (e.g. multi-vendor agent detection, not yet tested).
 - **`tasks/` stays inside `dotfiles/`** (per D2/D7 above) — only the
   `tsk daemon` ever commits changes to `tasks/`, never an individual
   agent session, to avoid the exact concurrent-working-tree collision
@@ -202,8 +210,8 @@ built:
 
 ### Status
 
-Nothing above is implemented. Next step is the de-risking spike described
-in the design session (install Agent Deck, confirm git-ref
-compare-and-swap claiming under concurrent writers, confirm a `Workflow`
-script with per-phase `model` overrides, confirm a trivial herdr plugin
-can open a popup) before any of `tsk` gets written.
+`tsk` itself is not implemented. One de-risking spike is done (tuiboard
+evaluation, above). Remaining spikes before any of `tsk` gets written:
+install Agent Deck, confirm git-ref compare-and-swap claiming under
+concurrent writers, confirm a `Workflow` script with per-phase `model`
+overrides, confirm a trivial herdr plugin can open a popup.

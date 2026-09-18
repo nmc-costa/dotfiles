@@ -1,0 +1,8 @@
+boards:
+  - path: /home/nbugz/.claude/jobs/19d2e3c5/tmp/tuiboard-test/TsTest.md
+    name: TsTest
+done_column: Done
+zones:
+  planner: off
+  agenda: off
+  agents: on
