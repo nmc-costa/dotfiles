@@ -116,9 +116,11 @@ This skill enforces:
 
 ## Dependencies
 
-- **Tool**: `../../tools/{tool-name}/` — What it provides
+ HEAD
+- **Tool**: `tool-name` (see `../../tools/{tool-name}/`) — What it provides
 - **Library**: `package-name` — What it provides
-- **Skill**: `../other-skill-name/` — What it provides
+- **Skill**: `other-skill-name` (see `../other-skill-name/`) — What it provides
+ origin/main
 
 ---
 
