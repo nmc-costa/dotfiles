@@ -7,7 +7,9 @@ description: "Orchestrate a multi-agent research-and-planning workflow: clarify 
 
 Role: you are the MAIN agent. You clarify, dispatch, verify, and integrate — you never research or write the plan yourself.
 
-Model names are the Agent tool's enum values only — `haiku`, `sonnet`, `opus`, `fable` — never a raw model ID.
+Every phase below names a role (researcher / planner / critic), not a specific tool call, so this skill runs on any harness. On one with a verified subagent-dispatch mechanism, dispatch each role as a real subagent, in parallel where the phase says so. On one without, play each role yourself, sequentially, in the same conversation, with the same discipline — you lose the parallelism/cost benefit, not the rigor. Check `.agents/harnesses/<this-harness>.md` before assuming either way; as of this writing only `claude-code.md` documents a delegation primitive (its `Agent`/Task tool) among this repo's harness docs.
+
+Where the harness exposes model tiers, use its cheapest/fastest one only for genuinely trivial confirmatory lookups, and its most capable one for Phase 4's plan and Phase 5's critique — never below the plan's own tier (see Phase 5). Never hardcode a dated/versioned model ID; use the harness's own tier names (Claude Code's Agent tool takes `haiku`/`sonnet`/`opus`/`fable`). On a single-model harness, every phase just uses that model — the discipline still applies.
 
 ## Phase 1 — Clarify (you, no subagents)
 
@@ -16,11 +18,11 @@ Produce: a one-sentence goal, 3-5 closed sub-questions, and a "done" criterion.
 Ask about anything ambiguous. Do not assume.
 If the work doesn't split into at least three genuinely separable sub-questions, answer directly — fan-out would be pure cost.
 
-## Phase 2 — Research (fan-out, `sonnet`)
+## Phase 2 — Research (fan-out)
 
-One researcher per sub-question, dispatched together in a SINGLE message as parallel tool calls — sequential dispatch is this workflow's main latency source.
-`sonnet` for every researcher: this is decision-grade cited research, not lookup. Savings come from the fan-out shape, not a cheaper worker.
-Each prompt is self-contained and states:
+One researcher role per sub-question, dispatched together in parallel wherever the harness allows it — going one at a time is this workflow's main source of wasted time, whether that's sequential subagent dispatch or you working through sub-questions yourself.
+Default every researcher to a mid/high-capability tier: this is decision-grade cited research, not lookup, the same reasoning behind Anthropic's own published multi-agent research system pairing a strong orchestrator with mid-tier (not cheapest-tier) workers. Savings come from the fan-out shape and tight scoping, not a cheaper worker.
+Each sub-task is self-contained and states:
 - the one closed sub-question, plus starting URLs if any exist
 - cite a URL + date for every fact; mark every line `[fact]` or `[inference]`
 - report in under ~300 words, no preamble
@@ -30,19 +32,19 @@ Do not ask a researcher to judge source quality or resolve contradictions; that'
 
 ## Phase 3 — Verify (you)
 
-Cross-check the outputs. On a conflict, dispatch ONE tie-breaking researcher (`haiku` — the question is narrow and already framed) with the deciding question.
+Cross-check the outputs. On a conflict, dispatch ONE tie-breaking researcher (a cheaper/faster tier is fine here — the question is narrow and already framed) with the deciding question.
 Discard unsupported `[inference]`s.
 Produce an evidence map: claim -> source -> confidence. The map, not the transcripts, is what moves forward.
 
-## Phase 4 — Plan (single subagent, `opus`)
+## Phase 4 — Plan (single subagent or role-switch, top tier)
 
 Receives: goal, evidence map, constraints, deliverables. Never the researchers' raw transcripts.
 Name any unresolved tension in the map and order the planner to settle it.
 Must CHOOSE, not enumerate. Open decisions = rejection.
 
-## Phase 5 — Critique (single subagent, `opus`, clean context)
+## Phase 5 — Critique (single subagent or role-switch, top tier, clean context)
 
-Never the agent that wrote the plan, and never below the planner's tier — a weaker reviewer misses exactly the flaws this phase exists for.
+Never the same instance that wrote the plan, and never below the planner's tier — a weaker or non-independent reviewer misses exactly the flaws this phase exists for. Where the harness can't spawn a real second context, force an explicit reset instead: restate the plan cold, without your own drafting rationale, before critiquing it.
 Looks for: unvalidated assumptions, non-idempotent steps, what fails first, circular dependencies, decisions the evidence doesn't support.
 Material flaw → back to Phase 4 with the findings. Maximum 2 rounds; after round 2, proceed to Phase 6 and list remaining flaws as accepted risks.
 
@@ -52,7 +54,7 @@ Final plan + evidence map + consciously accepted risks.
 
 ## Budget
 
-Never re-invoke the Agent tool to "continue" a finished subagent — that spawns a confused duplicate. Message the existing agent, or dispatch a fresh, self-contained one.
+Never relaunch a fresh subagent with an unrelated prompt to "continue" one that already finished — that produces a second, confused agent instead of an answer. Use whatever the harness provides to resume/message an existing subagent; with nothing available, treat its output as final and scope any follow-up as an explicitly new request.
 
 Hard stop — abandon the run and report what you have, out loud:
 - a dispatch fails twice in a row (its one allowed retry also fails)
