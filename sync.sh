@@ -287,8 +287,20 @@ sync_reconcile_file() {
         error "$location_name: $relpath differs from source with no known baseline -- refusing (run with --adopt=source or --strict is set)"
         CONFLICT_COUNT=$((CONFLICT_COUNT + 1))
       else
-        CONFLICT_SUMMARY+=("$location_name: $relpath (differs from source, no baseline yet -- kept destination, use --adopt=source to take source)")
-        log "$location_name: $relpath differs from source with no baseline -- keeping destination"
+        CONFLICT_SUMMARY+=("$location_name: $relpath (differs from source, no baseline yet -- kept destination and recorded its hash as the baseline; a future sync auto-adopts source once dest stops changing, use --adopt=source now to take it immediately)")
+        log "$location_name: $relpath differs from source with no baseline -- keeping destination, recording its hash as the new baseline"
+        # Without this, a file that reaches this branch once reaches it on
+        # EVERY future sync too -- s_hash/d_hash never converge and m_hash
+        # stays empty forever, so it's flagged as "unresolved" indefinitely
+        # even though nothing about it is actually still undecided. Setting
+        # d_hash as the baseline here mirrors what sync_handle_conflict's
+        # "dest" resolution already does for a real (known-baseline)
+        # conflict: the kept destination becomes the new known-good state,
+        # so next run either sees it unchanged (dest == baseline -> safe
+        # update, source flows in) or changed again (a real new conflict).
+        # Found 2026-09-20: workspace-standards.yaml never got a baseline
+        # recorded across every sync since the 2026-09-17 manifest rewrite.
+        (( DRY_RUN )) || sync_manifest_set "$target" "$relpath" "$d_hash" "$(sync_mode "$dfile")"
       fi
       return 0
     fi
