@@ -111,6 +111,8 @@ dotfiles/
 | `docs/requirements.txt` | Python deps for `scripts/monitor_vscode_docs.py` (`requests`, `beautifulsoup4`, `pyyaml`) |
 | `docs/vscode-docs-monitor.yml` | An older copy of the GitHub Actions workflow — the **active** one is `.github/workflows/vscode-docs-monitor.yml`; this copy still points at a dead path (`my/agentic_instructions/...`) from before the `agentic_instructions` merge and should not be treated as current |
 | `docs/SECRETS.md` | How the real secrets in this repo (a VS Code extension API key, the `dtx-providers` custom model API key) are encrypted with chezmoi + age |
+| `docs/AGENT_OS_UNIFICATION_PLAN.md` | **Committed plan** (2026-09-20, via the `plan-orchestra` workflow, 2 rounds of adversarial critique + 1 bug-fix pass) to make this repo the single source of truth for both agent instructions (all providers/harnesses) and Omarchy 4 "Quattro" OS config — all 7 decisions made, no options left open |
+| `docs/AGENT_OS_UNIFICATION_EVIDENCE.md` | Evidence map backing the plan above: every claim it relies on, with its source (URL+date or on-machine command output) and a confidence rating |
 
 ### Global per-tool instructions files
 

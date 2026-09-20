@@ -19,7 +19,7 @@ dotfiles/
 └── setup.sh, sync.sh, test-subagents.sh
 ```
 
-**Key docs:** `README.md` (overview + full directory tree + human/agent guidelines) · `CHEATSHEET.md` (where things go + persistent TODO) · `docs/STANDARDS.md` (conventions; proposed/not-implemented sections explicitly marked as such since 2026-09-15) · `docs/SUBAGENTS_VERIFICATION.md` (checklist) · `docs/AUDIT_REPORT.md` (audit; corrected 2026-09-15 to reflect real hardcoded paths/`dtx/`) · `docs/SECRETS.md` (chezmoi+age). **Before any structural change, run `./scripts/validate_dotfiles.sh`** — the evaluator that confirms a clean root, required docs present, and this file's/README's tree matching reality.
+**Key docs:** `README.md` (overview + full directory tree + human/agent guidelines) · `CHEATSHEET.md` (where things go + persistent TODO) · `docs/STANDARDS.md` (conventions; proposed/not-implemented sections explicitly marked as such since 2026-09-15) · `docs/SUBAGENTS_VERIFICATION.md` (checklist) · `docs/AUDIT_REPORT.md` (audit; corrected 2026-09-15 to reflect real hardcoded paths/`dtx/`) · `docs/SECRETS.md` (chezmoi+age) · `docs/AGENT_OS_UNIFICATION_PLAN.md` (committed 2026-09-20: makes this repo the single source of truth for agent instructions across all providers/harnesses AND Omarchy 4 "Quattro" OS config — see `docs/AGENT_OS_UNIFICATION_EVIDENCE.md` for the evidence it's built on). **Before any structural change, run `./scripts/validate_dotfiles.sh`** — the evaluator that confirms a clean root, required docs present, and this file's/README's tree matching reality.
 
 ## Workspace standards (added 2026-09-15)
 
