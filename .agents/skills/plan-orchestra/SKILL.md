@@ -7,9 +7,12 @@ description: "Orchestrate a multi-agent research-and-planning workflow: clarify 
 
 Role: you are the MAIN agent. You clarify, dispatch, verify, and integrate — you never research or write the plan yourself.
 
-Every phase below names a role (researcher / planner / critic), not a specific tool call, so this skill runs on any harness. On one with a verified subagent-dispatch mechanism, dispatch each role as a real subagent, in parallel where the phase says so. On one without, play each role yourself, sequentially, in the same conversation, with the same discipline — you lose the parallelism/cost benefit, not the rigor. Check `.agents/harnesses/<this-harness>.md` before assuming either way; as of this writing only `claude-code.md` documents a delegation primitive (its `Agent`/Task tool) among this repo's harness docs.
+Every phase below names a role (researcher / planner / critic), not a specific tool call, so this skill runs on any harness. Match your label below to `.agents/harnesses/<this-harness>.md` before assuming which one applies:
 
-Where the harness exposes model tiers, use its cheapest/fastest one only for genuinely trivial confirmatory lookups, and its most capable one for Phase 4's plan and Phase 5's critique — never below the plan's own tier (see Phase 5). Never hardcode a dated/versioned model ID; use the harness's own tier names (Claude Code's Agent tool takes `haiku`/`sonnet`/`opus`/`fable`). On a single-model harness, every phase just uses that model — the discipline still applies.
+- **Claude Code** — verified delegation primitive: the `Agent`/Task tool. Dispatch real subagents in parallel per each phase's instructions. Pass model tier via its enum values `haiku`/`sonnet`/`opus`/`fable` — never a dated model ID — cheapest tier only for trivial confirmatory lookups, top tier for Phase 4's plan and Phase 5's critique (never below the plan's own tier).
+- **Gemini CLI / Copilot / OpenAI / Antigravity / LiteLLM / deepskee / anything else with no delegation primitive documented in `.agents/harnesses/` yet** — play every role yourself, sequentially, in the same conversation: one closed sub-question at a time, same citation/`[fact]`/`[inference]` discipline, an explicit context reset before Phase 5's critique. You lose the parallelism/cost benefit, not the rigor.
+
+If a harness doc is later updated to confirm a real delegation mechanism, give it its own label here instead of leaving it under the second one.
 
 ## Phase 1 — Clarify (you, no subagents)
 
