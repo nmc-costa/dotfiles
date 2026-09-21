@@ -18,6 +18,7 @@ orchestration layer — partially built, see below). This file is only the
 | `rebuild_view.py` | Regenerate `board.md` (older flat-table view, pre-dates the 6-phase model). |
 | `sweep.py` | Detect `sla_expired`/`blocked_too_long` facts, raise `notification.raised` events. Run it periodically yourself — no systemd timer yet. |
 | `notify.py` | Deliver pending raised facts (herdr digest + notify-send fallback), or `--ack --dedup-key` to close one out. |
+| `brief.py` | Heartbeat + pending-facts briefing, or `--prompt-only --task-id` for a ready-to-paste dispatch prompt. No hook wires it up automatically yet. |
 
 None of these need arguments beyond what's shown below — no config file, no
 setup. Run them from anywhere with `python3 tasks/<tool>.py ...` or `cd
@@ -124,6 +125,18 @@ anything — `sweep.py` only raises, it never moves a task. See
 `tasks/README.md`'s "notify.py/sweep.py" status note for exactly what's
 deliberately not built yet (auto-validation, `loop_cap_exceeded`,
 `agent_session_stalled`).
+
+## Briefing (what needs me right now?)
+
+```bash
+python3 tasks/brief.py                                       # heartbeat + pending facts, or "what do you want to work on?"
+python3 tasks/brief.py --prompt-only --task-id dotfiles-my-task  # ready-to-paste dispatch prompt for one task
+```
+
+This is the logic behind the planned `/task-brief` skill and per-provider
+startup hooks (`dotfiles-tsk-hook-claude-code`/`-hook-antigravity`/
+`-cpx-copilot`, all still backlog) — none of them wire it up
+automatically yet, so run it by hand for now.
 
 ## See what's going on
 

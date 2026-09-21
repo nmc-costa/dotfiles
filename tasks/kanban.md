@@ -1,5 +1,4 @@
 ## Backlog
-- [ ] dotfiles-tsk-brief brief.py - heartbeat + inbox consumer
 - [ ] dotfiles-tsk-hook-claude-code Claude Code SessionStart hook + versioned settings.json fragment
 - [ ] dotfiles-tsk-cpx-copilot cpx wrapper for Copilot CLI (its own sessionStart hook is broken)
 - [ ] dotfiles-tsk-hook-antigravity Antigravity hook (inherited hook mechanism)
@@ -40,6 +39,7 @@
 - [x] dotfiles-tsk-roadmap-graph rebuild_graph.py: project events.jsonl into a Mermaid roadmap (tasks/roadmap.md + .mmd) - phases + per-project grouping + done timeline, no dependency edges yet
 - [x] dotfiles-tsk-writepath-unification lifecycle.py + LEGAL_TRANSITIONS + append() as the single writer, with CAS (Layer A)
 - [x] dotfiles-tsk-notify-sweep notify.py + sweep.py - the notification producer side
+- [x] dotfiles-tsk-brief brief.py - heartbeat + inbox consumer
 - [x] dotfiles-tsk-cards-frontmatter L1: markdown+YAML-frontmatter card per task (rebuild_cards.py, generated view, never hand-edited)
 
 ## Blocked
