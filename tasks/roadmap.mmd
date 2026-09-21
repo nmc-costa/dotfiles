@@ -23,12 +23,12 @@ flowchart LR
         dotfiles-repo-hygiene-dotfiles["dotfiles-repo-hygiene-dotfiles<br/>Abrir PR: claude/repo-hygiene-dotfiles"]:::done
         dotfiles-workspace-standards-schema["dotfiles-workspace-standards-schema<br/>Abrir PR: claude/workspace-standards-schema"]:::done
         dotfiles-todo-continuation-and-notes-backlog["dotfiles-todo-continuation-and-notes-backlog<br/>Abrir PR: claude/todo-continuation-and-notes-backlog"]:::done
-        dotfiles-tsk-spike-agent-deck["dotfiles-tsk-spike-agent-deck<br/>Spike: install Agent Deck, confirm it detects Claude Code + Copilot CLI sessions side by side"]:::in_progress
+        dotfiles-tsk-spike-agent-deck["dotfiles-tsk-spike-agent-deck<br/>Spike: install Agent Deck, confirm it detects Claude Code + Copilot CLI sessions side by side"]:::done
         dotfiles-tsk-spike-cas-concurrency["dotfiles-tsk-spike-cas-concurrency<br/>Spike: confirm git-ref compare-and-swap claiming survives concurrent writers"]:::done
-        dotfiles-tsk-spike-workflow-model["dotfiles-tsk-spike-workflow-model<br/>Spike: confirm a Workflow script with a real per-phase model override runs as expected"]:::in_progress
-        dotfiles-tsk-spike-herdr-popup["dotfiles-tsk-spike-herdr-popup<br/>Spike: confirm a trivial herdr plugin can open a popup (herdr plugin pane open)"]:::in_progress
-        dotfiles-tsk-tuiboard-install["dotfiles-tsk-tuiboard-install<br/>Install tuiboard for real (not a scratch install), point it at tasks/kanban.md"]:::in_progress
-        dotfiles-tsk-roadmap-graph["dotfiles-tsk-roadmap-graph<br/>rebuild_graph.py: project events.jsonl into a Mermaid roadmap (tasks/roadmap.md + .mmd) - phases + per-project grouping + done timeline, no dependency edges yet"]:::in_progress
+        dotfiles-tsk-spike-workflow-model["dotfiles-tsk-spike-workflow-model<br/>Spike: confirm a Workflow script with a real per-phase model override runs as expected"]:::done
+        dotfiles-tsk-spike-herdr-popup["dotfiles-tsk-spike-herdr-popup<br/>Spike: confirm a trivial herdr plugin can open a popup (herdr plugin pane open)"]:::done
+        dotfiles-tsk-tuiboard-install["dotfiles-tsk-tuiboard-install<br/>Install tuiboard for real (not a scratch install), point it at tasks/kanban.md"]:::done
+        dotfiles-tsk-roadmap-graph["dotfiles-tsk-roadmap-graph<br/>rebuild_graph.py: project events.jsonl into a Mermaid roadmap (tasks/roadmap.md + .mmd) - phases + per-project grouping + done timeline, no dependency edges yet"]:::done
         dotfiles-tsk-writepath-unification["dotfiles-tsk-writepath-unification<br/>lifecycle.py + LEGAL_TRANSITIONS + append() as the single writer, with CAS (Layer A)"]:::done
         dotfiles-tsk-notify-sweep["dotfiles-tsk-notify-sweep<br/>notify.py + sweep.py - the notification producer side"]:::backlog
         dotfiles-tsk-brief["dotfiles-tsk-brief<br/>brief.py - heartbeat + inbox consumer"]:::backlog
@@ -38,7 +38,11 @@ flowchart LR
         dotfiles-tsk-task-brief-skill["dotfiles-tsk-task-brief-skill<br/>/task-brief skill - thin shell over brief.py"]:::backlog
         dotfiles-tsk-systemd-units["dotfiles-tsk-systemd-units<br/>ensure-tsk-sweep.sh + systemd units, following the existing ensure-*.sh convention"]:::backlog
         dotfiles-tsk-graph-dependency-edges["dotfiles-tsk-graph-dependency-edges<br/>Add blocked_by dependency edges to rebuild_graph.py's flowchart (needs blocked_by as a list, not prose)"]:::backlog
-        dotfiles-tsk-cards-frontmatter["dotfiles-tsk-cards-frontmatter<br/>L1: markdown+YAML-frontmatter card per task (rebuild_cards.py, generated view, never hand-edited)"]:::backlog
+        dotfiles-tsk-cards-frontmatter["dotfiles-tsk-cards-frontmatter<br/>L1: markdown+YAML-frontmatter card per task (rebuild_cards.py, generated view, never hand-edited)"]:::done
+        dotfiles-tsk-dispatch-launcher["dotfiles-tsk-dispatch-launcher<br/>tsk dispatch: launch a session on a provider with the task brief pre-loaded (claude &quot;<p>&quot;/--bg, copilot -i, agy -i) - push side of cross-provider handoff, pull side is dotfiles-tsk-brief"]:::backlog
+        dotfiles-tsk-tasks-root-resolver["dotfiles-tsk-tasks-root-resolver<br/>tasks_root() resolver: one canonical write path for events.jsonl, the CAS lock and every rebuild_*.py (fixes 4 divergent copies + 1 orphaned event)"]:::backlog
+        dotfiles-tsk-claim-protocol["dotfiles-tsk-claim-protocol<br/>L2: claim protocol in a separate claims.jsonl -- locked conditional appends, closed role vocabulary, atomic preemption, human preempts swarm"]:::backlog
+        dotfiles-tsk-jsonl-merge-driver["dotfiles-tsk-jsonl-merge-driver<br/>Custom git merge driver (merge=union or equivalent) for tasks/*.jsonl so a conflict resolution can never silently drop an append-only line"]:::backlog
     end
 
     subgraph proj_notes["notes"]
