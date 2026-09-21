@@ -19,35 +19,23 @@ See tasks/README.md for the event schema and the provenance/quota rule (D13).
 """
 import argparse
 import datetime
-import fcntl
 import hashlib
 import json
 import sys
 import uuid
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
-from lifecycle import (  # noqa: E402
-    AGENT_ACTOR_KINDS,
-    CREATED_TYPES,
-    LEGAL_TRANSITIONS,
-    PHASE_CHANGED_TYPES,
-    STATUS_CHANGED_TYPES,
-    IllegalTransitionError,
-    current_phase,
-)
-
 EVENTS_FILE = Path(__file__).parent / "events.jsonl"
-LOCK_FILE = Path(__file__).parent / ".events.lock"
 REQUIRED_FIELDS = ("type", "actor")
 AGENT_PROPOSAL_QUOTA = 3
 AGENT_PROPOSAL_EXPIRY_DAYS = 14
 
-
-class ConcurrentModificationError(Exception):
-    """--expect-last-event-id didn't match the task's actual last event at
-    write time (Layer A CAS, tasks/plans/human-in-the-loop-notifications.md
-    §2) — a concurrent writer got there first. Callers exit(3)."""
+# English is the current default vocabulary (since 2026-09-16); the
+# Portuguese spellings are still recognized here only so the quota/dedup
+# logic keeps working across events written before that date.
+CREATED_TYPES = ("tarefa.criada", "task.created")
+STATUS_CHANGED_TYPES = ("tarefa.estado_mudou", "task.status_changed")
+AGENT_ACTOR_KINDS = ("agente", "agent")
 
 
 def load_events():
@@ -129,73 +117,7 @@ def validate_and_enrich(event, events):
     else:
         event.setdefault("status", "todo" if event["type"] in CREATED_TYPES else None)
 
-    if event["type"] in PHASE_CHANGED_TYPES:
-        task_id = event.get("task_id")
-        to_phase = (event.get("payload") or {}).get("phase")
-        if task_id and to_phase:
-            from_phase = current_phase(events, task_id)
-            # No task.created event yet is a different problem (move_task.py
-            # already refuses this before building the event) — not this
-            # function's job to diagnose, so it doesn't block here.
-            if from_phase is not None and to_phase not in LEGAL_TRANSITIONS.get(from_phase, set()):
-                legal = sorted(LEGAL_TRANSITIONS.get(from_phase, set())) or ["(none — terminal phase)"]
-                raise IllegalTransitionError(
-                    f"{task_id}: {from_phase!r} -> {to_phase!r} is not a legal transition "
-                    f"(legal from {from_phase!r}: {legal})"
-                )
-
     return event
-
-
-def last_event_id_for_task(events, task_id):
-    for ev in reversed(events):
-        if ev.get("task_id") == task_id:
-            return ev.get("event_id")
-    return None
-
-
-def _write_line(event):
-    with EVENTS_FILE.open("a", encoding="utf-8") as f:
-        f.write(json.dumps(event, ensure_ascii=False) + "\n")
-
-
-def append(event, expect_last_event_id=None):
-    """The single physical writer to events.jsonl (tasks/plans/
-    human-in-the-loop-notifications.md §0). `move_task.py` calls this
-    instead of writing `open("a")` itself — it's the phase-transition CLI,
-    not a second writer.
-
-    Plain appends (expect_last_event_id=None) take no lock: each line is
-    one `write()` syscall under PIPE_BUF, already confirmed safe at 20-way
-    concurrency, and there's nothing to re-resolve for an event that isn't
-    racing a specific prior state. A CAS-guarded append (§2, Layer A) takes
-    `flock(LOCK_EX)` on the sidecar `tasks/.events.lock` — never on
-    `events.jsonl` itself — re-reads the tail for this task_id *inside*
-    the lock, and raises ConcurrentModificationError if it no longer
-    matches: someone else moved this task first.
-    """
-    if expect_last_event_id is None:
-        events = load_events()
-        event = validate_and_enrich(event, events)
-        _write_line(event)
-        return event
-
-    LOCK_FILE.touch(exist_ok=True)
-    with LOCK_FILE.open("r+", encoding="utf-8") as lock_fh:
-        fcntl.flock(lock_fh, fcntl.LOCK_EX)
-        try:
-            events = load_events()
-            actual = last_event_id_for_task(events, event.get("task_id"))
-            if actual != expect_last_event_id:
-                raise ConcurrentModificationError(
-                    f"{event.get('task_id')}: expected last event {expect_last_event_id!r}, "
-                    f"found {actual!r} — someone else moved this task first"
-                )
-            event = validate_and_enrich(event, events)
-            _write_line(event)
-            return event
-        finally:
-            fcntl.flock(lock_fh, fcntl.LOCK_UN)
 
 
 def build_event_from_args(args):
@@ -224,10 +146,6 @@ def main():
     parser.add_argument("--payload", help="JSON object string")
     parser.add_argument("--outcome", choices=["success", "failure", "partial"])
     parser.add_argument("--failure-category")
-    parser.add_argument(
-        "--expect-last-event-id",
-        help="Layer-A CAS guard: abort (exit 3) unless this task_id's last event still has this id",
-    )
     args = parser.parse_args()
 
     if args.stdin:
@@ -237,17 +155,15 @@ def main():
             parser.error("--type, --actor-kind and --actor-id are required unless using --stdin")
         event = build_event_from_args(args)
 
+    events = load_events()
     try:
-        event = append(event, expect_last_event_id=args.expect_last_event_id)
-    except IllegalTransitionError as exc:
-        print(f"rejected: {exc}", file=sys.stderr)
-        sys.exit(2)
-    except ConcurrentModificationError as exc:
-        print(f"aborted: {exc}", file=sys.stderr)
-        sys.exit(3)
+        event = validate_and_enrich(event, events)
     except ValueError as exc:
         print(f"rejected: {exc}", file=sys.stderr)
         sys.exit(1)
+
+    with EVENTS_FILE.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(event, ensure_ascii=False) + "\n")
 
     print(f"appended {event['event_id']} ({event['type']}, task_id={event['task_id']})")
 

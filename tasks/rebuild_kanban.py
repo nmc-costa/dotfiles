@@ -17,10 +17,13 @@ mapping already decided in tasks/README.md's "Orchestration architecture"
 section (`new`/`todo` -> backlog, `in progress` -> in_progress,
 `in review` -> review, `done`/`feito` -> done) — the first
 `task.phase_changed` event for a task_id permanently takes over from then
-on. `deferred` isn't one of the 6 pipeline columns (it's documented as a
-parallel lane, not a stage) so it gets its own 7th column, appended after
-Done. Move a task with move_task.py — never edit this file directly, it's
-overwritten on every rebuild.
+on. `blocked` and `deferred` aren't pipeline stages (they're documented as
+parallel side lanes, not steps in the main sequence) so they get their own
+columns, appended after Done. Move a task with move_task.py — never edit
+this file directly, it's overwritten on every rebuild.
+
+The phase model itself (`PHASES`/`LEGAL_TRANSITIONS`/the migration map)
+lives in tasks/lifecycle.py, not here — this file only owns rendering.
 """
 import json
 import sys
@@ -31,13 +34,13 @@ EVENTS_FILE = TASKS_DIR / "events.jsonl"
 VIEW_FILE = TASKS_DIR / "kanban.md"
 
 sys.path.insert(0, str(TASKS_DIR))
-from rebuild_view import payload_get  # noqa: E402 — reuse the EN/PT legacy-key fallback
+from lifecycle import PIPELINE_PHASES, project  # noqa: E402
 
-# Order matters — this is the column order tuiboard renders, and the
-# lifecycle order decided in tasks/README.md's "Orchestration architecture"
-# section. "Done" is named exactly that on purpose: tuiboard hides a column
-# named "Done" from the board view and uses it for done-stats instead.
-PHASES = ["backlog", "planning", "in_progress", "review", "validation", "done"]
+# Order matters — this is the column order tuiboard renders. "Done" is
+# named exactly that on purpose: tuiboard hides a column named "Done" from
+# the board view and uses it for done-stats instead. Blocked comes right
+# after Done (closer to the active pipeline, needs attention) and Deferred
+# last (parked, lowest urgency).
 PHASE_HEADING = {
     "backlog": "Backlog",
     "planning": "Planning",
@@ -45,25 +48,8 @@ PHASE_HEADING = {
     "review": "Review",
     "validation": "Validation",
     "done": "Done",
-}
-DEFERRED = "deferred"  # not a pipeline stage — a parallel lane, rendered as a 7th column
-
-CREATED_TYPES = ("tarefa.criada", "task.created")
-STATUS_CHANGED_TYPES = ("tarefa.estado_mudou", "task.status_changed")
-PHASE_CHANGED_TYPES = ("task.phase_changed",)
-
-# Lossless one-time migration for tasks that predate this tool — the exact
-# mapping decided in tasks/README.md's "Orchestration architecture" section.
-OLD_STATUS_TO_PHASE = {
-    "new": "backlog",
-    "novo": "backlog",
-    "todo": "backlog",
-    "in progress": "in_progress",
-    "in review": "review",
-    "done": "done",
-    "feito": "done",
-    "deferred": DEFERRED,
-    "adiado": DEFERRED,
+    "blocked": "Blocked",
+    "deferred": "Deferred",
 }
 
 
@@ -79,53 +65,15 @@ def load_events():
     return events
 
 
-def project(events):
-    """Last event wins per task_id. Returns dict[task_id] -> {title, phase, created}.
-
-    `phase` is None until either a real task.phase_changed event or an old
-    status_changed event has been seen — resolved to "backlog" at the end
-    for anything that never had either.
-    """
-    tasks = {}
-    for ev in events:
-        task_id = ev.get("task_id")
-        if not task_id:
-            continue
-        payload = ev.get("payload") or {}
-        row = tasks.setdefault(task_id, {"title": task_id, "phase": None, "has_phase_event": False, "created": ev["ts"]})
-
-        if ev["type"] in CREATED_TYPES:
-            row["title"] = payload_get(payload, "title", row["title"])
-            row["created"] = ev["ts"]
-        elif ev["type"] in PHASE_CHANGED_TYPES:
-            phase = payload.get("phase")
-            if phase in PHASES or phase == DEFERRED:
-                row["phase"] = phase
-                row["has_phase_event"] = True
-        elif ev["type"] in STATUS_CHANGED_TYPES and not row["has_phase_event"]:
-            # One-time migration only — a real task.phase_changed event
-            # (even a no-op re-affirming the same phase) permanently takes
-            # over for that task_id from then on.
-            old_status = payload_get(payload, "status", "")
-            row["phase"] = OLD_STATUS_TO_PHASE.get(old_status, row["phase"])
-
-    for row in tasks.values():
-        if row["phase"] is None:
-            row["phase"] = "backlog"
-
-    return tasks
-
-
 def render(tasks):
-    columns = PHASES + [DEFERRED]
+    columns = list(PIPELINE_PHASES) + ["blocked", "deferred"]
     by_phase = {p: [] for p in columns}
     for task_id, row in tasks.items():
         by_phase[row["phase"]].append((task_id, row))
 
-    heading = dict(PHASE_HEADING, **{DEFERRED: "Deferred"})
     lines = []
     for phase in columns:
-        lines.append(f"## {heading[phase]}")
+        lines.append(f"## {PHASE_HEADING[phase]}")
         items = sorted(by_phase.get(phase, []), key=lambda kv: kv[1]["created"])
         for task_id, row in items:
             box = "x" if phase == "done" else " "

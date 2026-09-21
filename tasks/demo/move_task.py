@@ -9,21 +9,10 @@ Usage:
     ./move_task.py --task-id dotfiles-my-task --to-phase in_progress
     ./move_task.py --task-id dotfiles-my-task --to-phase review --actor-id claude \
         --team team-alpha --tokens 12000 --cost-usd 0.18 --duration-seconds 900 --cycles 1
-    ./move_task.py --task-id dotfiles-my-task --to-phase validation \
-        --expect-last-event-id <event_id from the previous move>
-
-Only transitions in tasks/lifecycle.py's LEGAL_TRANSITIONS are accepted
-(illegal ones exit 2) — e.g. backlog can only go to planning or deferred,
-never straight to in_progress. Moving into validation or done requires
---expect-last-event-id (Layer A CAS, tasks/plans/
-human-in-the-loop-notifications.md §2): read the event_id this command
-printed on the previous move, or the last line of `events.jsonl` for this
-task_id, and pass it back — a mismatch means someone else moved the task
-first, and the command aborts (exit 3) instead of overwriting them.
 
 This is the first real slice of the `tsk` CLI described in tasks/README.md's
-"Orchestration architecture" section — the move plus Layer-A CAS, none of
-the claiming/daemon machinery yet. Intended caller: the agent session
+"Orchestration architecture" section — just the move, none of the
+claiming/locking/daemon machinery yet. Intended caller: the agent session
 itself, not the human directly (see that section's "the owner is the
 director" note — a human tells the agent what to do, the agent moves the
 card).
@@ -53,20 +42,16 @@ import uuid
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from append_event import (  # noqa: E402
-    ConcurrentModificationError,
-    append,
-    load_events,
-)
-from lifecycle import PHASES, IllegalTransitionError, current_phase  # noqa: E402
-from rebuild_kanban import main as rebuild_kanban_main  # noqa: E402
+from append_event import EVENTS_FILE, load_events, validate_and_enrich  # noqa: E402
+from rebuild_kanban import PHASES, project as project_kanban, main as rebuild_kanban_main  # noqa: E402
 from rebuild_metrics import main as rebuild_metrics_main  # noqa: E402
 
-# Layer A (tasks/plans/human-in-the-loop-notifications.md §2) is required
-# on every move into these two phases, not just the sweep's own writes —
-# the common caller of this script is an agent, and that path had no CAS
-# protection at all before this.
-CAS_REQUIRED_PHASES = ("validation", "done")
+
+def current_phase(events, task_id):
+    tasks = project_kanban(events)
+    if task_id not in tasks:
+        return None
+    return tasks[task_id]["phase"]
 
 
 def latest_handoff(events, task_id):
@@ -97,11 +82,6 @@ def main():
     parser.add_argument("--cost-usd", type=float, help="USD cost the team spent in the phase being left")
     parser.add_argument("--duration-seconds", type=int, help="wall-clock time spent in the phase being left")
     parser.add_argument("--cycles", type=int, help="retry/loop count spent in the phase being left")
-    parser.add_argument(
-        "--expect-last-event-id",
-        help="Layer-A CAS guard: abort (exit 3) unless this task_id's last event still has this id. "
-        "Required when --to-phase is validation or done.",
-    )
     args = parser.parse_args()
 
     events = load_events()
@@ -117,11 +97,6 @@ def main():
     if args.to_phase is None:
         print("error: --to-phase is required unless --show-handoff is given", file=sys.stderr)
         sys.exit(1)
-    if args.to_phase in CAS_REQUIRED_PHASES and not args.expect_last_event_id:
-        parser.error(
-            f"--expect-last-event-id is required when --to-phase is {args.to_phase!r} "
-            f"(Layer A CAS — see tasks/plans/human-in-the-loop-notifications.md §2)"
-        )
     from_phase = current_phase(events, args.task_id)
     if from_phase is None:
         print(
@@ -166,21 +141,20 @@ def main():
         "ts": datetime.datetime.now(datetime.timezone.utc).isoformat(),
     }
     try:
-        event = append(event, expect_last_event_id=args.expect_last_event_id)
-    except IllegalTransitionError as exc:
-        print(f"rejected: {exc}", file=sys.stderr)
-        sys.exit(2)
-    except ConcurrentModificationError as exc:
-        print(f"aborted: {exc}", file=sys.stderr)
-        sys.exit(3)
+        event = validate_and_enrich(event, events)
     except ValueError as exc:
         print(f"rejected: {exc}", file=sys.stderr)
         sys.exit(1)
 
+    with EVENTS_FILE.open("a", encoding="utf-8") as f:
+        import json
+
+        f.write(json.dumps(event, ensure_ascii=False) + "\n")
+
     rebuild_kanban_main()
     if metrics:
         rebuild_metrics_main()
-    print(f"moved {args.task_id}: {from_phase} -> {args.to_phase} (event_id={event['event_id']})")
+    print(f"moved {args.task_id}: {from_phase} -> {args.to_phase}")
 
 
 if __name__ == "__main__":

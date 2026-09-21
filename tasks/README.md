@@ -1,5 +1,9 @@
 # tasks/
 
+**Quick command reference: `tasks/CHEATSHEET.md`.** This file explains the
+model and the decisions; the cheatsheet is the "how do I actually do X"
+lookup — start there if you just need a command.
+
 Workspace task-tracking system (PoC). Lives here, not in a separate repo —
 decision fixed by D2/D7 of the "Workspace Agil" doc (`Repo-Cerebro` =
 `dotfiles/`) and D11 (events go into the workspace repo's central log).
@@ -41,6 +45,12 @@ Regenerate the table after any change to the log:
 ```bash
 python3 tasks/rebuild_view.py
 ```
+
+This is the original PoC flow (free-form `status`, `board.md`). For the
+6-phase lifecycle, metrics, and handoff notes (`move_task.py`,
+`kanban.md`, `metrics.md`) see `tasks/CHEATSHEET.md` instead — both flows
+read the same `events.jsonl` and stay in sync, `move_task.py` is just the
+newer, more specific tool.
 
 **Language note (2026-09-16):** English is the default vocabulary for new
 events — event types (`task.created`, `task.status_changed`), `actor.kind`
@@ -230,21 +240,63 @@ claiming/locking/daemon machinery yet:
   `task.phase_changed` event takes over from then on. Point tuiboard's
   config at `tasks/kanban.md` to watch it live — same file shape verified
   in `tasks/evaluations/tuiboard/`.
+- **`move_task.py`'s metrics flags + `rebuild_metrics.py`** (added
+  2026-09-21) — optional `--team`/`--tokens`/`--cost-usd`/
+  `--duration-seconds`/`--cycles` on any move, recorded against the phase
+  being **left** (report what a team spent on `in_progress` when you call
+  `--to-phase review`, not on the call that opened `in_progress`).
+  `rebuild_metrics.py` projects these into `tasks/metrics.md`: every
+  metered phase-transition, plus totals by team and by task. No analysis
+  happens yet — this only makes the data collect, for the
+  orchestration-improvement/team-profile use this is meant to eventually
+  feed (see "Orchestration architecture" below). **`tasks/demo/`** is a
+  runnable, isolated worked example (2 tasks, 2 teams, full lifecycle,
+  `./run_demo.sh`) — see its own README for exactly how the isolation
+  works.
 
-**Notification/human-in-the-loop layer, planned (2026-09-21, not
-implemented):** `tasks/plans/human-in-the-loop-notifications.md` — full
-`plan-orchestra` output (research + evidence map + 2 rounds of
-decisive-plan/adversarial-critique) for the "human only needed on
-exception" system: SLA-then-orchestrator auto-validation with a
-compare-and-swap so it can never silently overwrite a human decision, a
-deduplicated notification/escalation path via herdr+notify-send, two
-watchdogs so a dead sweep doesn't look like "all clear", and a
-cross-provider `/task-brief` startup skill (Claude Code via a real hook,
-Copilot CLI via a wrapper since its own `sessionStart` hook is currently
-broken, Antigravity via its inherited hook). Its own prerequisite
-(merging `move_task.py`/`rebuild_kanban.py`, above) is now done.
+**Notification/human-in-the-loop layer, planned (2026-09-21):**
+`tasks/plans/human-in-the-loop-notifications.md` — full `plan-orchestra`
+output (research + evidence map + 2 rounds of decisive-plan/adversarial-
+critique) for the "human only needed on exception" system: SLA-then-
+orchestrator auto-validation with a compare-and-swap so it can never
+silently overwrite a human decision, a deduplicated notification/
+escalation path via herdr+notify-send, two watchdogs so a dead sweep
+doesn't look like "all clear", and a cross-provider `/task-brief` startup
+skill (Claude Code via a real hook, Copilot CLI via a wrapper since its
+own `sessionStart` hook is currently broken, Antigravity via its inherited
+hook). Its own prerequisite (merging `move_task.py`/`rebuild_kanban.py`,
+above) is done, and so is the plan's §0 ("Write path unificado", below).
+
+**`tasks/lifecycle.py`, §0 done (2026-09-21):** single source of truth for
+`PHASES` (now 8: the 6 pipeline phases plus the `blocked`/`deferred` side
+lanes — previously only defined piecemeal, and `move_task.py` couldn't
+actually target `blocked`/`deferred` at all despite the CHEATSHEET
+documenting them), `LEGAL_TRANSITIONS`, and the PT/EN actor-kind and event-
+type vocabulary, exactly as specified in the plan doc's §0. Consequences:
+- `append_event.py::append()` is now the single physical writer to
+  `events.jsonl`; `move_task.py` calls it instead of writing `open("a")`
+  itself.
+- An illegal `task.phase_changed` transition (e.g. `backlog` straight to
+  `in_progress`, skipping `planning`) is rejected, `exit 2`.
+- `append()` optionally takes `expect_last_event_id` — Layer A of the
+  plan's CAS (§2): `flock(LOCK_EX)` on a sidecar `tasks/.events.lock`
+  (never on `events.jsonl` itself), re-reads the task's last event inside
+  the lock, aborts (`exit 3`) if it no longer matches. `move_task.py`
+  requires `--expect-last-event-id` on every move into `validation` or
+  `done` — verified with a 10-way concurrent race: exactly 1 winner, 9
+  aborts, every time.
+- `rebuild_kanban.py` now renders 8 columns (added `Blocked`, next to the
+  pre-existing `Deferred`) and delegates phase-projection to
+  `lifecycle.project()` instead of its own copy.
+
+Deliberately **not** done in this slice (needs `tasks/policy.yaml` and the
+sweep's own event types, neither exists yet): `FACT_TYPES` and
+`dedup_key()`'s escalation-period argument, and Layer B of the CAS (the
+rule protecting a human's `validation`/`done` decision from a stale
+auto-validation — depends on `notify.py`/`sweep.py` existing to matter).
 
 Remaining spikes before the rest of `tsk` gets written: install Agent
-Deck, confirm git-ref compare-and-swap claiming under concurrent writers,
-confirm a `Workflow` script with per-phase `model` overrides, confirm a
-trivial herdr plugin can open a popup.
+Deck, confirm a `Workflow` script with per-phase `model` overrides,
+confirm a trivial herdr plugin can open a popup. (Git-ref CAS under
+concurrent writers is now confirmed, above, as part of shipping it rather
+than as a separate spike.)
