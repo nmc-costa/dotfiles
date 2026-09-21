@@ -15,7 +15,7 @@ D9/D10). Two diagrams, built from the same event log:
    per `task.phase_changed` event with `payload.phase == "done"` (grouped
    by that event's `ts` date) — independent of the flowchart above.
 
-See tasks/handoff.md's "Verdict 1" for why this is scoped this way: a
+See tasks/HANDOFF.md's "Verdict 1" for why this is scoped this way: a
 `mindmap` diagram was rejected (tree-only, no cross-links — wrong fit for
 a dependency graph); `flowchart LR` + `classDef` per phase + a separate
 `timeline` was adopted instead.
