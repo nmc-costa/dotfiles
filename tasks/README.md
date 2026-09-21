@@ -231,6 +231,19 @@ claiming/locking/daemon machinery yet:
   config at `tasks/kanban.md` to watch it live — same file shape verified
   in `tasks/evaluations/tuiboard/`.
 
+**Notification/human-in-the-loop layer, planned (2026-09-21, not
+implemented):** `tasks/plans/human-in-the-loop-notifications.md` — full
+`plan-orchestra` output (research + evidence map + 2 rounds of
+decisive-plan/adversarial-critique) for the "human only needed on
+exception" system: SLA-then-orchestrator auto-validation with a
+compare-and-swap so it can never silently overwrite a human decision, a
+deduplicated notification/escalation path via herdr+notify-send, two
+watchdogs so a dead sweep doesn't look like "all clear", and a
+cross-provider `/task-brief` startup skill (Claude Code via a real hook,
+Copilot CLI via a wrapper since its own `sessionStart` hook is currently
+broken, Antigravity via its inherited hook). Its own prerequisite
+(merging `move_task.py`/`rebuild_kanban.py`, above) is now done.
+
 Remaining spikes before the rest of `tsk` gets written: install Agent
 Deck, confirm git-ref compare-and-swap claiming under concurrent writers,
 confirm a `Workflow` script with per-phase `model` overrides, confirm a
