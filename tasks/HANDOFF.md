@@ -259,7 +259,7 @@ ideas:**
 ## Kickoff prompt for a new session
 
 ```
-Lê tasks/handoff.md no dotfiles (~/dotfiles) para retomares o contexto de
+Lê tasks/HANDOFF.md no dotfiles (~/dotfiles) para retomares o contexto de
 onde ficou (é a v4 — Onda 1 fechada, PRs #28/#30/#31/#32/#33/#35 já
 fundidas, LEGAL_TRANSITIONS aplicado). Depois:
 1. Corre `cat tasks/kanban.md` — confirma que `cards-frontmatter` (Wave 2)

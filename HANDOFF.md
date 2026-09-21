@@ -30,21 +30,12 @@ já tomadas). Estado, verificado com `gh pr view 34` em 2026-09-21:
 
 ## Trabalho ativo #2 — subsistema `tasks/` (orquestração de tarefas)
 
-**Não tocado por esta PR.** Tem o seu próprio handoff em curso, mas ainda
-só existe numa branch separada:
-
-- `tasks/handoff.md` (minúsculas, por agora) vive na branch
-  `claude/session-handoff` / worktree `handoff-update`, **PR #30, aberto,
-  não mesclado**. `tasks/events.jsonl`/`board.md`/`kanban.md` já divergem
-  nessa branch.
-- **Não mexer nesses ficheiros a partir de outra branch enquanto a PR #30
-  estiver aberta** — `board.md`/`kanban.md` são totalmente regenerados a
-  partir de `events.jsonl`, não apenas append; duas branches a regenerá-los
-  a partir de estados diferentes do log é o cenário de conflito real desta
-  sessão foi avisada para evitar.
-- Quando a PR #30 mesclar, `tasks/handoff.md` deve ser renomeado para
-  `tasks/HANDOFF.md` (ver convenção abaixo) — feito por quem terminar essa
-  PR, não por esta.
+**Resolvido, 2026-09-21.** PR #30 mesclou entretanto (junto com #35, #36,
+#40 — Onda 1 fechada). `tasks/handoff.md` foi renomeado para
+`tasks/HANDOFF.md` numa PR de seguimento desta (`claude/tasks-handoff-md-rename`),
+que também cria o card `dotfiles-handoff-standardization` para fechar esta
+tarefa formalmente no sistema `tasks/`. Ver `tasks/HANDOFF.md` para o
+estado corrente do subsistema.
 
 ## Trabalho ativo #3 — Esta PR: convenção `HANDOFF.md`
 
@@ -66,7 +57,7 @@ nesta máquina quando esta PR foi aberta).
   - `<repo>/<subsistema>/HANDOFF.md` — só quando o subsistema já tem os
     seus próprios docs de topo (precedente: `tasks/` já tem `README.md`,
     `CHEATSHEET.md`, `KICKOFF.md` próprios) — ex.: `tasks/HANDOFF.md`,
-    ainda por migrar (ver acima).
+    já migrado.
 - Ciclo de vida: não permanente, atualizar in place, apagar/arquivar
   quando "por fazer" ficar vazio.
 
@@ -78,11 +69,9 @@ nesta máquina quando esta PR foi aberta).
 - `CLAUDE.md`: árvore "Quick summary" atualizada.
 
 **O que ficou por fazer (não incluído nesta PR, deliberadamente):**
-- Card formal no sistema `tasks/` (`dotfiles-handoff-standardization`) —
-  adiado até a PR #30 mesclar, pelo mesmo motivo de colisão em
-  `events.jsonl`/`board.md`/`kanban.md` descrito acima.
-- Renomear `tasks/handoff.md` → `tasks/HANDOFF.md` — pertence a quem
-  terminar a PR #30, não a esta.
+- Card formal no sistema `tasks/` (`dotfiles-handoff-standardization`) e o
+  rename `tasks/handoff.md` → `tasks/HANDOFF.md` — feitos numa PR de
+  seguimento (`claude/tasks-handoff-md-rename`), depois de PR #30 mesclar.
 - Nota curta sobre a convenção `HANDOFF.md` em `CHEATSHEET.md` (root do
   dotfiles) — ainda não escrita.
 - Duas linhas soltas " HEAD" / " origin/main" perto da linha ~48/53 de
@@ -94,9 +83,9 @@ nesta máquina quando esta PR foi aberta).
 
 1. Esta PR mescla-se (autorização explícita do dono, 2026-09-21 — "Faz
    pull request, merge and sync").
-2. **Pós-merge, manual**: apagar `~/handoff.md` (o antigo, fora de git,
-   nesta máquina) — só depois de confirmar que este ficheiro já está
-   presente e correto no checkout principal.
-3. Quando a PR #30 mesclar: renomear `tasks/handoff.md` →
-   `tasks/HANDOFF.md`, e criar o card `dotfiles-handoff-standardization`
-   no sistema `tasks/` para fechar esta tarefa formalmente.
+2. **Feito, 2026-09-21**: `~/handoff.md` (o antigo, fora de git) apagado,
+   depois de confirmar que este ficheiro já estava presente e correto no
+   checkout principal.
+3. **Feito, 2026-09-21**: `tasks/handoff.md` renomeado para
+   `tasks/HANDOFF.md`, card `dotfiles-handoff-standardization` criado no
+   sistema `tasks/` e fechado — ver `claude/tasks-handoff-md-rename`.
