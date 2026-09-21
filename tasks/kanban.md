@@ -9,11 +9,12 @@
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
 
 ## Planning
-- [ ] dotfiles-tsk-task-brief-skill /task-brief skill - thin shell over brief.py
 
 ## In Progress
+- [ ] dotfiles-tsk-task-brief-skill /task-brief skill - thin shell over brief.py
 
 ## Review
+- [ ] dotfiles-handoff-standardization Adopt HANDOFF.md convention (global index + per-repo/subsystem), rename tasks/handoff.md
 
 ## Validation
 
