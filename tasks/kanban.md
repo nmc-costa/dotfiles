@@ -16,11 +16,11 @@
 - [ ] dotfiles-tsk-cards-frontmatter L1: markdown+YAML-frontmatter card per task (rebuild_cards.py, generated view, never hand-edited)
 
 ## Planning
-- [ ] dotfiles-tsk-writepath-unification lifecycle.py + LEGAL_TRANSITIONS + append() as the single writer, with CAS (Layer A)
 
 ## In Progress
 
 ## Review
+- [ ] dotfiles-tsk-writepath-unification lifecycle.py + LEGAL_TRANSITIONS + append() as the single writer, with CAS (Layer A)
 
 ## Validation
 
@@ -36,5 +36,7 @@
 - [x] notes-workspace-standards-schema Abrir PR: claude/workspace-standards-schema
 - [x] worknotes-repo-hygiene-worknotes Abrir PR: claude/repo-hygiene-worknotes
 - [x] worknotes-workspace-standards-schema Abrir PR: claude/workspace-standards-schema
+
+## Blocked
 
 ## Deferred
