@@ -10,12 +10,13 @@ a task's current phase to reject illegal transitions, and it can't import
 rebuild_kanban.py for that without inverting the dependency (rebuild_kanban
 is a *view* of the log, append() is the *writer* into it).
 
-Not yet implemented here (deliberately deferred to the notification/sweep
-layer in the plan doc, Wave 2 — their inputs don't exist yet): `FACT_TYPES`
-(depends on event types only `sweep.py` will ever produce, e.g.
-`agent.session_stalled`) and `dedup_key()`'s escalation-period argument
-(depends on `tasks/policy.yaml`, not written yet). Adding them now would be
-unused, speculative code with no real caller.
+`FACT_TYPES` only lists the two facts `tasks/sweep.py` can actually detect
+today (`sla_expired`, `blocked_too_long`) — `loop_cap_exceeded` (needs
+`review.judge_failed`, no producer exists) and `agent_session_stalled`
+(needs `session_id` populated on events — every event in the real log has
+`session_id: null`, nothing writes it) are deliberately left out until
+their inputs exist, same phasing the plan doc's own "Riscos aceites" R3
+already accepts for `review.judge_failed`/`budget.daily_cap_reached`.
 """
 import sys
 from pathlib import Path
@@ -69,6 +70,31 @@ OLD_STATUS_TO_PHASE = {
     "deferred": "deferred",
     "adiado": "deferred",
 }
+
+
+FACT_TYPES = ("sla_expired", "blocked_too_long")
+
+# P0 facts get individual delivery + unconditional notify-send (§3);
+# everything else is coalesced into one digest toast per sweep round.
+P0_FACT_TYPES = ("blocked_too_long",)
+
+# Re-notify cadence once a fact is outstanding (not itself specified as a
+# single number in the plan doc's §1 table — SLA's "4h pré-aviso a 3h30"
+# and blocked's "24h" describe when a fact first fires, not how often to
+# re-notify after that). These are this implementation's own reasonable
+# choice, not a decided spec value.
+ESCALATION_PERIOD_SECONDS = {
+    "sla_expired": 3600,
+    "blocked_too_long": 21600,
+}
+
+
+def dedup_key(task_id, fact_type, age_seconds):
+    """tasks/plans/human-in-the-loop-notifications.md §1's supression key:
+    stable within one escalation window, changes once a fact has been
+    outstanding long enough to deserve re-notifying."""
+    period = ESCALATION_PERIOD_SECONDS.get(fact_type, 3600)
+    return f"{task_id}:{fact_type}:{age_seconds // period}"
 
 
 class IllegalTransitionError(Exception):
