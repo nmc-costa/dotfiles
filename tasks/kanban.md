@@ -2,11 +2,9 @@
 - [ ] dotfiles-tsk-hook-claude-code Claude Code SessionStart hook + versioned settings.json fragment
 - [ ] dotfiles-tsk-cpx-copilot cpx wrapper for Copilot CLI (its own sessionStart hook is broken)
 - [ ] dotfiles-tsk-hook-antigravity Antigravity hook (inherited hook mechanism)
-- [ ] dotfiles-tsk-task-brief-skill /task-brief skill - thin shell over brief.py
 - [ ] dotfiles-tsk-systemd-units ensure-tsk-sweep.sh + systemd units, following the existing ensure-*.sh convention
 - [ ] dotfiles-tsk-graph-dependency-edges Add blocked_by dependency edges to rebuild_graph.py's flowchart (needs blocked_by as a list, not prose)
 - [ ] dotfiles-tsk-dispatch-launcher tsk dispatch: launch a session on a provider with the task brief pre-loaded (claude "<p>"/--bg, copilot -i, agy -i) - push side of cross-provider handoff, pull side is dotfiles-tsk-brief
-- [ ] dotfiles-tsk-claim-protocol L2: claim protocol in a separate claims.jsonl -- locked conditional appends, closed role vocabulary, atomic preemption, human preempts swarm
 - [ ] dotfiles-tsk-jsonl-merge-driver Custom git merge driver (merge=union or equivalent) for tasks/*.jsonl so a conflict resolution can never silently drop an append-only line
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
 
@@ -39,8 +37,11 @@
 - [x] dotfiles-tsk-writepath-unification lifecycle.py + LEGAL_TRANSITIONS + append() as the single writer, with CAS (Layer A)
 - [x] dotfiles-tsk-notify-sweep notify.py + sweep.py - the notification producer side
 - [x] dotfiles-tsk-brief brief.py - heartbeat + inbox consumer
+- [x] dotfiles-tsk-task-brief-skill /task-brief skill - thin shell over brief.py
 - [x] dotfiles-tsk-cards-frontmatter L1: markdown+YAML-frontmatter card per task (rebuild_cards.py, generated view, never hand-edited)
 - [x] dotfiles-tsk-tasks-root-resolver tasks_root() resolver: one canonical write path for events.jsonl, the CAS lock and every rebuild_*.py (fixes 4 divergent copies + 1 orphaned event)
+- [x] dotfiles-tsk-claim-protocol L2: claim protocol in a separate claims.jsonl -- locked conditional appends, closed role vocabulary, atomic preemption, human preempts swarm
+- [x] dotfiles-handoff-standardization Adopt HANDOFF.md convention (global index + per-repo/subsystem), rename tasks/handoff.md
 
 ## Blocked
 
