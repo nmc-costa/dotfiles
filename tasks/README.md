@@ -1,5 +1,9 @@
 # tasks/
 
+**Quick command reference: `tasks/CHEATSHEET.md`.** This file explains the
+model and the decisions; the cheatsheet is the "how do I actually do X"
+lookup — start there if you just need a command.
+
 Workspace task-tracking system (PoC). Lives here, not in a separate repo —
 decision fixed by D2/D7 of the "Workspace Agil" doc (`Repo-Cerebro` =
 `dotfiles/`) and D11 (events go into the workspace repo's central log).
@@ -41,6 +45,12 @@ Regenerate the table after any change to the log:
 ```bash
 python3 tasks/rebuild_view.py
 ```
+
+This is the original PoC flow (free-form `status`, `board.md`). For the
+6-phase lifecycle, metrics, and handoff notes (`move_task.py`,
+`kanban.md`, `metrics.md`) see `tasks/CHEATSHEET.md` instead — both flows
+read the same `events.jsonl` and stay in sync, `move_task.py` is just the
+newer, more specific tool.
 
 **Language note (2026-09-16):** English is the default vocabulary for new
 events — event types (`task.created`, `task.status_changed`), `actor.kind`
@@ -230,6 +240,19 @@ claiming/locking/daemon machinery yet:
   `task.phase_changed` event takes over from then on. Point tuiboard's
   config at `tasks/kanban.md` to watch it live — same file shape verified
   in `tasks/evaluations/tuiboard/`.
+- **`move_task.py`'s metrics flags + `rebuild_metrics.py`** (added
+  2026-09-21) — optional `--team`/`--tokens`/`--cost-usd`/
+  `--duration-seconds`/`--cycles` on any move, recorded against the phase
+  being **left** (report what a team spent on `in_progress` when you call
+  `--to-phase review`, not on the call that opened `in_progress`).
+  `rebuild_metrics.py` projects these into `tasks/metrics.md`: every
+  metered phase-transition, plus totals by team and by task. No analysis
+  happens yet — this only makes the data collect, for the
+  orchestration-improvement/team-profile use this is meant to eventually
+  feed (see "Orchestration architecture" below). **`tasks/demo/`** is a
+  runnable, isolated worked example (2 tasks, 2 teams, full lifecycle,
+  `./run_demo.sh`) — see its own README for exactly how the isolation
+  works.
 
 **Notification/human-in-the-loop layer, planned (2026-09-21, not
 implemented):** `tasks/plans/human-in-the-loop-notifications.md` — full
