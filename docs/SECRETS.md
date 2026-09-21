@@ -61,6 +61,10 @@ path).
   encrypted USB/physical copy). This assistant cannot know your backup
   situation, so nothing was done here beyond generating the key and leaving
   it at that path with `chmod 600`.
+- **Done 2026-09-21**: backed up as a Bitwarden secure note named
+  `dotfiles age key` (free tier — pasted as plain text, no file attachment
+  needed for a key this size). This is the owner's actual current backup;
+  the bullet above stays as general guidance for anyone else using this repo.
 - If you lose this file with no backup, you lose access to decrypt
   `encrypted_settings.json.age` — you would need to generate a **new** age
   key, then re-encrypt the real API key value again with the new recipient

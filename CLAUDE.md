@@ -33,7 +33,7 @@ Whenever you edit `workspace-standards.yaml`/`.schema.json`, run `python3 script
 
 | Item | State |
 |---|---|
-| Back up the age private key (`~/.config/chezmoi/key.txt`) | Manual, pending |
+| Back up the age private key (`~/.config/chezmoi/key.txt`) | **Done 2026-09-21** — Bitwarden secure note (`dotfiles age key`); see `docs/SECRETS.md` |
 | Authenticate `gh` CLI | **Done 2026-09-16** via browser login (not a manual PAT) — see `CHEATSHEET.md` §4 |
 | Adopt `claude/<topic>` + PR convention instead of direct pushes to `main` | **Done 2026-09-16** — 13 PRs opened and merged across `dotfiles`, `architect`, `notes`, `Work/notes`; see `CHEATSHEET.md` §4 |
 | Repo hygiene (clean root, README with tree+index+guidelines) — `dotfiles`, `architect`, `~/Projects/notes`, `~/Work/notes` | Done and merged in all 4 repos |
