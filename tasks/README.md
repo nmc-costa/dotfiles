@@ -373,3 +373,18 @@ then `rate_limited`, exactly as measured in the plan doc's evidence map).
   but nothing yet counts to 5 and promotes to `notification.undeliverable`.
 - **The two watchdogs** (§4 point 1, systemd `OnFailure=`) — that's
   `dotfiles-tsk-systemd-units`'s job, which is `blocked_by` this card.
+
+**`brief.py` done (2026-09-21):** the deterministic core behind the
+future cross-provider `/task-brief` skill (§5) — checks
+`tasks/.sweep-heartbeat` first (a stale-or-missing heartbeat prints a
+banner before anything else, per §4), then lists un-acked
+`notification.raised` facts by priority (P0 first), and only prints "what
+do you want to work on?" when nothing is pending. Never picks work
+itself. No separate `tasks/inbox.md` file — the pending list is computed
+directly from `events.jsonl`, the same source `notify.py` reads, instead
+of adding a generated intermediate with nothing new to say. Also
+implements the `--prompt-only --task-id` addition from `tasks/handoff.md`'s
+cross-provider dispatch verdict: prints a ready-to-paste dispatch prompt
+for one task (title, phase, latest handoff note, the two-step
+backlog→planning→in_progress reminder when still in backlog) — the
+contract `dotfiles-tsk-dispatch-launcher` needs.
