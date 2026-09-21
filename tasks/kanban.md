@@ -20,7 +20,6 @@
 ## In Progress
 
 ## Review
-- [ ] dotfiles-tsk-writepath-unification lifecycle.py + LEGAL_TRANSITIONS + append() as the single writer, with CAS (Layer A)
 
 ## Validation
 
@@ -37,6 +36,7 @@
 - [x] worknotes-repo-hygiene-worknotes Abrir PR: claude/repo-hygiene-worknotes
 - [x] worknotes-workspace-standards-schema Abrir PR: claude/workspace-standards-schema
 - [x] dotfiles-tsk-spike-cas-concurrency Spike: confirm git-ref compare-and-swap claiming survives concurrent writers
+- [x] dotfiles-tsk-writepath-unification lifecycle.py + LEGAL_TRANSITIONS + append() as the single writer, with CAS (Layer A)
 
 ## Blocked
 
