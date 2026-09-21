@@ -254,20 +254,49 @@ claiming/locking/daemon machinery yet:
   `./run_demo.sh`) — see its own README for exactly how the isolation
   works.
 
-**Notification/human-in-the-loop layer, planned (2026-09-21, not
-implemented):** `tasks/plans/human-in-the-loop-notifications.md` — full
-`plan-orchestra` output (research + evidence map + 2 rounds of
-decisive-plan/adversarial-critique) for the "human only needed on
-exception" system: SLA-then-orchestrator auto-validation with a
-compare-and-swap so it can never silently overwrite a human decision, a
-deduplicated notification/escalation path via herdr+notify-send, two
-watchdogs so a dead sweep doesn't look like "all clear", and a
-cross-provider `/task-brief` startup skill (Claude Code via a real hook,
-Copilot CLI via a wrapper since its own `sessionStart` hook is currently
-broken, Antigravity via its inherited hook). Its own prerequisite
-(merging `move_task.py`/`rebuild_kanban.py`, above) is now done.
+**Notification/human-in-the-loop layer, planned (2026-09-21):**
+`tasks/plans/human-in-the-loop-notifications.md` — full `plan-orchestra`
+output (research + evidence map + 2 rounds of decisive-plan/adversarial-
+critique) for the "human only needed on exception" system: SLA-then-
+orchestrator auto-validation with a compare-and-swap so it can never
+silently overwrite a human decision, a deduplicated notification/
+escalation path via herdr+notify-send, two watchdogs so a dead sweep
+doesn't look like "all clear", and a cross-provider `/task-brief` startup
+skill (Claude Code via a real hook, Copilot CLI via a wrapper since its
+own `sessionStart` hook is currently broken, Antigravity via its inherited
+hook). Its own prerequisite (merging `move_task.py`/`rebuild_kanban.py`,
+above) is done, and so is the plan's §0 ("Write path unificado", below).
+
+**`tasks/lifecycle.py`, §0 done (2026-09-21):** single source of truth for
+`PHASES` (now 8: the 6 pipeline phases plus the `blocked`/`deferred` side
+lanes — previously only defined piecemeal, and `move_task.py` couldn't
+actually target `blocked`/`deferred` at all despite the CHEATSHEET
+documenting them), `LEGAL_TRANSITIONS`, and the PT/EN actor-kind and event-
+type vocabulary, exactly as specified in the plan doc's §0. Consequences:
+- `append_event.py::append()` is now the single physical writer to
+  `events.jsonl`; `move_task.py` calls it instead of writing `open("a")`
+  itself.
+- An illegal `task.phase_changed` transition (e.g. `backlog` straight to
+  `in_progress`, skipping `planning`) is rejected, `exit 2`.
+- `append()` optionally takes `expect_last_event_id` — Layer A of the
+  plan's CAS (§2): `flock(LOCK_EX)` on a sidecar `tasks/.events.lock`
+  (never on `events.jsonl` itself), re-reads the task's last event inside
+  the lock, aborts (`exit 3`) if it no longer matches. `move_task.py`
+  requires `--expect-last-event-id` on every move into `validation` or
+  `done` — verified with a 10-way concurrent race: exactly 1 winner, 9
+  aborts, every time.
+- `rebuild_kanban.py` now renders 8 columns (added `Blocked`, next to the
+  pre-existing `Deferred`) and delegates phase-projection to
+  `lifecycle.project()` instead of its own copy.
+
+Deliberately **not** done in this slice (needs `tasks/policy.yaml` and the
+sweep's own event types, neither exists yet): `FACT_TYPES` and
+`dedup_key()`'s escalation-period argument, and Layer B of the CAS (the
+rule protecting a human's `validation`/`done` decision from a stale
+auto-validation — depends on `notify.py`/`sweep.py` existing to matter).
 
 Remaining spikes before the rest of `tsk` gets written: install Agent
-Deck, confirm git-ref compare-and-swap claiming under concurrent writers,
-confirm a `Workflow` script with per-phase `model` overrides, confirm a
-trivial herdr plugin can open a popup.
+Deck, confirm a `Workflow` script with per-phase `model` overrides,
+confirm a trivial herdr plugin can open a popup. (Git-ref CAS under
+concurrent writers is now confirmed, above, as part of shipping it rather
+than as a separate spike.)

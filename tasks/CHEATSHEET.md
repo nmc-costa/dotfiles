@@ -37,14 +37,34 @@ python3 tasks/move_task.py --task-id dotfiles-my-task --to-phase in_progress --a
 ```
 
 Phases, in order: `backlog → planning → in_progress → review → validation
-→ done`, plus `deferred`/`blocked` as side lanes. Nothing enforces legal
-transitions yet (any phase to any phase is currently accepted) — that's
-planned, not built (see the plan doc's `LEGAL_TRANSITIONS` table).
+→ done`, plus `deferred`/`blocked` as side lanes. Only the transitions in
+`tasks/lifecycle.py`'s `LEGAL_TRANSITIONS` are accepted (added
+2026-09-21) — e.g. `backlog` can only go to `planning` or `deferred`,
+never straight to `in_progress`. An illegal move exits 2. Move into
+`validation` or `done` and you also need `--expect-last-event-id` (below).
 
 **`--actor-kind`** defaults to `agent` — set `--actor-kind human` when a
 human, not an agent, is the one deciding the move (this matters once the
 auto-validation/CAS logic in the plan gets built; human-authored moves are
 meant to always win).
+
+## Protect a validation/done move (required, not optional)
+
+```bash
+python3 tasks/move_task.py --task-id dotfiles-my-task --to-phase validation \
+  --expect-last-event-id <event_id printed by the previous move>
+```
+
+`--to-phase validation`/`done` **require** `--expect-last-event-id` — the
+event_id this command (or `append_event.py`) printed on the task's
+previous move, or the `event_id` of the last line in `events.jsonl` for
+this `task_id`. If someone else moved the task in the meantime, the id
+you have is stale and the command aborts with `exit 3` instead of
+silently overwriting them (Layer A of the CAS in
+`tasks/plans/human-in-the-loop-notifications.md` §2 — confirmed to hold
+under a 10-way concurrent race, exactly 1 winner every time). Every other
+phase transition stays lock-free — this only applies to the two phases
+where overwriting a decision would actually matter.
 
 ## Record what a team spent (optional, on every move)
 
