@@ -2,9 +2,9 @@
 task_id: dotfiles-handoff-standardization
 title: "Adopt HANDOFF.md convention (global index + per-repo/subsystem), rename tasks/handoff.md"
 project: dotfiles
-phase: review
+phase: done
 created: "2026-09-21T21:51:04.263877+00:00"
-touched: "2026-09-21T21:51:04.426824+00:00"
+touched: "2026-09-21T21:51:45.865185+00:00"
 energy: ""
 estimate: ""
 deadline: ""
@@ -20,6 +20,8 @@ Adopt HANDOFF.md convention (global index + per-repo/subsystem), rename tasks/ha
 - 2026-09-21T21:51:04.324181+00:00: backlog -> planning (actor: claude/agent) — Card created retroactively to formally close work already merged in PRs #37/#48
 - 2026-09-21T21:51:04.378420+00:00: planning -> in_progress (actor: claude/agent)
 - 2026-09-21T21:51:04.426824+00:00: in_progress -> review (actor: claude/agent)
+- 2026-09-21T21:51:45.793279+00:00: review -> validation (actor: claude/agent)
+- 2026-09-21T21:51:45.865185+00:00: validation -> done (actor: claude/agent)
 
 ## Latest handoff
 _@ review_
