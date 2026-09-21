@@ -113,6 +113,10 @@ tmp/
 # truth; this is purely a flock() target, never read back for meaning.
 tasks/.events.lock
 
+# tasks/sweep.py's heartbeat (§4) — an mtime-only liveness marker for
+# tasks/brief.py to check, not a fact worth versioning.
+tasks/.sweep-heartbeat
+
 # But DO track core configs
 !.claude/
 !.agents/

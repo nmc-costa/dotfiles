@@ -338,3 +338,38 @@ projection here — `move_task.py` regenerates it on every move, same as
 `kanban.md`. `blocked_by` is still free-text prose in the frontmatter
 (becomes a real list of ids only once `dotfiles-tsk-graph-dependency-
 edges` lands).
+
+**`notify.py`/`sweep.py`, partial (2026-09-21):** implements the
+detection + delivery halves of §1/§3/§4 of the notification plan, scoped
+down deliberately. `tasks/sweep.py` detects two facts
+(`tasks/lifecycle.FACT_TYPES`) from real data already in the log:
+`sla_expired` (an agent-authored move into `validation` past 4h) and
+`blocked_too_long` (a move into `blocked` past 24h, P0). `tasks/notify.py`
+delivers them — P0 facts individually with an unconditional `notify-send`
+fallback, everything else coalesced into one digest toast per run — and
+supports `--ack --dedup-key` for closing one out. `tasks/
+validate_herdr_contract.sh` is the CI gate from §3, confirmed against the
+real herdr 0.8.2 contract on this machine (back-to-back calls: `shown`
+then `rate_limited`, exactly as measured in the plan doc's evidence map).
+
+**Not in this slice, on purpose:**
+- **Actual auto-validation of an expired SLA** — §1 calls this the
+  "ação automática" for `sla_expired`, but doing it safely needs CAS
+  Layer B (§2, "a peça mais crítica do plano", already adversarially
+  corrected three times before this session even started). `sweep.py`
+  only raises the fact; nothing moves a task automatically yet. Building
+  Layer B is real follow-up work, not a small addition.
+- **`loop_cap_exceeded`** (needs `review.judge_failed`, no producer
+  exists) and **`agent_session_stalled`** (needs `session_id` populated
+  on events — every event in the real log has `session_id: null`) — both
+  genuinely blocked on missing inputs, not complexity, same phasing the
+  plan's own "Riscos aceites" R3 already accepts for
+  `review.judge_failed`/`budget.daily_cap_reached`.
+- **The 5th-retry `notification.undeliverable` escalation** (§1) — a
+  `raised` without a `delivered` correctly self-heals by re-raising on
+  every sweep (verified: two sweeps before a delivery produced two
+  `raised` events for the same `dedup_key`, and `notify.py` correctly
+  collapses them into one delivered fact instead of double-announcing),
+  but nothing yet counts to 5 and promotes to `notification.undeliverable`.
+- **The two watchdogs** (§4 point 1, systemd `OnFailure=`) — that's
+  `dotfiles-tsk-systemd-units`'s job, which is `blocked_by` this card.

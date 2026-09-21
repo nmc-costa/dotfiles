@@ -2,8 +2,9 @@
 
 Quick reference for the commands you actually run. For the *why*, see
 `tasks/README.md` (the model/decisions) and
-`tasks/plans/human-in-the-loop-notifications.md` (the not-yet-built
-notification/orchestration layer). This file is only the *how*.
+`tasks/plans/human-in-the-loop-notifications.md` (the notification/
+orchestration layer — partially built, see below). This file is only the
+*how*.
 
 ## The tools, in one line each
 
@@ -15,6 +16,8 @@ notification/orchestration layer). This file is only the *how*.
 | `rebuild_cards.py` | Regenerate one YAML-frontmatter card per task under `tasks/cards/`. Run automatically by `move_task.py`. |
 | `rebuild_metrics.py` | Regenerate `metrics.md`. Run automatically by `move_task.py` when metrics are given. |
 | `rebuild_view.py` | Regenerate `board.md` (older flat-table view, pre-dates the 6-phase model). |
+| `sweep.py` | Detect `sla_expired`/`blocked_too_long` facts, raise `notification.raised` events. Run it periodically yourself — no systemd timer yet. |
+| `notify.py` | Deliver pending raised facts (herdr digest + notify-send fallback), or `--ack --dedup-key` to close one out. |
 
 None of these need arguments beyond what's shown below — no config file, no
 setup. Run them from anywhere with `python3 tasks/<tool>.py ...` or `cd
@@ -103,6 +106,24 @@ where the work lives); `--reason` is a one-line **why this move happened**.
 Different fields, use both if useful. Write a handoff note whenever a
 different team/session might pick the task up next — including "future
 you" reopening it in a week.
+
+## Notifications (SLA / blocked-too-long facts)
+
+```bash
+python3 tasks/sweep.py    # detect facts, raise notification.raised
+python3 tasks/notify.py   # deliver pending facts (herdr toast, or notify-send fallback)
+python3 tasks/notify.py --ack --dedup-key "dotfiles-my-task:sla_expired:6"
+```
+
+Run `sweep.py` periodically yourself (no systemd timer yet —
+`dotfiles-tsk-systemd-units` is still backlog). Two facts today: a task
+stuck in `validation` past 4h (`sla_expired`), or stuck in `blocked` past
+24h (`blocked_too_long`, delivered individually with an unconditional
+`notify-send`, not folded into the digest). Neither fact auto-resolves
+anything — `sweep.py` only raises, it never moves a task. See
+`tasks/README.md`'s "notify.py/sweep.py" status note for exactly what's
+deliberately not built yet (auto-validation, `loop_cap_exceeded`,
+`agent_session_stalled`).
 
 ## See what's going on
 
