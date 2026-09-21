@@ -1,4 +1,4 @@
-# Session handoff — 2026-09-21 (v2, supersedes the first version of this file)
+# Session handoff — 2026-09-21 (v3, supersedes v2)
 
 Snapshot of a session that took the `tasks/` orchestration system from
 "metrics PR sitting open" to "write-path unified, LEGAL_TRANSITIONS
@@ -6,6 +6,31 @@ enforced, CAS proven under concurrency, and a validated design for both
 the visual-roadmap and the cross-provider handoff pieces still to build."
 Written because the owner is about to hit a usage-limit reset. Not a
 permanent doc — delete/archive once its "Still pending" list is empty.
+
+## ⚠️ Onda 1 em dispatch agora — NÃO reivindicar estas 5 tarefas
+
+**Múltiplas sessões Claude estão a trabalhar em paralelo neste repositório
+neste momento** (confirmado: as PRs #30 e #35 foram fundidas por outra
+sessão enquanto esta própria sessão as estava a verificar, minutos depois
+de as ter visto ainda abertas). O sistema `tasks/` **não tem mecanismo de
+reserva/claim** — não há `claim` event type nem campo `assignee`; só CAS em
+`validation`/`done`. Por isso, este ficheiro é o sinal de coordenação
+manual: esta sessão está a despachar 5 subagentes, em paralelo, contra
+estas 5 tarefas da Onda 1:
+
+```
+dotfiles-tsk-spike-agent-deck
+dotfiles-tsk-spike-workflow-model
+dotfiles-tsk-spike-herdr-popup
+dotfiles-tsk-tuiboard-install
+dotfiles-tsk-roadmap-graph
+```
+
+**Se és outra sessão a ler isto:** corre `cat tasks/kanban.md` — se alguma
+destas 5 já não estiver em `Backlog`, não a reivindiques, está a ser
+tratada. Este bloco fica aqui até as 5 aparecerem em `Done` (ou `Blocked`,
+se algum spike falhar de forma irrecuperável) — nessa altura remove-se esta
+secção numa v4.
 
 **Important:** two design decisions below (the mermaid/roadmap verdict and
 the cross-provider dispatch verdict) were produced by Opus-model
@@ -46,16 +71,16 @@ why they're reproduced here in full rather than just referenced.
 
 ## Open PRs (check `gh pr list --state open` — state changes between sessions)
 
-- **PR #35** (`worktree-tsk-dispatch-launcher-card`) — adds one backlog
-  card, `dotfiles-tsk-dispatch-launcher` (see verdict below). **Not yet
-  merged** — owner hadn't approved it yet when the session ended. Ask
-  before merging, same as every other PR this session.
-- **PR #30** (`claude/session-handoff`) — this file. Update it in place
-  (don't create a new one) the next time a handoff snapshot is needed:
-  same branch, rewrite the content, push.
-- **PR #34** (`claude/pr1-chezmoi-migration`) — pre-existing, **unrelated
-  to this session's work**, not touched. Don't assume it's connected to
-  anything above.
+- **PR #35** and **PR #30** — both merged since v2 was written (confirmed
+  2026-09-21, merge commits visible in `git log main`). The
+  `dotfiles-tsk-dispatch-launcher` card from #35 is now in `tasks/kanban.md`'s
+  Backlog.
+- **PR #34** (`claude/pr1-chezmoi-migration`) — still open, pre-existing,
+  **unrelated to this session's work**, not touched. Don't assume it's
+  connected to anything above.
+- This file itself: still update in place on the same branch pattern used
+  before (a new `claude/<topic>` branch per handoff rewrite is fine too —
+  there's no single fixed branch name to reuse anymore since #30 merged).
 
 ## ⚠️ Behavior change: LEGAL_TRANSITIONS is now enforced
 
@@ -222,12 +247,15 @@ ideas:**
 
 ```
 Lê tasks/handoff.md no dotfiles (~/dotfiles) para retomares o contexto de
-onde ficou (é a v2, escrita depois de fundir PRs #28/#31/#32/#33 e com
-LEGAL_TRANSITIONS agora aplicado). Depois:
-1. Confirma o estado de PR #35 e de qualquer PR aberta desde então
-   (gh pr list --state open).
-2. Diz-me o que está pendente (secção "Still pending") e pergunta-me em
+onde ficou (é a v3 — PRs #28/#30/#31/#32/#33/#35 já fundidas,
+LEGAL_TRANSITIONS aplicado). Depois:
+1. Corre `cat tasks/kanban.md` — se a secção "Onda 1 em dispatch" ainda
+   estiver neste ficheiro, confirma se as 5 tarefas listadas já saíram de
+   Backlog antes de tocares nelas (outra sessão pode estar a tratá-las).
+2. Confirma `gh pr list --state open` — estado muda entre sessões.
+3. Diz-me o que está pendente (secção "Still pending") e pergunta-me em
    qual desses items queres que comece a trabalhar.
 Não assumas nada do handoff.md como ainda verdadeiro sem confirmar — pode
-ter passado tempo desde que foi escrito.
+ter passado tempo desde que foi escrito, e há múltiplas sessões a mexer
+neste repositório em paralelo.
 ```
