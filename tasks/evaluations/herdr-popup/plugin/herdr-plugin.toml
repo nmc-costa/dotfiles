@@ -1,0 +1,18 @@
+# Trivial spike manifest — dotfiles-tsk-spike-herdr-popup.
+#
+# Goal: find out whether `herdr plugin pane open --placement popup` is a
+# real, working placement on herdr 0.8.2. Kept minimal on purpose: one
+# plugin id, one pane, one script — nothing else.
+
+id = "herdr-popup-spike"
+name = "herdr-popup-spike"
+version = "0.1.0"
+description = "Spike plugin: one pane, used to test `herdr plugin pane open --placement popup`."
+min_herdr_version = "0.8.0"
+platforms = ["linux", "macos"]
+
+[[panes]]
+id = "popup"
+title = "Popup Spike"
+placement = "overlay"
+command = ["bash", "scripts/popup.sh"]

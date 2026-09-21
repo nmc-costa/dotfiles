@@ -1,36 +1,51 @@
-# Session handoff — 2026-09-21 (v3, supersedes v2)
+# Session handoff — 2026-09-21 (v4, supersedes v3)
 
 Snapshot of a session that took the `tasks/` orchestration system from
 "metrics PR sitting open" to "write-path unified, LEGAL_TRANSITIONS
-enforced, CAS proven under concurrency, and a validated design for both
-the visual-roadmap and the cross-provider handoff pieces still to build."
-Written because the owner is about to hit a usage-limit reset. Not a
-permanent doc — delete/archive once its "Still pending" list is empty.
+enforced, CAS proven under concurrency, Wave 1 fully closed by 5 parallel
+subagents, and a validated design for both the visual-roadmap and the
+cross-provider handoff pieces still to build." Written because the owner
+is about to hit a usage-limit reset. Not a permanent doc — delete/archive
+once its "Still pending" list is empty.
 
-## ⚠️ Onda 1 em dispatch agora — NÃO reivindicar estas 5 tarefas
+## ✅ Onda 1 — fechada (2026-09-21)
 
-**Múltiplas sessões Claude estão a trabalhar em paralelo neste repositório
-neste momento** (confirmado: as PRs #30 e #35 foram fundidas por outra
-sessão enquanto esta própria sessão as estava a verificar, minutos depois
-de as ter visto ainda abertas). O sistema `tasks/` **não tem mecanismo de
-reserva/claim** — não há `claim` event type nem campo `assignee`; só CAS em
-`validation`/`done`. Por isso, este ficheiro é o sinal de coordenação
-manual: esta sessão está a despachar 5 subagentes, em paralelo, contra
-estas 5 tarefas da Onda 1:
+As 5 tarefas da Onda 1 foram despachadas em paralelo (5 subagentes, um
+único worktree isolado partilhado, testando concorrência real de escrita
+em `tasks/events.jsonl` — não sintética) e estão todas em `Done`:
 
-```
-dotfiles-tsk-spike-agent-deck
-dotfiles-tsk-spike-workflow-model
-dotfiles-tsk-spike-herdr-popup
-dotfiles-tsk-tuiboard-install
-dotfiles-tsk-roadmap-graph
-```
+- `dotfiles-tsk-spike-agent-deck` — **PASS**. Instalação real (binário
+  pré-compilado, sem Go), deteção lado a lado confirmada via
+  `agent-deck status -v` com sessões tmux reais Claude Code + Copilot CLI.
+  Achado: deteção de estado é completa para Claude Code, superficial para
+  Copilot (consistente com o README oficial do projeto). Veredito sobre
+  `herdr`: complementares, não redundantes.
+- `dotfiles-tsk-spike-workflow-model` — **PASS**. O subagente delegado não
+  teve acesso à ferramenta `Workflow` (ausente do toolset de subagentes —
+  achado arquitetural relevante para o design do L2: `Workflow` só é
+  invocável a partir de uma sessão de topo). A sessão orquestradora correu
+  o script já escrito e confirmou diferenciação real por fase:
+  `phaseA→claude-haiku-4-5-20251001`, `phaseB→claude-opus-5`.
+- `dotfiles-tsk-spike-herdr-popup` — **PARCIAL**. `--placement popup` não
+  existe no herdr 0.8.2 instalado (falha silenciosa, processo órfão);
+  `--placement overlay` é o equivalente real e funcional, confirmado
+  visível/focado. Cleanup (`unlink`) confirmado.
+- `dotfiles-tsk-tuiboard-install` — **PASS**. `bun`+`tuiboard` instalados a
+  sério (via `mise`+`bun install -g`), config real a apontar para
+  `tasks/kanban.md` do checkout principal, render confirmado via captura
+  tmux.
+- `dotfiles-tsk-roadmap-graph` — **PASS**. `tasks/rebuild_graph.py` novo,
+  gera `tasks/roadmap.md`/`.mmd` (flowchart por projeto + timeline de
+  `done`), validado com `mermaid-cli` real.
 
-**Se és outra sessão a ler isto:** corre `cat tasks/kanban.md` — se alguma
-destas 5 já não estiver em `Backlog`, não a reivindiques, está a ser
-tratada. Este bloco fica aqui até as 5 aparecerem em `Done` (ou `Blocked`,
-se algum spike falhar de forma irrecuperável) — nessa altura remove-se esta
-secção numa v4.
+Detalhe completo de cada spike em `tasks/evaluations/<nome>/README.md`.
+Ver `tasks/metrics.md` para os custos reais (tokens/duração) por
+transição. **Achado de coordenação a reter**: durante o dispatch, outra
+sessão Claude pediu coordenação em tempo real sobre estas mesmas 5
+tarefas (via `cross-session-message`) — confirmou-se o âmbito e ela
+recuou para `dotfiles-tsk-cards-frontmatter` (Wave 2) em vez de duplicar
+trabalho. O sistema `tasks/` continua sem mecanismo de claim automático;
+este ficheiro + a troca de mensagens ao vivo foi o que evitou a colisão.
 
 **Important:** two design decisions below (the mermaid/roadmap verdict and
 the cross-provider dispatch verdict) were produced by Opus-model
@@ -207,27 +222,25 @@ ideas:**
 
 ## Still pending — in priority-ish order
 
-1. **Decide PR #35** (`gh pr view 35`) — small, mechanical, same pattern
-   as #31/#33 already approved this session.
-2. **Wave 1, dispatchable now, no more write-path blocker**: the 3
-   remaining spikes (agent-deck, workflow-model, herdr-popup),
-   tuiboard-install, roadmap-graph. Dispatch prompts for these were
-   drafted this session (in the local plan file, not versioned) — the
-   short version: move each card `backlog → planning → in_progress`
-   (two calls, see the LEGAL_TRANSITIONS warning above), do the spike,
-   write findings to `tasks/evaluations/<name>/README.md`, close with
-   `move_task.py --to-phase review` then `validation`
-   (`--expect-last-event-id` required) then `done`.
-3. **Wave 2, now unblocked**: `notify-sweep`, `brief` (with the new
+1. **Wave 1 — DONE**, see section above. Nothing left here.
+2. **Wave 2, unblocked**: `notify-sweep`, `brief` (with the new
    `--prompt-only` scope from Verdict 2), `graph-dependency-edges`,
-   `cards-frontmatter`.
-4. **Wave 3, blocked on `brief`**: the 3 hooks/wrapper cards, the
+   `cards-frontmatter`. **Check `tasks/kanban.md` before claiming
+   `cards-frontmatter`** — another Claude session said (live,
+   cross-session-message, 2026-09-21) it was picking that one up while
+   Wave 1 was in flight; may already be in progress or done by the time
+   you read this.
+3. **Wave 3, blocked on `brief`**: the 3 hooks/wrapper cards, the
    `/task-brief` skill, `dispatch-launcher`, then `systemd-units`.
-5. **Acceptance test** (from the notification plan's own "Próximos
+4. **Acceptance test** (from the notification plan's own "Próximos
    passos" #4): two different CLI sessions working tasks/ in parallel,
    force an SLA violation, confirm CAS doesn't let auto-validation
    silently overwrite a concurrent human decision. Needs Wave 2 done
-   first.
+   first. Note: Wave 1's dispatch was itself a real (if informal) version
+   of this test for the lock-free transitions — 5 agents wrote
+   `planning`/`in_progress` events concurrently into the same
+   `events.jsonl` with no corruption; the CAS-specific SLA/auto-validation
+   scenario is still untested.
 
 ## Quick orientation for a fresh session
 
@@ -247,11 +260,10 @@ ideas:**
 
 ```
 Lê tasks/handoff.md no dotfiles (~/dotfiles) para retomares o contexto de
-onde ficou (é a v3 — PRs #28/#30/#31/#32/#33/#35 já fundidas,
-LEGAL_TRANSITIONS aplicado). Depois:
-1. Corre `cat tasks/kanban.md` — se a secção "Onda 1 em dispatch" ainda
-   estiver neste ficheiro, confirma se as 5 tarefas listadas já saíram de
-   Backlog antes de tocares nelas (outra sessão pode estar a tratá-las).
+onde ficou (é a v4 — Onda 1 fechada, PRs #28/#30/#31/#32/#33/#35 já
+fundidas, LEGAL_TRANSITIONS aplicado). Depois:
+1. Corre `cat tasks/kanban.md` — confirma que `cards-frontmatter` (Wave 2)
+   não foi já reivindicada por outra sessão antes de a tocares.
 2. Confirma `gh pr list --state open` — estado muda entre sessões.
 3. Diz-me o que está pendente (secção "Still pending") e pergunta-me em
    qual desses items queres que comece a trabalhar.
