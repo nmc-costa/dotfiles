@@ -76,7 +76,9 @@ check, if ever wanted for a warning line, compares `git rev-parse
 - `tasks/` itself → always the canonical root, wherever the process runs
   from — guaranteed by A4/A5, not by discipline.
 - **On record:** the 2026-09-21 `wave1-parallel-dispatch` session wrote
-  `tasks/handoff.md` and ran `move_task.py` from inside a worktree shared
+  `tasks/HANDOFF.md` (then `tasks/handoff.md`, renamed by the
+  `dotfiles-handoff-standardization` work) and ran `move_task.py` from
+  inside a worktree shared
   by five subagents, violating this same rule already recorded in
   `tasks/README.md:203-208`. Direct, measured consequence: four divergent
   copies of `events.jsonl` existed simultaneously across the main checkout
