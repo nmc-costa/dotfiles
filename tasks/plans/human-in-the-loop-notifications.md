@@ -18,12 +18,10 @@ mesmo `tasks/events.jsonl` como fonte de verdade.
 
 ## Pré-requisito bloqueante
 
-**Merge da PR #20** (`move_task.py`, `rebuild_kanban.py`, `kanban.md`) antes de
-qualquer coisa abaixo. Verificado: `main` hoje só tem `append_event.py` /
-`rebuild_view.py` / `board.md` / `events.jsonl` — nem o vocabulário `validation`
-existe fora da PR. A PR será reescrita em ~3 dos seus 4 ficheiros logo a seguir
-ao merge (ver §5) — o merge dá uma base limpa e bisectável, não uma fundação
-estável a preservar intacta.
+**Merge da PR #20 — feito, 2026-09-21.** `move_task.py`, `rebuild_kanban.py` e
+`kanban.md` já estão em `main`. O resto deste plano ainda reescreve ~3 dos
+4 ficheiros que a PR trouxe (ver §5) — o merge deu uma base limpa e
+bisectável, não uma fundação estável a preservar intacta.
 
 ---
 
@@ -261,12 +259,12 @@ no projetado.
 | R4 | `inbox.md` gitignorado, sem histórico próprio | O histórico real vive nos eventos `notification.*` em `events.jsonl` (versionado); `inbox.md` é projeção pura, como `board.md`/`kanban.md` |
 | R5 | Wrapper `cpx` é opt-in — `copilot` direto perde o briefing | Mitigado por `alias copilot=cpx` no shell rc; o board fica correto na mesma |
 | R6 | Rate-limit do herdr indocumentado, pode mudar num update | O gate de CI (`validate_herdr_contract.sh`) deteta a mudança de contrato |
-| R7 | Merge da PR #20 é ação humana fora deste plano | Explícito e bloqueante por desenho — não há caminho alternativo (ver Pré-requisito) |
+| R7 | ~~Merge da PR #20 é ação humana fora deste plano~~ — feito 2026-09-21 | Resolvido |
 | R8 | Sweep de 5 em 5 min, não processo de vida longa | Stateless (o relógio do SLA vive no log); granularidade de 5 min é irrelevante para SLA de 4h/escaladas de 30min |
 
 ## Próximos passos
 
-1. Merge da PR #20.
+1. ~~Merge da PR #20.~~ Feito.
 2. Fase 0 de-risking (já delineada no `tasks/README.md`): instalar Agent
    Deck, confirmar CAS sob escrita concorrente, confirmar um script
    `Workflow` com `model` por fase, confirmar que um plugin herdr trivial

@@ -210,11 +210,26 @@ built:
 
 ### Status
 
-`tsk` itself is not implemented. One de-risking spike is done (tuiboard
-evaluation, above). Remaining spikes before any of `tsk` gets written:
-install Agent Deck, confirm git-ref compare-and-swap claiming under
-concurrent writers, confirm a `Workflow` script with per-phase `model`
-overrides, confirm a trivial herdr plugin can open a popup.
+One de-risking spike is done (tuiboard evaluation, above). A first real
+slice of `tsk` also exists now — just the move, none of the
+claiming/locking/daemon machinery yet:
+
+- **`move_task.py`** — moves a task to a new phase. Appends a
+  `task.phase_changed` event to `events.jsonl` and regenerates `kanban.md`
+  in one step. Intended caller is an agent session, not the human directly
+  (see "the owner is the director" above — a human tells the agent what to
+  do, the agent moves the card):
+  ```bash
+  python3 tasks/move_task.py --task-id dotfiles-my-task --to-phase in_progress --actor-id claude
+  ```
+- **`rebuild_kanban.py`** — projects `events.jsonl` into `tasks/kanban.md`,
+  a tuiboard-format board (the 6 lifecycle columns plus a 7th `Deferred`
+  column for the parallel lane). Tasks that predate this tool get a
+  one-time migrated phase from their old `status` value (see the mapping
+  in `rebuild_kanban.py`'s docstring); a task's first real
+  `task.phase_changed` event takes over from then on. Point tuiboard's
+  config at `tasks/kanban.md` to watch it live — same file shape verified
+  in `tasks/evaluations/tuiboard/`.
 
 **Notification/human-in-the-loop layer, planned (2026-09-21, not
 implemented):** `tasks/plans/human-in-the-loop-notifications.md` — full
@@ -226,5 +241,10 @@ deduplicated notification/escalation path via herdr+notify-send, two
 watchdogs so a dead sweep doesn't look like "all clear", and a
 cross-provider `/task-brief` startup skill (Claude Code via a real hook,
 Copilot CLI via a wrapper since its own `sessionStart` hook is currently
-broken, Antigravity via its inherited hook). Blocked on merging PR #20
-first.
+broken, Antigravity via its inherited hook). Its own prerequisite
+(merging `move_task.py`/`rebuild_kanban.py`, above) is now done.
+
+Remaining spikes before the rest of `tsk` gets written: install Agent
+Deck, confirm git-ref compare-and-swap claiming under concurrent writers,
+confirm a `Workflow` script with per-phase `model` overrides, confirm a
+trivial herdr plugin can open a popup.
