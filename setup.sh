@@ -225,6 +225,20 @@ setup_root_symlink "$BASE_DIR/dotfiles/global/ROOT.CLAUDE.md" "$BASE_DIR/CLAUDE.
 setup_root_symlink "$BASE_DIR/dotfiles/AGENTS.md" "$BASE_DIR/AGENTS.md"
 setup_root_symlink "$BASE_DIR/dotfiles/global/PROJECTS.CLAUDE.md" "$PROJECTS_DIR/CLAUDE.md"
 
+# Register the jsonl-union git merge driver (tasks/git-merge-jsonl-union.py)
+# for tasks/events.jsonl (see .gitattributes). This is local git config,
+# never versioned — a fresh clone's .gitattributes references a driver
+# name that means nothing until this runs, and git silently falls back to
+# its default (unsafe, for an append-only log) textual merge until it
+# does. Idempotent: `git config` overwrites, doesn't duplicate.
+echo ""
+echo "=== Registering tasks/ jsonl-union git merge driver ==="
+git -C "$BASE_DIR/dotfiles" config merge.jsonl-union.name \
+  "JSONL union merge (dedup by event_id, sort by ts) — never silently drops an append-only line"
+git -C "$BASE_DIR/dotfiles" config merge.jsonl-union.driver \
+  "$BASE_DIR/dotfiles/tasks/git-merge-jsonl-union.py %O %A %B"
+echo "registered: merge.jsonl-union driver"
+
 # Sync skills from dotfiles/.agents/skills/ location
 if [[ -d "$BASE_DIR/dotfiles/.agents/skills" ]]; then
   echo "info: Syncing skills from dotfiles/.agents/skills..."
