@@ -40,7 +40,7 @@ fi
 # --- 1. Root only has the allowed files/dirs ------------------------------
 echo "-- Root cleanliness --"
 
-ALLOWED_ROOT_FILES=(README.md CLAUDE.md AGENTS.md GEMINI.md CHEATSHEET.md \
+ALLOWED_ROOT_FILES=(README.md CLAUDE.md AGENTS.md GEMINI.md CHEATSHEET.md HANDOFF.md \
   setup.sh sync.sh test-subagents.sh .gitignore)
 ALLOWED_ROOT_DIRS=(.agents .chezmoisource .claude .github .vscode .gemini .codex .copilot docs scripts tasks .git global)
 
