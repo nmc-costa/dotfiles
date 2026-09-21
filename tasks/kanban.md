@@ -12,8 +12,6 @@
 - [ ] dotfiles-tsk-task-brief-skill /task-brief skill - thin shell over brief.py
 - [ ] dotfiles-tsk-systemd-units ensure-tsk-sweep.sh + systemd units, following the existing ensure-*.sh convention
 - [ ] dotfiles-tsk-graph-dependency-edges Add blocked_by dependency edges to rebuild_graph.py's flowchart (needs blocked_by as a list, not prose)
-- [ ] dotfiles-tsk-cards-frontmatter L1: markdown+YAML-frontmatter card per task (rebuild_cards.py, generated view, never hand-edited)
-- [ ] dotfiles-tsk-dispatch-launcher tsk dispatch: launch a session on a provider with the task brief pre-loaded (claude "<p>"/--bg, copilot -i, agy -i) - push side of cross-provider handoff, pull side is dotfiles-tsk-brief
 
 ## Planning
 
@@ -37,6 +35,7 @@
 - [x] worknotes-workspace-standards-schema Abrir PR: claude/workspace-standards-schema
 - [x] dotfiles-tsk-spike-cas-concurrency Spike: confirm git-ref compare-and-swap claiming survives concurrent writers
 - [x] dotfiles-tsk-writepath-unification lifecycle.py + LEGAL_TRANSITIONS + append() as the single writer, with CAS (Layer A)
+- [x] dotfiles-tsk-cards-frontmatter L1: markdown+YAML-frontmatter card per task (rebuild_cards.py, generated view, never hand-edited)
 
 ## Blocked
 

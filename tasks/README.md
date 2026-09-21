@@ -300,3 +300,14 @@ Deck, confirm a `Workflow` script with per-phase `model` overrides,
 confirm a trivial herdr plugin can open a popup. (Git-ref CAS under
 concurrent writers is now confirmed, above, as part of shipping it rather
 than as a separate spike.)
+
+**L1 (task cards) done (2026-09-21):** `tasks/rebuild_cards.py` projects
+`events.jsonl` into one markdown+YAML-frontmatter card per task, under
+`tasks/cards/<task_id>.md` — the same fields `board.md`'s flat table has
+(title/project/energy/estimate/deadline/blocked_by/origin) plus `phase`,
+plus a human-readable phase-transition history and the latest `--handoff`
+note. Generated view, never hand-edited, same rule as every other
+projection here — `move_task.py` regenerates it on every move, same as
+`kanban.md`. `blocked_by` is still free-text prose in the frontmatter
+(becomes a real list of ids only once `dotfiles-tsk-graph-dependency-
+edges` lands).
