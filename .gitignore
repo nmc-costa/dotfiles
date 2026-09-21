@@ -117,6 +117,13 @@ tasks/.events.lock
 # tasks/brief.py to check, not a fact worth versioning.
 tasks/.sweep-heartbeat
 
+# tasks/claims.py's claim log + sidecar lock (tasks/plans/claim-protocol.md
+# §C) — live, machine-local, TTL-bounded coordination state, deliberately
+# NOT durable: losing it just means everyone re-claims. The permanent
+# audit trail stays in tasks/events.jsonl via --team/--handoff.
+tasks/claims.jsonl
+tasks/.claims.lock
+
 # But DO track core configs
 !.claude/
 !.agents/
