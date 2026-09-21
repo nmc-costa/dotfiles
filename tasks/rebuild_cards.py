@@ -25,13 +25,14 @@ import json
 import sys
 from pathlib import Path
 
-TASKS_DIR = Path(__file__).parent
+SCRIPT_DIR = Path(__file__).parent
+sys.path.insert(0, str(SCRIPT_DIR))
+from lifecycle import CREATED_TYPES, PHASE_CHANGED_TYPES, project as project_phases, tasks_root  # noqa: E402
+from rebuild_view import payload_get  # noqa: E402
+
+TASKS_DIR = tasks_root()
 EVENTS_FILE = TASKS_DIR / "events.jsonl"
 CARDS_DIR = TASKS_DIR / "cards"
-
-sys.path.insert(0, str(TASKS_DIR))
-from lifecycle import CREATED_TYPES, PHASE_CHANGED_TYPES, project as project_phases  # noqa: E402
-from rebuild_view import payload_get  # noqa: E402
 
 BOARD_FIELDS = ("energy", "estimate", "deadline", "blocked_by", "origin")
 

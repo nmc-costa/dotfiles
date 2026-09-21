@@ -17,12 +17,27 @@ today (`sla_expired`, `blocked_too_long`) — `loop_cap_exceeded` (needs
 `session_id: null`, nothing writes it) are deliberately left out until
 their inputs exist, same phasing the plan doc's own "Riscos aceites" R3
 already accepts for `review.judge_failed`/`budget.daily_cap_reached`.
+
+`tasks_root()` (added by dotfiles-tsk-tasks-root-resolver, lives in the
+leaf module `tasks/paths.py` — not here, to avoid a circular import with
+`rebuild_view.py` below) is the single source of truth for where tasks/
+DATA lives (events.jsonl, kanban.md, claims.jsonl, ...) — distinct from
+`TASKS_DIR` below, which is only ever used to find sibling .py modules for
+`sys.path`. Before this fix, every rebuild_*.py and append_event.py
+derived both from the same `Path(__file__).parent`, so a script copy
+running inside a git worktree silently wrote (and read) that worktree's
+own divergent copy of the log instead of the one real, shared log —
+confirmed to have produced 4 divergent copies of events.jsonl at once and
+one silently orphaned event (tasks/plans/claim-protocol.md, section B).
+Re-exported here so existing callers can keep doing
+`from lifecycle import tasks_root`.
 """
 import sys
 from pathlib import Path
 
 TASKS_DIR = Path(__file__).parent
 sys.path.insert(0, str(TASKS_DIR))
+from paths import tasks_root  # noqa: E402,F401 — re-exported, see module docstring
 from rebuild_view import payload_get  # noqa: E402 — reuse the EN/PT legacy-key fallback
 
 # The full phase set, including the two side lanes (D12/CHEATSHEET.md:

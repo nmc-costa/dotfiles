@@ -16,9 +16,14 @@ profiles." Nothing here does that analysis yet; this is only the
 projection the analysis would read.
 """
 import json
+import sys
 from pathlib import Path
 
-TASKS_DIR = Path(__file__).parent
+SCRIPT_DIR = Path(__file__).parent
+sys.path.insert(0, str(SCRIPT_DIR))
+from lifecycle import tasks_root  # noqa: E402
+
+TASKS_DIR = tasks_root()
 EVENTS_FILE = TASKS_DIR / "events.jsonl"
 VIEW_FILE = TASKS_DIR / "metrics.md"
 

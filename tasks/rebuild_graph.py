@@ -37,14 +37,15 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-TASKS_DIR = Path(__file__).parent
+SCRIPT_DIR = Path(__file__).parent
+sys.path.insert(0, str(SCRIPT_DIR))
+from lifecycle import CREATED_TYPES, PHASE_CHANGED_TYPES, PHASES, project, tasks_root  # noqa: E402
+from rebuild_view import payload_get  # noqa: E402
+
+TASKS_DIR = tasks_root()
 EVENTS_FILE = TASKS_DIR / "events.jsonl"
 MD_FILE = TASKS_DIR / "roadmap.md"
 MMD_FILE = TASKS_DIR / "roadmap.mmd"
-
-sys.path.insert(0, str(TASKS_DIR))
-from lifecycle import CREATED_TYPES, PHASE_CHANGED_TYPES, PHASES, project  # noqa: E402
-from rebuild_view import payload_get  # noqa: E402
 
 # fill / stroke per phase — distinct colors so the flowchart reads at a
 # glance; order follows lifecycle.PHASES (pipeline phases, then the two

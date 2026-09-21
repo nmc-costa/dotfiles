@@ -35,10 +35,17 @@ from lifecycle import (  # noqa: E402
     STATUS_CHANGED_TYPES,
     IllegalTransitionError,
     current_phase,
+    tasks_root,
 )
 
-EVENTS_FILE = Path(__file__).parent / "events.jsonl"
-LOCK_FILE = Path(__file__).parent / ".events.lock"
+TASKS_DIR = tasks_root()
+EVENTS_FILE = TASKS_DIR / "events.jsonl"
+LOCK_FILE = TASKS_DIR / ".events.lock"
+assert LOCK_FILE.parent == EVENTS_FILE.parent, (
+    "EVENTS_FILE and LOCK_FILE must share a parent directory — otherwise two "
+    "processes can share the events log while flocking different lock files, "
+    "and Layer-A CAS silently stops being atomic while still appearing to work"
+)
 REQUIRED_FIELDS = ("type", "actor")
 AGENT_PROPOSAL_QUOTA = 3
 AGENT_PROPOSAL_EXPIRY_DAYS = 14
