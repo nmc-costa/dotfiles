@@ -13,6 +13,33 @@ implemented it — see `notes/ideas/architecture/Workspace Agil para Agentes
 Multiplataforma.md` (D1-D18) and `notes/ideas/agents/Agente Orquestrador -
 Jarvis do Diretor Humano.md` (task schema, §5.2) as sources.
 
+## Glossary
+
+- **Spike** — a short investigation/proof-of-concept task, not finished
+  product work. Its purpose is to answer one concrete technical question
+  ("does this work?", "does this tool do what we need?") before committing
+  time to build something on top of that premise. A spike's result is not
+  necessarily production-ready code — it's a **verdict** (works / doesn't
+  work / works with caveats), normally written up in an evaluation
+  `README.md` (e.g. `tasks/evaluations/<name>/README.md`, the pattern
+  `tuiboard` followed — see "Decided answers" below). A documented failure
+  is a valid spike outcome: a spike's job is to reduce uncertainty before
+  further investment, not to guarantee success.
+
+  "Wave 1" (the remaining spikes named in "Status" below) is three tasks:
+  - `dotfiles-tsk-spike-agent-deck` — install Agent Deck, confirm it
+    detects Claude Code + Copilot CLI sessions side by side.
+  - `dotfiles-tsk-spike-workflow-model` — confirm a `Workflow` script with
+    a per-phase `model` override runs as expected.
+  - `dotfiles-tsk-spike-herdr-popup` — confirm a trivial herdr plugin can
+    open a popup/pane.
+
+  (`dotfiles-tsk-spike-cas-concurrency`, the git-ref compare-and-swap
+  spike, is already `done` — folded into shipping the write-path
+  unification rather than run as a separate session; see its
+  `task.phase_changed`/`done` event in `events.jsonl` and the CAS
+  paragraph under "Orchestration architecture" → "Status" below.)
+
 ## Model: two layers
 
 1. **`events.jsonl`** — append-only event log. It is the **source of
