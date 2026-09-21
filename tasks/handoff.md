@@ -1,109 +1,233 @@
-# Session handoff — 2026-09-21
+# Session handoff — 2026-09-21 (v2, supersedes the first version of this file)
 
-Snapshot of a long session that took the multi-agent task orchestration
-idea from zero to a working first slice + a fully-researched, adversarially
-critiqued plan for the rest. Written so a fresh session (any CLI) can
-resume without re-deriving context. Not versioned as a permanent doc the
-way `tasks/README.md`/`CHEATSHEET.md` are — this is a point-in-time
-snapshot; delete or archive it once its "still pending" list is empty.
+Snapshot of a session that took the `tasks/` orchestration system from
+"metrics PR sitting open" to "write-path unified, LEGAL_TRANSITIONS
+enforced, CAS proven under concurrency, and a validated design for both
+the visual-roadmap and the cross-provider handoff pieces still to build."
+Written because the owner is about to hit a usage-limit reset. Not a
+permanent doc — delete/archive once its "Still pending" list is empty.
 
-## What's done (merged to `main`, or in an open PR — see below)
+**Important:** two design decisions below (the mermaid/roadmap verdict and
+the cross-provider dispatch verdict) were produced by Opus-model
+subagents during this session and only exist in this file and in a local,
+unversioned Claude Code plan file (`~/.claude/plans/vast-wishing-glade.md`,
+machine-local, not in git, may not survive a reset/new machine) — that's
+why they're reproduced here in full rather than just referenced.
 
-- **Root-level CLAUDE.md/AGENTS.md coverage**: `~/CLAUDE.md`, `~/AGENTS.md`,
-  `~/Projects/CLAUDE.md` symlinked to `dotfiles/global/*`;
-  `~/Work/CLAUDE.md` a real local file (never symlinked/committed —
-  employer content). `setup.sh` wires these on a fresh machine.
-- **Repo hygiene fixes**: an orphan git submodule link, a missing
-  `.gitignore` entry for `.claude/worktrees/`, a conflict-marker check
-  added to `scripts/validate_dotfiles.sh` (would have caught a real
-  incident where literal `<<<<<<<` markers got merged into `README.md` —
-  fixed too).
-- **`tuiboard` evaluated and chosen** as the kanban UI (safe, local, fast
-  — full writeup in `tasks/evaluations/tuiboard/`). **Not installed for
-  real use yet** — the evaluation ran from a scratch Bun install; `which
-  bun`/`which tuiboard` on this machine return nothing right now.
-- **`tasks/plans/human-in-the-loop-notifications.md`** — a full
-  `plan-orchestra` run (6 parallel researchers + 1 tie-breaker, a verified
-  evidence map, 2 rounds of decisive-plan/adversarial-critique) for the
-  "human only needed on exception" notification/escalation system. Final
-  verdict: **ship it**, with an 8-point addendum already folded into the
-  doc. **Nothing in this plan is implemented** — it's a design doc for
-  future work.
-- **First real slice of `tsk`** (`move_task.py` + `rebuild_kanban.py`,
-  merged): move a task through the 6-phase lifecycle
-  (`backlog→planning→in_progress→review→validation→done`, plus
-  `deferred`), generates `tasks/kanban.md` in tuiboard format.
-- **Metrics + handoff notes** (PR #28, **still open, not merged**):
-  `--team`/`--tokens`/`--cost-usd`/`--duration-seconds`/`--cycles` on any
-  move (attached to the phase being *left*), aggregated into
-  `tasks/metrics.md`. Plus `--handoff`/`--show-handoff` — free-text notes
-  for whoever picks up a task next.
-- **`tasks/demo/`** — a self-contained, runnable, isolated worked example
-  (2 tasks, 2 teams, full lifecycle, metrics, a handoff note). Run with
-  `tasks/demo/run_demo.sh`.
-- **`tasks/CHEATSHEET.md`** — the quick command reference for all of the
-  above (create/move/metrics/handoff/observe/demo), plus a comparison of
-  every session-observability surface currently available (herdr, `claude
-  agents --json`, plain `kanban.md`/`metrics.md`, the planned
-  `/task-brief`, Agent Deck) and how to ask an agent to "lead a team" on a
-  task today, including its real cross-vendor limits.
+## What's done (merged to `main`)
+
+- **PR #28** (`claude/tasks-metrics-and-demo`) — `move_task.py` metrics
+  flags, `rebuild_metrics.py`, `tasks/demo/`. Merged, merge commit
+  `3f55b79`.
+- **PR #31** — 16 backlog cards created in `tasks/events.jsonl` for the
+  parallelized work plan below (first real, non-demo use of
+  `task.created`/`move_task.py`). Merged, merge commit `2a59c2d`.
+- **PR #32** — **write-path unification**, the big one. New
+  `tasks/lifecycle.py`: single source of truth for `PHASES` (now 8 — the
+  6 pipeline phases plus `blocked`/`deferred`, which previously weren't
+  even reachable via `move_task.py` despite being documented),
+  `LEGAL_TRANSITIONS` (exactly per
+  `tasks/plans/human-in-the-loop-notifications.md` §0), and the PT/EN
+  actor-kind/event-type vocabulary. `append_event.py::append()` is now
+  the single physical writer; illegal transitions exit 2.
+  **CAS Layer A**: `--expect-last-event-id` required on every move into
+  `validation`/`done` (`flock` on a sidecar `tasks/.events.lock`, never on
+  `events.jsonl` itself) — verified with a 10-way concurrent race:
+  exactly 1 winner, 9 `ConcurrentModificationError` aborts, every time.
+  Merged, merge commit `265f8b5`.
+- **PR #33** — closed the `dotfiles-tsk-spike-cas-concurrency` backlog
+  card (verified inside PR #32 itself, no separate session needed) and
+  fixed a real oversight from #32: `tasks/.events.lock` was untracked but
+  not gitignored, almost got committed by accident. Merged.
+- **This file** (v2) also moves `dotfiles-tsk-writepath-unification`
+  itself through `validation → done` (it was left sitting in `review`
+  after #32 merged — a real gap this session almost handed off with a
+  stale card state).
+
+## Open PRs (check `gh pr list --state open` — state changes between sessions)
+
+- **PR #35** (`worktree-tsk-dispatch-launcher-card`) — adds one backlog
+  card, `dotfiles-tsk-dispatch-launcher` (see verdict below). **Not yet
+  merged** — owner hadn't approved it yet when the session ended. Ask
+  before merging, same as every other PR this session.
+- **PR #30** (`claude/session-handoff`) — this file. Update it in place
+  (don't create a new one) the next time a handoff snapshot is needed:
+  same branch, rewrite the content, push.
+- **PR #34** (`claude/pr1-chezmoi-migration`) — pre-existing, **unrelated
+  to this session's work**, not touched. Don't assume it's connected to
+  anything above.
+
+## ⚠️ Behavior change: LEGAL_TRANSITIONS is now enforced
+
+Before this session, `move_task.py --to-phase` accepted any phase from
+any phase. **That's no longer true as of PR #32.** Legal transitions
+(`tasks/lifecycle.py`):
+
+```
+backlog     -> planning, deferred
+planning    -> in_progress, backlog, deferred, blocked
+in_progress -> review, blocked, deferred
+review      -> in_progress, validation, blocked
+validation  -> done, in_progress, blocked
+blocked     -> in_progress, planning, deferred
+deferred    -> backlog, planning
+done        -> (terminal)
+```
+
+Concretely: **you can no longer move a fresh `backlog` task straight to
+`in_progress`** — go through `planning` first (two `move_task.py` calls).
+This session's own dispatch prompts (in `tasks/README.md`'s "Still
+pending" history and in the local plan file) said "move straight to
+in_progress" — that guidance is now wrong; use the two-step path instead.
+Moving into `validation` or `done` also requires
+`--expect-last-event-id <event_id from the previous move>` — read it from
+this command's own printed output, or the last line of `events.jsonl` for
+that `task_id`.
+
+## Current `tasks/kanban.md` state (at handoff time)
+
+```
+Backlog: dotfiles-tsk-spike-agent-deck, dotfiles-tsk-spike-workflow-model,
+  dotfiles-tsk-spike-herdr-popup, dotfiles-tsk-tuiboard-install,
+  dotfiles-tsk-roadmap-graph, dotfiles-tsk-notify-sweep, dotfiles-tsk-brief,
+  dotfiles-tsk-hook-claude-code, dotfiles-tsk-cpx-copilot,
+  dotfiles-tsk-hook-antigravity, dotfiles-tsk-task-brief-skill,
+  dotfiles-tsk-systemd-units, dotfiles-tsk-graph-dependency-edges,
+  dotfiles-tsk-cards-frontmatter
+  (+ dotfiles-tsk-dispatch-launcher once PR #35 merges)
+Done: dotfiles-tsk-spike-cas-concurrency, dotfiles-tsk-writepath-unification,
+  + the 11 older "Abrir PR: ..." cards from before this session
+```
+
+Dependency graph (`blocked_by`, prose today — see `dotfiles-tsk-graph-
+dependency-edges` for why it isn't a list yet):
+
+```
+Wave 1 (dispatchable now, zero deps — write-path already landed):
+  4 spikes (agent-deck/workflow-model/herdr-popup; cas-concurrency done),
+  tuiboard-install, roadmap-graph
+
+Wave 2 (blocked_by dotfiles-tsk-writepath-unification, now unblocked):
+  notify-sweep, brief, graph-dependency-edges, cards-frontmatter
+
+Wave 3 (blocked_by dotfiles-tsk-brief, still blocked):
+  hook-claude-code, cpx-copilot, hook-antigravity, task-brief-skill,
+  dispatch-launcher (new, see verdict below)
+  systemd-units (blocked_by notify-sweep instead)
+```
+
+## Verdict 1 — visual roadmap (mermaid), validated by an Opus subagent
+
+The owner asked about hierarchical metadata headers, big-picture-to-small
+Mermaid flowcharts (global roadmap → per-project), and a "mindmap" of
+what's been tackled. Full verdict (don't re-derive, it's decided):
+
+1. **Metadata headers** = the already-decided L1 in `tasks/README.md`
+   ("card markdown+YAML-frontmatter per task"), not a new idea. Must be a
+   **generated view** (`rebuild_cards.py`), never hand-edited — that's
+   `dotfiles-tsk-cards-frontmatter`.
+2. **Mermaid flowcharts**: adopt. Global multi-project is already in
+   scope (`payload.project` already has 4 real values, no other repo has
+   its own `tasks/`) — one `subgraph` per project in one file, never
+   federate logs across repos. Blocked on `blocked_by` becoming a real
+   list of ids (currently free prose) — that's
+   `dotfiles-tsk-graph-dependency-edges`, blocked_by write-path (now
+   unblocked).
+3. **Mindmap**: reject the diagram type (Mermaid `mindmap` is tree-only,
+   no cross-links, wrong for a dependency graph), adopt the goal via
+   `flowchart LR` + `classDef` per phase, plus a separate `timeline`
+   diagram for "done accumulated over time."
+4. **Concrete plan**: `tasks/rebuild_graph.py` (same pattern as
+   `rebuild_kanban.py`/`rebuild_metrics.py`) → `tasks/roadmap.md` (mermaid
+   block) + `tasks/roadmap.mmd` (repo already has a `.mmd` convention in
+   `.agents/instructions/workspace-config/mermaid.instructions.md` +
+   `.claude/rules/mermaid.md`). Split in two: `dotfiles-tsk-roadmap-graph`
+   (Wave 1, phases + project grouping + timeline, no edges) is
+   dispatchable now; `dotfiles-tsk-graph-dependency-edges` (Wave 2, needs
+   the `blocked_by` schema change) comes after. **Never** put mermaid
+   inside `kanban.md` itself — tuiboard would misparse it.
+
+## Verdict 2 — cross-provider task handoff, validated by an Opus subagent
+
+The owner asked how an agent hands off work to teams across Claude Code /
+Copilot CLI / Antigravity — daemon? per-team handoff file? global config?
+Live-verified finding (real `--help` on the 3 real binaries on this
+machine): **all three already accept a launch-time prompt** —
+`claude "<prompt>"` (+ `-p`, `--bg`), `copilot -i "<prompt>"` (+ `-p`,
+`--fleet`), `agy -i`/`--prompt-interactive` (+ `-p`/`--print`). This makes
+a daemon unnecessary for the "push" side.
+
+**Verdict: combine two mechanisms, add one small piece, reject three
+ideas:**
+- **Pull** (already planned, Wave 3): `/task-brief` + `brief.py` +
+  per-provider hook/wrapper (`dotfiles-tsk-brief` +
+  `dotfiles-tsk-hook-claude-code`/`-antigravity` + `dotfiles-tsk-cpx-
+  copilot`). Covers "a fresh session asks what to do."
+- **Push** (missing piece, now tracked): `dotfiles-tsk-dispatch-launcher`
+  (PR #35, not yet merged) — a `tsk dispatch --task-id X --provider
+  {claude,copilot,agy}` that generates the brief text
+  (`brief.py --prompt-only`) and launches the right binary with it. No
+  daemon, no IPC — state still only ever flows through `events.jsonl`.
+  Follows the existing `.agents/providers/adapters/*.sh` convention.
+- **Rejected, explicitly, don't rebuild**: `SendMessage` (Claude-Code-only,
+  never cross-vendor); a hand-maintained `tasks/teams.yaml` (same drift
+  risk as hand-edited cards — if a team profile is ever needed, it must
+  be a **generated** `rebuild_teams.py` → `tasks/teams.md`, read-only);
+  an interactive "assemble your team" Q&A flow (unneeded ceremony — the
+  system's whole point is natural language → `move_task.py` calls).
+- Small follow-on scope once built: `dotfiles-tsk-brief` gains
+  `--prompt-only --task-id`; `dotfiles-tsk-cpx-copilot` generalizes from
+  "just a Copilot wrapper" to "one instance of the general launcher
+  pattern."
 
 ## Still pending — in priority-ish order
 
-1. **Merge PR #28** (`claude/tasks-metrics-and-demo`) —
-   https://github.com/nmc-costa/dotfiles/pull/28. Clean, mergeable, tested.
-   Nothing else below strictly depends on it, but it's the natural next
-   step.
-2. **Fase 0 de-risking spikes** (from `tasks/README.md`'s "Orchestration
-   architecture" → Status), none started:
-   - Install Agent Deck and confirm it actually detects Claude Code +
-     Copilot CLI sessions side by side.
-   - Confirm git-ref compare-and-swap claiming survives concurrent
-     writers (the plan doc's Layer A).
-   - Confirm a `Workflow` script with a real per-phase `model` override
-     runs as expected.
-   - Confirm a trivial herdr plugin can open a popup (`herdr plugin pane
-     open`) — herdr itself is installed (v0.8.2, confirmed), the plugin
-     path hasn't been tried yet.
-3. **Install `tuiboard` for real** (not just in a scratch dir) if you want
-   to actually watch `tasks/kanban.md` live day-to-day. `bun install -g
-   tuiboard`, point its config at `tasks/kanban.md`.
-4. **Build the notification/escalation system** per
-   `tasks/plans/human-in-the-loop-notifications.md` — nothing in that
-   ~300-line plan is implemented. Suggested build order is in the plan's
-   own "Próximos passos" section (§0 write-path unification →
-   `lifecycle.py` → CAS → `notify.py`/`brief.py`/`sweep.py` → the Claude
-   Code hook → the `cpx` Copilot wrapper → the Antigravity hook → systemd
-   units following the existing `ensure-*.sh` convention).
-5. **`/task-brief` skill** — doesn't exist. Part of the plan above, but
-   callable on its own once `brief.py` exists: reads the inbox/kanban,
-   briefs whichever session opens next, asks "what do you want to work on"
-   if nothing's pending. Needed before "ask an agent to lead a team" stops
-   requiring you to type the context by hand every time.
-6. **Add `LEGAL_TRANSITIONS` enforcement to `move_task.py`** — right now
-   any phase can jump to any other phase, nothing validates the sequence.
-   The table is already specified in the plan doc (§0).
+1. **Decide PR #35** (`gh pr view 35`) — small, mechanical, same pattern
+   as #31/#33 already approved this session.
+2. **Wave 1, dispatchable now, no more write-path blocker**: the 3
+   remaining spikes (agent-deck, workflow-model, herdr-popup),
+   tuiboard-install, roadmap-graph. Dispatch prompts for these were
+   drafted this session (in the local plan file, not versioned) — the
+   short version: move each card `backlog → planning → in_progress`
+   (two calls, see the LEGAL_TRANSITIONS warning above), do the spike,
+   write findings to `tasks/evaluations/<name>/README.md`, close with
+   `move_task.py --to-phase review` then `validation`
+   (`--expect-last-event-id` required) then `done`.
+3. **Wave 2, now unblocked**: `notify-sweep`, `brief` (with the new
+   `--prompt-only` scope from Verdict 2), `graph-dependency-edges`,
+   `cards-frontmatter`.
+4. **Wave 3, blocked on `brief`**: the 3 hooks/wrapper cards, the
+   `/task-brief` skill, `dispatch-launcher`, then `systemd-units`.
+5. **Acceptance test** (from the notification plan's own "Próximos
+   passos" #4): two different CLI sessions working tasks/ in parallel,
+   force an SLA violation, confirm CAS doesn't let auto-validation
+   silently overwrite a concurrent human decision. Needs Wave 2 done
+   first.
 
 ## Quick orientation for a fresh session
 
-- `tasks/CHEATSHEET.md` — how to do anything (commands only).
-- `tasks/README.md` — the model and every decision, with reasoning.
+- `tasks/CHEATSHEET.md` / `tasks/README.md` — updated this session, now
+  accurate (LEGAL_TRANSITIONS, CAS, the 8 phases).
 - `tasks/plans/human-in-the-loop-notifications.md` — the notification
-  system design, fully researched and critiqued, nothing built.
-- `tasks/kanban.md` / `tasks/metrics.md` — current real task state (once
-  PR #28 lands, metrics.md will exist; until then only `kanban.md` does).
-- `gh pr list --state open` — check this first, state changes between
+  system design; §0 is now DONE (was the whole point of this session).
+- `tasks/kanban.md` / `tasks/metrics.md` — current real task state.
+- `gh pr list --state open` — check first, state changes between
   sessions.
+- The two "Verdict" sections above are NOT reproduced anywhere else in
+  the git repo — they only existed in a local plan file. If more design
+  discussion happened after this file was written, prefer that over this
+  snapshot.
 
 ## Kickoff prompt for a new session
 
 ```
 Lê tasks/handoff.md no dotfiles (~/dotfiles) para retomares o contexto de
-onde ficou. Depois:
-1. Confirma se a PR #28 já foi fundida (gh pr list --state open) — se não,
-   pergunta-me se posso fazer merge.
-2. Diz-me o que está pendente (secção "Still pending" do handoff.md) e
-   pergunta-me em qual desses items queres que eu comece a trabalhar.
+onde ficou (é a v2, escrita depois de fundir PRs #28/#31/#32/#33 e com
+LEGAL_TRANSITIONS agora aplicado). Depois:
+1. Confirma o estado de PR #35 e de qualquer PR aberta desde então
+   (gh pr list --state open).
+2. Diz-me o que está pendente (secção "Still pending") e pergunta-me em
+   qual desses items queres que comece a trabalhar.
 Não assumas nada do handoff.md como ainda verdadeiro sem confirmar — pode
 ter passado tempo desde que foi escrito.
 ```
