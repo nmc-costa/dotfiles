@@ -2,9 +2,9 @@
 task_id: dotfiles-tsk-task-brief-skill
 title: /task-brief skill - thin shell over brief.py
 project: dotfiles
-phase: backlog
+phase: planning
 created: "2026-09-21T13:25:25.524994+00:00"
-touched: "2026-09-21T13:25:25.524994+00:00"
+touched: "2026-09-21T21:48:07.259385+00:00"
 energy: ""
 estimate: ""
 deadline: ""
@@ -17,4 +17,4 @@ origin: ""
 /task-brief skill - thin shell over brief.py
 
 ## History
-- (no phase_changed events yet — still in its original created phase)
+- 2026-09-21T21:48:07.259385+00:00: backlog -> planning (actor: nmc-costa/human) — Onda 3, menor risco (sem tocar settings.json/systemd), sem colisao reportada
