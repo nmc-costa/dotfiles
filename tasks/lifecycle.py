@@ -70,6 +70,20 @@ PHASE_CHANGED_TYPES = ("task.phase_changed",)
 HUMAN_ACTOR_KINDS = ("humano", "human")
 AGENT_ACTOR_KINDS = ("agente", "agent")
 
+# Closes the gap where move_task.py/append_event.py's --actor-kind CLI has
+# accepted "swarm" since it was first written, but no vocabulary tuple ever
+# recognized it — added by dotfiles-tsk-claim-protocol for the tsk daemon
+# and other asynchronous processes (tasks/plans/claim-protocol.md §E).
+SWARM_ACTOR_KINDS = ("swarm",)
+ALL_ACTOR_KINDS = HUMAN_ACTOR_KINDS + AGENT_ACTOR_KINDS + SWARM_ACTOR_KINDS
+
+# Closed vocabulary for tasks/claims.py's `role` field (tasks/plans/
+# claim-protocol.md §C) — free-form roles filled independently by
+# different LLM sessions never collide ("implementer" vs "impl" vs "dev"),
+# which would make the same-role negotiation step in the escalation flow
+# never fire.
+CLAIM_ROLES = ("implementer", "reviewer", "validator", "planner")
+
 # Lossless one-time migration for tasks that predate task.phase_changed —
 # the exact mapping decided in tasks/README.md's "Orchestration
 # architecture" section. Moved here from rebuild_kanban.py so it isn't
