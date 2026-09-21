@@ -11,9 +11,14 @@ log is append-only, so those historical lines are never rewritten; this
 script reads either spelling (PT falls back when the EN key is absent).
 """
 import json
+import sys
 from pathlib import Path
 
-TASKS_DIR = Path(__file__).parent
+SCRIPT_DIR = Path(__file__).parent
+sys.path.insert(0, str(SCRIPT_DIR))
+from paths import tasks_root  # noqa: E402 — not `from lifecycle import ...`: lifecycle.py imports this module, so importing back from lifecycle would be circular
+
+TASKS_DIR = tasks_root()
 EVENTS_FILE = TASKS_DIR / "events.jsonl"
 VIEW_FILE = TASKS_DIR / "board.md"
 
