@@ -107,6 +107,12 @@ tmp/
 .copilot/ide/
 .copilot/sessions/
 
+# tasks/lifecycle.py's CAS Layer A sidecar lock (tasks/plans/
+# human-in-the-loop-notifications.md §2) — a local, machine-specific lock
+# file, never a fact about task state. events.jsonl is the source of
+# truth; this is purely a flock() target, never read back for meaning.
+tasks/.events.lock
+
 # But DO track core configs
 !.claude/
 !.agents/
