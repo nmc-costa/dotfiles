@@ -16,6 +16,7 @@ dotfiles/
 ├── AGENTS.md, CLAUDE.md, GEMINI.md   ← Auto-loaded by each respective tool
 ├── docs/SECRETS.md     ← chezmoi+age secrets doc
 ├── README.md, CHEATSHEET.md
+├── HANDOFF.md          ← Repo-wide session-continuity handoff, not permanent — see ~/HANDOFF.md for the cross-repo index
 └── setup.sh, sync.sh, test-subagents.sh
 ```
 
