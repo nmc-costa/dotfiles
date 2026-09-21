@@ -12,6 +12,7 @@ notification/orchestration layer). This file is only the *how*.
 | `append_event.py` | Create a task, or write a raw event. The only way in. |
 | `move_task.py` | Move a task to a new phase — optionally with metrics and/or a handoff note. |
 | `rebuild_kanban.py` | Regenerate `kanban.md` from `events.jsonl` (tuiboard format). Run automatically by `move_task.py`. |
+| `rebuild_cards.py` | Regenerate one YAML-frontmatter card per task under `tasks/cards/`. Run automatically by `move_task.py`. |
 | `rebuild_metrics.py` | Regenerate `metrics.md`. Run automatically by `move_task.py` when metrics are given. |
 | `rebuild_view.py` | Regenerate `board.md` (older flat-table view, pre-dates the 6-phase model). |
 
@@ -109,6 +110,7 @@ you" reopening it in a week.
 cat tasks/kanban.md      # tuiboard-format board — point tuiboard's config at this file to watch it live
 cat tasks/metrics.md      # team/task cost breakdown
 cat tasks/board.md        # older flat table (still generated, not the primary view anymore)
+cat tasks/cards/dotfiles-my-task.md   # one task's full history + latest handoff, YAML frontmatter + phase log
 python3 tasks/move_task.py --task-id X --show-handoff
 ```
 

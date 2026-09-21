@@ -59,6 +59,7 @@ from append_event import (  # noqa: E402
     load_events,
 )
 from lifecycle import PHASES, IllegalTransitionError, current_phase  # noqa: E402
+from rebuild_cards import main as rebuild_cards_main  # noqa: E402
 from rebuild_kanban import main as rebuild_kanban_main  # noqa: E402
 from rebuild_metrics import main as rebuild_metrics_main  # noqa: E402
 
@@ -178,6 +179,7 @@ def main():
         sys.exit(1)
 
     rebuild_kanban_main()
+    rebuild_cards_main()
     if metrics:
         rebuild_metrics_main()
     print(f"moved {args.task_id}: {from_phase} -> {args.to_phase} (event_id={event['event_id']})")
