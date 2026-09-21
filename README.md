@@ -57,6 +57,7 @@ dotfiles/
 ├── CLAUDE.md                    # Claude Code-specific context — auto-read by Claude Code
 ├── GEMINI.md                    # Gemini-specific context — auto-read by Gemini
 ├── CHEATSHEET.md                # Living "where does X go" reference + persistent TODO list
+├── HANDOFF.md                   # Repo-wide session-continuity handoff — not permanent, updated in place
 ├── README.md                    # This file
 ├── setup.sh                     # One-click machine setup (run from root)
 ├── sync.sh               # Synchronize skills to all agents (run from root)
@@ -75,6 +76,7 @@ dotfiles/
 | `AGENTS.md` | Complete agent guide (Crush/Claude, Copilot, Gemini, Cline), skills management, workflows — general agent-config convention |
 | `GEMINI.md` | Gemini-specific context — auto-loaded by Gemini |
 | `CHEATSHEET.md` | "Where does X go", the 3-repo map, the persistent cross-session TODO list, the agile-workspace roadmap |
+| `HANDOFF.md` | Repo-wide handoff — current work in flight, what's done/left, coordination notes for parallel sessions. Not permanent: updated in place, deleted/archived once its "still pending" list is empty. Workspace convention: `HANDOFF.md` (uppercase, singular) at the root of whatever scope it describes — see `~/HANDOFF.md` for the cross-repo index |
 | `setup.sh` | One-click machine setup: clones repos, creates symlinks, sets up agents. Run from repo root (`./setup.sh`) |
 | `sync.sh` | Distributes **every** `.agents/<subdir>/` (skills, instructions, harnesses, prompts, workflows, validation, automation, providers) to `~/.agents/<subdir>/`, plus `skills/` also to `.claude/skills/` and (with `--system`) the Omarchy system location. Rewritten 2026-09-17 from a destructive `rm -rf dest; cp -r` mirror to a per-file, manifest-based reconciliation (source vs. a last-synced baseline vs. the destination now, tracked in `~/.local/state/dtx-sync/manifest.json`) — a file created *at the destination* (e.g. by a live-installed tool writing there) is never deleted, and a file changed on both sides is flagged as a conflict (`--non-interactive` drops the incoming version beside it as `.incoming-<sha>` instead of picking a side; interactive runs prompt via `gum`). `./sync.sh --pull` copies destination-only/locally-edited files back into the dotfiles source, ready to commit. See `.agents/harnesses/PROVIDERS.md` for the motivating case. Name kept for compatibility even though it now syncs more than skills (2026-09-15). Run from repo root (`./sync.sh`) — also runs weekly via a systemd user timer, see `.agents/instructions/workspace-config/standards/` |
 | `test-subagents.sh` | Quick sanity check for subagent setup. Run from repo root (`./test-subagents.sh`) |
