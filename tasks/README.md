@@ -230,6 +230,19 @@ claiming/locking/daemon machinery yet:
   `task.phase_changed` event takes over from then on. Point tuiboard's
   config at `tasks/kanban.md` to watch it live — same file shape verified
   in `tasks/evaluations/tuiboard/`.
+- **`move_task.py`'s metrics flags + `rebuild_metrics.py`** (added
+  2026-09-21) — optional `--team`/`--tokens`/`--cost-usd`/
+  `--duration-seconds`/`--cycles` on any move, recorded against the phase
+  being **left** (report what a team spent on `in_progress` when you call
+  `--to-phase review`, not on the call that opened `in_progress`).
+  `rebuild_metrics.py` projects these into `tasks/metrics.md`: every
+  metered phase-transition, plus totals by team and by task. No analysis
+  happens yet — this only makes the data collect, for the
+  orchestration-improvement/team-profile use this is meant to eventually
+  feed (see "Orchestration architecture" below). **`tasks/demo/`** is a
+  runnable, isolated worked example (2 tasks, 2 teams, full lifecycle,
+  `./run_demo.sh`) — see its own README for exactly how the isolation
+  works.
 
 **Notification/human-in-the-loop layer, planned (2026-09-21, not
 implemented):** `tasks/plans/human-in-the-loop-notifications.md` — full
