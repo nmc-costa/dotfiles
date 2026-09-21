@@ -1,18 +1,20 @@
 # Secrets Management (chezmoi + age)
 
-This repo stores two real secrets, both age-encrypted under
-`.chezmoisource/`, both decrypted locally by `chezmoi apply`, both gitignored:
+This repo stores two real secrets, both age-encrypted under `home/` (chezmoi's
+source directory — see `docs/AGENT_OS_UNIFICATION_PLAN.md` §1 for why this
+moved off `.chezmoisource/` in PR1), both decrypted locally by `chezmoi
+apply`, both gitignored at their destination:
 
-1. The `apiKey` inside `.vscode/settings.json` (used by a VS Code chat
+1. The `apiKey` inside `~/.vscode/settings.json` (used by a VS Code chat
    extension to talk to a custom LLM endpoint at
    `https://glm53-flash.dtx-colab.com/v1/chat/completions`). It used to be
    committed in plaintext; now it's only at
-   `.chezmoisource/dot_vscode/encrypted_settings.json.age`.
-2. `.dtx-providers/secrets.env` — the same GLM-5.3-Flash API key (and any
+   `home/dot_vscode/encrypted_settings.json.age`.
+2. `~/.dtx-providers/secrets.env` — the same GLM-5.3-Flash API key (and any
    further custom model provider keys added later via `dtx-providers-tui`),
    consumed by the `.agents/providers/` adapters/proxy so opencode, Crush,
    Codex CLI, and Claude Code can all use it too. Encrypted at
-   `.chezmoisource/private_dot_dtx-providers/encrypted_private_secrets.env.age`.
+   `home/private_dot_dtx-providers/encrypted_private_secrets.env.age`.
    See `.agents/harnesses/PROVIDERS.md` for what consumes it.
 
 Both follow the exact same mechanism described below — this doc was written
@@ -22,23 +24,25 @@ path).
 ## How it fits into this repo
 
 - `~/dotfiles` is **not** chezmoi's default source directory
-  (`~/.local/share/chezmoi`). Instead, `~/dotfiles/.chezmoisource/` is used as
-  a dedicated chezmoi source directory, scoped to this one file, so chezmoi
-  never touches anything else in the repo (`.agents/`, `.claude/`, `setup.sh`,
-  etc. are untouched by chezmoi and keep working exactly as before via
-  `setup.sh`/`sync.sh`).
-- chezmoi's *destination* directory is set to `~/dotfiles` itself (not
-  `$HOME`), so `chezmoi apply` writes the decrypted file directly to
-  `~/dotfiles/.vscode/settings.json` — which is what the existing
-  `~/.vscode → ~/dotfiles/.vscode` symlink (from `setup.sh`) already expects.
+  (`~/.local/share/chezmoi`). Instead, `~/dotfiles/home/` is used as a
+  dedicated chezmoi source directory (PR1: previously `.chezmoisource/`), so
+  chezmoi never touches anything else in the repo (`.agents/`, `.claude/`,
+  `setup.sh`, etc. are untouched by chezmoi and keep working exactly as
+  before via `setup.sh`/`sync.sh`).
+- chezmoi's *destination* directory is `$HOME` (PR1: previously
+  `~/dotfiles` itself), so `chezmoi apply` writes the decrypted file
+  directly to `~/.vscode/settings.json` and `~/.dtx-providers/secrets.env` —
+  real directories since `setup.sh`'s `undo_legacy_dir_symlink` replaced the
+  old whole-directory symlinks (see `setup.sh`'s `# === AGENTS & SKILLS
+  SETUP ===` section).
 - The mapping is controlled by a **local, machine-specific** chezmoi config
   file at `~/.config/chezmoi/chezmoi.toml` (this file is NOT in the repo —
   each machine needs its own copy, see setup steps below):
 
   ```toml
-  sourceDir   = "/home/<you>/dotfiles/.chezmoisource"
-  destDir     = "/home/<you>/dotfiles"
-  workingTree = "/home/<you>/dotfiles/.chezmoisource"
+  sourceDir   = "/home/<you>/dotfiles/home"
+  destDir     = "/home/<you>"
+  workingTree = "/home/<you>/dotfiles"
   encryption  = "age"
 
   [age]
@@ -93,9 +97,9 @@ On a fresh machine, after `chezmoi` and `age` are installed
    ```bash
    mkdir -p ~/.config/chezmoi
    cat > ~/.config/chezmoi/chezmoi.toml <<'EOF'
-   sourceDir   = "$HOME/dotfiles/.chezmoisource"
-   destDir     = "$HOME/dotfiles"
-   workingTree = "$HOME/dotfiles/.chezmoisource"
+   sourceDir   = "$HOME/dotfiles/home"
+   destDir     = "$HOME"
+   workingTree = "$HOME/dotfiles"
    encryption  = "age"
 
    [age]
@@ -106,26 +110,26 @@ On a fresh machine, after `chezmoi` and `age` are installed
    (Expand `$HOME` to your actual home directory if your chezmoi version
    doesn't expand it — check with `chezmoi doctor` afterwards.)
 
-3. Decrypt and write the real files:
+3. Run `./setup.sh --links-only` first — this converts `~/.vscode` and
+   `~/.dtx-providers` from legacy whole-directory symlinks into real
+   directories (`undo_legacy_dir_symlink`, idempotent, a no-op if they're
+   already real directories) so `chezmoi apply` has a real destination to
+   write into.
+
+4. Decrypt and write the real files:
    ```bash
    chezmoi apply
    ```
-   This regenerates **both** `~/dotfiles/.vscode/settings.json` and
-   `~/dotfiles/.dtx-providers/secrets.env` with their real values, in one
-   command, without ever putting either key in git.
+   This regenerates **both** `~/.vscode/settings.json` and
+   `~/.dtx-providers/secrets.env` with their real values, in one command,
+   without ever putting either key in git.
 
-4. Verify:
+5. Verify:
    ```bash
    chezmoi diff       # should print nothing (already in sync)
-   cat ~/dotfiles/.vscode/settings.json     # should show the real apiKey
-   cat ~/dotfiles/.dtx-providers/secrets.env  # should show DTX_GLM53_FLASH_API_KEY=...
+   cat ~/.vscode/settings.json     # should show the real apiKey
+   cat ~/.dtx-providers/secrets.env  # should show DTX_GLM53_FLASH_API_KEY=...
    ```
-
-5. Re-run `./setup.sh` (or just `ln -sf ~/dotfiles/.dtx-providers ~/.dtx-providers`)
-   if `~/.dtx-providers` didn't exist as a symlink yet — `setup.sh`'s
-   `setup_agent_symlinks` skips a target whose source didn't exist yet, so if
-   you ran `setup.sh` before this file's `chezmoi apply` ever ran, run it once
-   more.
 
 This preserves the original "copy one key, get the same LLM endpoint config
 everywhere" convenience — the one thing you now copy out-of-band is the small
@@ -138,14 +142,14 @@ If the API key ever needs to change (rotation, new endpoint, etc.), on any
 machine that has the private key configured:
 
 ```bash
-# 1. edit ~/dotfiles/.vscode/settings.json with the new value locally
+# 1. edit ~/.vscode/settings.json with the new value locally
 # 2. re-encrypt it back into the source state:
-chezmoi add --encrypt ~/dotfiles/.vscode/settings.json
-# 3. commit the updated .chezmoisource/dot_vscode/encrypted_settings.json.age
-cd ~/dotfiles && git add .chezmoisource/dot_vscode/encrypted_settings.json.age
+chezmoi add --encrypt ~/.vscode/settings.json
+# 3. commit the updated home/dot_vscode/encrypted_settings.json.age
+cd ~/dotfiles && git add home/dot_vscode/encrypted_settings.json.age
 git commit -m "chore: rotate encrypted API key"
 git push
 ```
 
-Or use `chezmoi edit ~/dotfiles/.vscode/settings.json` which decrypts, opens
-your editor, and re-encrypts on save in one step.
+Or use `chezmoi edit ~/.vscode/settings.json` which decrypts, opens your
+editor, and re-encrypts on save in one step.

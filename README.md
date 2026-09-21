@@ -28,8 +28,11 @@ dotfiles/
 │   ├── skills/                  #   Agent skills — 1 real copy per skill (archi, diagnose-crash, omarchy, projecthits, ...)
 │   ├── validation/               #   Real validation outputs, keyed by skill
 │   └── workflows/                #   Agent personas / init workflows
-├── .chezmoisource/              # chezmoi source dir, scoped to one encrypted file
-│   └── dot_vscode/encrypted_settings.json.age
+├── home/                         # chezmoi source dir (destDir=$HOME) — the 2 encrypted secrets
+│   ├── dot_vscode/encrypted_settings.json.age
+│   └── private_dot_dtx-providers/encrypted_private_secrets.env.age
+├── bin/                          # Human-run scripts, never called by bootstrap/sync (see CLAUDE.md policy notes)
+│   └── dotfiles-clone-repos      #   Thin wrapper: setup.sh WITHOUT --links-only (clones ~/Work, ~/Projects repos)
 ├── .claude/                     # Claude Code global config; only CLAUDE.md is real here (file-symlinked to
 │                                 #   ~/.claude/CLAUDE.md by setup.sh) — see "Global per-tool instructions files" below
 ├── .github/                     # GitHub config; automation/, CONTRIBUTING.md, harnesses/, instructions/,
@@ -89,10 +92,11 @@ dotfiles/
  origin/main
 | `.claude/` | Claude Code config; `.claude/skills/<name>` are symlinks back into `.agents/skills/<name>`, and `.claude/CLAUDE.md` is the one real, versioned file of Claude Code's global config — see "Global per-tool instructions files" below |
 | `.github/` | GitHub config and CI; several subfolders (`automation/`, `CONTRIBUTING.md`, `harnesses/`, `instructions/`, `prompts/`) are symlinks into `.agents/` so Copilot/Actions read the same source of truth; `workflows/` holds real GitHub Actions (e.g. `vscode-docs-monitor.yml`) |
-| `.vscode/` | VS Code config; `settings.json` contains the real API key and is generated locally by `chezmoi apply` (gitignored) — see `docs/SECRETS.md` |
+| `.vscode/` | VS Code config for opening this repo as a workspace (`launch.json`, `tasks.json`, `github.code-workspace`, tracked). `settings.json` (gitignored) is **no longer chezmoi-managed here** as of PR1 — the real API key now lives only at `~/.vscode/settings.json` (`destDir=$HOME`); see `docs/SECRETS.md` |
 | `.gemini/`, `.codex/`, `.copilot/` | Global config for Gemini CLI, OpenAI Codex CLI, and GitHub Copilot CLI respectively — each holds exactly one real, versioned file (`GEMINI.md`, `AGENTS.md`, `copilot-instructions.md`), same pattern as `.claude/CLAUDE.md` — see below |
  HEAD
-| `.chezmoisource/` | Dedicated chezmoi source directory, scoped only to the one encrypted `.vscode/settings.json` — see `docs/SECRETS.md` |
+| `home/` | chezmoi source directory (`sourceDir`), `destDir=$HOME` — the 2 age-encrypted secrets (`~/.vscode/settings.json`, `~/.dtx-providers/secrets.env`); see `docs/SECRETS.md` |
+| `bin/` | Human-run scripts only — never invoked by bootstrap or an agent (L2 in the write-permission matrix, see `docs/AGENT_OS_UNIFICATION_PLAN.md` §7) |
 | `global/` | Home-directory-level `CLAUDE.md` templates: `ROOT.CLAUDE.md`/`PROJECTS.CLAUDE.md` are real symlinks to `~/CLAUDE.md`/`~/Projects/CLAUDE.md` (set up manually today, not yet by `setup.sh`); `WORK.CLAUDE.template.md` is copied and customized per machine instead — `~/Work/CLAUDE.md` stays local, not shared via dotfiles |
  origin/main
 | `scripts/` | Standalone utility scripts (currently the VS Code docs monitor) |
