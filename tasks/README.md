@@ -1,5 +1,9 @@
 # tasks/
 
+**Quick command reference: `tasks/CHEATSHEET.md`.** This file explains the
+model and the decisions; the cheatsheet is the "how do I actually do X"
+lookup — start there if you just need a command.
+
 Workspace task-tracking system (PoC). Lives here, not in a separate repo —
 decision fixed by D2/D7 of the "Workspace Agil" doc (`Repo-Cerebro` =
 `dotfiles/`) and D11 (events go into the workspace repo's central log).
@@ -41,6 +45,12 @@ Regenerate the table after any change to the log:
 ```bash
 python3 tasks/rebuild_view.py
 ```
+
+This is the original PoC flow (free-form `status`, `board.md`). For the
+6-phase lifecycle, metrics, and handoff notes (`move_task.py`,
+`kanban.md`, `metrics.md`) see `tasks/CHEATSHEET.md` instead — both flows
+read the same `events.jsonl` and stay in sync, `move_task.py` is just the
+newer, more specific tool.
 
 **Language note (2026-09-16):** English is the default vocabulary for new
 events — event types (`task.created`, `task.status_changed`), `actor.kind`

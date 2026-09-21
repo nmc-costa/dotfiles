@@ -25,6 +25,15 @@ gives a free audit trail per task/phase/team with no second store to keep
 in sync. See rebuild_metrics.py for the aggregated view, and
 tasks/demo/ for a worked example. None of the fields are required — a
 plain move with no metrics is still valid.
+
+The optional --handoff flag records what whoever picks up this task next
+(a different team, a different phase, a fresh session days later) needs to
+know to resume without re-deriving it: what's done, what's left, where the
+work lives (branch/PR/file), and the concrete next step. Same event,
+different purpose than --reason (--reason is a one-line "why did this
+move happen", --handoff is "here's the state, continue from here").
+Retrieve the latest handoff for a task with:
+    ./move_task.py --show-handoff dotfiles-my-task
 """
 import argparse
 import datetime
@@ -45,13 +54,29 @@ def current_phase(events, task_id):
     return tasks[task_id]["phase"]
 
 
+def latest_handoff(events, task_id):
+    """Most recent non-empty --handoff note for a task_id, or None."""
+    note = None
+    phase = None
+    for ev in events:
+        if ev.get("task_id") != task_id or ev.get("type") != "task.phase_changed":
+            continue
+        payload = ev.get("payload") or {}
+        if payload.get("handoff"):
+            note = payload["handoff"]
+            phase = payload.get("phase")
+    return note, phase
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--task-id", required=True)
-    parser.add_argument("--to-phase", required=True, choices=PHASES)
+    parser.add_argument("--to-phase", choices=PHASES, help="required unless --show-handoff is used")
     parser.add_argument("--actor-kind", default="agent", choices=["human", "agent", "swarm"])
     parser.add_argument("--actor-id", default="claude")
     parser.add_argument("--reason", help="short free-text note on why this moved (optional)")
+    parser.add_argument("--handoff", help="what the next team/session needs to resume this task (optional)")
+    parser.add_argument("--show-handoff", action="store_true", help="print the latest handoff note for --task-id and exit — no move happens")
     parser.add_argument("--team", help="which agent team did the work being closed out by this move")
     parser.add_argument("--tokens", type=int, help="tokens the team spent in the phase being left")
     parser.add_argument("--cost-usd", type=float, help="USD cost the team spent in the phase being left")
@@ -60,6 +85,18 @@ def main():
     args = parser.parse_args()
 
     events = load_events()
+
+    if args.show_handoff:
+        note, phase = latest_handoff(events, args.task_id)
+        if note is None:
+            print(f"no handoff note recorded for {args.task_id!r}")
+        else:
+            print(f"[{args.task_id} @ {phase}]\n{note}")
+        return
+
+    if args.to_phase is None:
+        print("error: --to-phase is required unless --show-handoff is given", file=sys.stderr)
+        sys.exit(1)
     from_phase = current_phase(events, args.task_id)
     if from_phase is None:
         print(
@@ -95,6 +132,7 @@ def main():
             "phase": args.to_phase,
             "from_phase": from_phase,
             "reason": args.reason,
+            "handoff": args.handoff,
             "metrics": metrics or None,
         },
         "outcome": None,

@@ -1,7 +1,9 @@
 # tasks/demo/
 
-A self-contained, runnable test of `move_task.py`'s metrics feature. Not
-docs — an actual working example, isolated from the real `tasks/`.
+A self-contained, runnable test of `move_task.py`'s metrics and handoff
+features. Not docs — an actual working example, isolated from the real
+`tasks/`. See `tasks/CHEATSHEET.md` for the quick command reference this
+demo exercises.
 
 ## Run it
 
@@ -26,7 +28,10 @@ Every phase transition that closes out real work calls `move_task.py` with
 `--team`/`--tokens`/--cost-usd`/`--duration-seconds`/`--cycles` (all
 simulated numbers, distinct per task so the totals are actually comparing
 something). `demo-cleanup`'s review phase deliberately uses `--cycles 2` to
-show a retry in the data.
+show a retry in the data. `demo-report`'s handoff from team-scout to
+team-forge also carries a `--handoff` note, retrieved at the end with
+`--show-handoff` — a worked example of the "what does the next
+team/session need to resume this" mechanism.
 
 ## What it produces
 

@@ -22,10 +22,16 @@ rm -f kanban.md metrics.md board.md
 echo
 
 move() {
-  local task=$1 phase=$2 team=$3 tokens=$4 cost=$5 duration=$6 cycles=$7
-  python3 move_task.py --task-id "$task" --to-phase "$phase" --actor-id demo \
-    --team "$team" --tokens "$tokens" --cost-usd "$cost" \
-    --duration-seconds "$duration" --cycles "$cycles"
+  local task=$1 phase=$2 team=$3 tokens=$4 cost=$5 duration=$6 cycles=$7 handoff=${8:-}
+  if [ -n "$handoff" ]; then
+    python3 move_task.py --task-id "$task" --to-phase "$phase" --actor-id demo \
+      --team "$team" --tokens "$tokens" --cost-usd "$cost" \
+      --duration-seconds "$duration" --cycles "$cycles" --handoff "$handoff"
+  else
+    python3 move_task.py --task-id "$task" --to-phase "$phase" --actor-id demo \
+      --team "$team" --tokens "$tokens" --cost-usd "$cost" \
+      --duration-seconds "$duration" --cycles "$cycles"
+  fi
 }
 
 echo "=== creating 2 tasks ==="
@@ -46,8 +52,9 @@ echo
 
 echo "=== demo-report: enters planning (no metrics yet, nothing done in backlog) ==="
 python3 move_task.py --task-id demo-report --to-phase planning --actor-id demo
-echo "=== demo-report: team-scout's planning work closes out ==="
-move demo-report in_progress team-scout 8200  0.14 420  1
+echo "=== demo-report: team-scout's planning closes out WITH a handoff note for team-forge ==="
+move demo-report in_progress team-scout 8200 0.14 420 1 \
+  "Plano escrito em docs/plan.md. Estrutura do relatorio acordada: 4 seccoes. Falta: implementar a seccao 3 (dados historicos) — API ainda nao escolhida, ver nota no plano."
 echo "=== demo-report: team-forge builds, reviews, validates, ships it ==="
 move demo-report review      team-forge 15600 0.09 1380 1
 move demo-report validation  team-forge 4100  0.06 300  1
@@ -71,4 +78,7 @@ echo
 echo "metrics.md:"
 cat metrics.md
 echo
-echo "=== done. Point tuiboard at $(pwd)/kanban.md to watch it, or just read the two .md files above. ==="
+echo "handoff note team-forge would read to resume demo-report (--show-handoff):"
+python3 move_task.py --task-id demo-report --show-handoff
+echo
+echo "=== done. Point tuiboard at $(pwd)/kanban.md to watch it, or just read the .md files above. ==="
