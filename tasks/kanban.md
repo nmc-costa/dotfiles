@@ -1,6 +1,5 @@
 ## Backlog
 - [ ] dotfiles-tsk-spike-agent-deck Spike: install Agent Deck, confirm it detects Claude Code + Copilot CLI sessions side by side
-- [ ] dotfiles-tsk-spike-cas-concurrency Spike: confirm git-ref compare-and-swap claiming survives concurrent writers
 - [ ] dotfiles-tsk-spike-workflow-model Spike: confirm a Workflow script with a real per-phase model override runs as expected
 - [ ] dotfiles-tsk-spike-herdr-popup Spike: confirm a trivial herdr plugin can open a popup (herdr plugin pane open)
 - [ ] dotfiles-tsk-tuiboard-install Install tuiboard for real (not a scratch install), point it at tasks/kanban.md
@@ -36,6 +35,7 @@
 - [x] notes-workspace-standards-schema Abrir PR: claude/workspace-standards-schema
 - [x] worknotes-repo-hygiene-worknotes Abrir PR: claude/repo-hygiene-worknotes
 - [x] worknotes-workspace-standards-schema Abrir PR: claude/workspace-standards-schema
+- [x] dotfiles-tsk-spike-cas-concurrency Spike: confirm git-ref compare-and-swap claiming survives concurrent writers
 
 ## Blocked
 
