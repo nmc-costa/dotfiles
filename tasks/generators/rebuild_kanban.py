@@ -29,7 +29,7 @@ import json
 import sys
 from pathlib import Path
 
-SCRIPT_DIR = Path(__file__).parent
+SCRIPT_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(SCRIPT_DIR))
 from lifecycle import PIPELINE_PHASES, project, tasks_root  # noqa: E402
 
@@ -147,6 +147,7 @@ def render(tasks, events, done_window_days=30, view_file=VIEW_FILE):
 
     # write archive file next to view_file
     archive_file = Path(view_file).parent / "archive.md"
+    archive_file.parent.mkdir(parents=True, exist_ok=True)
     archive_file.write_text("\n".join(archive_lines).rstrip() + "\n", encoding="utf-8")
 
     return "\n".join(lines).rstrip() + "\n"
