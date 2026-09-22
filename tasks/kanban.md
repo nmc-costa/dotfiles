@@ -19,7 +19,6 @@
 - [ ] dotfiles-tsk-gh-path-recursion Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)
 
 ## Validation
-- [ ] dotfiles-tsk-hook-claude-code Claude Code SessionStart hook + versioned settings.json fragment
 
 ## Done
 - [x] dotfiles-repo-hygiene-dotfiles Abrir PR: claude/repo-hygiene-dotfiles
@@ -42,6 +41,7 @@
 - [x] dotfiles-tsk-writepath-unification lifecycle.py + LEGAL_TRANSITIONS + append() as the single writer, with CAS (Layer A)
 - [x] dotfiles-tsk-notify-sweep notify.py + sweep.py - the notification producer side
 - [x] dotfiles-tsk-brief brief.py - heartbeat + inbox consumer
+- [x] dotfiles-tsk-hook-claude-code Claude Code SessionStart hook + versioned settings.json fragment
 - [x] dotfiles-tsk-task-brief-skill /task-brief skill - thin shell over brief.py
 - [x] dotfiles-tsk-cards-frontmatter L1: markdown+YAML-frontmatter card per task (rebuild_cards.py, generated view, never hand-edited)
 - [x] dotfiles-tsk-dispatch-launcher tsk dispatch: launch a session on a provider with the task brief pre-loaded (claude "<p>"/--bg, copilot -i, agy -i) - push side of cross-provider handoff, pull side is dotfiles-tsk-brief
