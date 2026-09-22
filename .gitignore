@@ -124,6 +124,11 @@ tasks/.sweep-heartbeat
 tasks/claims.jsonl
 tasks/.claims.lock
 
+# tasks/dispatch.py's log for providers with no confirmed background-
+# launch flag (copilot/agy — only Claude Code's --bg is confirmed) —
+# stdout/stderr from a detached process, not a fact about task state.
+tasks/.dispatch-logs/
+
 # But DO track core configs
 !.claude/
 !.agents/

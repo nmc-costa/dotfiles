@@ -19,6 +19,7 @@ orchestration layer — partially built, see below). This file is only the
 | `sweep.py` | Detect `sla_expired`/`blocked_too_long` facts, raise `notification.raised` events. Run it periodically yourself — no systemd timer yet. |
 | `notify.py` | Deliver pending raised facts (herdr digest + notify-send fallback), or `--ack --dedup-key` to close one out. |
 | `brief.py` | Heartbeat + pending-facts briefing, or `--prompt-only --task-id` for a ready-to-paste dispatch prompt. No hook wires it up automatically yet. |
+| `dispatch.py` | Launch a task on another provider (`claude`/`copilot`/`agy`) with its brief pre-loaded. Dry-run by default — add `--launch` to actually run it. |
 
 None of these need arguments beyond what's shown below — no config file, no
 setup. Run them from anywhere with `python3 tasks/<tool>.py ...` or `cd
@@ -137,6 +138,18 @@ This is the logic behind the planned `/task-brief` skill and per-provider
 startup hooks (`dotfiles-tsk-hook-claude-code`/`-hook-antigravity`/
 `-cpx-copilot`, all still backlog) — none of them wire it up
 automatically yet, so run it by hand for now.
+
+## Dispatch a task to another provider
+
+```bash
+python3 tasks/dispatch.py --task-id dotfiles-my-task --provider claude   # prints the command (dry-run)
+python3 tasks/dispatch.py --task-id dotfiles-my-task --provider claude --launch   # actually launches it
+```
+
+`--provider` is `claude`, `copilot`, or `agy` (Antigravity). Always a
+dry-run unless you pass `--launch` — launching spawns a real, autonomous
+session, not something to do by accident. No daemon: this just runs
+`brief.py --prompt-only` for the task and execs the right binary with it.
 
 ## See what's going on
 
