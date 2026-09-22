@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# L2: human-run only — never invoked by bootstrap or an agent. Clones the
+# WORK_REPOS/PROJECTS_REPOS lists (real employer/personal repo content) by
+# calling setup.sh WITHOUT --links-only, the flag bootstrap always passes.
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+exec ./setup.sh "$@"
