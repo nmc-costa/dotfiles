@@ -128,3 +128,51 @@ systemd service backend) — confirmed against a real plugin under review
 ("Omarchy Google Calendar", issue #6846). `omarchy-voice` does not follow
 this format (plain `install.sh`, no manifest) — noted so future work
 targets the real manifest system, not that shape.
+
+## 2026-09-22 — first scheduled re-check (cadence: 7 days)
+
+Re-ran the four `sourcesToRecheck` from the `review:` block. **No drift
+found — no schema/yaml content change this cycle**, only this note plus
+the `lastReviewed`/`nextDue` bump.
+
+**AGENTS.md still schema-free**: confirmed directly from agents.md — "No.
+AGENTS.md is just standard Markdown. Use any headings you like; the agent
+simply parses the text you provide." No required fields, no formal schema.
+Governance (AAIF, Linux Foundation) unchanged since the 2026-09-15
+baseline. **One thing to watch, not act on**: [agentsmd/agents.md#135](
+https://github.com/agentsmd/agents.md/issues/135) proposes an optional
+v1.1 frontmatter (`description`, `tags`) for progressive disclosure in
+monorepos with many nested AGENTS.md files; still open/unmerged as of this
+check, and GitHub Copilot custom-agent profiles already parse frontmatter
+speculatively for forward-compat. Doesn't apply here — this workspace has
+one root `AGENTS.md`, not a monorepo needing an index — but worth
+re-checking again if it merges, since `agentEntrypoints` is the part of
+this schema closest to caring.
+
+**AAIF governance**: aaif.io/projects/agents-md returned no fetchable
+content beyond title/URL (likely a JS-rendered page); nothing found
+elsewhere contradicting the AAIF/Linux Foundation stewardship noted at
+baseline. Not a strong enough check to claim confidently "nothing changed"
+— flagged as a source that needs a better fetch method next cycle (e.g. a
+direct API or cached copy) rather than silently marked clean.
+
+**"AI agent repo workspace standard 2026" general search**: nothing found
+that combines JSON-Schema-validated repo structure + drift-vs-SOTA review
+cadence + PR-on-drift, same conclusion as the 2026-09-16 `communityFirst`
+landscape scan. Adjacent 2026 write-ups (AGENTS.md guides, "AGENTS.md vs
+README.md" pieces, dotfiles-with-agent-config repos) reinforce the existing
+split this schema already assumes: README for humans, AGENTS.md for agent
+build/test/convention context, this schema for repo-structure/policy
+metadata around both. No competing standard found. Gap still confirmed,
+not just assumed.
+
+**This workspace's required README sections**: 2026 best-practice sources
+consistently reaffirm keeping README and AGENTS.md separate (human-facing
+vs. agent-facing) but none prescribe specific README section names —
+"Directory tree" / "What's where (index)" / "Guidelines" remain this
+workspace owner's own convention, not sourced as SOTA, same as noted at
+baseline for the optional diagram field. No change warranted.
+
+**Verdict**: schema and yaml content stand as designed at baseline. Only
+this file and `review.lastReviewed`/`review.nextDue` in
+`workspace-standards.yaml` change this cycle.

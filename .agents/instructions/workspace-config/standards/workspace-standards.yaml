@@ -145,8 +145,8 @@ validation:
 
 review:
   cadenceDays: 7
-  lastReviewed: "2026-09-15"
-  nextDue: "2026-09-22"
+  lastReviewed: "2026-09-22"
+  nextDue: "2026-09-29"
   sourcesToRecheck:
     - "https://agents.md — is AGENTS.md still schema-free / any new official fields"
     - "https://aaif.io/projects/agents-md — AAIF governance changes"
