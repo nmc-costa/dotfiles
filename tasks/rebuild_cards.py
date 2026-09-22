@@ -148,12 +148,13 @@ def render_card(task_id, card):
 
 
 def main():
-    events = load_events()
-    cards = project(events)
-    CARDS_DIR.mkdir(exist_ok=True)
-    for task_id, card in cards.items():
-        (CARDS_DIR / f"{task_id}.md").write_text(render_card(task_id, card), encoding="utf-8")
-    print(f"wrote {len(cards)} card(s) to {CARDS_DIR} (from {len(events)} events)")
+    # Thin wrapper: call generators/rebuild_cards.py to keep generators/ as source of truth
+    import os
+    import subprocess
+    script = Path(__file__).parent / "generators" / "rebuild_cards.py"
+    env = os.environ.copy()
+    # Preserve TASKS_OUTPUT_DIR if set; default behavior unchanged
+    subprocess.check_call(["python3", str(script)], env=env)
 
 
 if __name__ == "__main__":

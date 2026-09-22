@@ -178,17 +178,12 @@ def render_md(flowchart_src, timeline_src):
 
 
 def main():
-    events = load_events()
-    tasks = project(events)
-    task_project = collect_projects(events)
-
-    flowchart_src = build_flowchart(tasks, task_project)
-    timeline_src = build_timeline(events)
-
-    MD_FILE.write_text(render_md(flowchart_src, timeline_src), encoding="utf-8")
-    MMD_FILE.write_text(flowchart_src, encoding="utf-8")
-    print(f"wrote {MD_FILE} and {MMD_FILE} ({len(tasks)} tasks, "
-          f"{len({task_project.get(t, 'unknown') for t in tasks})} projects, from {len(events)} events)")
+    # Thin wrapper: call generators/rebuild_graph.py to keep generators/ as source of truth
+    import os
+    import subprocess
+    script = Path(__file__).parent / "generators" / "rebuild_graph.py"
+    env = os.environ.copy()
+    subprocess.check_call(["python3", str(script)], env=env)
 
 
 if __name__ == "__main__":
