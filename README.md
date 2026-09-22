@@ -49,12 +49,10 @@ dotfiles/
 ├── docs/                        # Everything not auto-loaded by a tool by convention — see index below
 │   └── SECRETS.md               #   Secrets-management doc (chezmoi + age)
 ├── .dtx-providers               # runtime provider secrets and configs (managed via chezmoi -> $HOME)
- HEAD
 ├── global/                      # Home-directory-level CLAUDE.md templates: ROOT.CLAUDE.md -> ~/CLAUDE.md and
 │                                 #   PROJECTS.CLAUDE.md -> ~/Projects/CLAUDE.md are real symlinks (currently set
 │                                 #   up manually, not yet by setup.sh); WORK.CLAUDE.template.md is copied and
 │                                 #   customized per machine, not symlinked (~/Work/CLAUDE.md stays local, not shared)
- origin/main
 ├── scripts/                     # Utility scripts (VS Code docs monitor: monitor_vscode_docs.py, setup_vscode_monitor_cron.sh)
 ├── tasks/                       # Task-tracking PoC: events.jsonl (log, source of truth) + board.md (generated view) + append_event.py/rebuild_view.py, plus KICKOFF.md (design history)
 ├── AGENTS.md                    # General agent guide (Crush/Claude, Copilot, Gemini, Cline) — auto-read by convention
@@ -92,18 +90,14 @@ dotfiles/
 
 | Directory | Purpose |
 |---|---|
- HEAD
 | `.agents/` | **Source of truth** for all agent config: `skills/`, `instructions/`, `harnesses/`, `prompts/`, `workflows/`, `validation/`, `automation/`, `rules/` (tool-agnostic rules some harnesses auto-discover via a `.agents/rules/*.md` glob, confirmed real for Antigravity 2026-09-16). Edit here, never in the synced copies. `instructions/workspace-config/standards/` holds the workspace-wide agent-orientation standard (`workspace-standards.schema.json` + `.yaml`, `RESEARCH_NOTES.md`) — every repo in this workspace has its own `docs/standards.yml` (or `standards.yml`) inheriting from it; see `CLAUDE.md`/`AGENTS.md` for the review protocol. `sync.sh` distributes all of this to `~/.agents/` (and `skills/` also to `~/.claude/skills/`) — **as of 2026-09-15 this is a real, working sync, not just an organizational convention.** |
- origin/main
 | `.claude/` | Claude Code config; `.claude/skills/<name>` are symlinks back into `.agents/skills/<name>`, and `.claude/CLAUDE.md` is the one real, versioned file of Claude Code's global config — see "Global per-tool instructions files" below |
 | `.github/` | GitHub config and CI; several subfolders (`automation/`, `CONTRIBUTING.md`, `harnesses/`, `instructions/`, `prompts/`) are symlinks into `.agents/` so Copilot/Actions read the same source of truth; `workflows/` holds real GitHub Actions (e.g. `vscode-docs-monitor.yml`) |
 | `.vscode/` | VS Code config for opening this repo as a workspace (`launch.json`, `tasks.json`, `github.code-workspace`, tracked). `settings.json` (gitignored) is **no longer chezmoi-managed here** as of PR1 — the real API key now lives only at `~/.vscode/settings.json` (`destDir=$HOME`); see `docs/SECRETS.md` |
 | `.gemini/`, `.codex/`, `.copilot/` | Global config for Gemini CLI, OpenAI Codex CLI, and GitHub Copilot CLI respectively — each holds exactly one real, versioned file (`GEMINI.md`, `AGENTS.md`, `copilot-instructions.md`), same pattern as `.claude/CLAUDE.md` — see below |
- HEAD
 | `home/` | chezmoi source directory (`sourceDir`), `destDir=$HOME` — the 2 age-encrypted secrets (`~/.vscode/settings.json`, `~/.dtx-providers/secrets.env`); see `docs/SECRETS.md` |
 | `bin/` | Human-run scripts only — never invoked by bootstrap or an agent (L2 in the write-permission matrix, see `docs/AGENT_OS_UNIFICATION_PLAN.md` §7) |
 | `global/` | Home-directory-level `CLAUDE.md` templates: `ROOT.CLAUDE.md`/`PROJECTS.CLAUDE.md` are real symlinks to `~/CLAUDE.md`/`~/Projects/CLAUDE.md` (set up manually today, not yet by `setup.sh`); `WORK.CLAUDE.template.md` is copied and customized per machine instead — `~/Work/CLAUDE.md` stays local, not shared via dotfiles |
- origin/main
 | `scripts/` | Standalone utility scripts (currently the VS Code docs monitor) |
 | `tasks/` | Task-tracking PoC — `events.jsonl` (append-only log, source of truth) projected into `board.md` (generated view) via `append_event.py`/`rebuild_view.py`; see `tasks/README.md`. Also still holds `KICKOFF.md` (design history). **2026-09-18: an orchestration architecture was decided** (multi-agent task board across Claude Code/Copilot CLI/Gemini CLI, backed by a `tsk` CLI+daemon — see `tasks/README.md`'s "Orchestration architecture" section) — not yet implemented, this only documents the decision |
 | `docs/` | Everything not auto-loaded by convention — see table below |

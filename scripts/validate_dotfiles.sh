@@ -37,6 +37,26 @@ else
   done <<< "$conflict_hits"
 fi
 
+# 2026-09-22: the check above only catches the marker lines themselves
+# (<<<<<<< / ======= / >>>>>>>). Found in the wild: someone resolves a
+# conflict by keeping content from both sides and deletes the ``` marker
+# lines, but leaves the trailing ref-name fragment of the <<<<<<< HEAD /
+# >>>>>>> origin/main lines behind as its own orphan line (" HEAD",
+# " origin/main") — content on both sides intact, just this stray line
+# sitting in the middle. README.md and the two _templates/*.md files each
+# had 2-3 of these (found 2026-09-22, unrelated to the PR #12 incident
+# above). Matches HEAD, origin/<branch>, and this repo's own claude/<topic>
+# branch convention (see CLAUDE.md) — deliberately not a bare "^ \w+$" to
+# avoid false-positives on legitimate single-word indented lines.
+residue_hits="$(git grep -n -E '^ (HEAD|origin/[A-Za-z0-9._/-]+|claude/[A-Za-z0-9._/-]+|main|master)$' -- . 2>/dev/null || true)"
+if [[ -z "$residue_hits" ]]; then
+  ok "no orphaned merge-marker ref-name lines (' HEAD', ' origin/<branch>', ...)"
+else
+  while IFS= read -r line; do
+    bad "orphaned merge-marker residue: $line"
+  done <<< "$residue_hits"
+fi
+
 # --- 1. Root only has the allowed files/dirs ------------------------------
 echo "-- Root cleanliness --"
 

@@ -116,10 +116,8 @@ Example:
 ## Agents That Use This Tool
 
 This tool is used by:
- HEAD
 - `agent-name` (see `../../agents/{agent-name}/`) — For {capability}
 - `agent-name-2` (see `../../agents/{agent-name-2}/`) — For {capability}
- origin/main
 
 ---
 
@@ -127,9 +125,7 @@ This tool is used by:
 
 - Documentation: [Official docs](https://docs.example.com)
 - GitHub: [Repository](https://github.com/example/tool-name)
- HEAD
 - Examples: `examples/` (see `./examples/`)
- origin/main
 - Registry: `.agents/skills/` (no central registry file in this repo; browse skill directories directly)
 
 ---
