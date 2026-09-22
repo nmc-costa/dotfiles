@@ -43,26 +43,27 @@ flowchart LR
         dotfiles-tsk-writepath-unification["dotfiles-tsk-writepath-unification<br/>lifecycle.py + LEGAL_TRANSITIONS + append() as the single writer, with CAS (Layer A)"]:::done
         dotfiles-tsk-notify-sweep["dotfiles-tsk-notify-sweep<br/>notify.py + sweep.py - the notification producer side"]:::done
         dotfiles-tsk-brief["dotfiles-tsk-brief<br/>brief.py - heartbeat + inbox consumer"]:::done
-        dotfiles-tsk-hook-claude-code["dotfiles-tsk-hook-claude-code<br/>Claude Code SessionStart hook + versioned settings.json fragment"]:::backlog
+        dotfiles-tsk-hook-claude-code["dotfiles-tsk-hook-claude-code<br/>Claude Code SessionStart hook + versioned settings.json fragment"]:::done
         dotfiles-tsk-cpx-copilot["dotfiles-tsk-cpx-copilot<br/>cpx wrapper for Copilot CLI (its own sessionStart hook is broken)"]:::backlog
         dotfiles-tsk-hook-antigravity["dotfiles-tsk-hook-antigravity<br/>Antigravity hook (inherited hook mechanism)"]:::backlog
         dotfiles-tsk-task-brief-skill["dotfiles-tsk-task-brief-skill<br/>/task-brief skill - thin shell over brief.py"]:::done
         dotfiles-tsk-systemd-units["dotfiles-tsk-systemd-units<br/>ensure-tsk-sweep.sh + systemd units, following the existing ensure-*.sh convention"]:::backlog
         dotfiles-tsk-graph-dependency-edges["dotfiles-tsk-graph-dependency-edges<br/>Add blocked_by dependency edges to rebuild_graph.py's flowchart (needs blocked_by as a list, not prose)"]:::backlog
         dotfiles-tsk-cards-frontmatter["dotfiles-tsk-cards-frontmatter<br/>L1: markdown+YAML-frontmatter card per task (rebuild_cards.py, generated view, never hand-edited)"]:::done
-        dotfiles-tsk-dispatch-launcher["dotfiles-tsk-dispatch-launcher<br/>tsk dispatch: launch a session on a provider with the task brief pre-loaded (claude &quot;<p>&quot;/--bg, copilot -i, agy -i) - push side of cross-provider handoff, pull side is dotfiles-tsk-brief"]:::in_progress
+        dotfiles-tsk-dispatch-launcher["dotfiles-tsk-dispatch-launcher<br/>tsk dispatch: launch a session on a provider with the task brief pre-loaded (claude &quot;<p>&quot;/--bg, copilot -i, agy -i) - push side of cross-provider handoff, pull side is dotfiles-tsk-brief"]:::done
         dotfiles-tsk-tasks-root-resolver["dotfiles-tsk-tasks-root-resolver<br/>tasks_root() resolver: one canonical write path for events.jsonl, the CAS lock and every rebuild_*.py (fixes 4 divergent copies + 1 orphaned event)"]:::done
         dotfiles-tsk-claim-protocol["dotfiles-tsk-claim-protocol<br/>L2: claim protocol in a separate claims.jsonl -- locked conditional appends, closed role vocabulary, atomic preemption, human preempts swarm"]:::done
         dotfiles-tsk-jsonl-merge-driver["dotfiles-tsk-jsonl-merge-driver<br/>Custom git merge driver (merge=union or equivalent) for tasks/*.jsonl so a conflict resolution can never silently drop an append-only line"]:::done
-        dotfiles-tsk-archive-and-reorg["dotfiles-tsk-archive-and-reorg<br/>Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)"]:::backlog
+        dotfiles-tsk-archive-and-reorg["dotfiles-tsk-archive-and-reorg<br/>Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)"]:::planning
         dotfiles-handoff-standardization["dotfiles-handoff-standardization<br/>Adopt HANDOFF.md convention (global index + per-repo/subsystem), rename tasks/handoff.md"]:::done
-        dotfiles-tsk-gh-path-recursion["dotfiles-tsk-gh-path-recursion<br/>Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)"]:::backlog
+        dotfiles-tsk-gh-path-recursion["dotfiles-tsk-gh-path-recursion<br/>Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)"]:::review
         dotfiles-tsk-agent-os-pr2-pr7["dotfiles-tsk-agent-os-pr2-pr7<br/>Agent-OS unification: PR2-PR7 (docs/AGENT_OS_UNIFICATION_PLAN.md)"]:::backlog
         dotfiles-tsk-archive-agentic-instructions["dotfiles-tsk-archive-agentic-instructions<br/>Archive agentic_instructions repo on GitHub"]:::backlog
         dotfiles-tsk-antigravity-reverify["dotfiles-tsk-antigravity-reverify<br/>Re-verify Antigravitys startup file-discovery from inside ~/dotfiles"]:::backlog
         dotfiles-tsk-agile-workspace-see["dotfiles-tsk-agile-workspace-see<br/>Agile Workspace roadmap step 1 (See): agtop + Claude Code Langfuse/OTel observability"]:::backlog
         dotfiles-tsk-agile-workspace-limit["dotfiles-tsk-agile-workspace-limit<br/>Agile Workspace roadmap step 3 (Limit): per-machine limit profiles"]:::backlog
         dotfiles-tsk-agile-workspace-schedule["dotfiles-tsk-agile-workspace-schedule<br/>Agile Workspace roadmap step 4 (Schedule): jobs/*.yaml manifest + systemd timers"]:::backlog
+        dotfiles-tsk-autolaunch-test["dotfiles-tsk-autolaunch-test<br/>dotfiles-tsk-autolaunch-test: Verify dispatch auto-launch across providers"]:::backlog
     end
 
     subgraph proj_notes["notes"]
@@ -78,4 +79,5 @@ flowchart LR
 timeline
     title Tasks reaching done, over time
     2026-09-21 : dotfiles-tsk-spike-cas-concurrency : dotfiles-tsk-writepath-unification : dotfiles-tsk-cards-frontmatter : dotfiles-tsk-spike-agent-deck : dotfiles-tsk-spike-workflow-model : dotfiles-tsk-spike-herdr-popup : dotfiles-tsk-tuiboard-install : dotfiles-tsk-roadmap-graph : dotfiles-tsk-notify-sweep : dotfiles-tsk-brief : dotfiles-tsk-tasks-root-resolver : dotfiles-tsk-claim-protocol : dotfiles-tsk-task-brief-skill : dotfiles-handoff-standardization : dotfiles-tsk-jsonl-merge-driver
+    2026-09-22 : dotfiles-tsk-dispatch-launcher : dotfiles-tsk-hook-claude-code
 ```
