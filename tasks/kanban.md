@@ -4,12 +4,19 @@
 - [ ] dotfiles-tsk-hook-antigravity Antigravity hook (inherited hook mechanism)
 - [ ] dotfiles-tsk-systemd-units ensure-tsk-sweep.sh + systemd units, following the existing ensure-*.sh convention
 - [ ] dotfiles-tsk-graph-dependency-edges Add blocked_by dependency edges to rebuild_graph.py's flowchart (needs blocked_by as a list, not prose)
-- [ ] dotfiles-tsk-dispatch-launcher tsk dispatch: launch a session on a provider with the task brief pre-loaded (claude "<p>"/--bg, copilot -i, agy -i) - push side of cross-provider handoff, pull side is dotfiles-tsk-brief
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
+- [ ] dotfiles-tsk-gh-path-recursion Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)
+- [ ] dotfiles-tsk-agent-os-pr2-pr7 Agent-OS unification: PR2-PR7 (docs/AGENT_OS_UNIFICATION_PLAN.md)
+- [ ] dotfiles-tsk-archive-agentic-instructions Archive agentic_instructions repo on GitHub
+- [ ] dotfiles-tsk-antigravity-reverify Re-verify Antigravitys startup file-discovery from inside ~/dotfiles
+- [ ] dotfiles-tsk-agile-workspace-see Agile Workspace roadmap step 1 (See): agtop + Claude Code Langfuse/OTel observability
+- [ ] dotfiles-tsk-agile-workspace-limit Agile Workspace roadmap step 3 (Limit): per-machine limit profiles
+- [ ] dotfiles-tsk-agile-workspace-schedule Agile Workspace roadmap step 4 (Schedule): jobs/*.yaml manifest + systemd timers
 
 ## Planning
 
 ## In Progress
+- [ ] dotfiles-tsk-dispatch-launcher tsk dispatch: launch a session on a provider with the task brief pre-loaded (claude "<p>"/--bg, copilot -i, agy -i) - push side of cross-provider handoff, pull side is dotfiles-tsk-brief
 
 ## Review
 

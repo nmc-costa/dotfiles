@@ -4,7 +4,7 @@ title: "Adopt HANDOFF.md convention (global index + per-repo/subsystem), rename 
 project: dotfiles
 phase: done
 created: "2026-09-21T21:51:04.263877+00:00"
-touched: "2026-09-21T21:51:45.865185+00:00"
+touched: "2026-09-22T13:30:07.023028+00:00"
 energy: ""
 estimate: ""
 deadline: ""
