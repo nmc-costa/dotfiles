@@ -101,9 +101,17 @@ nesta máquina quando esta PR foi aberta).
   trabalho de outra sessão ainda por rever.
 - Nota curta sobre a convenção `HANDOFF.md` em `CHEATSHEET.md` (root do
   dotfiles) — ainda não escrita.
-- Duas linhas soltas " HEAD" / " origin/main" perto da linha ~48/53 de
-  `README.md` — resíduo de um merge mal resolvido, pré-existente, **não
-  relacionado com este trabalho**. Vale a pena uma sessão futura limpar.
+- ~~Duas linhas soltas " HEAD" / " origin/main" perto da linha ~48/53 de
+  `README.md` — resíduo de um merge mal resolvido, pré-existente, não
+  relacionado com este trabalho.~~ **Feito 2026-09-22, PR #56 (aberta, por
+  mesclar):** afinal eram 7 pares (3 em `README.md`, 2 em
+  `.agents/skills/_templates/tool-template.md`, 2 em `skill-template.md`),
+  não só os 2 originalmente notados aqui — conteúdo de ambos os lados
+  verificado como completo e não duplicado antes de remover. A causa raiz
+  também foi endereçada: `scripts/validate_dotfiles.sh` tinha um check para
+  marcadores `<<<<<<< / ======= / >>>>>>>` mas não para este resíduo mais
+  subtil (o nome da branch a solo numa linha); adicionado um segundo check
+  para isso não passar despercebido outra vez.
 
 ## Próxima ação
 
