@@ -12,6 +12,7 @@ How work happens in this workspace, in one place — so you don't have to rememb
 | Add/edit a reusable prompt | `.agents/prompts/{chronicle,_templates}/` |
 | Store a real output (validation, client example, session) | `.agents/validation/<skill>/` — never in `.agents/skills/<skill>/examples/` (that folder is only for generic/anonymized examples) |
 | Check the state of the `agentic_instructions` → `dotfiles` merge | `CLAUDE.md` → "⚠️ Known Gaps" section |
+| Leave/find a session-continuity handoff | `HANDOFF.md` — uppercase, singular, always at the root of whatever scope it describes: `~/HANDOFF.md` (global cross-repo index), `<repo>/HANDOFF.md` (repo-wide), `<repo>/<subsystem>/HANDOFF.md` for a subsystem that already has its own top-level docs (e.g. `tasks/HANDOFF.md`). Not permanent — update in place, delete/archive once its "still pending" list is empty. |
 
 **Golden rule:** if you edited something inside `.claude/skills/` or `.github/skills/` directly, you edited a conceptually broken symlink — the real file is in `.agents/skills/`. Confirm with `readlink -f <path>` before editing if unsure.
 
