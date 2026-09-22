@@ -73,6 +73,7 @@ done
 AGENTS_SRC="$BASE_DIR/dotfiles/.agents"
 AGENTS_DEST="$BASE_DIR/.agents"
 CLAUDE_SKILLS="$BASE_DIR/.claude/skills"
+CLAUDE_HOOKS="$BASE_DIR/.claude/hooks"
 SYSTEM_SKILLS="/usr/share/omarchy/default/agents/skills"
 LOCAL_BIN="$BASE_DIR/.local/bin"
 
@@ -407,6 +408,20 @@ main() {
     if [[ "$subdir_name" == "skills" ]]; then
       if [[ -d "$CLAUDE_SKILLS" ]] || [[ -L "$(dirname "$CLAUDE_SKILLS")" ]] || [[ -d "$(dirname "$CLAUDE_SKILLS")" ]]; then
         sync_subdir "skills" "$subdir" "$CLAUDE_SKILLS" "~/.claude/skills" || true
+      fi
+    fi
+
+    # hooks/ additionally mirrors to ~/.claude/hooks (Claude Code's own
+    # hook-script location, same idea as the skills mirror above), then
+    # reconciles ~/.claude/settings.json's hooks.SessionStart against
+    # hooks/session-start-hooks.json -- add-only, idempotent, never
+    # touches hooks this workspace doesn't own. See .agents/hooks/README.md.
+    if [[ "$subdir_name" == "hooks" ]]; then
+      sync_subdir "hooks" "$subdir" "$CLAUDE_HOOKS" "~/.claude/hooks" || true
+      if [[ -f "$BASE_DIR/.claude/settings.json" ]]; then
+        install_args=(--fragment "$AGENTS_DEST/hooks/session-start-hooks.json" --settings "$BASE_DIR/.claude/settings.json")
+        [[ $DRY_RUN -eq 1 ]] && install_args+=(--dry-run)
+        python3 "$AGENTS_DEST/hooks/install_session_start_hooks.py" "${install_args[@]}" || true
       fi
     fi
 

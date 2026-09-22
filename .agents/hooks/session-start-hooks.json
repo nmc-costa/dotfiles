@@ -1,0 +1,14 @@
+{
+  "_comment": "Versioned source of truth for Claude Code SessionStart hook entries this workspace wants present in the live, local ~/.claude/settings.json. Never symlinked wholesale -- that file also holds live runtime state (theme, autoMode, remoteControlAtStartup, etc.) that must stay local, see ~/dotfiles/.claude/CLAUDE.md. install_session_start_hooks.py merges these entries in idempotently (add-if-missing, matched by command string), never touching unrelated hooks like herdr-agent-state.sh. `{{HOME}}` in a command is substituted with the real, absolute home directory at install time -- Claude Code execs these command strings literally, no shell variable expansion, matching the pre-existing herdr-agent-state.sh/workspace-standards-review-check.sh entries which hardcode an absolute path for the same reason.",
+  "entries": [
+    {
+      "matcher": "*",
+      "hook": {
+        "type": "command",
+        "command": "bash '{{HOME}}/.claude/hooks/tsk-brief-session-start.sh'",
+        "timeout": 10,
+        "statusMessage": "Checking tasks/ for pending work..."
+      }
+    }
+  ]
+}
