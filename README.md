@@ -66,6 +66,7 @@ dotfiles/
 ├── setup.sh                     # One-click machine setup (run from root)
 ├── sync.sh               # Synchronize skills to all agents (run from root)
 ├── test-subagents.sh            # Verification test script (run from root)
+├── .gitattributes
 └── .gitignore
 ```
 
