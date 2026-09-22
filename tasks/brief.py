@@ -103,6 +103,21 @@ def print_full_briefing():
         print(f"- {e['task_id']}: {e['payload'].get('fact_type')}{tag} (dedup_key={e['payload'].get('dedup_key')})")
 
 
+def recommend_harness(phase):
+    """Recommends harness and model tier based on the phase and specialization matrix:
+    See .agents/instructions/workspace-config/harness-matrix.instructions.md
+    """
+    if phase in ("backlog", "planning"):
+        return "claude (Claude 3.7 Sonnet / Opus — Design & Arquitetura)"
+    if phase == "in_progress":
+        return "agy (Antigravity/Gemini 2.5 Pro — Implementação & Scaffolding) ou claude (Tier 1 Core/Concorrência)"
+    if phase == "review":
+        return "copilot (PR review / conflitos) ou claude (Crítica adversária / reviewHITs)"
+    if phase == "validation":
+        return "claude (CAS gating / verificação formal) + agy (análise massiva de logs/traces)"
+    return "copilot (git hygiene / manutenção)"
+
+
 def prompt_for_task(task_id):
     events = load_events()
     phase = current_phase(events, task_id)
@@ -120,10 +135,12 @@ def prompt_for_task(task_id):
         elif e["type"] in PHASE_CHANGED_TYPES and e["payload"].get("handoff"):
             handoff = e["payload"]["handoff"]
 
+    recommendation = recommend_harness(phase)
     lines = [
         f"Pega na tarefa {task_id} em tasks/kanban.md e lidera-a.",
         f"Título: {title}",
         f"Fase atual: {phase}.",
+        f"Harness recomendado: {recommendation}.",
     ]
     if phase == "backlog":
         lines.append(
@@ -132,7 +149,7 @@ def prompt_for_task(task_id):
         )
     if handoff:
         lines.append(f"Handoff mais recente: {handoff}")
-    lines.append("Lê tasks/README.md e tasks/CHEATSHEET.md para o modelo e os comandos.")
+    lines.append("Lê tasks/README.md, tasks/CHEATSHEET.md e .agents/instructions/workspace-config/harness-matrix.instructions.md.")
     print("\n".join(lines))
 
 

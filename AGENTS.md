@@ -16,13 +16,15 @@ Guidance for AI agents (Crush/Claude, Copilot, Gemini) working in this repositor
 
 ## Available Agents
 
-| Agent | Config Location | When to Use |
-|--------|-------------------|-------------|
-| **Crush/Claude** | `~/.claude/`, `~/.claude.json` | Development, code analysis, debugging, automation |
-| **Copilot CLI** | `~/.copilot/` | Terminal agent, own global instructions file — distinct from the VS Code extension, which reads `.github/copilot-instructions.md` per-project instead |
-| **Gemini CLI** | `~/.gemini/` | Quick queries, brainstorming |
-| **OpenAI Codex CLI** | `~/.codex/` | Terminal coding agent |
-| **Cline** | `~/.cline/` | Complex multi-file task execution |
+| Agent | Config Location | When to Use | Recommended Phase / Role |
+|--------|-------------------|-------------|----------------------------|
+| **Crush/Claude Code** | `~/.claude/`, `~/.claude.json` | Deep architecture, complex planning, high-reasoning refactors, adversarial reviews | `planning`, critical `validation` (CAS gating) |
+| **Antigravity / Gemini CLI** | `~/.gemini/` (app: `antigravity-cli`) | Large-context research, codebase exploration, structured scaffolding, feature implementation, log digestion | `in_progress` (Tier 2), `research`, log analysis |
+| **Copilot CLI** | `~/.copilot/` | PR reviews, merge conflict resolution, branch maintenance, git hygiene, fast edits | Maintenance, git hygiene, PR review |
+| **OpenAI Codex CLI** | `~/.codex/` | Terminal coding agent | Supplementary tasks |
+| **Cline** | `~/.cline/` | Multi-file task execution, autonomous coding | Extended implementation |
+
+See `.agents/instructions/workspace-config/harness-matrix.instructions.md` for full token economics, phase routing rules, and handoff protocols.
 
 ## Custom Skills
 
@@ -161,6 +163,12 @@ assume one exists without checking.
 - **Reads:** `~/.gemini/GEMINI.md` (symlinked pointer → `.agents/instructions/workspace-config/`)
 - **Preferences:** Brainstorming, ideation, concept verification
 - **Restrictions:** Occasional use, no long-context storage
+
+### Antigravity
+- **Reads:** `~/.gemini/GEMINI.md` + `.agents/instructions/workspace-config/` (App Data: `~/.gemini/antigravity-cli`)
+- **Preferences:** Codebase exploration, multi-step subagents, deep research, feature scaffolding, large-context analysis
+- **Branch Prefix:** Always prefix branches with `antigravity/<topic>`
+- **Restrictions:** Respects worktree isolation, doesn't self-merge PRs without explicit owner request
 
 ### OpenAI Codex CLI
 - **Reads:** `~/.codex/AGENTS.md` (symlinked pointer → `.agents/instructions/workspace-config/`)
