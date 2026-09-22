@@ -388,3 +388,21 @@ cross-provider dispatch verdict: prints a ready-to-paste dispatch prompt
 for one task (title, phase, latest handoff note, the two-step
 backlog→planning→in_progress reminder when still in backlog) — the
 contract `dotfiles-tsk-dispatch-launcher` needs.
+
+**`dispatch.py` done (2026-09-22):** the "push" half of cross-provider
+handoff — `tasks/dispatch.py --task-id X --provider {claude,copilot,agy}`
+gets the brief from `brief.py --prompt-only` and launches that provider's
+binary with it (`claude "<p>" --bg`, `copilot -i "<p>"`, `agy -i "<p>"`).
+No daemon, no IPC — state still only ever flows through `events.jsonl`.
+Defaults to a dry-run (prints the command) since actually launching spawns
+a real, autonomous session — `--launch` is required to run it for real.
+Only Claude Code's `--bg` is a confirmed background flag; `copilot`/`agy`
+are detached manually (new session, stdio to `tasks/.dispatch-logs/`) so
+the script never blocks either way. **Not `.agents/providers/adapters/
+*.sh`** — that convention is for LLM API model-provider routing (a local
+litellm proxy), an unrelated concern from launching a CLI harness.
+Verified: dry-run output for all three providers (including correct shell
+quoting of a title with an apostrophe), a nonexistent task-id and a
+missing binary both error correctly. **Not** verified: an actual
+`--launch`, deliberately — it would spawn a real concurrent session into
+an already busy multi-session environment purely as a smoke test.
