@@ -41,7 +41,7 @@ fi
 echo "-- Root cleanliness --"
 
 ALLOWED_ROOT_FILES=(README.md CLAUDE.md AGENTS.md GEMINI.md CHEATSHEET.md HANDOFF.md \
-  setup.sh sync.sh test-subagents.sh .gitignore)
+  setup.sh sync.sh test-subagents.sh .gitignore .gitattributes)
 ALLOWED_ROOT_DIRS=(.agents home bin .claude .github .vscode .gemini .codex .copilot docs scripts tasks .git global)
 
 unexpected=0
