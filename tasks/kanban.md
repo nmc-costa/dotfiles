@@ -4,15 +4,20 @@
 - [ ] dotfiles-tsk-hook-antigravity Antigravity hook (inherited hook mechanism)
 - [ ] dotfiles-tsk-systemd-units ensure-tsk-sweep.sh + systemd units, following the existing ensure-*.sh convention
 - [ ] dotfiles-tsk-graph-dependency-edges Add blocked_by dependency edges to rebuild_graph.py's flowchart (needs blocked_by as a list, not prose)
-- [ ] dotfiles-tsk-dispatch-launcher tsk dispatch: launch a session on a provider with the task brief pre-loaded (claude "<p>"/--bg, copilot -i, agy -i) - push side of cross-provider handoff, pull side is dotfiles-tsk-brief
-- [ ] dotfiles-tsk-jsonl-merge-driver Custom git merge driver (merge=union or equivalent) for tasks/*.jsonl so a conflict resolution can never silently drop an append-only line
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
+- [ ] dotfiles-tsk-agent-os-pr2-pr7 Agent-OS unification: PR2-PR7 (docs/AGENT_OS_UNIFICATION_PLAN.md)
+- [ ] dotfiles-tsk-archive-agentic-instructions Archive agentic_instructions repo on GitHub
+- [ ] dotfiles-tsk-antigravity-reverify Re-verify Antigravitys startup file-discovery from inside ~/dotfiles
+- [ ] dotfiles-tsk-agile-workspace-see Agile Workspace roadmap step 1 (See): agtop + Claude Code Langfuse/OTel observability
+- [ ] dotfiles-tsk-agile-workspace-limit Agile Workspace roadmap step 3 (Limit): per-machine limit profiles
+- [ ] dotfiles-tsk-agile-workspace-schedule Agile Workspace roadmap step 4 (Schedule): jobs/*.yaml manifest + systemd timers
 
 ## Planning
 
 ## In Progress
 
 ## Review
+- [ ] dotfiles-tsk-gh-path-recursion Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)
 
 ## Validation
 
@@ -39,8 +44,10 @@
 - [x] dotfiles-tsk-brief brief.py - heartbeat + inbox consumer
 - [x] dotfiles-tsk-task-brief-skill /task-brief skill - thin shell over brief.py
 - [x] dotfiles-tsk-cards-frontmatter L1: markdown+YAML-frontmatter card per task (rebuild_cards.py, generated view, never hand-edited)
+- [x] dotfiles-tsk-dispatch-launcher tsk dispatch: launch a session on a provider with the task brief pre-loaded (claude "<p>"/--bg, copilot -i, agy -i) - push side of cross-provider handoff, pull side is dotfiles-tsk-brief
 - [x] dotfiles-tsk-tasks-root-resolver tasks_root() resolver: one canonical write path for events.jsonl, the CAS lock and every rebuild_*.py (fixes 4 divergent copies + 1 orphaned event)
 - [x] dotfiles-tsk-claim-protocol L2: claim protocol in a separate claims.jsonl -- locked conditional appends, closed role vocabulary, atomic preemption, human preempts swarm
+- [x] dotfiles-tsk-jsonl-merge-driver Custom git merge driver (merge=union or equivalent) for tasks/*.jsonl so a conflict resolution can never silently drop an append-only line
 - [x] dotfiles-handoff-standardization Adopt HANDOFF.md convention (global index + per-repo/subsystem), rename tasks/handoff.md
 
 ## Blocked

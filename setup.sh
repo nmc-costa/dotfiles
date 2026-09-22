@@ -5,11 +5,13 @@ set -euo pipefail
 BASE_DIR="$HOME"
 DRY_RUN=0
 DO_DOTFILES=0
+LINKS_ONLY=0
 
 for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY_RUN=1 ;;
     --dotfiles) DO_DOTFILES=1 ;;
+    --links-only) LINKS_ONLY=1 ;;
     --*) echo "unknown flag: $arg" >&2; exit 1 ;;
     *) BASE_DIR="$arg" ;;
   esac
@@ -53,59 +55,36 @@ clone(){
   git clone "$https" "$target" && echo "cloned via HTTPS: $repo" || echo "failed: $repo"
 }
 
-for r in "${WORK_REPOS[@]}"; do clone "$r" "$WORK_DIR/$r"; done
-for r in "${PROJECTS_REPOS[@]}"; do clone "$r" "$PROJECTS_DIR/$r"; done
+if [[ $LINKS_ONLY -eq 0 ]]; then
+  for r in "${WORK_REPOS[@]}";     do clone "$r" "$WORK_DIR/$r"; done
+  for r in "${PROJECTS_REPOS[@]}"; do clone "$r" "$PROJECTS_DIR/$r"; done
 
-if [[ $DO_DOTFILES -eq 1 ]]; then
-  if [[ $DRY_RUN -eq 1 ]]; then
-    echo "(dry) would setup bare dotfiles from https://github.com/nmc-costa/dotfiles"
-  else
-    git clone --bare "https://github.com/$GITHUB_USER/dotfiles.git" "$HOME/.cfg" || echo "dotfiles clone failed or already present"
-    echo "Add: alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME' to your shell rc, then run: config checkout"
+  if [[ $DO_DOTFILES -eq 1 ]]; then
+    if [[ $DRY_RUN -eq 1 ]]; then
+      echo "(dry) would setup bare dotfiles from https://github.com/nmc-costa/dotfiles"
+    else
+      git clone --bare "https://github.com/$GITHUB_USER/dotfiles.git" "$HOME/.cfg" || echo "dotfiles clone failed or already present"
+      echo "Add: alias config='git --git-dir=$HOME/.cfg/ --work-tree=$HOME' to your shell rc, then run: config checkout"
+    fi
   fi
 fi
 
 # === AGENTS & SKILLS SETUP ===
 
-# Whole-directory symlink — only safe for a directory that is ENTIRELY
-# curated/versioned content, where nothing ever writes live runtime state
-# into it. `.agents/` (skills/instructions/etc.) and `.vscode/` (its one
-# real secret already handled specially via chezmoi+age, see SECRETS.md)
-# both qualify.
-setup_agent_symlinks() {
-  local agent_name=$1
-  local agent_src="$BASE_DIR/dotfiles/.$agent_name"
-  local agent_dest="$BASE_DIR/.$agent_name"
-
-  if [[ ! -d "$agent_src" ]]; then
-    echo "skip: $agent_src does not exist"
-    return
-  fi
-
-  if [[ $DRY_RUN -eq 1 ]]; then
-    echo "(dry) would symlink $agent_src -> $agent_dest"
-    return
-  fi
-
-  if [[ -L "$agent_dest" ]]; then
-    if [[ "$(readlink -f "$agent_dest")" == "$(readlink -f "$agent_src")" ]]; then
-      echo "skip: $agent_dest already symlinked correctly"
-    else
-      echo "relink: $agent_dest pointed elsewhere, updating"
-      ln -sfn "$agent_src" "$agent_dest"
-      echo "symlink: .$agent_name -> $agent_dest"
-    fi
-    return
-  fi
-
-  if [[ -d "$agent_dest" ]]; then
-    local backup="${agent_dest}.backup.$(date +%Y%m%dT%H%M%S)"
-    echo "backup: moving $agent_dest to $backup"
-    mv "$agent_dest" "$backup"
-  fi
-
-  ln -sf "$agent_src" "$agent_dest"
-  echo "symlink: .$agent_name -> $agent_dest"
+# Convert a legacy whole-directory symlink back into a real directory.
+# Idempotent: a real directory or a missing path is left untouched.
+undo_legacy_dir_symlink() {
+  local dest="$BASE_DIR/.$1"
+  [[ -L $dest ]] || { echo "ok:   ~/.$1 is not a legacy symlink"; return 0; }
+  local target; target=$(readlink -f "$dest")
+  echo "migrating: ~/.$1 was a whole-directory symlink -> $target"
+  (( DRY_RUN )) && { echo "(dry) would replace with a real copy"; return 0; }
+  rm "$dest"                       # removes the LINK only, never the target
+  mkdir -p "$dest"
+  # n10: never seed a distributed copy of the write policy. policy/ is the one
+  # .agents subdir that must not exist under ~/.agents (see .agents/policy/README.md).
+  rsync -a --exclude 'policy/' "$target/" "$dest/"
+  echo "ok:   ~/.$1 is now a real directory (sync.sh will reconcile it)"
 }
 
 # File-level symlink — required for a directory that MIXES versioned
@@ -203,10 +182,18 @@ setup_root_symlink() {
 echo ""
 echo "=== Setting up agents and skills ==="
 
-# Setup agent symlinks
-setup_agent_symlinks "agents"
-setup_agent_symlinks "vscode"
-setup_agent_symlinks "dtx-providers"
+# M1/M2: the three whole-directory symlinks are gone.
+#  - "agents": a whole-directory symlink makes ~/.agents and dotfiles/.agents the
+#    same inode tree, so sync.sh's 3-way manifest degenerates (source and dest
+#    hashes are always equal) and every live write by dtx-providers-tui lands in
+#    the git working tree. sync.sh:344-349 already refuses to run in that state;
+#    this removes the thing that creates it.
+#  - "vscode" / "dtx-providers": both are now real directories written by
+#    `chezmoi apply` (§1), which also moves the TUI's generated litellm-config.yaml
+#    and proxy.env out of the git working tree.
+undo_legacy_dir_symlink "agents"
+undo_legacy_dir_symlink "vscode"
+undo_legacy_dir_symlink "dtx-providers"
 
 # All four of these mix versioned config with live runtime state
 # (credentials/session DBs/logs/caches) the same way ~/.claude/ does —
@@ -216,6 +203,7 @@ setup_agent_file_symlink "claude" "CLAUDE.md"
 setup_agent_file_symlink "gemini" "GEMINI.md"
 setup_agent_file_symlink "codex" "AGENTS.md"
 setup_agent_file_symlink "copilot" "copilot-instructions.md"
+setup_agent_file_symlink "cursor" "rules/workspace.mdc"
 
 # Root-level context (~, ~/Projects) — see global/ROOT.CLAUDE.md's own
 # note for why ~/Work/CLAUDE.md is NOT included here: it's copied by hand
@@ -224,6 +212,20 @@ setup_agent_file_symlink "copilot" "copilot-instructions.md"
 setup_root_symlink "$BASE_DIR/dotfiles/global/ROOT.CLAUDE.md" "$BASE_DIR/CLAUDE.md"
 setup_root_symlink "$BASE_DIR/dotfiles/AGENTS.md" "$BASE_DIR/AGENTS.md"
 setup_root_symlink "$BASE_DIR/dotfiles/global/PROJECTS.CLAUDE.md" "$PROJECTS_DIR/CLAUDE.md"
+
+# Register the jsonl-union git merge driver (tasks/git-merge-jsonl-union.py)
+# for tasks/events.jsonl (see .gitattributes). This is local git config,
+# never versioned — a fresh clone's .gitattributes references a driver
+# name that means nothing until this runs, and git silently falls back to
+# its default (unsafe, for an append-only log) textual merge until it
+# does. Idempotent: `git config` overwrites, doesn't duplicate.
+echo ""
+echo "=== Registering tasks/ jsonl-union git merge driver ==="
+git -C "$BASE_DIR/dotfiles" config merge.jsonl-union.name \
+  "JSONL union merge (dedup by event_id, sort by ts) — never silently drops an append-only line"
+git -C "$BASE_DIR/dotfiles" config merge.jsonl-union.driver \
+  "$BASE_DIR/dotfiles/tasks/git-merge-jsonl-union.py %O %A %B"
+echo "registered: merge.jsonl-union driver"
 
 # Sync skills from dotfiles/.agents/skills/ location
 if [[ -d "$BASE_DIR/dotfiles/.agents/skills" ]]; then

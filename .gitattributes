@@ -1,0 +1,12 @@
+# tasks/events.jsonl is an append-only log — a standard textual 3-way
+# merge (or a human/agent resolving a conflict by picking one side) can
+# silently drop a real, already-merged line. This happened for real on
+# 2026-09-21 (commit 61473f7, "auto-resolved: prefer PR branch", dropped
+# dotfiles-tsk-dispatch-launcher's event). tasks/git-merge-jsonl-union.py
+# always resolves a conflict here by taking the union of both sides,
+# deduplicated by event_id and sorted by ts — see that script and
+# setup.sh (which registers the `jsonl-union` driver name via `git
+# config`; a merge driver referenced here without the matching local
+# `git config merge.jsonl-union.driver` falls back to git's default
+# textual merge, silently losing this protection).
+tasks/events.jsonl merge=jsonl-union
