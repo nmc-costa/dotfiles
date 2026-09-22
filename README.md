@@ -48,6 +48,7 @@ dotfiles/
 │                                 #   from .github/copilot-instructions.md above, which is project-level
 ├── docs/                        # Everything not auto-loaded by a tool by convention — see index below
 │   └── SECRETS.md               #   Secrets-management doc (chezmoi + age)
+├── .dtx-providers               # runtime provider secrets and configs (managed via chezmoi -> $HOME)
  HEAD
 ├── global/                      # Home-directory-level CLAUDE.md templates: ROOT.CLAUDE.md -> ~/CLAUDE.md and
 │                                 #   PROJECTS.CLAUDE.md -> ~/Projects/CLAUDE.md are real symlinks (currently set
@@ -83,6 +84,7 @@ dotfiles/
 | `setup.sh` | One-click machine setup: clones repos, creates symlinks, sets up agents. Run from repo root (`./setup.sh`) |
 | `sync.sh` | Distributes **every** `.agents/<subdir>/` (skills, instructions, harnesses, prompts, workflows, validation, automation, providers) to `~/.agents/<subdir>/`, plus `skills/` also to `.claude/skills/` and (with `--system`) the Omarchy system location. Rewritten 2026-09-17 from a destructive `rm -rf dest; cp -r` mirror to a per-file, manifest-based reconciliation (source vs. a last-synced baseline vs. the destination now, tracked in `~/.local/state/dtx-sync/manifest.json`) — a file created *at the destination* (e.g. by a live-installed tool writing there) is never deleted, and a file changed on both sides is flagged as a conflict (`--non-interactive` drops the incoming version beside it as `.incoming-<sha>` instead of picking a side; interactive runs prompt via `gum`). `./sync.sh --pull` copies destination-only/locally-edited files back into the dotfiles source, ready to commit. See `.agents/harnesses/PROVIDERS.md` for the motivating case. Name kept for compatibility even though it now syncs more than skills (2026-09-15). Run from repo root (`./sync.sh`) — also runs weekly via a systemd user timer, see `.agents/instructions/workspace-config/standards/` |
 | `test-subagents.sh` | Quick sanity check for subagent setup. Run from repo root (`./test-subagents.sh`) |
+| `.gitattributes` | Git attributes for handling binary/text files and export-ignore rules |
 | `.gitignore` | What never gets committed (real `.vscode/settings.json`, caches, logs, etc.) |
 
 ### Top-level directories
