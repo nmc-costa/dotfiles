@@ -1,5 +1,4 @@
 ## Backlog
-- [ ] dotfiles-tsk-hook-claude-code Claude Code SessionStart hook + versioned settings.json fragment
 - [ ] dotfiles-tsk-cpx-copilot cpx wrapper for Copilot CLI (its own sessionStart hook is broken)
 - [ ] dotfiles-tsk-hook-antigravity Antigravity hook (inherited hook mechanism)
 - [ ] dotfiles-tsk-systemd-units ensure-tsk-sweep.sh + systemd units, following the existing ensure-*.sh convention
@@ -20,6 +19,7 @@
 - [ ] dotfiles-tsk-gh-path-recursion Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)
 
 ## Validation
+- [ ] dotfiles-tsk-hook-claude-code Claude Code SessionStart hook + versioned settings.json fragment
 
 ## Done
 - [x] dotfiles-repo-hygiene-dotfiles Abrir PR: claude/repo-hygiene-dotfiles
