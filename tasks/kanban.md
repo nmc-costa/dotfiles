@@ -10,9 +10,11 @@
 - [ ] dotfiles-tsk-agile-workspace-limit Agile Workspace roadmap step 3 (Limit): per-machine limit profiles
 - [ ] dotfiles-tsk-agile-workspace-schedule Agile Workspace roadmap step 4 (Schedule): jobs/*.yaml manifest + systemd timers
 - [ ] dotfiles-tsk-autolaunch-test dotfiles-tsk-autolaunch-test: Verify dispatch auto-launch across providers
+- [ ] dotfiles-tsk-session-continuation-skill Skill cross-harness para arranque e continuação de sessão (briefing, concorrência PR/worktree, isolamento, convenções e validação)
 
 ## Planning
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
+- [ ] dotfiles-tsk-harness-model-matrix Matriz de especialização de harnesses+modelos e roteamento inteligente por fase (conservação de tokens e dispatch)
 
 ## In Progress
 
