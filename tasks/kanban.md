@@ -10,6 +10,7 @@
 - [ ] dotfiles-tsk-agile-workspace-limit Agile Workspace roadmap step 3 (Limit): per-machine limit profiles
 - [ ] dotfiles-tsk-agile-workspace-schedule Agile Workspace roadmap step 4 (Schedule): jobs/*.yaml manifest + systemd timers
 - [ ] dotfiles-tsk-autolaunch-test dotfiles-tsk-autolaunch-test: Verify dispatch auto-launch across providers
+- [ ] dotfiles-tsk-sweep-validate Test and validate sweep.py end-to-end (never run on this machine yet)
 
 ## Planning
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
