@@ -17,9 +17,9 @@
 
 ## Planning
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
-- [ ] dotfiles-tsk-harness-provider-model-index Build a validated harness x provider x model orchestration index
 
 ## In Progress
+- [ ] dotfiles-tsk-harness-provider-model-index Build a validated harness x provider x model orchestration index
 
 ## Review
 - [ ] dotfiles-tsk-gh-path-recursion Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)
