@@ -13,11 +13,11 @@
 - [ ] dotfiles-tsk-sweep-validate Test and validate sweep.py end-to-end (never run on this machine yet)
 - [ ] dotfiles-tsk-card-priority Add priority levels (P0-P3) to tasks/ cards
 - [ ] dotfiles-tsk-recurring-cards Recurring cards: spawn new task instances on a cadence
-- [ ] dotfiles-tsk-harness-provider-model-index Build a validated harness x provider x model orchestration index
 - [ ] dotfiles-tsk-task-brief-assistant Upgrade /task-brief into a full tasks/ management assistant
 
 ## Planning
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
+- [ ] dotfiles-tsk-harness-provider-model-index Build a validated harness x provider x model orchestration index
 
 ## In Progress
 
