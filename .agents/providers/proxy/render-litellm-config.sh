@@ -1,11 +1,12 @@
 #!/bin/bash
-# Regenerates ~/.dtx-providers/litellm-config.yaml from the provider registry.
+# Regenerates ~/.custom_providers/litellm-config.yaml from the provider registry.
 # Never edit that YAML by hand -- it is always overwritten by this script, and it DOES
 # contain literal upstream API keys (LiteLLM is the piece that actually talks to each
 # provider's real backend). That's expected, same as .vscode/settings.json in this repo
-# (see docs/SECRETS.md): ~/.dtx-providers/ lives inside ~/dotfiles/.dtx-providers/ but is
-# gitignored, never committed. Clients (Claude Code, Codex CLI) only ever see the proxy's
-# own local master key, never the upstream provider keys.
+# (see docs/SECRETS.md): ~/.custom_providers/ is a real directory at $HOME, written by
+# chezmoi from the encrypted source in ~/dotfiles/.chezmoi-source/ -- never committed in
+# plaintext. Clients (Claude Code, Codex CLI) only ever see the proxy's own local master
+# key, never the upstream provider keys.
 
 set -euo pipefail
 # Set before any file is created in this script -- this whole directory holds

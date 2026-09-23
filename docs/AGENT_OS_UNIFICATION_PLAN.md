@@ -306,6 +306,20 @@ become real chezmoi-written directories, moving `dtx-providers-tui`'s generated
 `litellm-config.yaml` (which embeds a real upstream key) and `proxy.env` out of the git
 working tree.
 
+> **Errata (2026-09-23):** the `sourceDir = ".../dotfiles/home"` path above and every
+> `~/.dtx-providers` reference on this page describe this decision as originally
+> executed by PR1, but are no longer the live paths — `home/` was renamed to
+> `.chezmoi-source/` and the provider-secret subdirectory moved from
+> `private_dot_dtx-providers/` to `private_dot_custom_providers/` (decrypting to
+> `~/.custom_providers/dtx_providers.env`, not `~/.dtx-providers/secrets.env`). Neither
+> rename is reflected throughout the rest of this historical section — treat
+> `docs/SECRETS.md` as the current source of truth for these paths, not this page. The
+> rename exists because `home/` was never actually justified in writing anywhere
+> (confirmed by re-reading this entire plan and PR1's own commit message) and collided
+> semantically with `$HOME`/`/home/` — see `docs/SECRETS.md`'s "Porque `.chezmoi-source/`
+> e não `home/`" section for the full reasoning, written specifically so this doesn't
+> happen a third time.
+
 ### Exit plan (backing out of chezmoi)
 
 1. `chezmoi apply` — materialise everything.

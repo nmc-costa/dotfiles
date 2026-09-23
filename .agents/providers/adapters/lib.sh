@@ -4,8 +4,8 @@
 DTX_PROVIDERS_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 DTX_PROVIDERS_REGISTRY="$DTX_PROVIDERS_DIR/registry"
 DTX_PROVIDERS_HARNESSES="$DTX_PROVIDERS_DIR/harnesses"
-DTX_PROVIDERS_SECRETS="${DTX_PROVIDERS_SECRETS:-$HOME/.dtx-providers/secrets.env}"
-DTX_PROVIDERS_RUNTIME="$HOME/.dtx-providers"
+DTX_PROVIDERS_SECRETS="${DTX_PROVIDERS_SECRETS:-$HOME/.custom_providers/dtx_providers.env}"
+DTX_PROVIDERS_RUNTIME="$HOME/.custom_providers"
 
 dtx_fail() {
   echo "dtx-providers: $*" >&2
