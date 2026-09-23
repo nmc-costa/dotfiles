@@ -33,11 +33,12 @@ installs may have changed.
 |---|---|---|---|---|---|
 | 1 | Claude Code (`claude`) | Yes (this session) | **Already paid** — Claude Pro subscription | Sonnet 5 / Opus 5 per `/config` | Default for anything non-trivial: multi-file changes, planning, this repo's own `tasks/` orchestration. Dispatchable by `tasks/dispatch.py`. |
 | 2 | Copilot CLI (`copilot`) | Yes | **Already paid** — Copilot Pro subscription | GitHub's current default (check `copilot` itself, not `gh copilot` — no `gh copilot` extension is installed here, this is the standalone CLI) | Quick terminal lookups: syntax, regex, one-off commands — the "google of the terminal" case from the owner's own framing, without touching a metered key. Dispatchable by `tasks/dispatch.py`. |
-| 3 | OpenCode (`opencode`) | Yes (mise, v1.18.31) | Free if pointed at a local Ollama model; **needs a paid key** if pointed at a cloud model via OpenRouter — don't, per the constraint above, unless a specific cloud model is genuinely required | A local Ollama model, once one is actually pulled (none are pulled on this machine yet — `ollama list` errors, daemon isn't running) | Local/offline coding once Ollama has a model pulled and running. Not yet usable here as shipped — needs setup first (see Gaps). |
-| 4 | Pi (`pi`) | Yes (mise, v0.85.1) | Free, 100% local (Ollama/LM Studio) | A local quantized coder model, once pulled | Same local/offline niche as OpenCode above — also blocked on Ollama actually having a model today. |
-| 5 | `dtx-glm53-flash` (via LiteLLM proxy, reachable from `claude-code`/`codex`/`crush`/`gemini-cli`/`opencode`/`antigravity-cli` adapters) | Registered (`.agents/providers/registry/dtx-glm53-flash.json`) | **Unconfirmed** — DTx Colab's own hosted endpoint; whether it's metered against the owner personally isn't established here. Confirm before relying on it daily. | `zai-org/GLM-5.3-Flash` (reasoning, 262k context) | Once cost is confirmed: a reasoning-heavy task where Claude Pro's usage limits are a concern. Until confirmed, don't default to it. |
-| 6 | `omp` | Yes (`~/.local/bin/omp`) | Depends which backend it's pointed at — not itself a model provider, routes to others | N/A — inherits whichever harness/provider it wraps | Not enough here to place it — no docs found in this repo describing its actual setup. Needs its own verification pass before it earns a ranked slot. |
-| 7 | DeepSeek Harness (`dsh`) | Binary installed (mise, `@deepseek-ai/dsh` 0.1.5-rc.1) | N/A — integration unverified | N/A | **Do not use for real work yet.** `.agents/harnesses/deepskee.md` states, verbatim: "Status: template → needs verification." The binary exists; nothing confirms it's wired into this workspace's skills/instructions. |
+| 3 | Antigravity CLI (`agy`) / Gemini CLI (`gemini`) | Yes — `agy` 1.2.9 at `~/.local/bin/agy`, `gemini` 0.60.0 via mise. Dispatchable by `tasks/dispatch.py` (`PROVIDER_BINARIES["agy"]`), same as Claude/Copilot. | **Unconfirmed** — no entry under `.agents/providers/registry/`, and `.agents/harnesses/antigravity.md` / `gemini.md` both flag their own plumbing as only partially verified. Confirm your actual Google/Gemini plan before relying on it daily. | Not established from here — `.agents/harnesses/gemini.md` explicitly warns an earlier integration guide invented a fictional Gemini API setup. Don't trust a specific model name until re-verified against the CLI's own config/`--model` output. | Large-context scaffolding or codebase surveys once cost and plumbing are confirmed (see "Phase-routing guidance" below). Wired into this repo's own dispatch tool, unlike rows 7/8 below, but treat as unverified until the Gaps section closes. |
+| 4 | OpenCode (`opencode`) | Yes (mise, v1.18.31) | Free if pointed at a local Ollama model; **needs a paid key** if pointed at a cloud model via OpenRouter — don't, per the constraint above, unless a specific cloud model is genuinely required | A local Ollama model, once one is actually pulled (none are pulled on this machine yet — `ollama list` errors, daemon isn't running) | Local/offline coding once Ollama has a model pulled and running. Not yet usable here as shipped — needs setup first (see Gaps). |
+| 5 | Pi (`pi`) | Yes (mise, v0.85.1) | Free, 100% local (Ollama/LM Studio) | A local quantized coder model, once pulled | Same local/offline niche as OpenCode above — also blocked on Ollama actually having a model today. |
+| 6 | `dtx-glm53-flash` (via LiteLLM proxy, reachable from `claude-code`/`codex`/`crush`/`gemini-cli`/`opencode`/`antigravity-cli` adapters) | Registered (`.agents/providers/registry/dtx-glm53-flash.json`) | **Unconfirmed** — DTx Colab's own hosted endpoint; whether it's metered against the owner personally isn't established here. Confirm before relying on it daily. | `zai-org/GLM-5.3-Flash` (reasoning, 262k context) | Once cost is confirmed: a reasoning-heavy task where Claude Pro's usage limits are a concern. Until confirmed, don't default to it. |
+| 7 | `omp` | Yes (`~/.local/bin/omp`) | Depends which backend it's pointed at — not itself a model provider, routes to others | N/A — inherits whichever harness/provider it wraps | Not enough here to place it — no docs found in this repo describing its actual setup. Needs its own verification pass before it earns a ranked slot. |
+| 8 | DeepSeek Harness (`dsh`) | Binary installed (mise, `@deepseek-ai/dsh` 0.1.5-rc.1) | N/A — integration unverified | N/A | **Do not use for real work yet.** `.agents/harnesses/deepskee.md` states, verbatim: "Status: template → needs verification." The binary exists; nothing confirms it's wired into this workspace's skills/instructions. |
 
 **Explicitly not installed / not configured on this machine — don't
 recommend spending on these:** `aider` (no binary found anywhere), a
@@ -45,12 +46,53 @@ standalone DeepSeek API key, an Anthropic API key separate from the Claude
 Pro plan, OpenRouter credits. These appeared in an earlier draft (see
 Appendix) but aren't real here.
 
+## Phase-routing guidance (folded in from a separate Antigravity-authored draft)
+
+A second document — `.agents/instructions/workspace-config/harness-matrix.instructions.md`
+on branch `antigravity/harness-model-matrix` — was drafted independently by
+the Antigravity harness to answer a related but distinct question: not
+"which harness/model is available and paid-for" (this file's job above),
+but "which harness fits which `tasks/` Kanban phase." Per the owner's
+2026-09-23 decision, that content is folded in here as one canonical
+document instead of being kept as two diverging files. The routing logic
+below is preserved from that draft; the specific model names it used
+(`Claude 3.7 Sonnet`, `o3-mini`, `GPT-4o-mini`) didn't match verified state
+and have been corrected against the Ranked index above or removed where
+nothing here confirms them. **Don't merge
+`origin/antigravity/harness-model-matrix`'s copy of that instructions file
+separately** — that would reintroduce the divergence this section closes;
+`.agents/instructions/workspace-config/harness-matrix.instructions.md` now
+just points back here.
+
+### Recommended harness by task phase
+
+| Phase | Cognitive profile | Recommended harness | Model (per Ranked index above) | Focus |
+|---|---|---|---|---|
+| `planning` | Deep multi-step reasoning, architectural decomposition | Claude Code (`claude`) | Sonnet 5 / Opus 5 | Technical design, task breakdown, boundary definition |
+| `in_progress` — sensitive | Concurrency logic, CAS protocols, core multi-file refactors | Claude Code (`claude`) | Sonnet 5 | Critical algorithm implementation, core invariants |
+| `in_progress` — scaffolding | Boilerplate, broad exploration, large-context ingestion | Antigravity CLI (`agy`) | Unconfirmed — see row 3 above; verify cost/plumbing before dispatching real work here | Rapid implementation once verified |
+| `review` | Adversarial review, security/standards audit | Claude Code, clean session (no author context) | Sonnet 5 / Opus 5 | Unbiased critique |
+| `validation` | Formal verification, edge-case probing, CAS validation (`--expect-last-event-id`) | Claude Code (`claude`) | Sonnet 5 | Regression testing, CAS gating enforcement |
+| Git/maintenance hygiene | Mechanical merge conflicts, branch sync, formatting | Copilot CLI (`copilot`) | GitHub's current default — see row 2 above | Never spend a premium reasoning model on this, see guardrail below |
+
+### Token-conservation guardrails
+
+1. Claude Code is for `planning` and sensitive `in_progress`/`validation` work. If a session is about to do large-scale scaffolding or boilerplate, prefer handing off to Antigravity (`agy`) instead of spending Claude Pro usage on it — once Antigravity's plumbing/cost are confirmed (see Gaps).
+2. **Scout & Striker:** use a large-context harness to survey a big codebase or log set and produce a short brief, then hand that brief — not the raw material — to Claude Code to write the actual patch.
+3. Never spend a premium reasoning session resolving a mechanical git conflict or running a formatting pass — that's what Copilot CLI or a plain script is for.
+
+### Inter-harness handoff (already built in this repo, not aspirational)
+
+- Push-based handoff: `python3 tasks/dispatch.py --task-id <id> --provider <claude|copilot|agy> --launch` (confirmed in `tasks/dispatch.py`'s `PROVIDER_BINARIES`).
+- Context isolation: hand off a synthetic brief via `tasks/brief.py --prompt-only --task-id <task-id>`, never a raw transcript.
+- Worktree isolation: each task's implementation runs in its own git worktree, never shared across concurrent sessions — see `dotfiles-tsk-claim-protocol` (done) for the claim mechanism that enforces this.
+
 ## Per-machine hardware
 
 - **`omarchy`** (this machine, verified 2026-09-23): Intel Iris Xe
   **integrated** graphics only (`lspci`) — no discrete GPU. 38GB total RAM
   (`free -h`). This is a CPU-only box for local inference: any local model
-  (rows 3/4 above) needs to run on CPU via Ollama/LM Studio, favor a small
+  (rows 4/5 above) needs to run on CPU via Ollama/LM Studio, favor a small
   quantized model (7B class, Q4) over anything larger, and expect it to be
   slower than a GPU box. This matches the profile an earlier draft (see
   Appendix) called "Lenovo E14" — **not** the "RTX 3070 Ti 8GB" desktop
@@ -73,6 +115,12 @@ Appendix) but aren't real here.
 3. The `dtx-glm53-flash` endpoint's real cost to the owner is unconfirmed
    — resolve this before treating it as a safe default for anything.
 4. The RTX 3070 Ti machine's row is unverified from here (see above).
+5. Antigravity CLI / Gemini CLI (row 3): actual plan/cost and exact model
+   tier are unconfirmed — no `.agents/providers/registry/` entry exists for
+   it, and its own harness docs (`.agents/harnesses/antigravity.md`,
+   `gemini.md`) flag the integration as only partially verified. Don't
+   dispatch real scaffolding work to it via the phase-routing table above
+   until this closes.
 
 ## Appendix: owner's original draft (unverified / wrong-machine, kept for reference only)
 
