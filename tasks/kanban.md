@@ -20,6 +20,7 @@
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
 
 ## In Progress
+- [ ] dotfiles-tsk-gh-path-recursion-verify Investigate + fix real root cause of ~/.local/bin PATH duplication (gh wrapper recursion fix was incomplete)
 
 ## Review
 - [ ] dotfiles-tsk-gh-path-recursion Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)
