@@ -45,9 +45,14 @@ repo — see `docs/SECRETS.md`, same identity/recipient. `destDir=$HOME`, so
 `~/.custom_providers/dtx_providers.env` — never a symlink back into
 `~/dotfiles/`, and never committed in plaintext. The encrypted source lives
 at `~/dotfiles/.chezmoi-source/private_dot_custom_providers/
-encrypted_dtx_providers.env.age` (2026-09-23: renamed from the old
+encrypted_private_dtx_providers.env.age` (2026-09-23: renamed from the old
 `home/private_dot_dtx-providers/` path — see `docs/SECRETS.md`'s
-"Porque `.chezmoi-source/` e não `home/`" section for why).
+"Porque `.chezmoi-source/` e não `home/`" section for why). Note the
+double `encrypted_`/`private_` prefix on the filename itself, not just the
+parent directory — chezmoi applies `0600` file permissions from a
+`private_` prefix on the file's own segment, and dropping it (as an
+earlier pass of this rename briefly did) silently degrades the decrypted
+file to `0644`.
 
 ## Per-harness reality (verified 2026-09-17, not assumed)
 
