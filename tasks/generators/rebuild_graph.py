@@ -37,15 +37,18 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-SCRIPT_DIR = Path(__file__).parent
+import os
+
+SCRIPT_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(SCRIPT_DIR))
 from lifecycle import CREATED_TYPES, PHASE_CHANGED_TYPES, PHASES, project, tasks_root  # noqa: E402
 from rebuild_view import payload_get  # noqa: E402
 
 TASKS_DIR = tasks_root()
+OUT_DIR = Path(os.environ.get("TASKS_OUTPUT_DIR", str(TASKS_DIR)))
 EVENTS_FILE = TASKS_DIR / "events.jsonl"
-MD_FILE = TASKS_DIR / "roadmap.md"
-MMD_FILE = TASKS_DIR / "roadmap.mmd"
+MD_FILE = OUT_DIR / "roadmap.md"
+MMD_FILE = OUT_DIR / "roadmap.mmd"
 
 # fill / stroke per phase — distinct colors so the flowchart reads at a
 # glance; order follows lifecycle.PHASES (pipeline phases, then the two
@@ -178,12 +181,17 @@ def render_md(flowchart_src, timeline_src):
 
 
 def main():
-    # Thin wrapper: call generators/rebuild_graph.py to keep generators/ as source of truth
-    import os
-    import subprocess
-    script = Path(__file__).parent / "generators" / "rebuild_graph.py"
-    env = os.environ.copy()
-    subprocess.check_call(["python3", str(script)], env=env)
+    events = load_events()
+    tasks = project(events)
+    task_project = collect_projects(events)
+
+    flowchart_src = build_flowchart(tasks, task_project)
+    timeline_src = build_timeline(events)
+
+    MD_FILE.write_text(render_md(flowchart_src, timeline_src), encoding="utf-8")
+    MMD_FILE.write_text(flowchart_src, encoding="utf-8")
+    print(f"wrote {MD_FILE} and {MMD_FILE} ({len(tasks)} tasks, "
+          f"{len({task_project.get(t, 'unknown') for t in tasks})} projects, from {len(events)} events)")
 
 
 if __name__ == "__main__":

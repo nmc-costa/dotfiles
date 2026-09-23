@@ -46,6 +46,7 @@ dotfiles/
 ├── .copilot/                    # GitHub Copilot CLI global config; only copilot-instructions.md is real here
 │                                 #   (file-symlinked to ~/.copilot/copilot-instructions.md by setup.sh) — distinct
 │                                 #   from .github/copilot-instructions.md above, which is project-level
+├── .agy/                        # Antigravity CLI notes — AGY.md documents the harness-prefixed branch-naming policy
 ├── docs/                        # Everything not auto-loaded by a tool by convention — see index below
 │   └── SECRETS.md               #   Secrets-management doc (chezmoi + age)
 ├── global/                      # Home-directory-level CLAUDE.md templates: ROOT.CLAUDE.md -> ~/CLAUDE.md and

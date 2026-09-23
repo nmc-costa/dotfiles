@@ -62,7 +62,7 @@ echo "-- Root cleanliness --"
 
 ALLOWED_ROOT_FILES=(README.md CLAUDE.md AGENTS.md GEMINI.md CHEATSHEET.md HANDOFF.md \
   setup.sh sync.sh test-subagents.sh .gitignore .gitattributes)
-ALLOWED_ROOT_DIRS=(.agents .chezmoi-source bin .claude .github .vscode .gemini .codex .copilot docs scripts tasks .git global)
+ALLOWED_ROOT_DIRS=(.agents .chezmoi-source bin .claude .github .vscode .gemini .codex .copilot .agy docs scripts tasks .git global)
 
 unexpected=0
 while IFS= read -r entry; do

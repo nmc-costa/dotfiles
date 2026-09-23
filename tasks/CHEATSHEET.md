@@ -13,7 +13,7 @@ orchestration layer — partially built, see below). This file is only the
 | `append_event.py` | Create a task, or write a raw event. The only way in. |
 | `move_task.py` | Move a task to a new phase — optionally with metrics and/or a handoff note. |
 | `rebuild_kanban.py` | Regenerate `kanban.md` from `events.jsonl` (tuiboard format). Run automatically by `move_task.py`. |
-| `rebuild_cards.py` | Regenerate one YAML-frontmatter card per task under `tasks/cards/`. Run automatically by `move_task.py`. |
+| `rebuild_cards.py` | Regenerate one YAML-frontmatter card per task under `tasks/cards/` (generators live in `tasks/generators/` and accept `TASKS_OUTPUT_DIR`). Run automatically by `move_task.py`. |
 | `rebuild_metrics.py` | Regenerate `metrics.md`. Run automatically by `move_task.py` when metrics are given. |
 | `rebuild_view.py` | Regenerate `board.md` (older flat-table view, pre-dates the 6-phase model). |
 | `sweep.py` | Detect `sla_expired`/`blocked_too_long` facts, raise `notification.raised` events. Run it periodically yourself — no systemd timer yet. |
