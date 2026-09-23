@@ -13,18 +13,19 @@
 - [ ] dotfiles-tsk-sweep-validate Test and validate sweep.py end-to-end (never run on this machine yet)
 - [ ] dotfiles-tsk-card-priority Add priority levels (P0-P3) to tasks/ cards
 - [ ] dotfiles-tsk-recurring-cards Recurring cards: spawn new task instances on a cadence
-- [ ] dotfiles-tsk-provider-copilot-cli Adapter de provider para GitHub Copilot CLI (BYOK nativo via COPILOT_PROVIDER_BASE_URL/API_KEY/COPILOT_MODEL, sem proxy)
-- [ ] dotfiles-tsk-provider-vscode-copilot-chat Registar GLM-5.3-Flash como custom OAI model no VS Code Copilot Chat via .vscode/settings.json
 
 ## Planning
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
 - [ ] dotfiles-tsk-task-brief-assistant Upgrade /task-brief into a full tasks/ management assistant
 
 ## In Progress
+- [ ] dotfiles-tsk-verify-setup-skill-gaps Investigate 2 findings from first real run of setup-dotfiles/verify_setup.sh: _templates flagged missing from synced skills dirs, chezmoi status failure
+- [ ] dotfiles-tsk-agent-actor-safety [HIGH PRIORITY] Agents must sign tasks/ events as actor-kind=agent for their own writes, and must not run unguarded git ops on the shared tasks/events.jsonl working tree
 
 ## Review
 - [ ] dotfiles-tsk-gh-path-recursion Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)
 - [ ] dotfiles-tsk-harness-provider-model-index Build a validated harness x provider x model orchestration index
+- [ ] dotfiles-tsk-chezmoi-config-drift Corrigir ~/.config/chezmoi/chezmoi.toml pos-PR1 (destDir=$HOME, sourceDir=home/) + limpar ~/dotfiles/.dtx-providers/ + corrigir PROVIDERS.md e render-litellm-config.sh
 
 ## Validation
 
@@ -57,7 +58,6 @@
 - [x] dotfiles-tsk-claim-protocol L2: claim protocol in a separate claims.jsonl -- locked conditional appends, closed role vocabulary, atomic preemption, human preempts swarm
 - [x] dotfiles-tsk-jsonl-merge-driver Custom git merge driver (merge=union or equivalent) for tasks/*.jsonl so a conflict resolution can never silently drop an append-only line
 - [x] dotfiles-handoff-standardization Adopt HANDOFF.md convention (global index + per-repo/subsystem), rename tasks/handoff.md
-- [x] dotfiles-tsk-chezmoi-config-drift Corrigir ~/.config/chezmoi/chezmoi.toml pos-PR1 (destDir=$HOME, sourceDir=home/) + limpar ~/dotfiles/.dtx-providers/ + corrigir PROVIDERS.md e render-litellm-config.sh
 
 ## Blocked
 
