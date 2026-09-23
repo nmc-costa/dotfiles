@@ -1,3 +1,136 @@
+# Session handoff — 2026-09-23 (v5, supersedes v4 for current session state)
+
+Written because the owner is hitting usage limits and will continue in a
+new session. v4 below (2026-09-21) is now stale for its own Wave 1-3
+content (`tasks/kanban.md` shows far more done than v4 describes) — kept
+for historical detail only, don't treat its "Still pending" list as
+current. This v5 section only covers what changed in *this* session.
+
+## What this session did
+
+Owner asked (in Portuguese) why no card looked open, then requested a
+series of new backlog cards + a design pass, ending in real execution on
+a branch:
+
+- **`dotfiles-tsk-sweep-validate`** (Backlog) — `sweep.py` has never run
+  on this machine (no heartbeat file), needs a real validation pass.
+- **`dotfiles-tsk-card-priority`** / **`dotfiles-tsk-recurring-cards`**
+  (Backlog, second `blocked_by` the first) — design doc at
+  `tasks/plans/priority-and-recurring-cards.md`: P0-P3 priority via a new
+  `task.priority_changed` event + `lifecycle.project_priorities()`, and
+  recurring cards via `tasks/recurring.yaml` + a new `tasks/recur.py`
+  (sibling to `sweep.py`, doesn't require it). Neither implemented yet —
+  design only.
+- **`dotfiles-tsk-harness-provider-model-index`** (**Review**) —
+  **executed**, not just designed. `tasks/harness-provider-model-index.md`
+  written on branch `claude/harness-provider-model-index`, **PR #72 open,
+  not merged**: https://github.com/nmc-costa/dotfiles/pull/72. Built from
+  directly verifying this machine (hostname `omarchy`: Intel iGPU only, no
+  discrete GPU, 38GB RAM, mise-installed CLIs, the real
+  `.agents/providers/registry/`), not from the owner's pasted draft table,
+  which assumed a different (unverified from here) RTX 3070 Ti machine and
+  invented provider options (separate DeepSeek/Anthropic API keys,
+  OpenRouter) that aren't configured in this repo and conflict with the
+  owner's stated constraint: **already pays for Claude Pro + Copilot Pro,
+  wants no new metered spend.**
+- **`dotfiles-tsk-task-brief-assistant`** (Planning, `blocked_by` the
+  index card above) — design recorded on its handoff, not executed:
+  extend `.agents/skills/task-brief/SKILL.md` to add a board-shape
+  summary + harness/model suggestions read from the index file once it
+  exists.
+
+## ⚠️ Conflict risk — check before merging PR #72 or touching the index
+
+**`origin/antigravity/harness-model-matrix`** (a *different* harness —
+Antigravity, not Claude Code — pushed this branch, currently unmerged)
+independently added its own competing file:
+`.agents/instructions/workspace-config/harness-matrix.instructions.md`,
+solving what looks like the same problem as PR #72's
+`tasks/harness-provider-model-index.md`. That branch is based on an old
+point in history (its diff against `main` shows it's missing
+`tasks/generators/`, `tasks/rebuild_*.py`'s current shape, etc. — it
+predates the archive-and-reorg work), so it isn't an active git conflict
+today, but it **is** a real duplicate-effort risk: two harnesses each
+wrote their own "which model for which task" reference without seeing the
+other. **Before merging PR #72 (or doing more work on the index), diff the
+two documents and reconcile — don't let both become the source of truth.**
+
+## Reliability finding: shared-checkout concurrency actually bit this session
+
+This machine runs `tasks/` orchestration with **no per-session isolation**
+for the shared `events.jsonl`/`kanban.md` (by design — `tasks_root()`
+always resolves to the one canonical `~/dotfiles/tasks`, deliberately, so
+a worktree's copy of the scripts never diverges). But that only protects
+the *data path*, not the *shared checkout's HEAD*. During this session:
+
+1. At least **2 `move_task.py` writes were silently dropped** — the
+   command printed success and an `event_id`, but a fresh read of
+   `events.jsonl` moments later showed the line missing. Both were caught
+   by re-reading immediately after every write and retried successfully.
+   Root cause not fully diagnosed — `append_event.py`'s `flock` protects a
+   single append, but nothing serializes "read current state → decide →
+   append" across two concurrent processes, and something (very likely
+   another live session doing its own `tasks/` writes at the same moment)
+   won the race.
+2. **The shared checkout's checked-out branch changed out from under this
+   session mid-work** — HEAD flipped to a branch this session never
+   checked out (`claude/recreate-lost-task-cards`, seemingly another
+   session's own work — its name suggests it may already be addressing
+   this exact class of bug) and back to `main` again, without this session
+   running `git checkout`. A commit meant for `main` landed on the wrong
+   branch as a result; recovered via `git update-ref refs/heads/main
+   <sha>` (moves the ref without touching the then-checked-out branch's
+   working tree — safe, but only because the commit's content happened to
+   be redundant with what the other session would commit anyway).
+3. Multiple other branches/worktrees were active in this same checkout
+   during this session (informational, not further verified):
+   `claude/investigate-gh-path-duplication`,
+   `claude/recreate-lost-task-cards`, `claude/herdr-commander-eval`,
+   `copilot/allow-dtx-providers`, plus `claude/fix-provider-secret-perms`
+   (already merged as PR #71).
+
+**Lesson for the next session**: always re-read an event immediately after
+writing it before trusting `move_task.py`/`append_event.py`'s own success
+message, and check `git branch --show-current` before any commit if
+you suspect concurrent activity in this checkout — don't assume the
+directory you `cd`'d into is still on the branch you last left it on.
+This is itself worth a `tasks/` card (reliability gap, not yet filed as
+one) — see the verification prompt below.
+
+## Kickoff / conflict-check prompt for the next session
+
+```
+Lê tasks/HANDOFF.md, secção "Session handoff — 2026-09-23 (v5)", para
+retomares o contexto de onde ficou a sessão anterior. Antes de continuares
+qualquer trabalho novo, verifica conflitos -- não assumas nada abaixo como
+ainda verdadeiro sem confirmar, há múltiplas sessões a mexer neste
+repositório em paralelo:
+
+1. `gh pr view 72` -- confirma se claude/harness-provider-model-index
+   ainda está aberto/mergeable, e lê tasks/harness-provider-model-index.md
+   atual (pode ter recebido mais commits).
+2. Compara esse ficheiro contra
+   .agents/instructions/workspace-config/harness-matrix.instructions.md na
+   branch origin/antigravity/harness-model-matrix (`git show
+   origin/antigravity/harness-model-matrix:.agents/instructions/workspace-config/harness-matrix.instructions.md`)
+   -- dois documentos escritos por harnesses diferentes (Claude Code vs
+   Antigravity) a tentar resolver o mesmo problema sem se verem um ao
+   outro. Pergunta ao owner qual reconciliar antes de mergear qualquer um.
+3. `cat tasks/kanban.md` -- confirma o estado atual de
+   dotfiles-tsk-harness-provider-model-index (devia estar em Review) e
+   dotfiles-tsk-task-brief-assistant (devia estar em Planning, blocked_by
+   o anterior) -- outra sessão pode tê-los movido entretanto.
+4. `git branch -vv` -- confirma quais das branches concorrentes listadas
+   acima (claude/investigate-gh-path-duplication,
+   claude/recreate-lost-task-cards, claude/herdr-commander-eval,
+   copilot/allow-dtx-providers) ainda têm trabalho por integrar.
+5. Depois de confirmares o acima, diz ao owner o que encontraste e
+   pergunta o que quer fazer a seguir -- não decidas sozinho mergear a PR
+   #72 nem avançar dotfiles-tsk-task-brief-assistant sem essa reconciliação.
+```
+
+---
+
 # Session handoff — 2026-09-21 (v4, supersedes v3)
 
 Snapshot of a session that took the `tasks/` orchestration system from
