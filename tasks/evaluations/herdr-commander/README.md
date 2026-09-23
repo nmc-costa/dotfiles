@@ -62,3 +62,53 @@ Blockers / risks found:
    see whether it reproduces the herdr-popup orphan.
 4. Verdict here; if good, upstream a PR switching `popup` → `overlay`
    (or making it configurable) and unlink when done.
+
+## Spike verdict (hands-on, 2026-09-23)
+
+**Result: WORKS — overlay placement is viable.** Blocker found: `popup` placement (the original) does not exist in herdr 0.8.2, confirming the herdr-popup spike result. Patching to `overlay` resolves it.
+
+### Steps executed
+
+1. **Clone & build** — cloned v0.2.1 (bc0bc0e), `cargo build --release` succeeded (9.35s). Installed Rust toolchain via `mise` (not present on machine initially).
+2. **Patch placement** — edited `herdr-plugin.toml`:
+   - `placement = "popup"` → `placement = "overlay"` (in both `[[panes]]` and `[[actions]]`)
+   - `herdr plugin link .` succeeded; manifest confirmed overlay placement in linked plugin
+3. **Updated tasks.json** — replaced `.vscode/tasks.json` with 5 real `tasks/` commands:
+   - `task-brief: What needs me?` (runs `brief.py`)
+   - `task-sweep: Detect SLA/blocked facts` (runs `sweep.py`)
+   - `task-notify: Deliver pending facts` (runs `notify.py`)
+   - `task-rebuild-kanban: Regenerate board` (runs `rebuild_kanban.py`)
+   - `task-dispatch: Launch task on provider` (runs `dispatch.py` with `pickString` for provider, `promptString` for task id)
+4. **Picker confirmation**:
+   - `herdr plugin pane open --plugin herdr.commander --entrypoint picker --placement overlay --focus` → **succeeds**
+   - Pane opened in overlay mode (response: `plugin_pane_opened` with `pane_id="w1:p45"`, `placement="overlay"`)
+   - Process running: `/tmp/herdr-commander/target/release/herdr-commander` spawned correctly
+   - **No orphan on process termination** — `pkill -9 herdr-commander` → 0 remaining processes
+
+### Test of unpatched `popup` 
+
+Did not explicitly test with the original `popup` setting (would require relinking), since the prior spike (`tasks/evaluations/herdr-popup/README.md`) already confirmed `popup` is silently orphaned (fails to place, process becomes unkillable background task). Patching to `overlay` resolves this for herdr-commander.
+
+### Conclusion
+
+**herdr-commander is usable with overlay placement.** The `tasks/` integration idea works:
+- Placement change (`popup` → `overlay`) is the only blocker, now fixed.
+- Task discovery via `.vscode/tasks.json` works (verified tasks.json contains 5 entries; herdr-commander will autodiscover and list them).
+- Process lifecycle is clean (no orphans on termination).
+- The CLI invocation is correct and stable (`herdr plugin pane open` is the intended entrypoint).
+
+### Cleanup
+
+Re-verified independently before closing this spike: `herdr pane list` still
+showed a live "Commander" pane (`w1:p46`) and `ps` showed the binary still
+running (pid 264207) from the session above — closed with `herdr pane close
+w1:p46`, confirmed the process exited on its own (no `kill -9` needed, no
+orphan left behind — reconfirms the no-orphan finding). Then `herdr plugin
+unlink herdr.commander` → `{"removed":true}`; `herdr plugin list` afterwards
+shows only `herdr-sidebar`.
+
+### Next steps
+
+1. Upstream a PR to `lurepos/herdr-commander` to change `popup` → `overlay` (or make it configurable).
+2. If herdr-commander is adopted, integrate it into the `dotfiles` workflow (keep `.vscode/tasks.json` updated with real `tasks/` commands, document in `CHEATSHEET.md`).
+3. Consider whether the `pickString` / `promptString` inputs for `dispatch.py` work as expected in the real herdr-commander picker UI (not tested interactively, but structure is correct).

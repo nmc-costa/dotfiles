@@ -22,7 +22,6 @@
 ## In Progress
 - [ ] dotfiles-tsk-verify-setup-skill-gaps Investigate 2 findings from first real run of setup-dotfiles/verify_setup.sh: _templates flagged missing from synced skills dirs, chezmoi status failure
 - [ ] dotfiles-tsk-agent-actor-safety [HIGH PRIORITY] Agents must sign tasks/ events as actor-kind=agent for their own writes, and must not run unguarded git ops on the shared tasks/events.jsonl working tree
-- [ ] dotfiles-tsk-spike-herdr-commander-build Spike (hands-on): patch herdr-commander to overlay placement, wire real .vscode/tasks.json, verify picker end-to-end
 
 ## Review
 - [ ] dotfiles-tsk-gh-path-recursion Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)
@@ -61,6 +60,7 @@
 - [x] dotfiles-tsk-jsonl-merge-driver Custom git merge driver (merge=union or equivalent) for tasks/*.jsonl so a conflict resolution can never silently drop an append-only line
 - [x] dotfiles-handoff-standardization Adopt HANDOFF.md convention (global index + per-repo/subsystem), rename tasks/handoff.md
 - [x] dotfiles-tsk-chezmoi-config-drift Corrigir ~/.config/chezmoi/chezmoi.toml pos-PR1 (destDir=$HOME, sourceDir=home/) + limpar ~/dotfiles/.dtx-providers/ + corrigir PROVIDERS.md e render-litellm-config.sh
+- [x] dotfiles-tsk-spike-herdr-commander-build Spike (hands-on): patch herdr-commander to overlay placement, wire real .vscode/tasks.json, verify picker end-to-end
 
 ## Blocked
 

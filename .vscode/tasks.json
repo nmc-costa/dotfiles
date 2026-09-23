@@ -1,50 +1,88 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // Kedro tasks
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Install",
+            "label": "task-brief: What needs me?",
             "type": "shell",
-            "command": "/path/to/kedro/script",
+            "command": "python3",
             "args": [
-                "install"
-            ]
-        },
-        {
-            "label": "Test",
-            "group": "test",
-            "type": "shell",
-            "command": "/path/to/kedro/script",
-            "args": [
-                "test"
-            ]
-        },
-        {
-            "label": "Run",
-            "type": "shell",
-            "command": "/path/to/kedro/script",
-            "args": [
-                "run"
-            ]
-        },
-
-        // This is the default build task
-        {
-            "label": "Package",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "type": "shell",
-            "command": "/path/to/kedro/script",
-            "args": [
-                "package"
+                "tasks/brief.py"
             ],
-            // Will run `Test` before packaging
-            "dependsOn": [
-                "Test"
-            ]
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "task-sweep: Detect SLA/blocked facts",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "tasks/sweep.py"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "task-notify: Deliver pending facts",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "tasks/notify.py"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "task-rebuild-kanban: Regenerate board",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "tasks/rebuild_kanban.py"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "task-dispatch: Launch task on provider",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "tasks/dispatch.py",
+                "--task-id",
+                "${input:taskId}",
+                "--provider",
+                "${input:provider}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "taskId",
+            "type": "promptString",
+            "description": "Task ID (e.g., dotfiles-tsk-spike-herdr-commander-build)",
+            "default": ""
+        },
+        {
+            "id": "provider",
+            "type": "pickString",
+            "description": "Provider",
+            "options": [
+                "claude",
+                "copilot",
+                "agy"
+            ],
+            "default": "claude"
         }
     ]
 }
