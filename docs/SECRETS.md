@@ -15,8 +15,12 @@ apply`, both gitignored at their destination:
    `dtx-providers-tui`), consumed by the `.agents/providers/` adapters/proxy
    so opencode, Crush, Codex CLI, and Claude Code can all use it too.
    Encrypted at `.chezmoi-source/private_dot_custom_providers/
-   encrypted_dtx_providers.env.age`. See `.agents/harnesses/PROVIDERS.md` for
-   what consumes it.
+   encrypted_private_dtx_providers.env.age` — note the `private_` prefix on
+   the *file* too, not just the parent directory: that's what gives the
+   decrypted file `0600` permissions, and dropping it (as a first pass of
+   this rename briefly did, caught and fixed the same day) silently
+   degrades it to `0644`. See `.agents/harnesses/PROVIDERS.md` for what
+   consumes it.
 
 Both follow the exact same mechanism described below — this doc was written
 for secret #1 and generalizes directly to #2 (just a different source/target

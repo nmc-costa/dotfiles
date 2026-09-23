@@ -30,7 +30,7 @@ dotfiles/
 │   └── workflows/                #   Agent personas / init workflows
 ├── .chezmoi-source/              # chezmoi source dir (destDir=$HOME) — the 2 encrypted secrets
 │   ├── dot_vscode/encrypted_settings.json.age
-│   └── private_dot_custom_providers/encrypted_dtx_providers.env.age
+│   └── private_dot_custom_providers/encrypted_private_dtx_providers.env.age
 ├── bin/                          # Human-run scripts, never called by bootstrap/sync (see CLAUDE.md policy notes)
 │   └── dotfiles-clone-repos      #   Thin wrapper: setup.sh WITHOUT --links-only (clones ~/Work, ~/Projects repos)
 ├── .claude/                     # Claude Code global config; only CLAUDE.md is real here (file-symlinked to
