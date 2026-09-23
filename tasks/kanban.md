@@ -14,6 +14,7 @@
 - [ ] dotfiles-tsk-card-priority Add priority levels (P0-P3) to tasks/ cards
 - [ ] dotfiles-tsk-recurring-cards Recurring cards: spawn new task instances on a cadence
 - [ ] dotfiles-tsk-spike-herdr-commander Spike: evaluate herdr-commander (lurepos) as herdr palette for tasks/ commands
+- [ ] dotfiles-tsk-spike-herdr-commander-build Spike (hands-on): patch herdr-commander to overlay placement, wire real .vscode/tasks.json, verify picker end-to-end
 
 ## Planning
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
