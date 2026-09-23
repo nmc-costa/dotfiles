@@ -40,9 +40,14 @@ other `.agents/` subdir (`./sync.sh`), which also symlinks the TUI itself to
 
 The actual secret (API key) is never in `registry/`. It's encrypted with the
 same `chezmoi` + `age` setup already used for `.vscode/settings.json` in this
-repo — see `docs/SECRETS.md`, same identity/recipient, same
-"decrypted output lives inside `~/dotfiles/`, gitignored, symlinked into
-`$HOME`" pattern (`~/.dtx-providers` → `~/dotfiles/.dtx-providers`).
+repo — see `docs/SECRETS.md`, same identity/recipient. `destDir=$HOME`, so
+`chezmoi apply` writes the decrypted secret directly to a real directory,
+`~/.custom_providers/dtx_providers.env` — never a symlink back into
+`~/dotfiles/`, and never committed in plaintext. The encrypted source lives
+at `~/dotfiles/.chezmoi-source/private_dot_custom_providers/
+encrypted_dtx_providers.env.age` (2026-09-23: renamed from the old
+`home/private_dot_dtx-providers/` path — see `docs/SECRETS.md`'s
+"Porque `.chezmoi-source/` e não `home/`" section for why).
 
 ## Per-harness reality (verified 2026-09-17, not assumed)
 
@@ -65,14 +70,14 @@ current docs/source before assuming the adapter is just buggy.
 One shared local LiteLLM proxy, `dtx-litellm-proxy.service` (systemd --user,
 `127.0.0.1:4444`), generated from the *entire* provider registry by
 `proxy/render-litellm-config.sh` — never hand-edit
-`~/.dtx-providers/litellm-config.yaml`, it's always regenerated.
+`~/.custom_providers/litellm-config.yaml`, it's always regenerated.
 
 Requires `litellm[proxy]` on `PATH` (not installed by this tooling —
 `pipx install "litellm[proxy]"` yourself first). `proxy/ensure-proxy.sh`
 renders the config, installs/refreshes the unit, and restarts it; it's called
 automatically by `codex.sh`/`claude-code.sh`/`gemini-cli.sh` on `apply`.
 
-The proxy's own local master key (`~/.dtx-providers/proxy.env`,
+The proxy's own local master key (`~/.custom_providers/proxy.env`,
 machine-generated, never synced) is what Codex/Claude Code/Gemini CLI present
 to the *local* proxy — the real upstream provider key lives only inside
 `litellm-config.yaml` server-side, which the proxy needs in order to actually
@@ -81,7 +86,7 @@ talk to the provider.
 ## Adding a new provider
 
 `dtx-providers-tui add-provider` — prompts for baseURL/key/model, writes
-`registry/<id>.json`, stores the key in `~/.dtx-providers/secrets.env`, and
+`registry/<id>.json`, stores the key in `~/.custom_providers/dtx_providers.env`, and
 reminds you to `chezmoi add --encrypt` it so it survives a fresh machine (see
 `docs/SECRETS.md`).
 

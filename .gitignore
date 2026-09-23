@@ -15,10 +15,14 @@
 !.vscode/tasks.json
 .idea/
 
-# dtx-providers: secrets.env (chezmoi+age, see docs/SECRETS.md) plus everything
-# else here is generated locally (litellm-config.yaml embeds a real upstream API
-# key server-side, proxy.env is a locally-generated token) — never commit any of it.
-.dtx-providers/*
+# custom_providers: dtx_providers.env (chezmoi+age, see docs/SECRETS.md) plus
+# everything else here is generated locally (litellm-config.yaml embeds a real
+# upstream API key server-side, proxy.env is a locally-generated token) — never
+# commit any of it. Defense-in-depth: this should never exist inside the repo
+# at all (it's a $HOME-level chezmoi destination, see docs/SECRETS.md), but a
+# misconfigured local chezmoi.toml has produced exactly that before (2026-09-21
+# — see docs/SECRETS.md's "Porque .chezmoi-source/ e não home/" section).
+.custom_providers/*
 *.sublime-*
 
 # Python

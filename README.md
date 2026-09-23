@@ -28,9 +28,9 @@ dotfiles/
 │   ├── skills/                  #   Agent skills — 1 real copy per skill (archi, diagnose-crash, omarchy, projecthits, ...)
 │   ├── validation/               #   Real validation outputs, keyed by skill
 │   └── workflows/                #   Agent personas / init workflows
-├── home/                         # chezmoi source dir (destDir=$HOME) — the 2 encrypted secrets
+├── .chezmoi-source/              # chezmoi source dir (destDir=$HOME) — the 2 encrypted secrets
 │   ├── dot_vscode/encrypted_settings.json.age
-│   └── private_dot_dtx-providers/encrypted_private_secrets.env.age
+│   └── private_dot_custom_providers/encrypted_dtx_providers.env.age
 ├── bin/                          # Human-run scripts, never called by bootstrap/sync (see CLAUDE.md policy notes)
 │   └── dotfiles-clone-repos      #   Thin wrapper: setup.sh WITHOUT --links-only (clones ~/Work, ~/Projects repos)
 ├── .claude/                     # Claude Code global config; only CLAUDE.md is real here (file-symlinked to
@@ -48,7 +48,6 @@ dotfiles/
 │                                 #   from .github/copilot-instructions.md above, which is project-level
 ├── docs/                        # Everything not auto-loaded by a tool by convention — see index below
 │   └── SECRETS.md               #   Secrets-management doc (chezmoi + age)
-├── .dtx-providers               # runtime provider secrets and configs (managed via chezmoi -> $HOME)
 ├── global/                      # Home-directory-level CLAUDE.md templates: ROOT.CLAUDE.md -> ~/CLAUDE.md and
 │                                 #   PROJECTS.CLAUDE.md -> ~/Projects/CLAUDE.md are real symlinks (currently set
 │                                 #   up manually, not yet by setup.sh); WORK.CLAUDE.template.md is copied and
@@ -95,7 +94,7 @@ dotfiles/
 | `.github/` | GitHub config and CI; several subfolders (`automation/`, `CONTRIBUTING.md`, `harnesses/`, `instructions/`, `prompts/`) are symlinks into `.agents/` so Copilot/Actions read the same source of truth; `workflows/` holds real GitHub Actions (e.g. `vscode-docs-monitor.yml`) |
 | `.vscode/` | VS Code config for opening this repo as a workspace (`launch.json`, `tasks.json`, `github.code-workspace`, tracked). `settings.json` (gitignored) is **no longer chezmoi-managed here** as of PR1 — the real API key now lives only at `~/.vscode/settings.json` (`destDir=$HOME`); see `docs/SECRETS.md` |
 | `.gemini/`, `.codex/`, `.copilot/` | Global config for Gemini CLI, OpenAI Codex CLI, and GitHub Copilot CLI respectively — each holds exactly one real, versioned file (`GEMINI.md`, `AGENTS.md`, `copilot-instructions.md`), same pattern as `.claude/CLAUDE.md` — see below |
-| `home/` | chezmoi source directory (`sourceDir`), `destDir=$HOME` — the 2 age-encrypted secrets (`~/.vscode/settings.json`, `~/.dtx-providers/secrets.env`); see `docs/SECRETS.md` |
+| `.chezmoi-source/` | chezmoi source directory (`sourceDir`), `destDir=$HOME` — the 2 age-encrypted secrets (`~/.vscode/settings.json`, `~/.custom_providers/dtx_providers.env`); see `docs/SECRETS.md` |
 | `bin/` | Human-run scripts only — never invoked by bootstrap or an agent (L2 in the write-permission matrix, see `docs/AGENT_OS_UNIFICATION_PLAN.md` §7) |
 | `global/` | Home-directory-level `CLAUDE.md` templates: `ROOT.CLAUDE.md`/`PROJECTS.CLAUDE.md` are real symlinks to `~/CLAUDE.md`/`~/Projects/CLAUDE.md` (set up manually today, not yet by `setup.sh`); `WORK.CLAUDE.template.md` is copied and customized per machine instead — `~/Work/CLAUDE.md` stays local, not shared via dotfiles |
 | `scripts/` | Standalone utility scripts (currently the VS Code docs monitor) |

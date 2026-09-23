@@ -3,8 +3,8 @@ Description=DTx providers local LiteLLM proxy (bridges custom openai-compat mode
 After=network-online.target
 
 [Service]
-EnvironmentFile=%h/.dtx-providers/proxy.env
-ExecStart=/usr/bin/env litellm --config %h/.dtx-providers/litellm-config.yaml --port 4444 --host 127.0.0.1
+EnvironmentFile=%h/.custom_providers/proxy.env
+ExecStart=/usr/bin/env litellm --config %h/.custom_providers/litellm-config.yaml --port 4444 --host 127.0.0.1
 Restart=on-failure
 RestartSec=2
 

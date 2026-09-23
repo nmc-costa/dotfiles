@@ -1,46 +1,81 @@
 # Secrets Management (chezmoi + age)
 
-This repo stores two real secrets, both age-encrypted under `home/` (chezmoi's
-source directory — see `docs/AGENT_OS_UNIFICATION_PLAN.md` §1 for why this
-moved off `.chezmoisource/` in PR1), both decrypted locally by `chezmoi
+This repo stores two real secrets, both age-encrypted under `.chezmoi-source/`
+(chezmoi's source directory — renamed from `home/` on 2026-09-23, see "Porque
+`.chezmoi-source/` e não `home/`" below), both decrypted locally by `chezmoi
 apply`, both gitignored at their destination:
 
 1. The `apiKey` inside `~/.vscode/settings.json` (used by a VS Code chat
    extension to talk to a custom LLM endpoint at
    `https://glm53-flash.dtx-colab.com/v1/chat/completions`). It used to be
    committed in plaintext; now it's only at
-   `home/dot_vscode/encrypted_settings.json.age`.
-2. `~/.dtx-providers/secrets.env` — the same GLM-5.3-Flash API key (and any
-   further custom model provider keys added later via `dtx-providers-tui`),
-   consumed by the `.agents/providers/` adapters/proxy so opencode, Crush,
-   Codex CLI, and Claude Code can all use it too. Encrypted at
-   `home/private_dot_dtx-providers/encrypted_private_secrets.env.age`.
-   See `.agents/harnesses/PROVIDERS.md` for what consumes it.
+   `.chezmoi-source/dot_vscode/encrypted_settings.json.age`.
+2. `~/.custom_providers/dtx_providers.env` — the same GLM-5.3-Flash API key
+   (and any further custom model provider keys added later via
+   `dtx-providers-tui`), consumed by the `.agents/providers/` adapters/proxy
+   so opencode, Crush, Codex CLI, and Claude Code can all use it too.
+   Encrypted at `.chezmoi-source/private_dot_custom_providers/
+   encrypted_dtx_providers.env.age`. See `.agents/harnesses/PROVIDERS.md` for
+   what consumes it.
 
 Both follow the exact same mechanism described below — this doc was written
 for secret #1 and generalizes directly to #2 (just a different source/target
 path).
 
+## Porque `.chezmoi-source/` e não `home/`
+
+PR1 (`docs/AGENT_OS_UNIFICATION_PLAN.md`, commit `81de91f`, PR #34) renamed
+this directory from `.chezmoisource/` to `home/` without writing down why —
+no rationale for that specific name exists anywhere in the plan, the commit
+message, or this doc's earlier version. In practice the name caused real
+confusion: it reads as "this directory *is* your home directory" rather than
+"this is chezmoi's source tree, and its *contents* map onto `$HOME` once
+decrypted" — colliding semantically with `$HOME`/`/home/` in a repo that
+already has to reason carefully about both. It also produced at least one
+real bug elsewhere in the plan (references to a literal `x/home/y` path
+getting confused with this directory).
+
+Renamed to `.chezmoi-source/` on 2026-09-23: self-descriptive (names the
+tool, not the destination), and the leading dot keeps it out of the way at
+the top of a repo listing. The *contents* still use chezmoi's own `dot_`/
+`private_`/`encrypted_` prefix convention to say what each file becomes at
+the destination — the source directory's own name has no bearing on that
+mapping (verified directly: `sourceDir` can be located/named anything;
+chezmoi only cares about `dot_`/`private_`/`encrypted_` prefixes on each
+path segment *inside* it, and completely ignores any segment that starts
+with a literal `.`, which is reserved for chezmoi's own special files like
+`.chezmoiignore`).
+
+Same 2026-09-23 pass also renamed the provider-secret subdirectory from
+`private_dot_dtx-providers/` to `private_dot_custom_providers/` (decrypting
+to `~/.custom_providers/dtx_providers.env` instead of
+`~/.dtx-providers/secrets.env`) — `custom_providers` was chosen over the
+shorter `private_providers` because `private_` is itself a chezmoi prefix
+keyword that always strips out of the final name (tested: a source directory
+literally named `private_providers` decrypts to `.providers`, never
+`.private_providers`) — so `private_providers` alone can never survive as
+literal text in the destination path, and `custom_providers` avoids that
+trap entirely while also not colliding with `~/dotfiles/.agents/providers/`
+(the *system*, unaffected by this rename, still lives there).
+
 ## How it fits into this repo
 
 - `~/dotfiles` is **not** chezmoi's default source directory
-  (`~/.local/share/chezmoi`). Instead, `~/dotfiles/home/` is used as a
-  dedicated chezmoi source directory (PR1: previously `.chezmoisource/`), so
-  chezmoi never touches anything else in the repo (`.agents/`, `.claude/`,
-  `setup.sh`, etc. are untouched by chezmoi and keep working exactly as
-  before via `setup.sh`/`sync.sh`).
-- chezmoi's *destination* directory is `$HOME` (PR1: previously
-  `~/dotfiles` itself), so `chezmoi apply` writes the decrypted file
-  directly to `~/.vscode/settings.json` and `~/.dtx-providers/secrets.env` —
-  real directories since `setup.sh`'s `undo_legacy_dir_symlink` replaced the
-  old whole-directory symlinks (see `setup.sh`'s `# === AGENTS & SKILLS
-  SETUP ===` section).
+  (`~/.local/share/chezmoi`). Instead, `~/dotfiles/.chezmoi-source/` is used
+  as a dedicated chezmoi source directory, so chezmoi never touches anything
+  else in the repo (`.agents/`, `.claude/`, `setup.sh`, etc. are untouched by
+  chezmoi and keep working exactly as before via `setup.sh`/`sync.sh`).
+- chezmoi's *destination* directory is `$HOME`, so `chezmoi apply` writes the
+  decrypted file directly to `~/.vscode/settings.json` and
+  `~/.custom_providers/dtx_providers.env` — real directories since
+  `setup.sh`'s `undo_legacy_dir_symlink` replaced the old whole-directory
+  symlinks (see `setup.sh`'s `# === AGENTS & SKILLS SETUP ===` section).
 - The mapping is controlled by a **local, machine-specific** chezmoi config
   file at `~/.config/chezmoi/chezmoi.toml` (this file is NOT in the repo —
   each machine needs its own copy, see setup steps below):
 
   ```toml
-  sourceDir   = "/home/<you>/dotfiles/home"
+  sourceDir   = "/home/<you>/dotfiles/.chezmoi-source"
   destDir     = "/home/<you>"
   workingTree = "/home/<you>/dotfiles"
   encryption  = "age"
@@ -97,7 +132,7 @@ On a fresh machine, after `chezmoi` and `age` are installed
    ```bash
    mkdir -p ~/.config/chezmoi
    cat > ~/.config/chezmoi/chezmoi.toml <<'EOF'
-   sourceDir   = "$HOME/dotfiles/home"
+   sourceDir   = "$HOME/dotfiles/.chezmoi-source"
    destDir     = "$HOME"
    workingTree = "$HOME/dotfiles"
    encryption  = "age"
@@ -111,7 +146,7 @@ On a fresh machine, after `chezmoi` and `age` are installed
    doesn't expand it — check with `chezmoi doctor` afterwards.)
 
 3. Run `./setup.sh --links-only` first — this converts `~/.vscode` and
-   `~/.dtx-providers` from legacy whole-directory symlinks into real
+   `~/.custom_providers` from legacy whole-directory symlinks into real
    directories (`undo_legacy_dir_symlink`, idempotent, a no-op if they're
    already real directories) so `chezmoi apply` has a real destination to
    write into.
@@ -121,14 +156,14 @@ On a fresh machine, after `chezmoi` and `age` are installed
    chezmoi apply
    ```
    This regenerates **both** `~/.vscode/settings.json` and
-   `~/.dtx-providers/secrets.env` with their real values, in one command,
-   without ever putting either key in git.
+   `~/.custom_providers/dtx_providers.env` with their real values, in one
+   command, without ever putting either key in git.
 
 5. Verify:
    ```bash
    chezmoi diff       # should print nothing (already in sync)
-   cat ~/.vscode/settings.json     # should show the real apiKey
-   cat ~/.dtx-providers/secrets.env  # should show DTX_GLM53_FLASH_API_KEY=...
+   cat ~/.vscode/settings.json          # should show the real apiKey
+   cat ~/.custom_providers/dtx_providers.env  # should show DTX_GLM53_FLASH_API_KEY=...
    ```
 
 This preserves the original "copy one key, get the same LLM endpoint config
@@ -145,8 +180,8 @@ machine that has the private key configured:
 # 1. edit ~/.vscode/settings.json with the new value locally
 # 2. re-encrypt it back into the source state:
 chezmoi add --encrypt ~/.vscode/settings.json
-# 3. commit the updated home/dot_vscode/encrypted_settings.json.age
-cd ~/dotfiles && git add home/dot_vscode/encrypted_settings.json.age
+# 3. commit the updated .chezmoi-source/dot_vscode/encrypted_settings.json.age
+cd ~/dotfiles && git add .chezmoi-source/dot_vscode/encrypted_settings.json.age
 git commit -m "chore: rotate encrypted API key"
 git push
 ```
