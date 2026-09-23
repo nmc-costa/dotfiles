@@ -13,10 +13,12 @@
 - [ ] dotfiles-tsk-sweep-validate Test and validate sweep.py end-to-end (never run on this machine yet)
 - [ ] dotfiles-tsk-card-priority Add priority levels (P0-P3) to tasks/ cards
 - [ ] dotfiles-tsk-recurring-cards Recurring cards: spawn new task instances on a cadence
+- [ ] dotfiles-tsk-spike-herdr-commander Spike: evaluate herdr-commander (lurepos) as herdr palette for tasks/ commands
 
 ## Planning
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
 - [ ] dotfiles-tsk-task-brief-assistant Upgrade /task-brief into a full tasks/ management assistant
+- [ ] worknotes-siac-colab-portfolio-report [HIGH PRIORITY] SIAC CoLAB (COMPETE2030 transferencia, ~1.2M EUR/24m): planear portfolio de demonstradores + report com tabela para o CEO (Work/notes/projects)
 
 ## In Progress
 - [ ] dotfiles-tsk-verify-setup-skill-gaps Investigate 2 findings from first real run of setup-dotfiles/verify_setup.sh: _templates flagged missing from synced skills dirs, chezmoi status failure
@@ -60,5 +62,6 @@
 - [x] dotfiles-tsk-chezmoi-config-drift Corrigir ~/.config/chezmoi/chezmoi.toml pos-PR1 (destDir=$HOME, sourceDir=home/) + limpar ~/dotfiles/.dtx-providers/ + corrigir PROVIDERS.md e render-litellm-config.sh
 
 ## Blocked
+- [ ] dotfiles-tsk-spike-herdr-commander-build Spike (hands-on): patch herdr-commander to overlay placement, wire real .vscode/tasks.json, verify picker end-to-end
 
 ## Deferred
