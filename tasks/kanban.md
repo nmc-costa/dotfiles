@@ -17,7 +17,6 @@
 
 ## Planning
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
-- [ ] dotfiles-tsk-task-brief-assistant Upgrade /task-brief into a full tasks/ management assistant
 - [ ] worknotes-siac-colab-portfolio-report [HIGH PRIORITY] SIAC CoLAB (COMPETE2030 transferencia, ~1.2M EUR/24m): planear portfolio de demonstradores + report com tabela para o CEO (Work/notes/projects)
 
 ## In Progress
@@ -26,9 +25,10 @@
 
 ## Review
 - [ ] dotfiles-tsk-gh-path-recursion Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)
-- [ ] dotfiles-tsk-harness-provider-model-index Build a validated harness x provider x model orchestration index
+- [ ] dotfiles-tsk-task-brief-assistant Upgrade /task-brief into a full tasks/ management assistant
 
 ## Validation
+- [ ] dotfiles-tsk-harness-provider-model-index Build a validated harness x provider x model orchestration index
 
 ## Done
 - [x] dotfiles-repo-hygiene-dotfiles Abrir PR: claude/repo-hygiene-dotfiles
