@@ -19,10 +19,11 @@
 - [ ] dotfiles-tsk-task-brief-assistant Upgrade /task-brief into a full tasks/ management assistant
 
 ## In Progress
-- [ ] dotfiles-tsk-harness-provider-model-index Build a validated harness x provider x model orchestration index
 
 ## Review
 - [ ] dotfiles-tsk-gh-path-recursion Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)
+- [ ] dotfiles-tsk-harness-provider-model-index Build a validated harness x provider x model orchestration index
+- [ ] dotfiles-tsk-chezmoi-config-drift Corrigir ~/.config/chezmoi/chezmoi.toml pos-PR1 (destDir=$HOME, sourceDir=home/) + limpar ~/dotfiles/.dtx-providers/ + corrigir PROVIDERS.md e render-litellm-config.sh
 
 ## Validation
 
