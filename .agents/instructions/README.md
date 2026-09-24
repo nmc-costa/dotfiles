@@ -24,6 +24,7 @@ around only to be archived on GitHub for history — do not treat it as a live s
 | **Daily Optimization** | Automated daily workspace optimization workflow | [`workspace-config/daily-optimization.instructions.md`](workspace-config/daily-optimization.instructions.md) |
 | **Model Routing** | Model selection rules (Haiku vs. more expensive models) | [`workspace-config/model-routing.instructions.md`](workspace-config/model-routing.instructions.md) |
 | **Token Tracking** | Token usage monitoring and routing compliance | [`workspace-config/token-tracking.instructions.md`](workspace-config/token-tracking.instructions.md) |
+| **Output Frame** | Header + TL;DR/Index/Flow footer standard for every human-facing reply, sized S/M/L/L+ (on-demand; the always-loaded part is the `OUTPUT-FRAME:CORE` block in each entry file) | [`workspace-config/output-frame.instructions.md`](workspace-config/output-frame.instructions.md) |
 | **Mermaid Diagrams** | Mermaid diagram generation rules and validation | [`workspace-config/mermaid.instructions.md`](workspace-config/mermaid.instructions.md) |
 | **Machine Environment** | Standing environment facts for this machine (e.g. `sudo` has no TTY, use `pkexec`) | [`workspace-config/machine-environment.instructions.md`](workspace-config/machine-environment.instructions.md) |
 | **Proactive Memory Capture** | Persist what works from every interaction, not just corrections, without being asked | [`workspace-config/memory-capture.instructions.md`](workspace-config/memory-capture.instructions.md) |
@@ -53,5 +54,5 @@ the `.github/instructions` symlink which always resolves here automatically.
 
 ---
 
-**Last Updated**: 2026-09-14
+**Last Updated**: 2026-09-24
 **Architecture**: Single source of truth in `.agents/` (dead "Hybrid C" pointer to `/my/agentic_instructions/` removed)

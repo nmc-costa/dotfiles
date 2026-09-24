@@ -236,5 +236,5 @@ ln -sf ~/dotfiles/.copilot/copilot-instructions.md ~/.copilot/copilot-instructio
 
 ---
 
-**Last Updated:** 2026-09-14
+**Last Updated:** 2026-09-24
 **Maintained by:** nmc-costa
