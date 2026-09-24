@@ -1,0 +1,20 @@
+---
+task_id: dotfiles-tsk-researcher-radar
+title: "researcher-radar family: omarchy-radar + agents-radar (headless daily digests, human approves everything)"
+project: dotfiles
+phase: backlog
+created: "2026-09-24T20:45:26.404229+00:00"
+touched: "2026-09-24T20:45:26.404229+00:00"
+energy: deep
+estimate: ""
+deadline: ""
+blocked_by: ""
+origin: "pedido direto do owner 2026-09-24 em plan mode (\"Podes criar um omarchy-radar, mas eu nao quero so um omarchy-radar, quero tambem um agents-radar... Faz ja o card\"), card criado por claude em nome do owner"
+---
+
+# dotfiles-tsk-researcher-radar
+
+researcher-radar family: omarchy-radar + agents-radar (headless daily digests, human approves everything)
+
+## History
+- (no phase_changed events yet — still in its original created phase)
