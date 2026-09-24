@@ -29,10 +29,10 @@
 - [ ] dotfiles-tsk-skill-gauntlet-prompting Skill: gauntlet prompting (desenhar e criar skill .agents/skills/gauntlet-prompting)
 - [ ] dotfiles-tsk-agent-autonomy-charter Agent autonomy charter: shared system prompt for all harnesses with no-ask domains + TL;DR-only escalation
 - [ ] dotfiles-tsk-cross-harness-orchestra Skill /harness-orchestra: fan-out de tarefas entre harness+provider+model (ex: 1 Claude Code Opus + 1 Copilot CLI GPT-5), cada um no seu worktree, fecho via handoff md
-- [ ] dotfiles-tsk-agent-output-tldr-format Formato padrão de fecho para planos e outputs longos de agentes: TL;DR + índice, com opção visual/diagrama e possível artifact
 
 ## In Progress
 - [ ] dotfiles-tsk-researcher-radar researcher-radar family: omarchy-radar + agents-radar (headless daily digests, human approves everything)
+- [ ] dotfiles-tsk-agent-output-tldr-format Formato padrão de fecho para planos e outputs longos de agentes: TL;DR + índice, com opção visual/diagrama e possível artifact
 
 ## Review
 - [ ] dotfiles-tsk-gh-path-recursion Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)

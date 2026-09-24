@@ -2,9 +2,9 @@
 task_id: dotfiles-tsk-agent-output-tldr-format
 title: "Formato padrão de fecho para planos e outputs longos de agentes: TL;DR + índice, com opção visual/diagrama e possível artifact"
 project: dotfiles
-phase: planning
+phase: in_progress
 created: "2026-09-24T21:31:29.981641+00:00"
-touched: "2026-09-24T21:50:46.922682+00:00"
+touched: "2026-09-24T22:05:16.470496+00:00"
 energy: deep
 estimate: ""
 deadline: ""
@@ -18,6 +18,7 @@ Formato padrão de fecho para planos e outputs longos de agentes: TL;DR + índic
 
 ## History
 - 2026-09-24T21:43:16.274864+00:00: backlog -> planning (actor: claude/agent) — Owner refinou o pedido via chat 2026-09-24: header e footer de metadados, não só TL;DR solto.
+- 2026-09-24T22:05:16.470496+00:00: planning -> in_progress (actor: nmc-costa/human) — Owner aprovou Q1/Q2 do plano; plano fica aprovado como escrito, próximo passo é a implementação S1-S6.
 
 ## Latest handoff
 _@ planning_

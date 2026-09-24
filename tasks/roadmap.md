@@ -79,7 +79,7 @@ flowchart LR
         dotfiles-tsk-github-to-agents["dotfiles-tsk-github-to-agents<br/>Migrar .github/ para .agents/ e apagar .github (Copilot já lê AGENTS.md)"]:::backlog
         dotfiles-tsk-cross-harness-orchestra["dotfiles-tsk-cross-harness-orchestra<br/>Skill /harness-orchestra: fan-out de tarefas entre harness+provider+model (ex: 1 Claude Code Opus + 1 Copilot CLI GPT-5), cada um no seu worktree, fecho via handoff md"]:::planning
         dotfiles-tsk-researcher-radar["dotfiles-tsk-researcher-radar<br/>researcher-radar family: omarchy-radar + agents-radar (headless daily digests, human approves everything)"]:::in_progress
-        dotfiles-tsk-agent-output-tldr-format["dotfiles-tsk-agent-output-tldr-format<br/>Formato padrão de fecho para planos e outputs longos de agentes: TL;DR + índice, com opção visual/diagrama e possível artifact"]:::planning
+        dotfiles-tsk-agent-output-tldr-format["dotfiles-tsk-agent-output-tldr-format<br/>Formato padrão de fecho para planos e outputs longos de agentes: TL;DR + índice, com opção visual/diagrama e possível artifact"]:::in_progress
         dotfiles-tsk-tree-tidy-core["dotfiles-tsk-tree-tidy-core<br/>[P1] Tree-tidy core: root check in validate_workspace_standards.py + allowlist reconcile, tree_tidy.py scope/map/metrics, root-guard PreToolUse hook, 3 AGENTS.md lines, delete docs/directory_tree.md"]:::backlog
         dotfiles-tsk-tree-tidy-skill["dotfiles-tsk-tree-tidy-skill<br/>[P1] Rung 2: /tree-tidy skill (map, research, plan, /simplify + /simplifyhit, gate, draft PR) + tree_tidy.py gate"]:::backlog
         dotfiles-tsk-tree-tidy-recurring["dotfiles-tsk-tree-tidy-recurring<br/>[P2] Rung 3: recurring card template - run /tree-tidy on next repo in rotation every 14 days"]:::backlog
