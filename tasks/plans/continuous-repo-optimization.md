@@ -105,7 +105,7 @@ Blocking gates: a new root violation; duplication up; broken links up; any SKILL
 
 5 new cards (4 in v2; the cadence card is split per R2-C), each created with: `tasks/append_event.py --type task.created --actor-kind human --actor-id nmc-costa --task-id <id> --payload '{"project":"dotfiles","title":"…","blocked_by":"…"}'`. Priorities are applied once card-priority lands.
 
-Not yet created: the planning session's `--actor-kind agent` write was rejected by the agent proposal quota (D13: 3 open, expiry 14d) on 2026-09-24. The human creates these cards directly (`--actor-kind human`, since the human is the one deciding).
+Created 2026-09-24, all 5, `phase: backlog`. First attempt (`--actor-kind agent`) was rejected by the agent proposal quota (D13: 3 open, expiry 14d); the human then directed the session to create them explicitly, so the write used `--actor-kind human --actor-id nmc-costa` per tasks/README.md:128-146 ("override to human when a human is the one literally deciding the move") — no quota applies to that path.
 
 | task_id | title | blocked_by | prio |
 |---|---|---|---|
