@@ -1,8 +1,40 @@
 # HANDOFF — dotfiles (agent-OS unification + repo conventions)
 
-**Data:** 2026-09-21. Este ficheiro é o handoff do repo `~/dotfiles` como um
-todo — não é permanente, atualiza-se in place, apaga-se/arquiva-se quando a
-lista "por fazer" ficar vazia. Ponto de entrada global: `~/HANDOFF.md`.
+**Data:** 2026-09-21, atualizado 2026-09-24. Este ficheiro é o handoff do
+repo `~/dotfiles` como um todo — não é permanente, atualiza-se in place,
+apaga-se/arquiva-se quando a lista "por fazer" ficar vazia. Ponto de
+entrada global: `~/HANDOFF.md`.
+
+## Trabalho ativo #4 — sessão 2026-09-24: skill `/setup-dotfiles` + incidente actor-safety
+
+- **PR #69 (mesclada):** nova skill `.agents/skills/setup-dotfiles/`
+  (`SKILL.md` + `verify_setup.sh`) — corre `./setup.sh` + `./sync.sh` num
+  máquina nova e depois verifica o resultado real (não confia em
+  README.md/AGENTS.md onde já se sabia estarem desatualizados).
+- **PR #76 (mesclada):** corrigiu 2 falsos-positivos reais do
+  `verify_setup.sh` descobertos ao correr a skill pela primeira vez
+  (`_templates` sinalizado como "em falta" — não é bug do `sync.sh`, é a
+  regra de exigir `SKILL.md` por skill, de propósito; referências a
+  `~/.dtx-providers` desatualizadas por causa do rename da PR #70 para
+  `~/.custom_providers`).
+- **Incidente real durante a investigação (recuperado, nada perdido):**
+  distinto do incidente de 2026-09-21 abaixo (esse já tem as duas
+  causas-raiz corrigidas — `tasks-root-resolver` e `jsonl-merge-driver`,
+  ambos `done`). Este foi novo: (1) uma escrita corretiva em
+  `events.jsonl` foi assinada `actor-kind=human` em vez de `agent` (a
+  regra certa: quem decide *esta escrita*, não de quem é a decisão que o
+  payload descreve); (2) um `git checkout --` correu diretamente sobre
+  `tasks/events.jsonl` no checkout principal partilhado, apagando um
+  evento humano concorrente do working tree (só recuperado porque havia
+  um diff guardado). Documentado e corrigido na PR #76: `tasks/README.md`
+  ganhou as secções "Agent actor-kind: never impersonate the human" e
+  "`tasks/events.jsonl` is live and shared — don't run raw git ops on
+  it", com apontadores a partir de `AGENTS.md`/`CLAUDE.md` (os ficheiros
+  que os agentes realmente leem ao arrancar sessão).
+- **Por fazer:** card `dotfiles-tsk-agent-actor-safety` [HIGH PRIORITY]
+  está em `validation`, não `done` — muda normas de comportamento para
+  todas as sessões futuras, deixado para o dono confirmar antes de
+  fechar.
 
 ## Correção importante face ao handoff anterior
 
@@ -115,8 +147,9 @@ nesta máquina quando esta PR foi aberta).
 
 ## Próxima ação
 
-1. Esta PR (`tasks/handoff.md` → `tasks/HANDOFF.md`) mescla-se.
-2. Verificar se `tasks/events.jsonl` no checkout principal está estável
-   (sem alterações locais não commitadas de outra sessão) antes de criar
-   o card `dotfiles-handoff-standardization` — a partir do checkout
-   principal, nunca de uma worktree.
+Os 2 passos originais desta secção (rename `tasks/handoff.md` →
+`tasks/HANDOFF.md`, criar o card `dotfiles-handoff-standardization`)
+ficaram feitos entretanto — ver `tasks/HANDOFF.md` e o card já com 7
+eventos no board. O único item genuinamente por fazer neste ficheiro,
+agora, é o listado no "Trabalho ativo #4" acima: confirmação do dono para
+fechar `dotfiles-tsk-agent-actor-safety` (`validation` → `done`).
