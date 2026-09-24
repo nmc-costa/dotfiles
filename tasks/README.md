@@ -150,6 +150,27 @@ corrective write as `agent`/`claude`. Caught by the human, not by tooling
 human-attributed write from an agent process. Flagged as not the first time
 this class of mistake has happened (see `dotfiles-tsk-agent-actor-safety`).
 
+**Mirror case: don't default to `agent` when the human already asked for
+exactly this write, right now (hard-won, 2026-09-24).** The failure above
+is an agent forging `human`. The opposite failure is just as real: an
+agent defaults `--actor-kind` to `agent` out of habit for a card creation
+that the human's own current-turn request already decided — e.g. the
+human ran a planning skill and the resulting cards ARE the deliverable
+they asked for, not something the agent chose to open on its own
+initiative. Defaulting to `agent` there needlessly burns the agent
+proposal quota (see next section) and forces a second, explicit
+"yes, create it, because I'm asking" round-trip before the write
+succeeds — which is exactly what happened creating the
+`dotfiles-tsk-tree-tidy-*` cards in this same session. **Test before
+picking `--actor-kind`:** did the human's own message this turn (or a
+skill they explicitly invoked) directly ask for this specific
+task/card/deliverable to exist? If yes, use `human`/their actor-id
+immediately — don't wait to be asked twice. Reserve `agent`-attributed
+writes for cards/moves the agent is initiating on its own judgment
+(a sub-task it decided to split out, a correction to its own prior
+write, routine bookkeeping) with no direct human instruction behind
+*this specific write*.
+
 ## `tasks/events.jsonl` is live and shared — don't run raw git ops on it
 
 This repo can have several agent sessions (Claude Code, Copilot CLI,
