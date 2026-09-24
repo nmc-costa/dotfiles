@@ -4,7 +4,7 @@ title: "Formato padrão de fecho para planos e outputs longos de agentes: TL;DR 
 project: dotfiles
 phase: in_progress
 created: "2026-09-24T21:31:29.981641+00:00"
-touched: "2026-09-24T22:09:45.414164+00:00"
+touched: "2026-09-24T22:15:49.277024+00:00"
 energy: deep
 estimate: ""
 deadline: ""

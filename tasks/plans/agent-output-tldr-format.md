@@ -46,7 +46,7 @@ This is the same 8-target placement as the charter's `AUTONOMY:CORE` block, with
 | **S** | Under about 25 rendered lines and no `##` headings (fits on one terminal screen) | none | none |
 | **M** | 25–80 lines, or 3 or more headed sections, or a report of changes across 2 or more files | compact 1-line header | TL;DR |
 | **L** | Any plan (multi-step, phased, or a PR sequence; plan mode; anything written to `tasks/plans/`), or more than about 80 lines | full 5-line header | TL;DR + Index + Flow |
-| **L+** | L and more than about 150 lines, and the harness can write files | full header in chat | body goes to a file (§4); chat gets header + footer + link |
+| **L+** | (L and more than about 150 lines) **or** the body is likely to be revised, referred back to by a later turn/session, or handed off — and the harness can write files | full header in chat | body goes to a file (§4); chat gets header + footer + link |
 
 **Full header (L).** The field names are archi's exactly, as the owner asked:
 ```yaml
@@ -149,7 +149,7 @@ What actually saves scrolling and re-reading is getting the long body **out of t
 
   **Inside the file, the summary moves to the top**: header, then TL;DR + Index + Flow, then the body. The principle behind both placements: "put the summary where the reader's eyes land". That is the bottom in chat and the top in a file. It is also why the charter plan's top "TL;DR (PT)" is already correct for a file.
 
-  The chat reply is then only: full header, the same footer, and `Full text: <path>`. Later turns cite the path instead of re-quoting the text; that is where the real token saving is.
+  The chat reply is then only: full header, the same footer, and `Full text: <path>`. The saving is not from "not re-quoting" — an inline reply is already in context either way. It comes from three things a file enables that inline text doesn't: (1) revising the body later with a targeted Edit instead of re-emitting the whole thing; (2) the body surviving `/compact`/`/clear` as a path that can be re-read on demand ("restorable compression" — Anthropic calls this structured note-taking); (3) when a subagent produces the body and writes the file itself, only its summary reaches the main session's context, which is the one variant that actually shrinks the main context in the same turn. Revise long bodies with targeted file edits, never by re-emitting them; refer back to them by path + heading. Prefer having a subagent write an L+ research/plan body when the harness supports it, for exactly that reason. (Validated against Anthropic's prompt-caching docs 2026-09-24 — see the KV-cache addendum below the Critical Files list.)
 - **Claude Code only, optional.** Publish an Artifact only when:
   - the content is actually visual or interactive (use the `artifact-design`, `artifact-diagramming` and `dataviz` skills); or
   - the owner asks for one.
@@ -197,9 +197,10 @@ Size the reply: S = <~25 lines, no headings · M = 25–80 lines, ≥3 sections,
 - S: no frame.
 - M: first line `MODE [X] · STATUS: … · Confidence n/10 · Entropy: Stable|High · <date>`; end with `---` + **TL;DR** (≤5 bullets that compact what's above, nothing new) + `Needs you: … | none`.
 - L: full header (SYSTEM INSTRUCTION MODE / STATUS / RESONANCE / ANALYSIS / TIMESTAMP); end with TL;DR + Index (headings verbatim, in order) + Flow (`Path:` arrow line + ≤12-node mermaid flowchart: steps, dependencies, owner-decision diamonds; omit if no sequence) + Needs you.
-- L >~150 lines and you can write files: body goes to a file (tasks/plans/, docs/, scratchpad; Claude Artifact only if visual or requested) with TL;DR+Index+Flow at its TOP; chat = header + footer + path.
+- L >~150 lines, OR likely to be revised/re-referenced/handed off, and you can write files: body goes to a file (tasks/plans/, docs/, scratchpad; Claude Artifact only if visual or requested) with TL;DR+Index+Flow at its TOP; chat = header + footer + path. Revise it with targeted edits, never by re-emitting the whole body; refer to it by path + heading. Prefer a subagent writing the file itself when the harness supports it.
 - `Needs you:` uses the autonomy charter's DECISION line format. Escalation BLUFs, agent-to-agent messages, commits, PR bodies and verbatim output are exempt.
 - Confidence: 9–10 verified this turn, 6–8 consistent-not-run, 3–5 inferred, ≤2 guess. Never invent a timestamp. Footer in the owner's language; header keys in English.
+- This block is static: no dates, counters, or per-machine values in it — it's loaded into every session's cached prefix, and dynamic content here would force a cache rewrite on every request.
 <!-- OUTPUT-FRAME:CORE END -->
 ```
 
@@ -218,6 +219,7 @@ Size the reply: S = <~25 lines, no headings · M = 25–80 lines, ≥3 sections,
 - An M prompt ("summarise the last 5 commits") gets the compact header and a TL;DR.
 - An L prompt ("plan feature X") gets the full header and TL;DR + Index + Flow.
 - An exempt prompt ("write the commit message") gets no frame.
+- Check that no entry file loads both the 14-line core block *and* the full `output-frame.instructions.md` on the same session start (the global pointer chain tells agents to read every `workspace-config/*.instructions.md`, which would double it in `~/dotfiles` sessions specifically) — cheap at cached rates, but redundant; keep only the core block in always-loaded files.
 
 **S6 (conditional, after 2 weeks).** Only if Claude Code compliance is poor: add a `Stop` hook that detects a reply over 80 lines with no `TL;DR` and asks for the footer. Nothing like that ships in v1, because prose comes first and a hook costs a turn on every miss.
 
@@ -273,6 +275,20 @@ flowchart TD
   C["Charter PR-A (PR #75)"] -.->|replaces the Needs you fallback| S2
 ```
 **Needs you:** Approve the plan as written, or redirect Q1 (no frame on S replies) / Q2 (L+ body goes to a file). Recommended: approve both. If you don't answer, the card stays in `planning`.
+
+**Owner decision (2026-09-24): approved as written — Q1 and Q2 both confirmed with the recommended defaults.** No changes to the plan from this round.
+
+---
+
+## Addendum (2026-09-24): does this help with KV-cache / prompt caching?
+
+Before implementing, the owner asked whether this design is also a KV-cache/prompt-caching optimization, not just a scrolling fix — and had a second Opus session validate it against the local `claude-api` skill and Anthropic's docs before committing. Verdict: **go ahead with S1–S6 as approved, no rethink**, with the three wording changes below already applied to §1, §4 and §6 above.
+
+- **Header/footer: no cache effect, either way.** They're appended at the end of an already-generated reply, so they can't invalidate an earlier cached prefix. They cost a small, one-time addition to output/cache-write tokens (25–300 tokens), then get re-read at the ~10% cached rate on every later turn. Justify them on readability alone — that was always the actual goal.
+- **L+ body-to-file: real benefit, but not the mechanism §4 originally claimed.** Moving a body to a file doesn't shrink *that turn's* context (the Write call's input still carries the full body). The real savings are: (1) revising later with a targeted Edit instead of re-emitting the whole body; (2) the body surviving `/compact`/`/clear` as a re-readable path ("restorable compression" / structured note-taking); (3) when a subagent writes the file itself, only its summary lands in the main session's context — the one variant that shrinks context in the same turn.
+- **The owner's general instinct is right**: cost and quality both degrade as context grows (cache reads still bill on the full history; long contexts also cause "context rot"). The fix for that is `/clear`/`/compact` discipline and pushing verbose work to subagents — this plan's file-offload habit supports that, it just isn't itself the caching lever.
+- **The ~150-line L+ threshold stays** — caching gives no reason to prefer a token-based cutoff, and the model can't count tokens reliably anyway. What changed is *why* something qualifies for L+: line count OR "will be revised/re-referenced/handed off" (already reflected in §1's table and the §6 core block).
+- Full research trail, sources, and the verified-vs-inferred breakdown: see the session's KV-cache research report (2026-09-24) referenced from this card's `tasks/events.jsonl` handoff — not duplicated here to keep this plan file from growing past its own L+ threshold.
 
 ### Critical Files for Implementation
 - `.agents/instructions/workspace-config/output-frame.instructions.md` (new, canonical)
