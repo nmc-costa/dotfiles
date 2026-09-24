@@ -64,12 +64,40 @@ flowchart LR
         dotfiles-tsk-agile-workspace-limit["dotfiles-tsk-agile-workspace-limit<br/>Agile Workspace roadmap step 3 (Limit): per-machine limit profiles"]:::backlog
         dotfiles-tsk-agile-workspace-schedule["dotfiles-tsk-agile-workspace-schedule<br/>Agile Workspace roadmap step 4 (Schedule): jobs/*.yaml manifest + systemd timers"]:::backlog
         dotfiles-tsk-autolaunch-test["dotfiles-tsk-autolaunch-test<br/>dotfiles-tsk-autolaunch-test: Verify dispatch auto-launch across providers"]:::backlog
+        dotfiles-tsk-sweep-validate["dotfiles-tsk-sweep-validate<br/>Test and validate sweep.py end-to-end (never run on this machine yet)"]:::backlog
+        dotfiles-tsk-card-priority["dotfiles-tsk-card-priority<br/>Add priority levels (P0-P3) to tasks/ cards"]:::backlog
+        dotfiles-tsk-recurring-cards["dotfiles-tsk-recurring-cards<br/>Recurring cards: spawn new task instances on a cadence"]:::backlog
+        dotfiles-tsk-harness-provider-model-index["dotfiles-tsk-harness-provider-model-index<br/>Build a validated harness x provider x model orchestration index"]:::validation
+        dotfiles-tsk-task-brief-assistant["dotfiles-tsk-task-brief-assistant<br/>Upgrade /task-brief into a full tasks/ management assistant"]:::review
+        dotfiles-tsk-chezmoi-config-drift["dotfiles-tsk-chezmoi-config-drift<br/>Corrigir ~/.config/chezmoi/chezmoi.toml pos-PR1 (destDir=$HOME, sourceDir=home/) + limpar ~/dotfiles/.dtx-providers/ + corrigir PROVIDERS.md e render-litellm-config.sh"]:::done
+        dotfiles-tsk-verify-setup-skill-gaps["dotfiles-tsk-verify-setup-skill-gaps<br/>Investigate 2 findings from first real run of setup-dotfiles/verify_setup.sh: _templates flagged missing from synced skills dirs, chezmoi status failure"]:::done
+        dotfiles-tsk-agent-actor-safety["dotfiles-tsk-agent-actor-safety<br/>[HIGH PRIORITY] Agents must sign tasks/ events as actor-kind=agent for their own writes, and must not run unguarded git ops on the shared tasks/events.jsonl working tree"]:::validation
+        dotfiles-tsk-spike-herdr-commander["dotfiles-tsk-spike-herdr-commander<br/>Spike: evaluate herdr-commander (lurepos) as herdr palette for tasks/ commands"]:::backlog
+        dotfiles-tsk-spike-herdr-commander-build["dotfiles-tsk-spike-herdr-commander-build<br/>Spike (hands-on): patch herdr-commander to overlay placement, wire real .vscode/tasks.json, verify picker end-to-end"]:::done
+        dotfiles-tsk-skill-gauntlet-prompting["dotfiles-tsk-skill-gauntlet-prompting<br/>Skill: gauntlet prompting (desenhar e criar skill .agents/skills/gauntlet-prompting)"]:::planning
+        dotfiles-tsk-agent-autonomy-charter["dotfiles-tsk-agent-autonomy-charter<br/>Agent autonomy charter: shared system prompt for all harnesses with no-ask domains + TL;DR-only escalation"]:::planning
+        dotfiles-tsk-github-to-agents["dotfiles-tsk-github-to-agents<br/>Migrar .github/ para .agents/ e apagar .github (Copilot já lê AGENTS.md)"]:::backlog
+        dotfiles-tsk-cross-harness-orchestra["dotfiles-tsk-cross-harness-orchestra<br/>Skill /harness-orchestra: fan-out de tarefas entre harness+provider+model (ex: 1 Claude Code Opus + 1 Copilot CLI GPT-5), cada um no seu worktree, fecho via handoff md"]:::planning
+        dotfiles-tsk-researcher-radar["dotfiles-tsk-researcher-radar<br/>researcher-radar family: omarchy-radar + agents-radar (headless daily digests, human approves everything)"]:::in_progress
+        dotfiles-tsk-agent-output-tldr-format["dotfiles-tsk-agent-output-tldr-format<br/>Formato padrão de fecho para planos e outputs longos de agentes: TL;DR + índice, com opção visual/diagrama e possível artifact"]:::planning
+        dotfiles-tsk-tree-tidy-core["dotfiles-tsk-tree-tidy-core<br/>[P1] Tree-tidy core: root check in validate_workspace_standards.py + allowlist reconcile, tree_tidy.py scope/map/metrics, root-guard PreToolUse hook, 3 AGENTS.md lines, delete docs/directory_tree.md"]:::backlog
+        dotfiles-tsk-tree-tidy-skill["dotfiles-tsk-tree-tidy-skill<br/>[P1] Rung 2: /tree-tidy skill (map, research, plan, /simplify + /simplifyhit, gate, draft PR) + tree_tidy.py gate"]:::backlog
+        dotfiles-tsk-tree-tidy-recurring["dotfiles-tsk-tree-tidy-recurring<br/>[P2] Rung 3: recurring card template - run /tree-tidy on next repo in rotation every 14 days"]:::backlog
+        dotfiles-tsk-tree-tidy-tournament["dotfiles-tsk-tree-tidy-tournament<br/>[P1] Rung 4a: sandboxed haiku/sonnet worktree tournament, opus judge vs baseline, draft PR (manual runs first)"]:::backlog
+        dotfiles-tsk-tree-tidy-schedule["dotfiles-tsk-tree-tidy-schedule<br/>[P2] Rung 4b: weekly tree-tidy tournament job in .agents/automation/jobs/ manifest"]:::backlog
+        dotfiles-tsk-header-persona-drift["dotfiles-tsk-header-persona-drift<br/>Header/persona RESONANCE drift: ~15 ficheiros com cópias divergentes do bloco de header (achado pelo plano do Output Frame)"]:::backlog
+        dotfiles-tsk-simplifyhit-ressonance-typo["dotfiles-tsk-simplifyhit-ressonance-typo<br/>Fix typo: simplifyhit/SKILL.md escreve RESSONANCE em vez de RESONANCE no bloco de header"]:::backlog
+        dotfiles-tsk-mermaid-instructions-footer-conflict["dotfiles-tsk-mermaid-instructions-footer-conflict<br/>mermaid.instructions.md (Regras 1, 2 e 5) entra em conflito com qualquer diagrama Mermaid devolvido inline (ex. footer do Output Frame)"]:::backlog
     end
 
     subgraph proj_notes["notes"]
         notes-repo-hygiene-notes["notes-repo-hygiene-notes<br/>Abrir PR: claude/repo-hygiene-notes"]:::done
         notes-ideas-review-fixes["notes-ideas-review-fixes<br/>Abrir PR: claude/ideas-review-fixes"]:::done
         notes-workspace-standards-schema["notes-workspace-standards-schema<br/>Abrir PR: claude/workspace-standards-schema"]:::done
+    end
+
+    subgraph proj_worknotes["worknotes"]
+        worknotes-siac-colab-portfolio-report["worknotes-siac-colab-portfolio-report<br/>[HIGH PRIORITY] SIAC CoLAB (COMPETE2030 transferencia, ~1.2M EUR/24m): planear portfolio de demonstradores + report com tabela para o CEO (Work/notes/projects)"]:::review
     end
 ```
 
@@ -80,4 +108,6 @@ timeline
     title Tasks reaching done, over time
     2026-09-21 : dotfiles-tsk-spike-cas-concurrency : dotfiles-tsk-writepath-unification : dotfiles-tsk-cards-frontmatter : dotfiles-tsk-spike-agent-deck : dotfiles-tsk-spike-workflow-model : dotfiles-tsk-spike-herdr-popup : dotfiles-tsk-tuiboard-install : dotfiles-tsk-roadmap-graph : dotfiles-tsk-notify-sweep : dotfiles-tsk-brief : dotfiles-tsk-tasks-root-resolver : dotfiles-tsk-claim-protocol : dotfiles-tsk-task-brief-skill : dotfiles-handoff-standardization : dotfiles-tsk-jsonl-merge-driver
     2026-09-22 : dotfiles-tsk-dispatch-launcher : dotfiles-tsk-hook-claude-code
+    2026-09-23 : dotfiles-tsk-chezmoi-config-drift : dotfiles-tsk-spike-herdr-commander-build
+    2026-09-24 : dotfiles-tsk-verify-setup-skill-gaps
 ```
