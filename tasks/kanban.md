@@ -14,18 +14,21 @@
 - [ ] dotfiles-tsk-card-priority Add priority levels (P0-P3) to tasks/ cards
 - [ ] dotfiles-tsk-recurring-cards Recurring cards: spawn new task instances on a cadence
 - [ ] dotfiles-tsk-spike-herdr-commander Spike: evaluate herdr-commander (lurepos) as herdr palette for tasks/ commands
+- [ ] dotfiles-tsk-github-to-agents Migrar .github/ para .agents/ e apagar .github (Copilot já lê AGENTS.md)
 
 ## Planning
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
-- [ ] worknotes-siac-colab-portfolio-report [HIGH PRIORITY] SIAC CoLAB (COMPETE2030 transferencia, ~1.2M EUR/24m): planear portfolio de demonstradores + report com tabela para o CEO (Work/notes/projects)
+- [ ] dotfiles-tsk-skill-gauntlet-prompting Skill: gauntlet prompting (desenhar e criar skill .agents/skills/gauntlet-prompting)
+- [ ] dotfiles-tsk-agent-autonomy-charter Agent autonomy charter: shared system prompt for all harnesses with no-ask domains + TL;DR-only escalation
 
 ## In Progress
-- [ ] dotfiles-tsk-verify-setup-skill-gaps Investigate 2 findings from first real run of setup-dotfiles/verify_setup.sh: _templates flagged missing from synced skills dirs, chezmoi status failure
-- [ ] dotfiles-tsk-agent-actor-safety [HIGH PRIORITY] Agents must sign tasks/ events as actor-kind=agent for their own writes, and must not run unguarded git ops on the shared tasks/events.jsonl working tree
 
 ## Review
 - [ ] dotfiles-tsk-gh-path-recursion Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)
 - [ ] dotfiles-tsk-task-brief-assistant Upgrade /task-brief into a full tasks/ management assistant
+- [ ] dotfiles-tsk-verify-setup-skill-gaps Investigate 2 findings from first real run of setup-dotfiles/verify_setup.sh: _templates flagged missing from synced skills dirs, chezmoi status failure
+- [ ] dotfiles-tsk-agent-actor-safety [HIGH PRIORITY] Agents must sign tasks/ events as actor-kind=agent for their own writes, and must not run unguarded git ops on the shared tasks/events.jsonl working tree
+- [ ] worknotes-siac-colab-portfolio-report [HIGH PRIORITY] SIAC CoLAB (COMPETE2030 transferencia, ~1.2M EUR/24m): planear portfolio de demonstradores + report com tabela para o CEO (Work/notes/projects)
 
 ## Validation
 - [ ] dotfiles-tsk-harness-provider-model-index Build a validated harness x provider x model orchestration index
