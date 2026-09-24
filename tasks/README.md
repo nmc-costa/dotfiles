@@ -125,6 +125,67 @@ proposals, a 14-day expiry, and dedup by `payload` fingerprint — all
 applied automatically by `append_event.py`, not by human convention (D14:
 script before rule).
 
+## Agent actor-kind: never impersonate the human (hard-won, 2026-09-24)
+
+**Rule:** when an agent performs the write — creates a task, moves a phase,
+appends any event — it signs `actor.kind: agent`, `actor.id: <its own
+name>` (e.g. `claude`). This holds even when the event's `payload`/`reason`
+describes a decision a human made elsewhere or earlier (e.g. the human
+said "open a card for X" — the *card* can fairly be `human`-attributed,
+since the human really did decide to create it, but a *later* agent action
+like re-appending a dropped event, or moving a phase on the agent's own
+initiative, is the agent's own act and must be `agent`-attributed). The
+test is **"who is deciding *this specific write*, right now"** — not "whose
+decision does the payload describe" and not "whose task is this."
+`--actor-kind` defaults to `agent` in every tool here for exactly this
+reason; only override to `human` when a human is the one literally deciding
+the move (see "How to use" above).
+
+This was violated for real on 2026-09-23: an agent session, while
+correcting its own mistake (see next section), re-appended a dropped
+`task.phase_changed` event under `--actor-kind human --actor-id nmc-costa`
+— copying the *original* event's actor instead of signing its own
+corrective write as `agent`/`claude`. Caught by the human, not by tooling
+— `append_event.py`/`move_task.py` don't currently reject a plausible-looking
+human-attributed write from an agent process. Flagged as not the first time
+this class of mistake has happened (see `dotfiles-tsk-agent-actor-safety`).
+
+## `tasks/events.jsonl` is live and shared — don't run raw git ops on it
+
+This repo can have several agent sessions (Claude Code, Copilot CLI,
+others) working in the **same** `~/dotfiles` checkout at the same time,
+each able to append to `tasks/events.jsonl` at any moment — not just via
+separate git branches, but as literal concurrent writes to the same file
+on disk, seconds apart, independent of any commit. Treat it like you would
+a database another process is actively writing to, not like an ordinary
+tracked file that's safe to blow away and re-derive.
+
+**Never run `git checkout --`, `git reset`, `git stash` (bare, without
+`-u`+a unique tag — see the worktree tool's own warning), or `git clean`
+against `tasks/events.jsonl` (or `kanban.md`/`tasks/cards/`) in the shared
+main checkout.** Any of these can silently discard another session's
+uncommitted append that landed in the working tree microseconds before
+your command ran — there's no conflict marker, no warning, it's just gone
+from the working tree (recoverable only if someone happened to have a diff
+saved, which is not something to rely on).
+
+If you need to undo *your own* speculative edit to this file:
+- Prefer never editing it directly in the first place — `append_event.py`
+  and `move_task.py` are the only sanctioned write path (D9/D10: the log is
+  append-only, hand-editing is already forbidden for correctness reasons;
+  this is the same rule extended to cover *reverting* too).
+- If you're about to do anything exploratory or destructive nearby,
+  isolate in a worktree first (`EnterWorktree` in Claude Code, or `git
+  worktree add` elsewhere) — a worktree's `tasks/events.jsonl` is a
+  separate checkout, so a mistake there can't touch what another live
+  session just wrote to the shared one.
+- Committing your own change to `tasks/events.jsonl` promptly (even a small
+  "tasks/: sync accumulated events" housekeeping commit, the established
+  pattern in this repo's git history) is safer than leaving it uncommitted
+  for long, since an uncommitted working-tree append is exactly what a raw
+  git op can silently destroy — a local commit can't be undone by another
+  session's `git checkout --`.
+
 ## Out of scope for this PoC
 
 A SQLite/DuckDB index, `tasks.csv` (only once `board.md` passes "a few

@@ -42,7 +42,7 @@ verification pass.
    location, needs sudo) if the user explicitly asks for it.
 
 4. **Secrets are a separate, manual, sensitive step — never automate it.**
-   `~/.vscode/settings.json`'s API key and `~/.dtx-providers/secrets.env`
+   `~/.vscode/settings.json`'s API key and `~/.custom_providers/dtx_providers.env`
    are chezmoi+age encrypted; restoring them needs the human to paste their
    private key from Bitwarden. Point them at `docs/SECRETS.md`'s
    "New-machine setup" section and let them run `chezmoi apply` themselves.
@@ -91,11 +91,13 @@ verification pass.
   reconciled by a manifest instead (a symlink here breaks that
   reconciliation — see `CLAUDE.md`'s Known Gaps). `verify_setup.sh` checks
   the real, current behavior.
-- `README.md`/`AGENTS.md` also describe `~/.vscode`/`~/.dtx-providers` as
-  symlinks, while `setup.sh`'s own `undo_legacy_dir_symlink` comments say
-  both are now real directories written by `chezmoi apply` instead.
-  `verify_setup.sh` reports whichever is actually true on the machine
-  rather than asserting either doc's claim.
+- `README.md`/`AGENTS.md` also describe `~/.vscode`/`~/.custom_providers`
+  (renamed 2026-09-23 from `~/.dtx-providers`, PR #70) as symlinks, while
+  `setup.sh`'s own `undo_legacy_dir_symlink` comments say both are now real
+  directories written by `chezmoi apply` instead. `verify_setup.sh` reports
+  whichever is actually true on the machine rather than asserting either
+  doc's claim, and separately warns if a leftover `~/.dtx-providers` from
+  before the rename is still on disk.
 - `.claude/CLAUDE.md` (this repo's own pointer file) references
   `./setup.sh --install-hooks`, `./sync.sh --install-hooks`, and
   `tasks/scripts/setup_git_hooks.sh`/`pre-push.sample` for the branch-naming

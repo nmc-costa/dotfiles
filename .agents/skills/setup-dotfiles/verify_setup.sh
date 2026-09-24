@@ -4,9 +4,10 @@
 #
 # README.md/AGENTS.md and setup.sh's own comments disagree with each other in
 # two places (~/.agents & ~/.claude symlink-vs-copy, ~/.vscode &
-# ~/.dtx-providers symlink-vs-copy) — this script checks against the scripts'
-# actual current behavior, and reports (never asserts a "correct" answer for)
-# the two places where the docs are stale. See setup-dotfiles/SKILL.md.
+# ~/.custom_providers symlink-vs-copy) — this script checks against the
+# scripts' actual current behavior, and reports (never asserts a "correct"
+# answer for) the two places where the docs are stale. See
+# setup-dotfiles/SKILL.md.
 #
 # Never touches secrets: the chezmoi/age step is reported, not automated —
 # restoring the private key is a human action (docs/SECRETS.md).
@@ -75,6 +76,19 @@ echo
 echo "-- ~/.agents and ~/.claude: real directories reconciled by sync.sh, not symlinks --"
 echo "   (2026-09-17 design — a symlink here makes source/dest hashes always equal and"
 echo "   sync.sh's manifest reconciliation refuses to run; see CLAUDE.md Known Gaps)"
+# Mirrors sync.sh's sync_source_paths rule for skills/ (sync.sh:150-152):
+# a top-level dir under .agents/skills/ only counts as a real skill, and
+# only gets synced, if it has a SKILL.md. _templates/ deliberately has none
+# (it's example scaffolding, not a skill) — listing it here would make this
+# check permanently FAIL on a correctly-synced machine.
+list_real_skills() {
+  local skills_dir=$1
+  local d
+  for d in "$skills_dir"/*/; do
+    [[ -f "$d/SKILL.md" ]] && basename "$d"
+  done
+}
+
 check_real_dir_with_skills() {
   local dest=$1
   if [[ -L "$dest" ]]; then
@@ -90,7 +104,7 @@ check_real_dir_with_skills() {
   local src_skills="$REPO_ROOT/.agents/skills"
   if [[ -d "$dest_skills" ]]; then
     local missing
-    missing="$(comm -23 <(ls "$src_skills" | sort) <(ls "$dest_skills" 2>/dev/null | sort))"
+    missing="$(comm -23 <(list_real_skills "$src_skills" | sort) <(list_real_skills "$dest_skills" | sort))"
     if [[ -z "$missing" ]]; then
       ok "$dest_skills has every skill from .agents/skills/"
     else
@@ -104,7 +118,7 @@ check_real_dir_with_skills "$HOME/.agents"
 check_real_dir_with_skills "$HOME/.claude"
 echo
 
-echo "-- ~/.vscode and ~/.dtx-providers (chezmoi-managed; reported as-is, not asserted) --"
+echo "-- ~/.vscode and ~/.custom_providers (chezmoi-managed; reported as-is, not asserted) --"
 report_state() {
   local dest=$1
   if [[ -L "$dest" ]]; then
@@ -116,7 +130,10 @@ report_state() {
   fi
 }
 report_state "$HOME/.vscode"
-report_state "$HOME/.dtx-providers"
+report_state "$HOME/.custom_providers"
+if [[ -d "$HOME/.dtx-providers" ]]; then
+  warn "~/.dtx-providers still exists — pre-2026-09-23 name (docs/SECRETS.md, PR #70 renamed it to ~/.custom_providers/dtx_providers.env). Leftover from before the rename, not auto-migrated by setup.sh; safe to remove by hand once ~/.custom_providers/dtx_providers.env has the same value."
+fi
 echo "  NOTE  README.md/AGENTS.md call these symlinks; setup.sh's undo_legacy_dir_symlink"
 echo "        comment says both are now real directories written by 'chezmoi apply'"
 echo "        instead (docs/SECRETS.md). This script reports current reality above"
@@ -143,7 +160,7 @@ if command -v chezmoi >/dev/null 2>&1; then
     warn "no age key at ~/.config/chezmoi/key.txt — restore it from Bitwarden (see docs/SECRETS.md 'New-machine setup') before 'chezmoi apply' can decrypt secrets. Expected on a brand-new machine, not a failure."
   fi
 else
-  warn "chezmoi not installed — secrets (.vscode/settings.json API key, ~/.dtx-providers/secrets.env) won't be restored until it is (see docs/SECRETS.md)"
+  warn "chezmoi not installed — secrets (.vscode/settings.json API key, ~/.custom_providers/dtx_providers.env) won't be restored until it is (see docs/SECRETS.md)"
 fi
 echo
 
