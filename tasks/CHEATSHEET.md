@@ -170,6 +170,9 @@ questions, use whichever answers what you're actually asking:
 - **`herdr`** (the multiplexer itself, independent of tuiboard) — native
   sidebar with per-session state (`idle`/`working`/`blocked`), already
   installed, works with zero extra config.
+- **`herdr-commander` picker** — fuzzy-filterable UI for `tasks/` commands
+  inside herdr (brief, sweep, notify, dispatch, rebuild-kanban). One hotkey,
+  no typing. See `docs/HERDR_COMMANDER.md` for setup.
 - **`claude agents --json`** — Claude Code's native Agent View: lists
   sessions with state, a 1-line summary, and what's blocking each one.
 - **`tasks/kanban.md` and `tasks/metrics.md`** — plain text, read in any
