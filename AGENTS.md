@@ -14,6 +14,8 @@ Guidance for AI agents (Crush/Claude, Copilot, Gemini) working in this repositor
 
 (Claude Code has this automated via a `SessionStart` hook — see `CLAUDE.md`. Other tools follow this protocol in prose, here. **Known gap (2026-09-16):** this file and `CLAUDE.md` both reference `CHEATSHEET.md` §7 but neither used to mention `tasks/` explicitly, and `.github/copilot-instructions.md`/`GEMINI.md` had no startup pointer to either — see `CLAUDE.md`'s "Known Gaps" for the full finding and what's still needed to fix it for Copilot/Gemini/Antigravity.)
 
+**Before writing to `tasks/` at all** (creating a task, moving a phase, or touching `tasks/events.jsonl`/`kanban.md`/`cards/` directly): read `tasks/README.md`'s "Agent actor-kind: never impersonate the human" and "`tasks/events.jsonl` is live and shared — don't run raw git ops on it" sections first (added 2026-09-24, after a real agent session did both wrong in the same afternoon). Short version — sign your own writes `actor.kind: agent`, never borrow a human's identity; and never `git checkout --`/`reset`/`stash`/`clean` that file in the shared checkout, since another session may be appending to it right now.
+
 ## Available Agents
 
 | Agent | Config Location | When to Use |
