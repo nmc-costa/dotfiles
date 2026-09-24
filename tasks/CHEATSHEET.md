@@ -19,7 +19,8 @@ orchestration layer — partially built, see below). This file is only the
 | `sweep.py` | Detect `sla_expired`/`blocked_too_long` facts, raise `notification.raised` events. Run it periodically yourself — no systemd timer yet. |
 | `notify.py` | Deliver pending raised facts (herdr digest + notify-send fallback), or `--ack --dedup-key` to close one out. |
 | `brief.py` | Heartbeat + pending-facts briefing, or `--prompt-only --task-id` for a ready-to-paste dispatch prompt. No hook wires it up automatically yet. |
-| `dispatch.py` | Launch a task on another provider (`claude`/`copilot`/`agy`) with its brief pre-loaded. Dry-run by default — add `--launch` to actually run it. |
+| `dispatch.py` | Launch a task on another provider (`claude`/`copilot`/`agy`) with its brief pre-loaded. Dry-run by default — add `--launch` to actually run it. `--worktree` launches it inside the card's worktree. |
+| `worktree.py` | One git worktree per (harness, card) at `~/dotfiles.worktrees/<harness>/<task-id>`, branch `<harness>/<task-id>` — same for every harness. Per-machine view in `tasks/cards/worktrees/`. |
 
 None of these need arguments beyond what's shown below — no config file, no
 setup. Run them from anywhere with `python3 tasks/<tool>.py ...` or `cd
@@ -150,6 +151,22 @@ python3 tasks/dispatch.py --task-id dotfiles-my-task --provider claude --launch 
 dry-run unless you pass `--launch` — launching spawns a real, autonomous
 session, not something to do by accident. No daemon: this just runs
 `brief.py --prompt-only` for the task and execs the right binary with it.
+
+## One worktree per card (any harness)
+
+```bash
+python3 tasks/worktree.py create --task-id dotfiles-my-task --harness copilot   # path<TAB>branch<TAB>created|existing
+python3 tasks/dispatch.py --task-id dotfiles-my-task --provider agy --worktree --launch   # create + launch inside it
+python3 tasks/worktree.py list                     # what exists on this machine (also: tasks/cards/worktrees/)
+python3 tasks/worktree.py prune                    # dry-run: clean worktrees of done cards; --apply to remove
+```
+
+Only worktrees at exactly `~/dotfiles.worktrees/<harness>/<task-id>` are
+managed — anything else (`.claude/worktrees/`, a foreign `claude/<x>`
+branch) is never listed, reused or pruned. Removal refuses dirty, locked
+or occupied worktrees and never deletes the branch. Every card links to
+its `tasks/cards/worktrees/<id>.md` (gitignored, per-machine). Design:
+`tasks/plans/card-worktrees.md`.
 
 ## See what's going on
 
