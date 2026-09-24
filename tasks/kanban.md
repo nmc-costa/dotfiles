@@ -20,18 +20,18 @@
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
 - [ ] dotfiles-tsk-skill-gauntlet-prompting Skill: gauntlet prompting (desenhar e criar skill .agents/skills/gauntlet-prompting)
 - [ ] dotfiles-tsk-agent-autonomy-charter Agent autonomy charter: shared system prompt for all harnesses with no-ask domains + TL;DR-only escalation
+- [ ] dotfiles-tsk-cross-harness-orchestra Skill /harness-orchestra: fan-out de tarefas entre harness+provider+model (ex: 1 Claude Code Opus + 1 Copilot CLI GPT-5), cada um no seu worktree, fecho via handoff md
 
 ## In Progress
 
 ## Review
 - [ ] dotfiles-tsk-gh-path-recursion Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)
 - [ ] dotfiles-tsk-task-brief-assistant Upgrade /task-brief into a full tasks/ management assistant
-- [ ] dotfiles-tsk-verify-setup-skill-gaps Investigate 2 findings from first real run of setup-dotfiles/verify_setup.sh: _templates flagged missing from synced skills dirs, chezmoi status failure
-- [ ] dotfiles-tsk-agent-actor-safety [HIGH PRIORITY] Agents must sign tasks/ events as actor-kind=agent for their own writes, and must not run unguarded git ops on the shared tasks/events.jsonl working tree
 - [ ] worknotes-siac-colab-portfolio-report [HIGH PRIORITY] SIAC CoLAB (COMPETE2030 transferencia, ~1.2M EUR/24m): planear portfolio de demonstradores + report com tabela para o CEO (Work/notes/projects)
 
 ## Validation
 - [ ] dotfiles-tsk-harness-provider-model-index Build a validated harness x provider x model orchestration index
+- [ ] dotfiles-tsk-agent-actor-safety [HIGH PRIORITY] Agents must sign tasks/ events as actor-kind=agent for their own writes, and must not run unguarded git ops on the shared tasks/events.jsonl working tree
 
 ## Done
 - [x] dotfiles-repo-hygiene-dotfiles Abrir PR: claude/repo-hygiene-dotfiles
@@ -63,6 +63,7 @@
 - [x] dotfiles-tsk-jsonl-merge-driver Custom git merge driver (merge=union or equivalent) for tasks/*.jsonl so a conflict resolution can never silently drop an append-only line
 - [x] dotfiles-handoff-standardization Adopt HANDOFF.md convention (global index + per-repo/subsystem), rename tasks/handoff.md
 - [x] dotfiles-tsk-chezmoi-config-drift Corrigir ~/.config/chezmoi/chezmoi.toml pos-PR1 (destDir=$HOME, sourceDir=home/) + limpar ~/dotfiles/.dtx-providers/ + corrigir PROVIDERS.md e render-litellm-config.sh
+- [x] dotfiles-tsk-verify-setup-skill-gaps Investigate 2 findings from first real run of setup-dotfiles/verify_setup.sh: _templates flagged missing from synced skills dirs, chezmoi status failure
 - [x] dotfiles-tsk-spike-herdr-commander-build Spike (hands-on): patch herdr-commander to overlay placement, wire real .vscode/tasks.json, verify picker end-to-end
 
 ## Blocked

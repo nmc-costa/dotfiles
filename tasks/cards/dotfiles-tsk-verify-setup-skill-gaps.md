@@ -2,9 +2,9 @@
 task_id: dotfiles-tsk-verify-setup-skill-gaps
 title: "Investigate 2 findings from first real run of setup-dotfiles/verify_setup.sh: _templates flagged missing from synced skills dirs, chezmoi status failure"
 project: dotfiles
-phase: review
+phase: done
 created: "2026-09-23T12:05:14.218406+00:00"
-touched: "2026-09-24T15:35:49.164078+00:00"
+touched: "2026-09-24T15:46:01.000609+00:00"
 energy: mechanical
 estimate: ""
 deadline: ""
@@ -20,6 +20,8 @@ Investigate 2 findings from first real run of setup-dotfiles/verify_setup.sh: _t
 - 2026-09-23T12:05:38.611692+00:00: backlog -> planning (actor: claude/agent)
 - 2026-09-23T12:05:38.681225+00:00: planning -> in_progress (actor: claude/agent)
 - 2026-09-24T15:35:49.164078+00:00: in_progress -> review (actor: claude/agent) — PR #76 opened: fixes both findings (_templates false-positive, stale ~/.dtx-providers refs) + adds the actor-safety docs. validate_dotfiles.sh: 35 passed, 0 failed.
+- 2026-09-24T15:45:55.431251+00:00: review -> validation (actor: claude/agent) — PR #76 merged (b6cf32d), local ./sync.sh confirms the updated verify_setup.sh is live in ~/.agents/skills and ~/.claude/skills
+- 2026-09-24T15:46:01.000609+00:00: validation -> done (actor: claude/agent)
 
 ## Latest handoff
 _@ in_progress_

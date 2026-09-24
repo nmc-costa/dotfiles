@@ -2,9 +2,9 @@
 task_id: dotfiles-tsk-agent-actor-safety
 title: "[HIGH PRIORITY] Agents must sign tasks/ events as actor-kind=agent for their own writes, and must not run unguarded git ops on the shared tasks/events.jsonl working tree"
 project: dotfiles
-phase: review
+phase: validation
 created: "2026-09-23T12:05:25.335490+00:00"
-touched: "2026-09-24T15:35:49.244340+00:00"
+touched: "2026-09-24T15:46:01.074072+00:00"
 energy: mechanical
 estimate: ""
 deadline: ""
@@ -20,6 +20,7 @@ origin: "recurring problem, flagged again 2026-09-23: an agent session (1) wrote
 - 2026-09-23T12:05:38.473729+00:00: backlog -> planning (actor: claude/agent)
 - 2026-09-23T12:05:38.545893+00:00: planning -> in_progress (actor: claude/agent)
 - 2026-09-24T15:35:49.244340+00:00: in_progress -> review (actor: claude/agent) — PR #76 opened: adds tasks/README.md 'Agent actor-kind' + 'events.jsonl is live and shared' sections, with pointers from AGENTS.md/CLAUDE.md's session-start reading.
+- 2026-09-24T15:46:01.074072+00:00: review -> validation (actor: claude/agent) — PR #76 merged (b6cf32d): tasks/README.md + AGENTS.md + CLAUDE.md all carry the new actor-kind/git-safety sections on main now
 
 ## Latest handoff
 _@ in_progress_
