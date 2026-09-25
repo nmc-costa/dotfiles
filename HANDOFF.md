@@ -1,3 +1,79 @@
+<!-- handoff:block 2026-09-25T22:51Z -->
+# Handoff — omarchy-radar: installed, 3 pipeline bugs fixed, first brief on radar branch, timer live (GLM-routed agent step) (2026-09-25)
+
+> **To whoever picks this up (any harness, any model):** this top block is the
+> current handoff; blocks below it are history. Check the Snapshot against live
+> state (`git status`, `git log`, open PRs) before acting on it, then start at
+> **Next step**. When you stop with work unfinished, add a new block on top
+> (`/handoff`, or `handoff.py new`) rather than editing this one.
+
+## Goal
+
+Owner is consolidating three parallel radar sessions into one ("eu tenho que juntar isto numa só unica sessão, mas existem 3 sessoes de radars que estão a dar o mesmo erro"). This session's slice: install `omarchy-radar` end-to-end on this machine, fix its pipeline, produce the first brief, enable the timer. The shared error killing all radar sessions: **Claude weekly usage limit** (resets Sep 29, 11:00 Europe/Lisbon) — every `claude` CLI call fails with "You've hit your weekly limit".
+
+## Done
+
+- **omarchy-radar installed + timer live**: units copied to `~/.config/systemd/user/`, `systemctl --user enable --now omarchy-radar.timer` (OnCalendar=08:00, Persistent=true, next fire 2026-09-26 ~08:02). Explicitly-flagged manual enable, per the skill's README.
+- **collect.sh validated**: all 9 sources `ok` in `~/.local/state/omarchy-radar/status.json`; dedupe acceptance criterion met (second same-day run → byte-identical inbox).
+- **3 pipeline bugs found + fixed** (now in `main` via PR #100, commit `6067903`):
+  1. `collect.sh:279` (news feed) + Reddit collector — jq `index(.filter)` passes a path filter to `index()`, which errors **and exits 0**: new feed items were silently marked seen without ever entering the inbox (permanent data loss on promotion). Fixed with the `as $g`/`as $i` binding pattern (matches the MCP collector's existing style).
+  2. Reddit `.json` endpoint 403-blocks this machine's UA/IP class → switched collector to the Atom `.rss` feed (200 OK, stdlib ElementTree) + updated `sources.md`.
+  3. `run.sh:151` — `Write(briefs/*)` allow rule is **no longer honored by Claude Code 2.1.280** ("only Edit(path) rules are; Edit rules cover all file-editing tools") → changed to `Edit(briefs/*)`. Without this the agent scores everything then cannot write the brief.
+- **`radar-common/lib.sh`: `RADAR_CLAUDE_BIN` override added** (default stays `claude`; backwards compatible) so a machine can route the agent step through an opt-in provider launcher.
+- **First brief produced end-to-end**: branch `radar/omarchy-radar/2026-09-25`, commit `377dc27`, files `briefs/omarchy-radar-2026-09-25.md` + `.ranked.json`. All README acceptance criteria verified: single commit touching only its own brief files, worktree removed, `main` checkout untouched, secret-scan passed, `seen.json` promoted, 156 candidates in `~/.local/state/omarchy-radar/history.db`.
+- **Claude-limit workaround live** (owner's own dtx stack): `uv tool install "litellm[proxy]"` → `dtx-litellm-proxy.service` active on 127.0.0.1:4444 (master key auto-generated at `~/.custom_providers/proxy.env`) → launcher `~/.local/bin/claude-dtx-glm53-flash` (via `.agents/providers/adapters/claude-code.sh apply dtx-glm53-flash`) → machine-local drop-in `~/.config/systemd/user/omarchy-radar.service.d/override.conf` sets `RADAR_CLAUDE_BIN` to it. Smoke-tested, then used for the real run (GLM-5.3-Flash).
+
+## Decisions
+
+- **Agent step routed through the owner's GLM proxy** rather than waiting for the Sep 29 reset — the day-one flood (597 inbox items) would otherwise be marked seen without ever being briefed (silent loss, same failure mode as bug 1). Revert = delete the drop-in file above; daily cost after day one is small (only genuinely new items).
+- **Reddit via `.rss`, not `.json`** — the JSON endpoint 403s this machine; RSS is the only keyless endpoint that still serves it.
+- **Brief left unmerged on its branch** — the radar's own security model reserves review/merge for the human; this session did not push or merge it.
+
+## Open / risks
+
+- **A radar session was STILL WORKING in this shared checkout at handoff time (~22:5xZ)**: it merged PR #100 (radar family → main) and has uncommitted work-in-progress converting the agent step to an **opencode twin** (`radar_run_opencode_agent` in `.agents/automation/radar-common/lib.sh`, `harness-radar/scripts/run.sh` rework, `.gitignore` +card `dotfiles-tsk-researcher-radar` edits). **Do not race it** — read its handoff/PR first; it may supersede the GLM-launcher drop-in decision above with the native opencode path.
+- **Brief branch `radar/omarchy-radar/2026-09-25` is local-only** — push/merge it before any cleanup of stale branches, or the first brief is lost.
+- **`harness-radar` is not installed on this machine** (no timer, no state dir). Its units exist in the repo (`systemd/harness-radar/`); install flow = `bash ~/dotfiles/.agents/skills/harness-radar/scripts/install_timer.sh` then explicit `systemctl --user enable --now harness-radar.timer`.
+- **`dtx_providers.env`-backed proxy is live** (`dtx-litellm-proxy.service` enabled) — daily radar runs spend the owner's GLM quota unattended; acceptable per owner's "do it all", but worth knowing.
+- Claude weekly limit resets **Sep 29, 11:00 Europe/Lisbon**; until then any headless `claude` call fails the same way for every session.
+
+## Next step
+
+1. In the **new consolidated session**, first sweep for the other two radar sessions' output: `cd ~/dotfiles && git log --oneline -8` (look past `6067903`/`155adf3`), `git branch -a | grep radar`, open PRs (`gh pr list`), and any newer HANDOFF.md blocks — the opencode-twin session may have landed or left a PR.
+2. Decide the single agent-step backend (opencode native vs `claude-dtx-glm53-flash` launcher) and make `omarchy-radar` + `harness-radar` use it consistently; delete whichever drop-in/env becomes redundant.
+3. Review + merge the first brief: `git -C ~/dotfiles show radar/omarchy-radar/2026-09-25:briefs/omarchy-radar-2026-09-25.md`, then merge the branch (it only touches `briefs/`).
+4. Tomorrow ~08:02, verify the timer's first unattended run: `systemctl --user list-timers omarchy-radar.timer`, `jq . ~/.local/state/omarchy-radar/status.json`, new `radar/omarchy-radar/2026-09-26` branch.
+5. Install `harness-radar`'s timer the same way (see Open/risks).
+
+## Snapshot
+
+_Generated by `handoff.py` at write time — verify against live state before trusting it._
+
+- **Written:** 2026-09-25 22:51 UTC on `omarchy` by `opencode` / `local/zai-org/GLM-5.3-Flash`
+- **Repo:** `/home/nbugz/dotfiles` — branch `main`
+- **Upstream:** `origin/main` — 0 ahead, 0 behind
+
+Uncommitted changes:
+
+```
+ M .agents/automation/radar-common/lib.sh
+ M .agents/skills/harness-radar/scripts/run.sh
+ M .gitignore
+ M tasks/cards/dotfiles-tsk-chronicle-d7.md
+ M tasks/cards/dotfiles-tsk-researcher-radar.md
+ M tasks/cards/dotfiles-tsk-skill-gauntlet-prompting.md
+ M tasks/events.jsonl
+?? briefs/
+```
+
+`tasks/brief.py` at write time:
+
+```
+Nothing pending. What do you want to work on?
+```
+
+---
+
 <!-- handoff:block 2026-09-25T22:26Z -->
 # Handoff — Chronicle D7 built (PR #98) — d4-d6 merged+deployed by owner (2026-09-25)
 
@@ -40,11 +116,11 @@ Continue the chronicle skill-layer plan from the previous handoff: land D4-D6 (3
 ## Open / risks
 
 - **PRs #98 (D7) and #102 (daily improve) both pending owner merge** (squash). After #98: move card d7 → validation, `./sync.sh`, **restart opencode**. After #102: `./sync.sh` then `systemctl --user enable --now chronicle-improve.timer` (owner-run; hardened unit, daily 08:00+jitter).
-- **Radar timers are still not installed on this machine** (units exist in the repo's untracked `systemd/` from the radar session; radars ran today into `~/.local/state/*-radar/`). The chronicle job consumes their briefs — installing the radar timers is a natural follow-up if the owner wants the full loop.
+- **Radar timers: `omarchy-radar.timer` is now INSTALLED + ENABLED** (2026-09-25 late session, see top block) — agent step currently GLM-routed. `harness-radar` timer is still not installed; same install flow when wanted.
 - **The daily-improve gate model is a deliberate exception** to the human-only-merge rule (owner-directed); pr-finish's default and every other skill remain propose-only.
 - **Owner validation pending** for cards `dotfiles-tsk-chronicle-d4-d6` (in `validation`) and, later, `dotfiles-tsk-chronicle-d7`.
 - **D8 not built** (voxtype + ydotoold; plan note on done card `dotfiles-tsk-chronicle-skill-layer`).
-- **Shared checkout has another session's work**: modified `tasks/cards/dotfiles-tsk-chronicle-d4-d6.md` (derived view, regenerable) + untracked radar-family dirs (`.agents/automation/radar-common/`, `.agents/skills/{harness,omarchy,researcher}-radar/`, `briefs/`, `docs/radar-knowledge/`, `systemd/`). Never `git checkout --/reset/stash/clean` them.
+- **Shared checkout has other sessions' live work**: modified `tasks/cards/*` + `tasks/events.jsonl` (derived views / live log — regenerable, never `git checkout --/reset/stash/clean` them). The previously-untracked radar-family dirs were merged via PR #100; a radar session was still editing `lib.sh`/`harness-radar` at handoff time (see top block).
 - `sync.sh --dry-run` hang is pre-existing (verified at base `2842866` last session); real sync runs fine.
 
 ## Next step
