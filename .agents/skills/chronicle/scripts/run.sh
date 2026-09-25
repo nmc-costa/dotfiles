@@ -163,10 +163,25 @@ case "${CHRONICLE_AGENT:-opencode}" in
     ;;
   claude)
     # Same unattended wrapper the radars use (radar-common/lib.sh), so the
-    # agent-step flags stay in exactly one place across the family.
-    # shellcheck source=../../automation/radar-common/lib.sh
-    source "$REPO_DIR/.agents/automation/radar-common/lib.sh"
-    radar_common_run_agent "$WORKTREE" "$(cat "$PROMPT")" > "$AGENT_OUT" 2>&1 || true
+    # agent-step flags stay in one place across the family. Conditional
+    # source: radar-common lands via the radar-family PR and may not exist
+    # on a fresh checkout yet. Unlike the radar steps, the chronicle agent
+    # commits its own work, so narrowly-allowed git add/commit Bash is
+    # required; the disposable worktree + PR-level path gate stay the real
+    # containment.
+    if [[ -f "$REPO_DIR/.agents/automation/radar-common/lib.sh" ]]; then
+      # shellcheck source=../../automation/radar-common/lib.sh
+      source "$REPO_DIR/.agents/automation/radar-common/lib.sh"
+      radar_run_claude_agent "$WORKTREE" \
+        "Read,Grep,Glob,Edit(.agents/skills/**),Write(.agents/skills/**),Bash(git add:*),Bash(git commit:*)" \
+        "WebFetch,WebSearch" \
+        "$PROMPT" > "$AGENT_OUT" 2>&1 || true
+    else
+      (cd "$WORKTREE" && timeout 480 claude -p --permission-mode dontAsk \
+        --allowedTools "Read,Grep,Glob,Edit(.agents/skills/**),Write(.agents/skills/**),Bash(git add:*),Bash(git commit:*)" \
+        --disallowedTools "WebFetch,WebSearch" \
+        < "$PROMPT") > "$AGENT_OUT" 2>&1 || true
+    fi
     ;;
   *) die "unknown CHRONICLE_AGENT '$CHRONICLE_AGENT' (use opencode|claude)" ;;
 esac
