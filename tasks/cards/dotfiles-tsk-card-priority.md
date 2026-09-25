@@ -18,3 +18,5 @@ Add priority levels (P0-P3) to tasks/ cards
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-card-priority.md](worktrees/dotfiles-tsk-card-priority.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-card-priority`

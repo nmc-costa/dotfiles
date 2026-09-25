@@ -23,6 +23,8 @@ notify.py + sweep.py - the notification producer side
 - 2026-09-21T18:55:05.108027+00:00: review -> validation (actor: nmc-costa/human)
 - 2026-09-21T18:55:14.801560+00:00: validation -> done (actor: nmc-costa/human)
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-notify-sweep.md](worktrees/dotfiles-tsk-notify-sweep.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-notify-sweep`
+
 ## Latest handoff
 _@ validation_
 

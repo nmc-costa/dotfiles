@@ -18,3 +18,5 @@ Migrar .github/ para .agents/ e apagar .github (Copilot já lê AGENTS.md)
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-github-to-agents.md](worktrees/dotfiles-tsk-github-to-agents.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-github-to-agents`

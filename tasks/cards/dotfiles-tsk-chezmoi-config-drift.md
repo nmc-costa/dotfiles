@@ -23,6 +23,8 @@ Corrigir ~/.config/chezmoi/chezmoi.toml pos-PR1 (destDir=$HOME, sourceDir=home/)
 - 2026-09-23T12:06:48.581710+00:00: review -> validation (actor: nmc-costa/human)
 - 2026-09-23T12:06:53.192848+00:00: validation -> done (actor: nmc-costa/human)
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-chezmoi-config-drift.md](worktrees/dotfiles-tsk-chezmoi-config-drift.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-chezmoi-config-drift`
+
 ## Latest handoff
 _@ done_
 

@@ -18,3 +18,5 @@ Abrir PR: claude/env-leak-fix
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/architect-env-leak-fix.md](worktrees/architect-env-leak-fix.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id architect-env-leak-fix`

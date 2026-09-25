@@ -18,3 +18,5 @@ Re-verify Antigravitys startup file-discovery from inside ~/dotfiles
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-antigravity-reverify.md](worktrees/dotfiles-tsk-antigravity-reverify.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-antigravity-reverify`

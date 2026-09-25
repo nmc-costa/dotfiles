@@ -23,6 +23,8 @@ Investigate 2 findings from first real run of setup-dotfiles/verify_setup.sh: _t
 - 2026-09-24T15:45:55.431251+00:00: review -> validation (actor: claude/agent) — PR #76 merged (b6cf32d), local ./sync.sh confirms the updated verify_setup.sh is live in ~/.agents/skills and ~/.claude/skills
 - 2026-09-24T15:46:01.000609+00:00: validation -> done (actor: claude/agent)
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-verify-setup-skill-gaps.md](worktrees/dotfiles-tsk-verify-setup-skill-gaps.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-verify-setup-skill-gaps`
+
 ## Latest handoff
 _@ in_progress_
 

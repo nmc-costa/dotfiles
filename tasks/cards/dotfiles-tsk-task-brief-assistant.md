@@ -21,6 +21,8 @@ Upgrade /task-brief into a full tasks/ management assistant
 - 2026-09-23T22:07:36.864705+00:00: planning -> in_progress (actor: claude/agent) — harness-provider-model-index merged (PR #72), unblocking this task; owner said faz o que falta
 - 2026-09-23T22:08:09.297636+00:00: in_progress -> review (actor: claude/agent) — PR #74 opened
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-task-brief-assistant.md](worktrees/dotfiles-tsk-task-brief-assistant.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-task-brief-assistant`
+
 ## Latest handoff
 _@ review_
 

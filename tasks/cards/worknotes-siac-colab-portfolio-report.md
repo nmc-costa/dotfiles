@@ -21,6 +21,8 @@ origin: "pedido direto do owner 2026-09-23, escrito por claude a pedido (quota d
 - 2026-09-24T09:47:13.029970+00:00: planning -> in_progress (actor: claude/agent) — plan-orchestra a correr: 4 agentes investigacao + planeador + critico
 - 2026-09-24T09:47:13.178684+00:00: in_progress -> review (actor: claude/agent) — Artifact entregue; report.md ja existente serve de fonte
 
+Worktrees (this machine): [worktrees/worknotes-siac-colab-portfolio-report.md](worktrees/worknotes-siac-colab-portfolio-report.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id worknotes-siac-colab-portfolio-report`
+
 ## Latest handoff
 _@ review_
 

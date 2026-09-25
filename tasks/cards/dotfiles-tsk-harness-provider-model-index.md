@@ -22,6 +22,8 @@ Build a validated harness x provider x model orchestration index
 - 2026-09-23T12:02:25.508135+00:00: in_progress -> review (actor: claude/agent)
 - 2026-09-23T21:49:00.824912+00:00: review -> validation (actor: claude/agent) — PR #72 merged (merge commit 67cec54044e66abbef11c86bbfc282f4ea47463e), owner authorized the merge directly
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-harness-provider-model-index.md](worktrees/dotfiles-tsk-harness-provider-model-index.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-harness-provider-model-index`
+
 ## Latest handoff
 _@ validation_
 

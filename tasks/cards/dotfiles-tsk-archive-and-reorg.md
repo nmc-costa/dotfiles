@@ -19,6 +19,8 @@ Archive done tasks out of live views + reorganize tasks/ directory tree so 'curr
 ## History
 - 2026-09-22T18:07:22.457365+00:00: backlog -> planning (actor: nmc-costa/human) — Design verdict reached in conversation with the owner (2026-09-22), recording so it isn't lost before another session picks this up
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-archive-and-reorg.md](worktrees/dotfiles-tsk-archive-and-reorg.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-archive-and-reorg`
+
 ## Latest handoff
 _@ planning_
 

@@ -19,6 +19,8 @@ Agent autonomy charter: shared system prompt for all harnesses with no-ask domai
 ## History
 - 2026-09-24T11:30:27.777904+00:00: backlog -> planning (actor: claude/agent) — owner pediu plano por agente Opus com validação online
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-agent-autonomy-charter.md](worktrees/dotfiles-tsk-agent-autonomy-charter.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-agent-autonomy-charter`
+
 ## Latest handoff
 _@ planning_
 

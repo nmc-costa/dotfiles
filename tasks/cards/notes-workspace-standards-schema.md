@@ -18,3 +18,5 @@ Abrir PR: claude/workspace-standards-schema
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/notes-workspace-standards-schema.md](worktrees/notes-workspace-standards-schema.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id notes-workspace-standards-schema`

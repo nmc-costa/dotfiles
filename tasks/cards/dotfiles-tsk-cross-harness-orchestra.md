@@ -18,3 +18,5 @@ Skill /harness-orchestra: fan-out de tarefas entre harness+provider+model (ex: 1
 
 ## History
 - 2026-09-24T15:42:27.395559+00:00: backlog -> planning (actor: nmc-costa/human) — owner pediu Opus em /plan para este card
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-cross-harness-orchestra.md](worktrees/dotfiles-tsk-cross-harness-orchestra.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-cross-harness-orchestra`

@@ -23,6 +23,8 @@ rebuild_graph.py: project events.jsonl into a Mermaid roadmap (tasks/roadmap.md 
 - 2026-09-21T17:34:33.642716+00:00: review -> validation (actor: nmc-costa/human) — revisto manualmente pelo diretor: corri rebuild_graph.py eu mesmo, output correto e idempotente
 - 2026-09-21T17:34:33.694246+00:00: validation -> done (actor: nmc-costa/human)
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-roadmap-graph.md](worktrees/dotfiles-tsk-roadmap-graph.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-roadmap-graph`
+
 ## Latest handoff
 _@ review_
 

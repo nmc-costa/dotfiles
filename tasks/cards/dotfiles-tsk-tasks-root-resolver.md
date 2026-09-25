@@ -22,3 +22,5 @@ tasks_root() resolver: one canonical write path for events.jsonl, the CAS lock a
 - 2026-09-21T21:44:17.284588+00:00: in_progress -> review (actor: nmc-costa/human) — PR #46 aberta, testado contra scratch TSK_ROOT + ciclo de vida completo com CAS
 - 2026-09-21T21:44:36.257759+00:00: review -> validation (actor: nmc-costa/human) — revisto: testes de scratch TSK_ROOT + ciclo de vida completo confirmados, demo/ confirmado nao afetado
 - 2026-09-21T21:44:40.243218+00:00: validation -> done (actor: nmc-costa/human)
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-tasks-root-resolver.md](worktrees/dotfiles-tsk-tasks-root-resolver.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-tasks-root-resolver`

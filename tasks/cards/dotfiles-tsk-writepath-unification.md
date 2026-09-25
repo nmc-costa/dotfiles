@@ -23,6 +23,8 @@ lifecycle.py + LEGAL_TRANSITIONS + append() as the single writer, with CAS (Laye
 - 2026-09-21T13:49:34.677337+00:00: review -> validation (actor: nmc-costa/human) — PR #32 fundida em main
 - 2026-09-21T13:49:40.952832+00:00: validation -> done (actor: nmc-costa/human)
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-writepath-unification.md](worktrees/dotfiles-tsk-writepath-unification.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-writepath-unification`
+
 ## Latest handoff
 _@ review_
 

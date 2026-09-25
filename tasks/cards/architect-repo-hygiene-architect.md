@@ -18,3 +18,5 @@ Abrir PR: claude/repo-hygiene-architect
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/architect-repo-hygiene-architect.md](worktrees/architect-repo-hygiene-architect.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id architect-repo-hygiene-architect`

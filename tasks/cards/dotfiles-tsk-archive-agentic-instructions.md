@@ -18,3 +18,5 @@ Archive agentic_instructions repo on GitHub
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-archive-agentic-instructions.md](worktrees/dotfiles-tsk-archive-agentic-instructions.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-archive-agentic-instructions`

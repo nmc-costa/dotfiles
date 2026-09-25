@@ -23,6 +23,8 @@ Spike: install Agent Deck, confirm it detects Claude Code + Copilot CLI sessions
 - 2026-09-21T17:33:37.856729+00:00: review -> validation (actor: nmc-costa/human) — revisto manualmente pelo diretor: README consistente, instalacao verificada, achado de assimetria Claude/Copilot confirmado com evidencia
 - 2026-09-21T17:33:42.286135+00:00: validation -> done (actor: nmc-costa/human)
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-spike-agent-deck.md](worktrees/dotfiles-tsk-spike-agent-deck.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-spike-agent-deck`
+
 ## Latest handoff
 _@ review_
 

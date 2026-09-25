@@ -23,6 +23,8 @@ Install tuiboard for real (not a scratch install), point it at tasks/kanban.md
 - 2026-09-21T17:34:20.664933+00:00: review -> validation (actor: nmc-costa/human) — revisto manualmente pelo diretor: config real confirmada, captura tmux mostra board real
 - 2026-09-21T17:34:20.722122+00:00: validation -> done (actor: nmc-costa/human)
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-tuiboard-install.md](worktrees/dotfiles-tsk-tuiboard-install.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-tuiboard-install`
+
 ## Latest handoff
 _@ review_
 

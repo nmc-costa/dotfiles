@@ -18,3 +18,5 @@ Add blocked_by dependency edges to rebuild_graph.py's flowchart (needs blocked_b
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-graph-dependency-edges.md](worktrees/dotfiles-tsk-graph-dependency-edges.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-graph-dependency-edges`

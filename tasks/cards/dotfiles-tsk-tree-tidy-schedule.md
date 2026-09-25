@@ -18,3 +18,5 @@ origin: "plan-orchestra 2026-09-24, see tasks/plans/continuous-repo-optimization
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-tree-tidy-schedule.md](worktrees/dotfiles-tsk-tree-tidy-schedule.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-tree-tidy-schedule`

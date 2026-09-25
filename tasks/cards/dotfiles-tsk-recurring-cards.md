@@ -18,3 +18,5 @@ Recurring cards: spawn new task instances on a cadence
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-recurring-cards.md](worktrees/dotfiles-tsk-recurring-cards.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-recurring-cards`

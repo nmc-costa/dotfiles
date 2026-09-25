@@ -21,6 +21,8 @@ Fix typo: simplifyhit/SKILL.md escreve RESSONANCE em vez de RESONANCE no bloco d
 - 2026-09-25T14:25:13.804382+00:00: planning -> in_progress (actor: claude/agent) — implemented on claude/output-frame-impl
 - 2026-09-25T14:25:14.041652+00:00: in_progress -> review (actor: claude/agent) — fix in commit d284445, draft PR #83
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-simplifyhit-ressonance-typo.md](worktrees/dotfiles-tsk-simplifyhit-ressonance-typo.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-simplifyhit-ressonance-typo`
+
 ## Latest handoff
 _@ review_
 

@@ -22,3 +22,5 @@ Custom git merge driver (merge=union or equivalent) for tasks/*.jsonl so a confl
 - 2026-09-21T21:55:30.499685+00:00: in_progress -> review (actor: nmc-costa/human) — PR #52 aberta, reproduzi o bug real num repo scratch e confirmei a correcao
 - 2026-09-21T21:55:34.294755+00:00: review -> validation (actor: nmc-costa/human) — revisto: PR #52 fundida, teste reproduzindo o bug real confirma a correcao
 - 2026-09-21T21:55:37.515799+00:00: validation -> done (actor: nmc-costa/human)
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-jsonl-merge-driver.md](worktrees/dotfiles-tsk-jsonl-merge-driver.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-jsonl-merge-driver`

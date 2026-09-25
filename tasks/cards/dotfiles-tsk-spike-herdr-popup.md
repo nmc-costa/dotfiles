@@ -23,6 +23,8 @@ Spike: confirm a trivial herdr plugin can open a popup (herdr plugin pane open)
 - 2026-09-21T17:34:08.463089+00:00: review -> validation (actor: nmc-costa/human) — revisto manualmente pelo diretor: README excelente, achado bem evidenciado (server log, herdr pane list, ps), cleanup confirmado
 - 2026-09-21T17:34:08.522290+00:00: validation -> done (actor: nmc-costa/human)
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-spike-herdr-popup.md](worktrees/dotfiles-tsk-spike-herdr-popup.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-spike-herdr-popup`
+
 ## Latest handoff
 _@ review_
 

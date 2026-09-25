@@ -18,3 +18,5 @@ ensure-tsk-sweep.sh + systemd units, following the existing ensure-*.sh conventi
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-systemd-units.md](worktrees/dotfiles-tsk-systemd-units.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-systemd-units`

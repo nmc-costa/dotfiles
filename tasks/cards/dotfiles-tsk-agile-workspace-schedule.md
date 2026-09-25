@@ -18,3 +18,5 @@ Agile Workspace roadmap step 4 (Schedule): jobs/*.yaml manifest + systemd timers
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-agile-workspace-schedule.md](worktrees/dotfiles-tsk-agile-workspace-schedule.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-agile-workspace-schedule`

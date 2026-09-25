@@ -195,7 +195,7 @@ if command -v python3 >/dev/null 2>&1; then
   fi
 
   link_report="$(REPO_ROOT="$REPO_ROOT" python3 - "${md_files[@]}" <<'PYEOF'
-import os, re, sys
+import os, re, subprocess, sys
 
 repo_root = os.environ["REPO_ROOT"]
 md_files = sys.argv[1:]
@@ -243,7 +243,16 @@ for rel in md_files:
             checked += 1
             resolved = os.path.normpath(os.path.join(link_dir, path_part))
             if not os.path.exists(resolved):
-                broken.append(f"{rel}:{lineno}: broken link '{target}' -> resolves to {os.path.relpath(resolved, repo_root)}")
+                # A link into a gitignored, machine-local path (e.g. the
+                # tasks/cards/worktrees/ view that tasks/worktree.py writes
+                # and every generated card links to) is legitimate: it only
+                # exists on machines where it's been generated. `git
+                # check-ignore` works on paths that don't exist yet.
+                rel_resolved = os.path.relpath(resolved, repo_root)
+                if not rel_resolved.startswith('..') and subprocess.run(
+                        ['git', '-C', repo_root, 'check-ignore', '-q', '--', rel_resolved]).returncode == 0:
+                    continue
+                broken.append(f"{rel}:{lineno}: broken link '{target}' -> resolves to {rel_resolved}")
 
 print(f"CHECKED={checked}")
 for b in broken:

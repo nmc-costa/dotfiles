@@ -21,6 +21,8 @@ Formato padrão de fecho para planos e outputs longos de agentes: TL;DR + índic
 - 2026-09-24T22:05:16.470496+00:00: planning -> in_progress (actor: nmc-costa/human) — Owner aprovou Q1/Q2 do plano; plano fica aprovado como escrito, próximo passo é a implementação S1-S6.
 - 2026-09-25T14:25:12.728405+00:00: in_progress -> review (actor: claude/agent) — S1-S4 implemented, draft PR #83 open (stacked on plan PR #80)
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-agent-output-tldr-format.md](worktrees/dotfiles-tsk-agent-output-tldr-format.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-agent-output-tldr-format`
+
 ## Latest handoff
 _@ review_
 

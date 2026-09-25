@@ -18,3 +18,5 @@ Agile Workspace roadmap step 3 (Limit): per-machine limit profiles
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-agile-workspace-limit.md](worktrees/dotfiles-tsk-agile-workspace-limit.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-agile-workspace-limit`

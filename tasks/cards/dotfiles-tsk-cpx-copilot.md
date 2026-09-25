@@ -18,3 +18,5 @@ cpx wrapper for Copilot CLI (its own sessionStart hook is broken)
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-cpx-copilot.md](worktrees/dotfiles-tsk-cpx-copilot.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-cpx-copilot`

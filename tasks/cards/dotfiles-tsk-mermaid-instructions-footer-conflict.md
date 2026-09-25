@@ -21,6 +21,8 @@ mermaid.instructions.md (Regras 1, 2 e 5) entra em conflito com qualquer diagram
 - 2026-09-25T14:25:14.668832+00:00: planning -> in_progress (actor: claude/agent) — implemented on claude/output-frame-impl
 - 2026-09-25T14:25:14.883322+00:00: in_progress -> review (actor: claude/agent) — fix in commit 3b4aa5f, draft PR #83
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-mermaid-instructions-footer-conflict.md](worktrees/dotfiles-tsk-mermaid-instructions-footer-conflict.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-mermaid-instructions-footer-conflict`
+
 ## Latest handoff
 _@ review_
 

@@ -23,6 +23,8 @@ Spike: confirm a Workflow script with a real per-phase model override runs as ex
 - 2026-09-21T17:33:56.329804+00:00: review -> validation (actor: nmc-costa/human) — revisto manualmente pelo diretor: corri eu mesmo o script, resultado real confirmado (differentiated: true)
 - 2026-09-21T17:33:56.388141+00:00: validation -> done (actor: nmc-costa/human)
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-spike-workflow-model.md](worktrees/dotfiles-tsk-spike-workflow-model.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-spike-workflow-model`
+
 ## Latest handoff
 _@ review_
 
