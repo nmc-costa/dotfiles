@@ -16,6 +16,8 @@ Guidance for AI agents (Crush/Claude, Copilot, Gemini) working in this repositor
 
 **Before writing to `tasks/` at all** (creating a task, moving a phase, or touching `tasks/events.jsonl`/`kanban.md`/`cards/` directly): read `tasks/README.md`'s "Agent actor-kind: never impersonate the human" and "`tasks/events.jsonl` is live and shared — don't run raw git ops on it" sections first (added 2026-09-24, after a real agent session did both wrong in the same afternoon). Short version — sign your own writes `actor.kind: agent`, never borrow a human's identity; and never `git checkout --`/`reset`/`stash`/`clean` that file in the shared checkout, since another session may be appending to it right now.
 
+**Worktree per card (every harness, 2026-09-24):** writing code for a `tasks/` card? Your process cwd must be that card's worktree — `python3 ~/dotfiles/tasks/worktree.py path --task-id <id> --harness <claude|copilot|gemini|agy|codex>` prints it. If it doesn't exist or you aren't in it, run `python3 ~/dotfiles/tasks/worktree.py create --task-id <id> --harness <you>` and relaunch there (`python3 ~/dotfiles/tasks/dispatch.py --task-id <id> --provider <you> --worktree --launch`, or start your CLI from that directory) — never edit the main checkout, and never use a native `--worktree`/`EnterWorktree` for tasks work. See `.agents/skills/task-worktree/SKILL.md`.
+
 ## Available Agents
 
 | Agent | Config Location | When to Use |
