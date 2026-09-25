@@ -1,0 +1,15 @@
+[Unit]
+Description=Run harness-radar once a day
+
+[Timer]
+# 08:20, not 08:00 (omarchy-radar's time) -- offset past omarchy-radar's
+# own RandomizedDelaySec jitter window so the two timers' cold starts
+# (both do `git worktree add`/`remove` against ~/dotfiles) don't compete
+# for the same moment. See harness-radar/README.md's "This radar's
+# identity" table for the reasoning.
+OnCalendar=08:20
+Persistent=true
+RandomizedDelaySec=600
+
+[Install]
+WantedBy=timers.target
