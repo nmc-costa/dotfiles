@@ -38,9 +38,9 @@ how a harness works — verify it, or clearly mark what's unverified.
 
 ### Step 3: Update Copilot Discovery (if relevant)
 
-If the new harness should be mentioned in `.github/copilot-instructions.md`, add it there. That
-file (and `.github/harnesses`, which is a symlink to `.agents/harnesses`) is what GitHub Copilot
-actually reads — there's no separate registry to update.
+If the new harness should be mentioned to Copilot, add it to `.agents/AGENT.md` (reached from
+the root `AGENTS.md`, which is what GitHub Copilot actually reads) — there's no separate registry
+to update.
 
 **Done!** ✅
 
@@ -61,13 +61,13 @@ actually reads — there's no separate registry to update.
       `/my/agentic_instructions/`, no `REGISTRY.md`, no `config/harness-config.json`
 - [ ] Skill/persona trigger table included (see the "Common Tasks" table in `TEMPLATE.md`)
 - [ ] Deployment/verification checklist included, specific to this harness
-- [ ] If the harness needs a symlinked directory (like `.github/` does for Copilot), that's
+- [ ] If the harness needs a symlinked directory (like `.claude/skills/` does for Claude Code), that's
       set up — don't duplicate skill/instruction content into a harness-specific copy
 - [ ] Any code samples use current, correct API syntax for that provider's SDK — test them if
       you can, don't just pattern-match off an old example
 
 ### If This Harness Needs Copilot/VS Code Awareness
-- [ ] `.github/copilot-instructions.md` mentions it, if relevant
+- [ ] `.agents/AGENT.md` mentions it, if relevant
 
 ### Testing
 - [ ] Confirm the harness actually reads the files you pointed it at (open a real session and
@@ -92,7 +92,7 @@ names. Fix the model list and any Groq-specific setup (API key env var, rate lim
 
 ### Step 3: Mention it in Copilot's instructions (optional)
 
-If relevant, add a line to `.github/copilot-instructions.md` noting the new harness doc exists.
+If relevant, add a line to `.agents/AGENT.md` noting the new harness doc exists.
 
 ---
 
@@ -110,8 +110,7 @@ If relevant, add a line to `.github/copilot-instructions.md` noting the new harn
 │   └── {new-harness}.md   ← NEW (single file, no subdirectory)
 ```
 
-`.github/harnesses` is a symlink to `.agents/harnesses`, so nothing needs to be duplicated
-there.
+Nothing needs to be duplicated outside `.agents/harnesses/`.
 
 ---
 
@@ -121,7 +120,7 @@ there.
 ✅ **Consistent** — all harnesses follow the same template
 ✅ **Maintainable** — one file per harness, no separate integration-guide subdirectory to keep
    in sync
-✅ **No Duplication** — `.agents/` is the single source of truth; `.github/` symlinks to it
+✅ **No Duplication** — `.agents/` is the single source of truth; no `.github/` mirror
 ✅ **Honest** — every harness doc states plainly what's verified vs. what still needs checking
 
 ---

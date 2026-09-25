@@ -1,9 +1,9 @@
 # VS Code Copilot Workspace Workflow (Global)
 
 > **Note:** This file serves as a reference log of the global Copilot workspace configuration. The canonical source of truth is located in the workspace root:
-> - **Root Level:** `.github/copilot-instructions.md`
-> - **Feature Instructions:** `.github/instructions/model-routing.instructions.md`
-> - **Skills:** `.github/skills/project-doc-lifecycle/SKILL.md`
+> - **Root Level:** `AGENTS.md` → `.agents/AGENT.md`
+> - **Feature Instructions:** `.agents/instructions/workspace-config/model-routing.instructions.md`
+> - **Skills:** `.agents/skills/project-doc-lifecycle/SKILL.md`
 
 All agents automatically discover and apply these rules without explicit prompting.
 

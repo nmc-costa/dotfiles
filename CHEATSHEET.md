@@ -6,7 +6,7 @@ How work happens in this workspace, in one place — so you don't have to rememb
 
 | You want to... | Go to... |
 |---|---|
-| Add/edit a skill (Claude Code, Copilot, Gemini) | `.agents/skills/<name>/SKILL.md` — the **single real source**. `.claude/skills/<name>` and `.github/skills/<name>` are symlinks to it, never edit there. |
+| Add/edit a skill (Claude Code, Copilot, Gemini) | `.agents/skills/<name>/SKILL.md` — the **single real source**. `.claude/skills/<name>` is a symlink to it, never edit there (Copilot and Antigravity read `.agents/skills/` directly). |
 | Add/edit a persona or instruction | `.agents/instructions/{base-personas,task-personas,workspace-config,automation}/` |
 | Add/edit a harness guide (Claude Code, Gemini, OpenAI, LiteLLM, VS Code Copilot) | `.agents/harnesses/<name>.md` — use `.agents/harnesses/TEMPLATE.md` as a starting point |
 | Add/edit a reusable prompt | `.agents/prompts/{chronicle,_templates}/` |
@@ -15,7 +15,7 @@ How work happens in this workspace, in one place — so you don't have to rememb
 | Leave/find a session-continuity handoff | `HANDOFF.md` — uppercase, singular, always at the root of whatever scope it describes: `~/HANDOFF.md` (global cross-repo index), `<repo>/HANDOFF.md` (repo-wide), `<repo>/<subsystem>/HANDOFF.md` for a subsystem that already has its own top-level docs (e.g. `tasks/HANDOFF.md`). Not permanent — delete/archive once nothing in it is pending. **Write one with `/handoff`** (`python3 ~/.agents/skills/handoff/handoff.py new\|check\|prompt`): newest block on top, generated state snapshot, readable by any harness/model without a skill — see `.agents/skills/handoff/SKILL.md`. |
 | Add/edit a harness startup hook (e.g. Claude Code `SessionStart`) | `.agents/hooks/` — see `.agents/hooks/README.md`. `sync.sh` mirrors scripts to `~/.claude/hooks/` and merges `session-start-hooks.json` into the live `~/.claude/settings.json` (add-only, idempotent — that file also holds local runtime state, so it's never a straight symlink). |
 
-**Golden rule:** if you edited something inside `.claude/skills/` or `.github/skills/` directly, you edited a conceptually broken symlink — the real file is in `.agents/skills/`. Confirm with `readlink -f <path>` before editing if unsure.
+**Golden rule:** if you edited something inside `.claude/skills/` directly, you edited a conceptually broken symlink — the real file is in `.agents/skills/`. Confirm with `readlink -f <path>` before editing if unsure.
 
 ## 2. Adding a new skill (full flow)
 
@@ -69,6 +69,7 @@ The task list Claude Code creates within a session (the internal tracking tool) 
 - [ ] `setup.sh` has hardcoded repo lists (`nmc-costa`) — known, not blocking, only matters if you share the repo.
 - [x] **Non-Claude harnesses didn't auto-read `tasks/`+`CHEATSHEET.md` on startup** (found 2026-09-16 via Copilot/Antigravity diagnostics the owner ran directly) — fixed round 1 (startup pointer added to `.github/copilot-instructions.md`, `GEMINI.md`, `AGENTS.md`), then **verified round 2 with a second real diagnostic prompt, same day**: Copilot CLI (not Copilot Chat) has no auto-read mechanism at all, nothing fixes that on the repo side; Antigravity self-reported it actually scans for `GEMINI.md`/`AGENTS.md`/`.agents/rules/*.md` — added a matching `.agents/rules/session-startup.md` — but the same test showed zero files actually auto-loaded in that session, so it's not confirmed live yet.
 - [x] **New skill `research-report`** (2026-09-25) — verified research reports: `ledger.py` (stdlib) captures sources into a sha256 evidence store, layer-1 checks every claim's quotes/numbers verbatim, a blind layer-2 verifier judges support, and the report is sealed with a recomputable manifest hash. Ports the core of PerryLink/dsh-research-report (Apache-2.0, see the skill's `NOTICE`) and adds the semantic layer it lacks. Design: `tasks/plans/research-report-skill.md`. Symlinked in `.claude/skills/` and `.github/skills/`; run `./sync.sh` to install.
+- [x] **`.github/` folded into `.agents/`** (2026-09-25, `dotfiles-tsk-github-to-agents`) — Copilot reads `AGENTS.md` and `.agents/skills/` natively, so `.github/copilot-instructions.md` and every `.github/` symlink are gone; its Copilot-only rules live in `.agents/AGENT.md`, `model-routing-monitor`/`session-memory` moved to `.agents/skills/`. `.github/workflows/` stays (GitHub Actions only runs from there). VS Code needs `chat.promptFilesLocations`/`chat.instructionsFilesLocations` pointed at `.agents/` to keep finding prompt/instruction files — snippet in `.agents/harnesses/vscode-copilot.md`.
 - [ ] **Re-verify Antigravity's startup wiring from inside `~/dotfiles`** (not a parent/unrelated directory) — round 2's diagnostic described the right mechanism but reported nothing was actually auto-loaded; see `.agents/harnesses/antigravity.md`'s checklist for the exact re-test.
 
 **Rule:** when starting a new session, explicitly ask it to read this list and build its internal todo list from it (see section 7). When finishing a task, the commit that closes it must check the `[x]` off here.

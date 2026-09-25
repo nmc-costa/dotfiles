@@ -202,7 +202,7 @@ A: No problem. `/chronicle tips` analyzes the last 7 days, so you'll still get p
 A: Run `/chronicle standup` on Friday and compare Haiku tokens to Premium tokens. Should be ~80/20 split.
 
 **Q: Can I customize the timing?**  
-A: Yes! Edit the `trigger:` field above and update agent instructions in `.github/copilot-instructions.md`.
+A: Yes! Edit the `trigger:` field above and update agent instructions in `.agents/AGENT.md`.
 
 ---
 
