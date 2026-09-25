@@ -309,6 +309,34 @@ else
   bad ".agents/instructions/workspace-config/standards/workspace-standards.yaml not found"
 fi
 
+# --- 8. Core blocks (inlined instruction copies) ----------------------------
+# Every <!-- NAME:CORE BEGIN/END --> block (OUTPUT-FRAME, later AUTONOMY) must
+# be present in every file scripts/core_blocks.manifest lists and
+# byte-identical across them. The checker's own FAIL lines are re-emitted
+# here one by one; its diff output is shown indented under them.
+echo
+echo "-- Core blocks (inlined instruction copies) --"
+if [[ -f "$REPO_ROOT/scripts/check_core_blocks.sh" ]]; then
+  core_out="$(bash "$REPO_ROOT/scripts/check_core_blocks.sh" 2>&1)"
+  core_rc=$?
+  if [[ $core_rc -eq 0 ]]; then
+    while IFS= read -r line; do
+      [[ "$line" == "  OK   "* ]] && ok "core block: ${line#  OK   }"
+    done <<< "$core_out"
+  else
+    core_fails=0
+    while IFS= read -r line; do
+      case "$line" in
+        "  FAIL "*) bad "core block: ${line#  FAIL }"; core_fails=$((core_fails+1)) ;;
+        "         "*) echo "$line" ;;
+      esac
+    done <<< "$core_out"
+    [[ $core_fails -eq 0 ]] && bad "scripts/check_core_blocks.sh exited $core_rc: $(tr '\n' ' ' <<<"$core_out")"
+  fi
+else
+  bad "scripts/check_core_blocks.sh not found"
+fi
+
 # --- Summary ----------------------------------------------------------------
 echo
 echo "=== $PASS passed, $FAIL failed ==="
