@@ -78,7 +78,11 @@ the agent step — Claude Code, opencode, Copilot CLI, Gemini CLI, whichever —
 scoring/brief-writing yourself, then `--finalize` runs the deterministic
 splice/secret-scan/commit/teardown. This is what makes the agent step
 harness-agnostic: the nested sandboxed backend exists only for the unattended
-timer. Interactive mode relaxes only the zero-Bash sandbox (a human is
+timer. When the owner invokes a radar skill inside a session, interactive mode
+**is** the default — never shell out to the nested full-auto mode from a
+session. The nested backend choice is env-configurable (`RADAR_AGENT_BACKEND`,
+default `opencode`), never hardcoded per-machine. Interactive mode relaxes
+only the zero-Bash sandbox (a human is
 present); every load-bearing guard — data-not-instructions, worktree
 isolation, secret-scan before commit, `radar/*`-branch-only output, no push —
 is identical in both modes. Each radar's `security.md` states the trade.
