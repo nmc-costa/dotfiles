@@ -9,7 +9,7 @@
 
 ## Goal
 
-Continue the chronicle skill-layer plan from the previous handoff: land D4-D6 (3 PRs were awaiting owner review), then build D7. Owner picked "merge all 3" and "D7 only" (not D8) via questionnaire this session.
+Continue the chronicle skill-layer plan from the previous handoff: land D4-D6 (3 PRs were awaiting owner review), build D7, then the owner's added requirement: chronicle must run **in the background once a day** producing improvements via branch→PR→merge with a fallback path. Owner picked "merge all 3", "D7 only", "auto-merge with gates", and "opencode + radar briefs as input" via questionnaires this session.
 
 ## Done
 
@@ -23,6 +23,11 @@ Continue the chronicle skill-layer plan from the previous handoff: land D4-D6 (3
   - `.agents/opencode/plugin/chronicle-chain.js` — server plugin: on `session.idle`, scans the final assistant reply for the D6 footer `Next: /skill <args>` (markdown-tolerant, must start with `/`, prose ignored) and stages it into the TUI input via `tui.prompt.append`. Propose-only, per-session dedup, errors swallowed (headless-safe). 10 behavioral tests pass (ran against a fake client; verified API shapes against installed opencode 1.18.32 / @opencode-ai/plugin 1.18.29 types).
   - `sync.sh` — `opencode/` subdir mirror: only `command/` + `plugin/` → `~/.config/opencode/`; opencode.json/node_modules/herdr's plugins/ never touched; skipped if opencode absent.
   - pr-finish (D4's own skill) preflighted #98 end-to-end.
+- **Daily background improve built — card `dotfiles-tsk-chronicle-daily-improve` (human-attributed), PR #102, CI green, MERGEABLE/CLEAN, card in `review`:**
+  - `chronicle/scripts/run.sh` — daily: mine (read-only) → newest radar briefs as research input → headless agent (`opencode` default, claude switchable) makes ≤1 small skill edit on `chronicle/improve-<date>` in a disposable worktree → evidence-cited PR → **gated auto-merge**.
+  - Gates (owner-approved override of human-only merge **for this job only**): path allowlist `.agents/(skills|opencode)/**` checked from GitHub's file list; MERGEABLE+CLEAN; CI green via `--auto --squash`; 1 PR/day. Fallback: `git revert <squash-sha>` in every PR body; failed gate = propose-only.
+  - `chronicle/security.md` (threat model) + `systemd/chronicle-improve/{service,timer}` (daily 08:00+jitter, hardened like the radars) — **timer not auto-installed**.
+  - Dry-run verified with real data: 2 candidate groups mined, `omarchy-radar-2026-09-25.md` picked up from `~/.local/state/omarchy-radar/worktrees/` (radars write briefs there, not `<repo>/briefs/` — lookup checks both).
 
 ## Decisions
 
@@ -34,7 +39,9 @@ Continue the chronicle skill-layer plan from the previous handoff: land D4-D6 (3
 
 ## Open / risks
 
-- **PR #98 merge pending owner direction** (squash, repo convention). After merge: `move_task.py --to-phase validation --actor-id <you> --expect-last-event-id <last d7 event>` (CAS required for validation moves), `./sync.sh`, then **restart opencode** (commands/plugins load at startup only).
+- **PRs #98 (D7) and #102 (daily improve) both pending owner merge** (squash). After #98: move card d7 → validation, `./sync.sh`, **restart opencode**. After #102: `./sync.sh` then `systemctl --user enable --now chronicle-improve.timer` (owner-run; hardened unit, daily 08:00+jitter).
+- **Radar timers are still not installed on this machine** (units exist in the repo's untracked `systemd/` from the radar session; radars ran today into `~/.local/state/*-radar/`). The chronicle job consumes their briefs — installing the radar timers is a natural follow-up if the owner wants the full loop.
+- **The daily-improve gate model is a deliberate exception** to the human-only-merge rule (owner-directed); pr-finish's default and every other skill remain propose-only.
 - **Owner validation pending** for cards `dotfiles-tsk-chronicle-d4-d6` (in `validation`) and, later, `dotfiles-tsk-chronicle-d7`.
 - **D8 not built** (voxtype + ydotoold; plan note on done card `dotfiles-tsk-chronicle-skill-layer`).
 - **Shared checkout has another session's work**: modified `tasks/cards/dotfiles-tsk-chronicle-d4-d6.md` (derived view, regenerable) + untracked radar-family dirs (`.agents/automation/radar-common/`, `.agents/skills/{harness,omarchy,researcher}-radar/`, `briefs/`, `docs/radar-knowledge/`, `systemd/`). Never `git checkout --/reset/stash/clean` them.
@@ -42,10 +49,11 @@ Continue the chronicle skill-layer plan from the previous handoff: land D4-D6 (3
 
 ## Next step
 
-1. Owner reviews + merges PR #98: `gh pr merge 98 --squash` (propose-only — not agent's call).
-2. Post-merge: `python3 tasks/move_task.py --task-id dotfiles-tsk-chronicle-d7 --to-phase validation --actor-id <harness> --expect-last-event-id <last>` → `./sync.sh` → restart opencode → test `/task-brief` and a `Next:` footer staging live.
-3. Owner validates d4-d6 (+d7 after its validation) → `done`.
-4. Next slice if the owner says go: D8 (voxtype voice engine + ydotoold injection), plan on card `dotfiles-tsk-chronicle-skill-layer`.
+1. Owner reviews + merges PR #98 (D7) and PR #102 (daily improve): `gh pr merge <n> --squash` (propose-only — not agent's call).
+2. Post-#98: `move_task.py --task-id dotfiles-tsk-chronicle-d7 --to-phase validation --actor-id <harness> --expect-last-event-id <last>` → `./sync.sh` → restart opencode → test `/task-brief` and a `Next:` footer staging live.
+3. Post-#102: `./sync.sh` → `systemctl --user enable --now chronicle-improve.timer` → next morning check `~/.local/state/chronicle-improve/run.log` + the auto-PR (first real end-to-end improve).
+4. Owner validates d4-d6 (+d7 after its validation) → `done`.
+5. Optional next slices if the owner says go: D8 (voxtype voice engine + ydotoold; plan on card `dotfiles-tsk-chronicle-skill-layer`) and installing the radar timers (see Open/risks).
 
 ## Snapshot
 
