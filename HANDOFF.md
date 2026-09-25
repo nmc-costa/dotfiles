@@ -1,4 +1,75 @@
 <!-- handoff:block 2026-09-25T22:53Z -->
+# Handoff — Radar consolidation sweep: both timers live, 2 unmerged briefs, PR #103 landed - owner wants ONE session (2026-09-25)
+
+> **To whoever picks this up (any harness, any model):** this top block is the
+> current handoff; blocks below it are history. Check the Snapshot against live
+> state (`git status`, `git log`, open PRs) before acting on it, then start at
+> **Next step**. When you stop with work unfinished, add a new block on top
+> (`/handoff`, or `handoff.py new`) rather than editing this one.
+
+## Goal
+
+Owner opened a `researcher-radar` session and asked "all" — a full radar status sweep (timers, state, briefs). Mid-sweep the owner redirected to consolidation, verbatim: `"faz handoff disto porque tenho outras sessoes a correr radars e preciso de ter so uma sessaõ"` — several parallel radar sessions are running; only ONE session should own the radars going forward. This session ends here and hands over; it installed nothing and decided nothing.
+
+## Done
+
+All verified 2026-09-25 ~22:52Z against live state (`systemctl --user list-timers --all`, `ls ~/.local/state/<radar>/`, `git -C ~/dotfiles log`/`ls-tree`):
+
+- **Both timers installed + ACTIVE**: `omarchy-radar.timer` next fire Sat 2026-09-26 08:02:39 WEST; `harness-radar.timer` next fire 08:21:47 WEST. Units + `omarchy-radar.service.d/` drop-in present in `~/.config/systemd/user/`.
+- **Both radars ran end-to-end ~23:31–23:52 WEST today**: fresh state in `~/.local/state/omarchy-radar/` (history.db 57KB, seen.json, status.json, snapshots) and `~/.local/state/harness-radar/` (history.db 94KB, prompt file, status.json).
+- **Both first briefs exist on local, unmerged branches**: `radar/omarchy-radar/2026-09-25` @ `377dc27` and `radar/harness-radar/2026-09-25` @ `7357d35` — each with `briefs/<radar>-2026-09-25.md` + `.ranked.json`.
+- **PR #103 confirmed in `main`** (`e586b98`, harness-agnostic agent step `--prepare`/`--finalize` + opencode nested backend) — it landed after the 22:51Z block below.
+- **Point-in-time anomaly recorded**: at ~22:21Z `router.sh list/status` reported "not installed/enabled" and "no status.json"; state existed minutes later — the other sessions' runs were concurrent with this sweep. A single `router.sh status` reading can be stale while runs are in flight; verify with `systemctl` + `ls` before acting on it.
+- **Live collision witnessed (meta-lesson for `handoff.py`)**: this session's first handoff block was silently clobbered by the harness-radar session's concurrent `handoff.py new` (read-modify-write, no `flock`). A block may have been lost again — the block directly below this one (harness-radar slice, 22:53Z) plus the 22:51Z one are both intact.
+
+## Decisions
+
+- **None.** Owner redirected the offered "install timers / first run" paths into "handoff instead" — the other sessions had already installed and run everything. Propose-only rule stands untouched: both brief branches left unmerged, nothing pushed or merged here.
+
+## Open / risks
+
+- **A harness-radar agent step may still have been MID-RUN at write time** (`last-agent-output.json` was 0 bytes at 22:50Z). Its session's handoff block sits directly below this one (same minute) — **read it; it is authoritative on the agent-backend rework and remaining work** ("remaining: omarchy run.sh mirror + docs").
+- **Both brief branches are local** — check `git branch -r` / pushed state before any branch cleanup, or the first briefs are lost.
+- **Unverified here**: whether the GLM drop-in `~/.config/systemd/user/omarchy-radar.service.d/override.conf` (`RADAR_CLAUDE_BIN`) is now redundant post-#103 (nested backend defaults to opencode); whether omarchy-radar's `run.sh` got the #103 mirror rework.
+- **`handoff.py` has no write lock** — concurrent `/handoff` in the shared checkout silently loses a block (happened here). Fix idea: `flock` the file in `handoff.py` (one-line card-worthy).
+- **Shared checkout has other sessions' uncommitted work** (`tasks/cards/*`, `tasks/events.jsonl`): never `git checkout --/reset/stash/clean` those; commit only files you wrote.
+- Claude weekly limit until **Sep 29, 11:00 Europe/Lisbon** — only matters if `RADAR_AGENT_BACKEND=claude` is used.
+
+## Next step
+
+1. In the single consolidated session: **read the handoff block directly below this one** (harness-radar slice) — its Open/risks + Next step hold the remaining radar work.
+2. Sweep anything newer: `cd ~/dotfiles && git log --oneline -8` (past `e586b98`), `gh pr list`, `git branch -a | grep radar`, plus any HANDOFF.md block newer than this one.
+3. Owner reviews + merges both brief branches (squash; each touches only `briefs/`): `git -C ~/dotfiles show radar/omarchy-radar/2026-09-25:briefs/omarchy-radar-2026-09-25.md` and `git -C ~/dotfiles show radar/harness-radar/2026-09-25:briefs/harness-radar-2026-09-25.md`.
+4. Check the GLM drop-in for redundancy: `cat ~/.config/systemd/user/omarchy-radar.service.d/override.conf` — if opencode backend is confirmed live, delete the drop-in and `systemctl --user daemon-reload`.
+5. Tomorrow ~08:02 / 08:21 WEST: verify the first unattended runs (`systemctl --user list-timers`, `jq . ~/.local/state/<radar>/status.json`, new `radar/<name>/2026-09-26` branches).
+
+## Snapshot
+
+_Generated by `handoff.py` at write time — verify against live state before trusting it._
+
+- **Written:** 2026-09-25 22:53 UTC on `omarchy` by `opencode` / `local/zai-org/GLM-5.3-Flash`
+- **Repo:** `/home/nbugz/dotfiles` — branch `main`
+- **Upstream:** `origin/main` — 0 ahead, 0 behind
+
+Uncommitted changes:
+
+```
+ M tasks/cards/dotfiles-tsk-chronicle-d7.md
+ M tasks/cards/dotfiles-tsk-researcher-radar.md
+ M tasks/cards/dotfiles-tsk-skill-gauntlet-prompting.md
+ M tasks/events.jsonl
+?? briefs/
+```
+
+`tasks/brief.py` at write time:
+
+```
+Nothing pending. What do you want to work on?
+```
+
+---
+
+<!-- handoff:block 2026-09-25T22:53Z -->
 # Handoff — radar consolidation: harness-agnostic agent step landed (PR #103), harness-radar first brief + timer live — remaining: omarchy run.sh mirror + docs (2026-09-25)
 
 > **To whoever picks this up (any harness, any model):** this top block is the
