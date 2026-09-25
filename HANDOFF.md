@@ -1,3 +1,81 @@
+<!-- handoff:block 2026-09-25T22:26Z -->
+# Handoff — Chronicle D7 built (PR #98) — d4-d6 merged+deployed by owner (2026-09-25)
+
+> **To whoever picks this up (any harness, any model):** this top block is the
+> current handoff; blocks below it are history. Check the Snapshot against live
+> state (`git status`, `git log`, open PRs) before acting on it, then start at
+> **Next step**. When you stop with work unfinished, add a new block on top
+> (`/handoff`, or `handoff.py new`) rather than editing this one.
+
+## Goal
+
+Continue the chronicle skill-layer plan from the previous handoff: land D4-D6 (3 PRs were awaiting owner review), then build D7. Owner picked "merge all 3" and "D7 only" (not D8) via questionnaire this session.
+
+## Done
+
+- **D4-D6 merged by the owner's own hand mid-session** (22:18–22:19Z, squash `f7b5168`/`bf99fc4`/`736dc08`, order D6→D4→D5 as suggested; PR #97 radar docs also merged). Their head branches vanished because the repo auto-deletes merged branches — initial `mergeable: unknown` confusion was this, not a problem.
+- **Main realigned + pushed** (was 2/2 diverged: local had events-sync `2842866` + duplicate handoff commit `94a06e4`, patch-id-identical to origin's `f1c98e2`): events-sync committed (`337415d`), origin merged in (`707b00e`, conflicts only in derived views/cards — resolved by taking origin's state then regenerating from the union-merged log), pushed.
+- **jsonl-union merge driver was NOT registered locally** (`.gitattributes` referenced it, `git config` had it missing = the exact silent-fallback failure mode its comment warns about). Registered locally from setup.sh's exact line. **Other machines/checkouts probably need the same** — setup.sh covers it, existing checkouts may not have it.
+- **d4-d6 worktree pruned**; `./sync.sh` ran clean — `pr-finish` + `chronicle` skills now live in `~/.agents/skills/`.
+- **Card `dotfiles-tsk-chronicle-d4-d6` is in `validation`** (parallel claude session moved it 22:19:51Z; validation→done is the owner's call).
+- **D7 built — card `dotfiles-tsk-chronicle-d7` (human-attributed, owner-directed), PR #98, CI green, MERGEABLE/CLEAN, card in `review`:**
+  - `.agents/opencode/command/{pr-finish,chronicle,task-brief,handoff}.md` — thin global slash commands over the synced skills.
+  - `.agents/opencode/plugin/chronicle-chain.js` — server plugin: on `session.idle`, scans the final assistant reply for the D6 footer `Next: /skill <args>` (markdown-tolerant, must start with `/`, prose ignored) and stages it into the TUI input via `tui.prompt.append`. Propose-only, per-session dedup, errors swallowed (headless-safe). 10 behavioral tests pass (ran against a fake client; verified API shapes against installed opencode 1.18.32 / @opencode-ai/plugin 1.18.29 types).
+  - `sync.sh` — `opencode/` subdir mirror: only `command/` + `plugin/` → `~/.config/opencode/`; opencode.json/node_modules/herdr's plugins/ never touched; skipped if opencode absent.
+  - pr-finish (D4's own skill) preflighted #98 end-to-end.
+
+## Decisions
+
+- **D7 only** — owner deferred D8 (voxtype voice engine) explicitly.
+- **FR #5971 (custom sidebar panels) verified still OPEN** — v1 sticks to `tui.prompt.append`; the real panel is a follow-up when the FR lands (noted in `.agents/opencode/README.md`).
+- **Card created human-attributed** — owner directed D7 in chat (same rule as the D4-D6 card); agent phase-moves signed `agent/opencode` with `--expect-last-event-id` CAS.
+- **Sync mirror scoped to `command/` + `plugin/` only** — `~/.config/opencode/opencode.json` holds a live API key; it must never enter sync or the repo.
+- Propose-only rule stands everywhere (plugin stages text, never submits; merges human-directed).
+
+## Open / risks
+
+- **PR #98 merge pending owner direction** (squash, repo convention). After merge: `move_task.py --to-phase validation --actor-id <you> --expect-last-event-id <last d7 event>` (CAS required for validation moves), `./sync.sh`, then **restart opencode** (commands/plugins load at startup only).
+- **Owner validation pending** for cards `dotfiles-tsk-chronicle-d4-d6` (in `validation`) and, later, `dotfiles-tsk-chronicle-d7`.
+- **D8 not built** (voxtype + ydotoold; plan note on done card `dotfiles-tsk-chronicle-skill-layer`).
+- **Shared checkout has another session's work**: modified `tasks/cards/dotfiles-tsk-chronicle-d4-d6.md` (derived view, regenerable) + untracked radar-family dirs (`.agents/automation/radar-common/`, `.agents/skills/{harness,omarchy,researcher}-radar/`, `briefs/`, `docs/radar-knowledge/`, `systemd/`). Never `git checkout --/reset/stash/clean` them.
+- `sync.sh --dry-run` hang is pre-existing (verified at base `2842866` last session); real sync runs fine.
+
+## Next step
+
+1. Owner reviews + merges PR #98: `gh pr merge 98 --squash` (propose-only — not agent's call).
+2. Post-merge: `python3 tasks/move_task.py --task-id dotfiles-tsk-chronicle-d7 --to-phase validation --actor-id <harness> --expect-last-event-id <last>` → `./sync.sh` → restart opencode → test `/task-brief` and a `Next:` footer staging live.
+3. Owner validates d4-d6 (+d7 after its validation) → `done`.
+4. Next slice if the owner says go: D8 (voxtype voice engine + ydotoold injection), plan on card `dotfiles-tsk-chronicle-skill-layer`.
+
+## Snapshot
+
+_Generated by `handoff.py` at write time — verify against live state before trusting it._
+
+- **Written:** 2026-09-25 22:26 UTC on `omarchy` by `unknown`
+- **Repo:** `/home/nbugz/dotfiles` — branch `main`
+- **Upstream:** `origin/main` — 1 ahead, 0 behind
+
+Uncommitted changes:
+
+```
+ M tasks/cards/dotfiles-tsk-chronicle-d4-d6.md
+?? .agents/automation/radar-common/
+?? .agents/skills/harness-radar/
+?? .agents/skills/omarchy-radar/
+?? .agents/skills/researcher-radar/
+?? briefs/
+?? docs/radar-knowledge/
+?? systemd/
+```
+
+`tasks/brief.py` at write time:
+
+```
+Nothing pending. What do you want to work on?
+```
+
+---
+
 <!-- handoff:block 2026-09-25T22:15Z -->
 # Handoff — Chronicle slice D4-D6 built + 3 PRs ready for review (2026-09-25) (2026-09-25)
 
