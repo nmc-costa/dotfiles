@@ -12,8 +12,9 @@
 // by design — a headless run (no TUI) or a transient API failure must never
 // break the turn (same contract as .agents/hooks/precompact_handoff.py).
 //
-// Deployed by sync.sh to ~/.config/opencode/plugin/ (auto-discovered, no
-// opencode.json entry needed). Spec: card dotfiles-tsk-chronicle-d7;
+// Deployed by sync.sh to ~/.config/opencode/plugins/ — plural: that's the
+// global plugin dir opencode auto-discovers (the singular plugin/ is never
+// scanned); no opencode.json entry needed. Spec: card dotfiles-tsk-chronicle-d7;
 // real sidebar panels are opencode FR #5971 (still open as of 2026-09-25).
 
 // Matches the footer line after markdown decoration is stripped: bold,
