@@ -194,7 +194,7 @@ nested_agent_step() {
     claude)
       radar_run_claude_agent \
         "$WORKTREE_DIR" \
-        "Read,Grep,Glob,Write(briefs/*)" \
+        "Read,Grep,Glob,Edit(briefs/*)" \
         "WebFetch,WebSearch,Bash" \
         "$PROMPT_FILE" > "$AGENT_OUTPUT_FILE" || failed=1 ;;
     *)

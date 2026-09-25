@@ -60,12 +60,32 @@ Every radar's `run.sh` is a thin call-site into
 [`.agents/automation/radar-common/lib.sh`](../../automation/radar-common/lib.sh) —
 the state-management helpers (atomic tmp-then-`mv` writes, `seen.json.pending`
 → `seen.json` promotion), the git-worktree create/commit/remove helpers, the
-`claude -p` invocation wrapper (fixed flag set, no Bash/git tools for the
-LLM), the secret-scan pass, the `flock` guard, the notification helper, and
+nested agent invocation wrappers (the default `opencode run` backend plus the
+`claude -p` escape hatch — zero Bash/git tools for the LLM in either), the
+secret-scan pass, the `flock` guard, the notification helper, and
 a per-radar SQLite history loader (`radar_sqlite_load_ranked`, see below).
 It's written and reviewed **once** so a future radar reuses the same hardened
 plumbing instead of copy-pasting it. Read `lib.sh` itself before changing any
 radar's `run.sh` — don't re-derive what it already provides.
+
+### Two ways to run the agent step: timer vs interactive
+
+Every radar's `run.sh` has three modes: no args (what the systemd timer runs:
+prepare → nested sandboxed agent backend → finalize), `--prepare`, and
+`--finalize`. In **interactive mode** the harness that invoked the skill IS
+the agent step — Claude Code, opencode, Copilot CLI, Gemini CLI, whichever —
+`--prepare` sets up the worktree and prompt file and hands off, you do the
+scoring/brief-writing yourself, then `--finalize` runs the deterministic
+splice/secret-scan/commit/teardown. This is what makes the agent step
+harness-agnostic: the nested sandboxed backend exists only for the unattended
+timer. When the owner invokes a radar skill inside a session, interactive mode
+**is** the default — never shell out to the nested full-auto mode from a
+session. The nested backend choice is env-configurable (`RADAR_AGENT_BACKEND`,
+default `opencode`), never hardcoded per-machine. Interactive mode relaxes
+only the zero-Bash sandbox (a human is
+present); every load-bearing guard — data-not-instructions, worktree
+isolation, secret-scan before commit, `radar/*`-branch-only output, no push —
+is identical in both modes. Each radar's `security.md` states the trade.
 
 ### `router.sh`: one entry point across every radar
 
@@ -106,10 +126,12 @@ not a theoretical one:
 - **Never install or run anything collected** — `collect.sh`/`run.sh` are
   data-fetch only (`curl`/`gh api`); nothing unattended runs `npm
   install`/`npx <pkg>`/a plugin-install command/`sudo`/`pacman`.
-- **Zero Bash/git tools for the LLM step.** All git operations (worktree
+- **Zero Bash/git tools for the nested LLM step.** All git operations (worktree
   create/commit/remove) are deterministic bash in `radar-common`/`run.sh`;
-  the agent's entire filesystem view is a disposable worktree with an
-  explicit read allowlist and a secret-location deny list.
+  the nested agent's entire filesystem view is a disposable worktree with an
+  explicit read allowlist and a secret-location deny list. (Interactive mode
+  lets the calling harness use its usual tools with a human present — see
+  "Two ways to run the agent step" above; the guards below are unchanged.)
 - **A deterministic secret-scan gate runs before any commit** — on top of,
   not instead of, the read-path restrictions.
 - **Proposals only.** Nothing is ever auto-applied, auto-merged, or pushed;

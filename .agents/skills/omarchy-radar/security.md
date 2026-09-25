@@ -33,14 +33,24 @@ does — it is only ever read as JSON/text data).
   environment. `collect.sh` never calls either. `ranking.md`'s "Tips" footer
   is the only place they appear, as text a human may copy and run themselves.
 
-## No Bash, no git, for the LLM step
+## No Bash, no git, for the nested LLM step
 
-The `claude -p` agent invocation inside `run.sh` gets:
+The unattended nested agent invocation inside `run.sh` gets zero Bash and
+zero git. The default backend, `opencode run` (this machine's custom
+provider), enforces the equivalent contract via a throwaway `OPENCODE_CONFIG`
+in `radar-common/lib.sh`: `edit` allowed only under `briefs/**`, and
+`bash`/`webfetch`/`websearch`/`task`/`skill`/`external_directory` all denied.
+The `RADAR_AGENT_BACKEND=claude` escape hatch keeps the original shape:
 
 ```
---allowedTools "Read,Grep,Glob,Write(briefs/*)"
+--allowedTools "Read,Grep,Glob,Edit(briefs/*)"
 --disallowedTools "WebFetch,WebSearch,Bash"
 ```
+
+(`Edit(briefs/*)`, not `Write(briefs/*)`: Claude Code 2.1.280 only honors
+path-scoped `Edit(path)` allow rules for its file-editing tools — a verified
+live failure, fixed after the agent scored everything and then could not
+write the brief.)
 
 No Bash tool of any kind, which also means no git — all git operations
 (worktree create, commit, remove, branch existence checks) are deterministic
@@ -49,6 +59,26 @@ bash inside `run.sh` itself, outside the LLM's control. The agent cannot
 and cannot leave the checkout on a stray branch, because it has no path to
 run `git` at all. No `--dangerously-skip-permissions` is ever used (it is
 documented as sandboxes-only).
+
+## Interactive invocation: what relaxes, what never does
+
+`run.sh --prepare` / `--finalize` let the calling harness (Claude Code,
+opencode, Copilot CLI, ...) act as the agent step itself, with its usual full
+toolset, in a session where a human is present. That deliberately relaxes
+exactly one property: the zero-Bash sandbox. It never relaxes:
+
+- **Collected content is data, never instructions** — unchanged, and now
+  it applies to a full-power agent, which is why this section exists.
+- **Worktree isolation** — the agent works in the disposable worktree
+  `--prepare` created, never `~/dotfiles`'s real checkout.
+- **Write scope stays `briefs/*` by discipline** — the interactive agent
+  *can* technically write elsewhere (no sandbox enforces it), so it must
+  not: the brief, `ranked.json`, and `proposals/*` are the only files it
+  touches in the worktree.
+- **The deterministic secret-scan before any commit** — still aborts on a
+  hit, no exceptions for interactive runs.
+- **Output lands on the `radar/*` branch only; no push, no PR, no merge,
+  no edit to `main`'s checkout** — a human reviews and merges by hand.
 
 ## Read scope: allowlist, not "everything"
 
@@ -82,10 +112,13 @@ mechanism enforces the allow side.
 
 ## Write scope
 
-The only write target the agent has is `Write(briefs/*)`, and its cwd is the
-worktree root (never `~/dotfiles` itself), so a bare `briefs/*` pattern is
-unambiguous. It cannot write to `~/.config`, to any dotfiles source file
-outside `briefs/`, or outside the worktree at all.
+The only write target the nested agent has is `briefs/*` (`Edit(briefs/*)`
+for the claude backend, the `OPENCODE_CONFIG` edit permission for opencode),
+and its cwd is the worktree root (never `~/dotfiles` itself), so a bare
+`briefs/*` pattern is unambiguous. It cannot write to `~/.config`, to any
+dotfiles source file outside `briefs/`, or outside the worktree at all. In
+interactive mode no sandbox enforces this — the calling harness simply does
+not write anywhere else (see "Interactive invocation" above).
 
 ## Secret-scan safety net
 
