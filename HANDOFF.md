@@ -1,3 +1,181 @@
+<!-- handoff:block 2026-09-25T22:15Z -->
+# Handoff — Chronicle slice D4-D6 built + 3 PRs ready for review (2026-09-25) (2026-09-25)
+
+> **To whoever picks this up (any harness, any model):** this top block is the
+> current handoff; blocks below it are history. Check the Snapshot against live
+> state (`git status`, `git log`, open PRs) before acting on it, then start at
+> **Next step**. When you stop with work unfinished, add a new block on top
+> (`/handoff`, or `handoff.py new`) rather than editing this one.
+
+## Goal
+
+Continue the chronicle skill-layer plan: owner said go (in chat, 2026-09-25) for building D4-D6 now — "D6 primeiro — o footer + questionário, a lição de hoje — depois D4, depois D5" — with the orphan worktree cleaned up. Done this session; next session reviews/merges the PRs.
+
+## Done
+
+- **Card `dotfiles-tsk-chronicle-d4-d6` created human-attributed** (owner directed in chat), `backlog → planning → in_progress`; 3 progress notes appended (last: `156ba431`).
+- **Orphan worktree removed** (was clean, branch kept): `~/dotfiles.worktrees/opencode/dotfiles-tsk-chronicle-skill-layer`.
+- **D6 — `9da4fc8`, PR #94**: `output-frame.instructions.md` gained the keyword-compact rule (time-on-screen; status lines; dashboard UX is the direction), the questionnaire rule (recommended first, ready-to-run options, native ask-tool; owner accepts by reading chat alone), and "Skill stacking and Chains" (stacking `/a /b`; `## Chains` in SKILL.md bodies, descriptions stay tight; `Next:` footer line only when a chain applies). `skill-template.md` gained `## Chains`; seeded into task-brief / task-worktree / handoff.
+- **D4 — `2d8c6ce` + `189f485`, PR #95**: `/pr-finish` (`.agents/skills/pr-finish/`, script + SKILL.md). Propose-only default; `--auto` enables `gh pr merge --auto --squash` ONLY when card still in `review` + CI green + `MERGEABLE` + `CLEAN/HAS_HOOKS`; refuses (exit 2) otherwise; idempotent by card+PR (live-tested on merged PR #92; 8 gate tests pass). Card-phase lookup falls back to the canonical tasks root (`tasks/paths.tasks_root()`) so a worktree whose branch predates the card still resolves it.
+- **D5 — `74adf08`, PR #96**: `/chronicle` (`.agents/skills/chronicle/`). Read-only miner over Claude transcripts + `tasks/events.jsonl` (via `tasks_root()`) + merged-PR churn; secret redaction + boilerplate filter + segment-aware command normalization; live mine run produced meaningful candidates. Propose-only: evidence-cited `chronicle/*` PRs, human-only merge.
+- **All 3 PRs marked ready + preflighted with `/pr-finish`** (owner approved via questionnaire): #94/#95/#96 all `MERGEABLE`, `CLEAN`, CI green. NOT merged — merges are human-directed (propose-only rule).
+
+## Decisions
+
+- **PRs one per slice**, independent off `main` (no inter-PR conflicts): D6 #94, D4 #95, D5 #96.
+- **`--auto` gate = card phase `review`**: the 2026-09-18 loop-cap/human-required-validation policy has no producer yet (`loop_cap_exceeded` needs `review.judge_failed`, see tasks/README.md), so phase is the conservative proxy — `validation`+ is never auto-merged.
+- **Rework-loop detector shipped without data**: 0 `review → in_progress` transitions exist in the whole log (verified); it's correct, just no occurrence yet.
+- **`sync.sh --dry-run` hang is pre-existing**: reproduced at base commit `2842866` in a throwaway worktree; not caused by this work. validate_dotfiles.sh's bash -n / link check / setup dry-run all pass.
+- Owner questionnaire answers (2026-09-25): build all three D6→D4→D5; remove orphan worktree; then "Ready + /pr-finish nas 3"; then "Handoff + nova sessão".
+
+## Open / risks
+
+- **Merges pending owner direction** — the propose-only rule stands; nobody merges without the owner saying so in chat.
+- **`origin/main` moved (+1)**: PR #93 (tsk-sweep timer) merged 21:58Z — `git pull` on `main` before branching further; the 3 PRs don't conflict with it (different files).
+- **Other sessions' uncommitted work in the shared checkout** (standards yaml, AGENTS.md, CLAUDE.md, README, validate_dotfiles.sh, several tasks/ cards + events.jsonl): never `git checkout --/reset/stash/clean` those; commit only files you wrote.
+- **D7-D8 not built** (next slice: D7 opencode custom commands + `tui.prompt.append`, follow opencode FR #5971; D8 voxtype voice engine + ydotoold injection). Full plan in the done card `dotfiles-tsk-chronicle-skill-layer`'s handoff note.
+- Worktree `~/dotfiles.worktrees/opencode/dotfiles-tsk-chronicle-d4-d6` holds the 3 local branches (D6 checked out); keep until PRs merge, then `tasks/worktree.py prune`.
+
+## Next step
+
+1. Owner reviews PRs #94/#95/#96 and directs merges (squash, repo convention) — suggested order D6 → D4 → D5 so the Chains reference to `/pr-finish` lands early; run `python3 .agents/skills/pr-finish/pr-finish.py --task-id dotfiles-tsk-chronicle-d4-d6 --pr <n>` after any rebase for a fresh preflight.
+2. After merges: `python3 tasks/move_task.py --task-id dotfiles-tsk-chronicle-d4-d6 --to-phase validation --actor-id <harness>` → owner validates → `done`; sync (`./sync.sh`) so the new conventions/skills reach `~/.agents/`.
+3. Then the next slice, D7 (+D8 if the owner says go): start from the plan note on card `dotfiles-tsk-chronicle-skill-layer`.
+
+## Snapshot
+
+_Generated by `handoff.py` at write time — verify against live state before trusting it._
+
+- **Written:** 2026-09-25 22:15 UTC on `omarchy` by `opencode` / `glm-5.3-flash`
+- **Repo:** `/home/nbugz/dotfiles` — branch `main`
+- **Upstream:** `origin/main` — 1 ahead, 1 behind
+
+Uncommitted changes:
+
+```
+M  .agents/instructions/workspace-config/standards/workspace-standards.yaml
+M  AGENTS.md
+M  CHEATSHEET.md
+M  CLAUDE.md
+ M HANDOFF.md
+M  README.md
+M  scripts/validate_dotfiles.sh
+ M tasks/board.md
+ M tasks/cards/dotfiles-tsk-agent-actor-safety.md
+ M tasks/cards/dotfiles-tsk-chronicle-skill-layer.md
+ M tasks/cards/dotfiles-tsk-harness-provider-model-index.md
+ M tasks/cards/dotfiles-tsk-skill-gauntlet-prompting.md
+ M tasks/cards/dotfiles-tsk-systemd-units.md
+ M tasks/events.jsonl
+ M tasks/kanban.md
+ M tasks/metrics.md
+ M tasks/roadmap.md
+ M tasks/roadmap.mmd
+?? .agents/automation/radar-common/
+?? .agents/skills/harness-radar/
+?? .agents/skills/omarchy-radar/
+?? .agents/skills/researcher-radar/
+?? briefs/
+?? docs/radar-knowledge/
+?? systemd/
+?? tasks/cards/dotfiles-tsk-chronicle-d4-d6.md
+```
+
+`tasks/brief.py` at write time:
+
+```
+Nothing pending. What do you want to work on?
+```
+
+---
+
+<!-- handoff:block 2026-09-25T21:42Z -->
+# Handoff — Chronicle skill layer - proxima fatia D4-D6 (2026-09-25)
+
+> **To whoever picks this up (any harness, any model):** this top block is the
+> current handoff; blocks below it are history. Check the Snapshot against live
+> state (`git status`, `git log`, open PRs) before acting on it, then start at
+> **Next step**. When you stop with work unfinished, add a new block on top
+> (`/handoff`, or `handoff.py new`) rather than editing this one.
+
+## Goal
+
+Owner wants the "telepathic" skill layer (their words: "eu quase devia só encadear skills para comunicar mais rápido contigo... o menos possível escrito") — built in slices from a plan-orchestra run (6+2 researchers, 2 critique rounds). D1-D3 shipped and deployed today. This handoff covers the next slice, D4-D6.
+
+## Done
+
+- **D1-D3 shipped** (PR #92, squash-merged as `20a8bf6`, card `dotfiles-tsk-chronicle-skill-layer` → `done`): per-event hook installer + `--self-test`; `session-and-compact-hooks.json` (SessionStart + PreCompact); **PreCompact hook live** (`~/.claude/hooks/precompact_handoff.py`, wired in `~/.claude/settings.json` — deployed via `./sync.sh`, owner chose post-merge); `handoff.py snapshot --json` + `new --title-from-branch`.
+- plan-orchestra evidence map + final plan D1-D8 delivered in chat (2026-09-25); key research: Copilot CLI `/chronicle improve` exists (propose-only); skill triggering is LLM-description-driven in all harnesses; no tool combines hotkeys + parameterized prompts + chaining + composition-autocomplete.
+- Meta-lesson recorded as `task.note` on the done card: close every confirmable decision with a questionnaire (recommended first, options as ready-to-run commands, native ask-tool when available) — the owner accepts by reading the chat alone.
+- `tasks/worktree.py`: `opencode` added to HARNESSES.
+
+## Decisions
+
+- **D4 auto-merge**: `pr-finish --auto` does `gh pr merge --auto` ONLY when CI green + no conflicts; never for cards past loop cap (human-required validation, 2026-09-18 policy); default remains print-commands.
+- **D6**: stacking (`/skill-a /skill-b`) is the micro-language; "Chains" sections live in SKILL.md bodies (descriptions stay tight for E3 matching); footer pós-turno `→ /skill args` only when a chain applies; the questionnaire rule goes into `.agents/instructions/workspace-config/*.instructions.md` (shared via sync.sh to all agents).
+- **D8**: voice engine = **voxtype** (owner choice), phrase→macro map, inject via ydotoold.
+- **Positioning**: workspace-private now (A); open-source opencode plugin + write-up deferred (B/C), owner: "quero os 3 mas, agora só o A".
+- **D6 (owner feedback 2026-09-25, verbatim intent):** chat output must be KEYWORD-compact — a status line ("thinking isto" style: what's happening + todo phase), expandable on click, minimal time on screen ("quero estar o mínimo de tempo a olhar para aqui"); long-running-chat CLIs "não são o futuro" — session-dashboard UX (Claude Code agent view / opencode FR #5971 / herdr pane) is the direction. Fold into the footer/questionnaire conventions.
+- Propose-only rule stands: merges happen by human direction (today's merge was explicitly directed in chat).
+
+## Open / risks
+
+- **D4-D8 not built yet.** Full plan + owner decisions live in the done card's handoff note: `tasks/cards/dotfiles-tsk-chronicle-skill-layer.md`.
+- **Agent proposal quota full** (3 open, D13) — my `task.created` for a D4-D6 card was rejected; the NEXT session should create that card **human-attributed** once the owner says go.
+- Provider quota: claude at weekly limit until **Sep 29, 11:00 Europe/Lisbon**; copilot timing out; opencode online. Quota evidence + desired dispatch liveness-probe feature on card `dotfiles-tsk-dispatch-quota-check`.
+- Worktree `~/dotfiles.worktrees/opencode/dotfiles-tsk-chronicle-skill-layer` (branch kept, card done) — remove when clean if unwanted: `python3 tasks/worktree.py remove`.
+- Other sessions have uncommitted changes in the shared checkout (instructions files, roadmap) — never `git checkout --/reset/stash/clean` those; tasks/ views regenerate from `events.jsonl`.
+
+## Next step
+
+Run `python3 tasks/brief.py`, ask the owner whether to build D4-D6 now (card `dotfiles-tsk-chronicle-d4-d6`, create it human-attributed since the owner directs it), then `python3 tasks/worktree.py create --task-id <id> --harness opencode` and implement in that worktree, in order: D6 footer+questionário conventions (cheapest, closes today's lesson) → D4 `/pr-finish` (idempotent by card+PR#, owner's auto-merge rule) → D5 `/chronicle` miner (propose-only PR with cited evidence).
+
+## Snapshot
+
+_Generated by `handoff.py` at write time — verify against live state before trusting it._
+
+- **Written:** 2026-09-25 21:42 UTC on `omarchy` by `opencode` / `glm-5.3-flash`
+- **Repo:** `/home/nbugz/dotfiles` — branch `main`
+- **Upstream:** `origin/main` — 1 ahead, 0 behind
+
+Uncommitted changes:
+
+```
+M  .agents/instructions/workspace-config/standards/workspace-standards.yaml
+M  AGENTS.md
+UU CHEATSHEET.md
+M  CLAUDE.md
+M  README.md
+M  scripts/validate_dotfiles.sh
+ M tasks/board.md
+ M tasks/cards/dotfiles-tsk-chronicle-skill-layer.md
+ M tasks/cards/dotfiles-tsk-skill-gauntlet-prompting.md
+ M tasks/events.jsonl
+ M tasks/kanban.md
+M  tasks/metrics.md
+UU tasks/roadmap.md
+UU tasks/roadmap.mmd
+?? .agents/automation/radar-common/
+?? .agents/skills/harness-radar/
+?? .agents/skills/omarchy-radar/
+?? .agents/skills/researcher-radar/
+?? briefs/
+?? docs/radar-knowledge/
+?? systemd/
+```
+
+`tasks/brief.py` at write time:
+
+```
+⚠️  tasks/.sweep-heartbeat is 380min old (>15min) — the sweep looks dead. Facts below may be stale.
+
+Nothing pending. What do you want to work on?
+```
+
+---
+
+# Earlier handoff notes (free-form, pre-`/handoff`)
+
 # HANDOFF — dotfiles (agent-OS unification + repo conventions)
 
 **Data:** 2026-09-21, atualizado 2026-09-24. Este ficheiro é o handoff do
