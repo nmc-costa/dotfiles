@@ -1,6 +1,6 @@
 # Agent Autonomy Charter — plan (2026-09-24)
 
-**Status:** proposed plan. Nothing implemented. Card:
+**Status:** approved plan (owner decisions recorded in §9, 2026-09-25). Nothing implemented yet. Card:
 `dotfiles-tsk-agent-autonomy-charter` (phase `planning`).
 Produced by an Opus `Plan` agent with online research (sources at the end);
 repo claims in §0 spot-checked by the dispatching session.
@@ -321,7 +321,12 @@ unification.
    `can_self_merge.sh` caps a `Mechanical:` PR at 15 changed files.
 6. **The `~/Work/**` L2 glob** in Decision 7 must be rescoped (Q3).
 
-## 9. Open questions for the owner (only these)
+## 9. Owner decisions (answered 2026-09-25)
+
+**Resolved:** Q1 = A (auto-start), Q2 = B (~2M tokens / ~90 min cap), Q3 = A (code + push own branch in `~/Work`; PRs/merge/CI/external stay the owner's; rescope Decision 7 glob), Q4 = A for `nmc-costa/*` L1 paths, B (owner merges) for `.github/**` and `.githooks/**`. PR-A can start.
+
+Original questions, for the record:
+
 
 1. **Director rule (T3).** When nothing is pending, may the agent start the
    top human-originated or already-planned backlog item and say so in one
