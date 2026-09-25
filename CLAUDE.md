@@ -12,9 +12,12 @@ dotfiles/
 ├── .vscode/            ← VS Code config (settings.json = real API key, managed by chezmoi+age)
 ├── .chezmoisource/     ← chezmoi source dir, scoped only to .vscode/settings.json
 ├── scripts/            ← Utilities (VS Code docs monitor)
+├── systemd/            ← Radar-family systemd --user units (omarchy-radar/, harness-radar/), installed via each radar's install_timer.sh
+├── briefs/             ← Radar output; only .gitkeep on main, real briefs only on radar/<name>/<date> branches
 ├── docs/               ← Everything not auto-loaded by convention (see index below)
 ├── AGENTS.md, CLAUDE.md, GEMINI.md   ← Auto-loaded by each respective tool
 ├── docs/SECRETS.md     ← chezmoi+age secrets doc
+├── docs/radar-knowledge/  ← Durable "last verified" fact ledgers for the radar family
 ├── README.md, CHEATSHEET.md
 ├── HANDOFF.md          ← Repo-wide session-continuity handoff, not permanent — see ~/HANDOFF.md for the cross-repo index
 └── setup.sh, sync.sh, test-subagents.sh
@@ -91,6 +94,21 @@ Skills are agent extensions. Location: `~/.agents/skills/`
 - **Purpose:** Hyprland/window manager/desktop customization
 - **Triggers:** Hyprland, hyprctl, keybindings, themes, gaps, borders
 - **See:** `~/.agents/skills/omarchy/SKILL.md`
+
+### omarchy-radar
+- **Purpose:** Headless daily digest of what's new in the Omarchy Linux (Quattro) community (releases, discussions, `awesome-omarchy`, plugin marketplace, r/omarchy, HN), compared against this machine's live config, proposing (never applying) the top 3 changes on a disposable git-worktree branch for human review
+- **Triggers:** omarchy digest, omarchy brief, omarchy news, omarchy changelog, omarchy release watch, awesome-omarchy, omarchy plugin marketplace, r/omarchy, radar inbox, radar worktree, briefs directory
+- **See:** `~/.agents/skills/omarchy-radar/SKILL.md`
+
+### harness-radar
+- **Purpose:** Headless daily digest of the AI coding-agent/harness ecosystem (`herdr` + its plugin marketplace, Claude Code/Codex CLI/OpenCode/Gemini CLI/Copilot CLI/`dsh` plugin ecosystems, multi-agent orchestration frameworks, and benchmark leaderboards like SWE-bench/SWE-bench Verified/Terminal-Bench/LiveCodeBench), proposing top-3 changes the same way `omarchy-radar` does
+- **Triggers:** harness-radar, agent radar, herdr, herdr.dev/plugins, dsh-ecosystem, DeepSeek Harness, SWE-bench, SWE-bench Verified, Terminal-Bench, LiveCodeBench, best-skills CSV, MCP registry, radar brief
+- **See:** `~/.agents/skills/harness-radar/SKILL.md`
+
+### researcher-radar
+- **Purpose:** Meta-skill for the radar family — what a "radar" is in this repo, the shared security model, and a pointer table to `omarchy-radar`/`harness-radar`; not itself a data-collecting radar
+- **Triggers:** researcher-radar, radar family, what is a radar, radar-common, add a new radar, radar security model, radar architecture
+- **See:** `~/.agents/skills/researcher-radar/SKILL.md`
 
 ## Adding a New Skill
 
