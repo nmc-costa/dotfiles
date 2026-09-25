@@ -4,7 +4,7 @@ title: "[HIGH PRIORITY] Agents must sign tasks/ events as actor-kind=agent for t
 project: dotfiles
 phase: validation
 created: "2026-09-23T12:05:25.335490+00:00"
-touched: "2026-09-24T15:46:01.074072+00:00"
+touched: "2026-09-25T21:09:18.484780+00:00"
 energy: mechanical
 estimate: ""
 deadline: ""
