@@ -46,7 +46,6 @@
 
 ## Validation
 - [ ] dotfiles-tsk-skill-gauntlet-prompting Skill: gauntlet prompting (desenhar e criar skill .agents/skills/gauntlet-prompting)
-- [ ] dotfiles-tsk-chronicle-d7 Chronicle D7: opencode custom commands + tui.prompt.append chain bridge
 
 ## Done
 - [x] dotfiles-repo-hygiene-dotfiles Abrir PR: claude/repo-hygiene-dotfiles
@@ -86,6 +85,7 @@
 - [x] dotfiles-tsk-github-to-agents Migrar .github/ para .agents/ e apagar .github (Copilot já lê AGENTS.md)
 - [x] dotfiles-tsk-chronicle-skill-layer Chronicle-like skill layer: mine interactions into skills/instructions, resume-after-timeout, PR-finish, skill chaining + chat autocomplete
 - [x] dotfiles-tsk-chronicle-d4-d6 Chronicle slice D4-D6: /pr-finish, /chronicle miner, footer+questionario conventions
+- [x] dotfiles-tsk-chronicle-d7 Chronicle D7: opencode custom commands + tui.prompt.append chain bridge
 
 ## Blocked
 
