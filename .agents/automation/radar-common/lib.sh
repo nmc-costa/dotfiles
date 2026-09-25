@@ -275,7 +275,9 @@ radar_sqlite_load_ranked() {
   local db_path="$1" radar_name="$2" date="$3" ranked_json_file="$4"
   [[ -f "$ranked_json_file" ]] || return 0
   radar_sqlite_ensure_schema "$db_path"
-  jq -c '.[]' "$ranked_json_file" 2>/dev/null | while IFS= read -r row; do
+  # Accept both a bare array of items and an object wrapping one
+  # ({"ranked": [...]}) — agents emitting ranked.json do both.
+  jq -c 'if type == "object" then (.ranked // .items // []) else . end | .[]' "$ranked_json_file" 2>/dev/null | while IFS= read -r row; do
     local title url category score rationale picked
     title="$(jq -r '.title // ""' <<< "$row")"
     url="$(jq -r '.url // ""' <<< "$row")"
