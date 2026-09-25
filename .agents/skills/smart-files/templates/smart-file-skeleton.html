@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ficheiro Inteligente</title>
+<!--
+  smart-file skeleton — copy, rename, then add domain views in VIEWS below.
+  Rules (see ../SKILL.md): no CDN, no build, no network. JSON file = source of truth.
+  localStorage = best-effort cache only. Works from file:// in any desktop browser.
+-->
+<style>
+:root{
+  --bg:#f6f7f9;--card:#fff;--ink:#1d2330;--muted:#6b7385;--line:#e3e6ec;
+  --accent:#2f6fed;--accent-ink:#fff;--ok:#1f9d55;--warn:#d98a00;--bad:#d64545;
+  --radius:10px;--shadow:0 1px 3px rgba(0,0,0,.08);
+  font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#14171d;--card:#1c2029;--ink:#e8eaf0;--muted:#99a1b3;--line:#2c3240;--shadow:none}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink)}
+header{position:sticky;top:0;z-index:5;display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  padding:8px 16px;background:var(--card);border-bottom:1px solid var(--line)}
+header h1{font-size:17px;margin:0 12px 0 0}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav button{border:0;background:none;padding:8px 12px;border-radius:8px;color:var(--muted);cursor:pointer;font:inherit}
+nav button[aria-selected=true]{background:var(--accent);color:var(--accent-ink)}
+.spacer{flex:1}
+.status{font-size:13px;color:var(--muted);white-space:nowrap}
+.status.dirty{color:var(--warn);font-weight:600}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:8px;cursor:pointer;font:inherit}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.warn{background:var(--warn);color:#fff;border-color:var(--warn)}
+main{padding:16px;max-width:1200px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+.empty{text-align:center;padding:48px 16px}
+.empty .btn{margin:6px}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);
+  padding:10px 16px;border-radius:8px;display:none;gap:12px;align-items:center;z-index:20}
+#toast button{background:none;border:0;color:var(--accent);font:inherit;font-weight:600;cursor:pointer}
+dialog{border:0;border-radius:var(--radius);padding:20px;max-width:520px;width:calc(100% - 32px);background:var(--card);color:var(--ink)}
+dialog::backdrop{background:rgba(0,0,0,.35)}
+body.dragging main{outline:3px dashed var(--accent);outline-offset:-8px}
+@media print{header,#toast{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1 id="appTitle">Ficheiro Inteligente</h1>
+  <nav id="tabs" role="tablist"></nav>
+  <span class="spacer"></span>
+  <span id="status" class="status">Sem ficheiro</span>
+  <button class="btn" id="btnOpen" title="Abrir ficheiro .json">Abrir</button>
+  <button class="btn primary" id="btnSave" title="Guardar (Ctrl+S)">Guardar</button>
+</header>
+<main id="view"></main>
+<div id="toast" role="status"><span id="toastMsg"></span><button id="toastUndo">Anular</button></div>
+<input type="file" id="fileInput" accept=".json,application/json" hidden>
+
+<script>
+"use strict";
+/* ============ CONFIG — change per smart file ============ */
+const APP = { id: "smart-file", title: "Ficheiro Inteligente", schema: 1, fileName: "dados.json" };
+const EXAMPLE = { meta: { app: APP.id, schema: APP.schema, id: "exemplo" }, items: [] };
+/* ======================================================== */
+
+/* ---------- helpers ---------- */
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+// LOCAL dates only — never toISOString() for "today" (UTC shifts late-evening entries).
+const pad = n => String(n).padStart(2, "0");
+const isoDate = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const ptDate = iso => iso ? iso.slice(8, 10) + "/" + iso.slice(5, 7) + "/" + iso.slice(0, 4) : "";
+const ptNum = n => String(Math.round(n * 100) / 100).replace(".", ",");
+const parseNum = s => parseFloat(String(s).replace(",", "."));
+
+/* ---------- cache (best effort, never source of truth) ---------- */
+const cache = {
+  key: id => `${APP.id}:v${APP.schema}:${id}`,
+  get(id) { try { return JSON.parse(localStorage.getItem(this.key(id))); } catch { return null; } },
+  set(id, v) { try { localStorage.setItem(this.key(id), JSON.stringify(v)); } catch { /* file:// may forbid */ } },
+  del(id) { try { localStorage.removeItem(this.key(id)); } catch {} }
+};
+
+/* ---------- document store ---------- */
+const store = {
+  doc: null, handle: null, dirty: false, undo: [],
+  canWrite: typeof window.showSaveFilePicker === "function",
+  load(doc, handle = null) {
+    if (!doc || doc.meta?.app !== APP.id) throw new Error("Este ficheiro não é deste programa.");
+    this.doc = doc; this.handle = handle; this.dirty = false; this.undo = [];
+    const draft = cache.get(doc.meta.id + ":rascunho");
+    if (draft && draft.savedFrom === doc.meta.updatedAt && confirm("Há alterações por guardar deste ficheiro. Recuperar?")) {
+      this.doc = draft.doc; this.markDirty();
+    }
+    render(); updateStatus();
+  },
+  change(fn, label) {                       // every mutation goes through here
+    this.undo.push(JSON.stringify(this.doc));
+    fn(this.doc);
+    this.markDirty();
+    render();
+    if (label) toast(label, () => this.undoLast());
+  },
+  undoLast() {
+    const prev = this.undo.pop(); if (!prev) return;
+    this.doc = JSON.parse(prev); this.markDirty(); render();
+  },
+  markDirty() {
+    this.dirty = true;
+    cache.set(this.doc.meta.id + ":rascunho", { savedFrom: this.doc.meta.updatedAt, doc: this.doc });
+    updateStatus();
+  },
+  async save() {
+    if (!this.doc) return;
+    this.doc.meta.updatedAt = new Date().toISOString();
+    const text = JSON.stringify(this.doc, null, 2);
+    try {
+      if (this.canWrite) {
+        if (!this.handle) this.handle = await showSaveFilePicker({ suggestedName: APP.fileName,
+          types: [{ description: "JSON", accept: { "application/json": [".json"] } }] });
+        const w = await this.handle.createWritable(); await w.write(text); await w.close();
+      } else {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([text], { type: "application/json" }));
+        a.download = APP.fileName; a.click(); URL.revokeObjectURL(a.href);
+        toast("Descarregado. Substitua o ficheiro antigo na pasta partilhada.");
+      }
+      this.dirty = false; cache.del(this.doc.meta.id + ":rascunho"); updateStatus();
+    } catch (e) { if (e.name !== "AbortError") alert("Não foi possível guardar: " + e.message); }
+  }
+};
+
+async function openFile() {
+  try {
+    if (window.showOpenFilePicker) {
+      const [h] = await showOpenFilePicker({ types: [{ description: "JSON", accept: { "application/json": [".json"] } }] });
+      store.load(JSON.parse(await (await h.getFile()).text()), h);
+    } else $("#fileInput").click();
+  } catch (e) { if (e.name !== "AbortError") alert(e.message); }
+}
+$("#fileInput").onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try { store.load(JSON.parse(await f.text())); } catch (err) { alert(err.message); }
+  e.target.value = "";
+};
+// drag & drop and paste import
+addEventListener("dragover", e => { e.preventDefault(); document.body.classList.add("dragging"); });
+addEventListener("dragleave", () => document.body.classList.remove("dragging"));
+addEventListener("drop", async e => {
+  e.preventDefault(); document.body.classList.remove("dragging");
+  const f = e.dataTransfer.files[0]; if (!f) return;
+  try { store.load(JSON.parse(await f.text())); } catch (err) { alert(err.message); }
+});
+addEventListener("paste", e => {
+  if (e.target.closest("input,textarea")) return;
+  const t = e.clipboardData.getData("text"); if (!t.trim().startsWith("{")) return;
+  try { store.load(JSON.parse(t)); } catch (err) { alert(err.message); }
+});
+addEventListener("beforeunload", e => { if (store.dirty) { e.preventDefault(); e.returnValue = ""; } });
+addEventListener("keydown", e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === "s") { e.preventDefault(); store.save(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === "z" && !e.target.closest("input,textarea")) { e.preventDefault(); store.undoLast(); }
+});
+$("#btnOpen").onclick = openFile;
+$("#btnSave").onclick = () => store.save();
+
+/* ---------- UI chrome ---------- */
+let toastTimer;
+function toast(msg, onUndo) {
+  $("#toastMsg").textContent = msg;
+  const u = $("#toastUndo"); u.style.display = onUndo ? "" : "none";
+  u.onclick = () => { onUndo(); $("#toast").style.display = "none"; };
+  $("#toast").style.display = "flex";
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => $("#toast").style.display = "none", 6000);
+}
+function updateStatus() {
+  const s = $("#status");
+  if (!store.doc) { s.textContent = "Sem ficheiro"; s.className = "status"; return; }
+  s.textContent = store.dirty ? "● Por guardar" : "● Guardado";
+  s.className = "status" + (store.dirty ? " dirty" : "");
+  $("#btnSave").className = "btn " + (store.dirty ? "warn" : "primary");
+}
+
+/* ---------- views: add domain views here ---------- */
+const VIEWS = {
+  inicio: { label: "Início", render: doc => `<div class="card"><h2>Olá 👋</h2>
+    <p>${doc.items.length} itens.</p></div>` }
+};
+let current = Object.keys(VIEWS)[0];
+function render() {
+  $("#tabs").innerHTML = Object.entries(VIEWS).map(([k, v]) =>
+    `<button role="tab" aria-selected="${k === current}" data-v="${k}">${esc(v.label)}</button>`).join("");
+  $("#tabs").onclick = e => { const k = e.target.dataset.v; if (k) { current = k; render(); } };
+  $("#view").innerHTML = store.doc ? VIEWS[current].render(store.doc)
+    : `<div class="card empty"><h2>${esc(APP.title)}</h2>
+       <p>Abra o seu ficheiro <b>.json</b> (ou arraste-o para aqui) para começar.</p>
+       <button class="btn primary" onclick="openFile()">Abrir ficheiro</button>
+       <button class="btn" onclick="store.load(structuredClone(EXAMPLE))">Experimentar com exemplo</button></div>`;
+}
+document.title = APP.title; $("#appTitle").textContent = APP.title;
+render(); updateStatus();
+</script>
+</body>
+</html>
