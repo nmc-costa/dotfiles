@@ -57,14 +57,29 @@ def current_branch(root: Path) -> str:
 
 
 def card_phase(root: Path, task_id: str) -> str | None:
-    """Phase from the generated card view; None if the card doesn't exist."""
-    card = root / "tasks" / "cards" / f"{task_id}.md"
-    if not card.is_file():
-        return None
-    for line in card.read_text(encoding="utf-8").splitlines():
-        if line.startswith("phase:"):
-            return line.split(":", 1)[1].strip()
+    """Phase from the generated card view; None if the card doesn't exist.
+
+    A worktree whose branch predates the card won't have the file in its own
+    copy — fall back to the canonical tasks root (tasks/paths.tasks_root(),
+    same resolver tasks/*.py use) before giving up.
+    """
+    for candidate in dict.fromkeys((root, _canonical_root(root))):
+        card = candidate / "tasks" / "cards" / f"{task_id}.md"
+        if card.is_file():
+            for line in card.read_text(encoding="utf-8").splitlines():
+                if line.startswith("phase:"):
+                    return line.split(":", 1)[1].strip()
+            return None
     return None
+
+
+def _canonical_root(root: Path) -> Path:
+    try:
+        sys.path.insert(0, str(root / "tasks"))
+        from paths import tasks_root  # type: ignore
+        return tasks_root().parent
+    except Exception:
+        return root
 
 
 def resolve_pr(root: Path, task_id: str, pr_arg: int | None) -> dict:
