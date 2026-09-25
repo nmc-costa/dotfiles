@@ -1,0 +1,20 @@
+[Unit]
+Description=chronicle daily improve (mine history + radar briefs, one gated skill-improvement PR)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/dotfiles
+ExecStart=%h/dotfiles/.agents/skills/chronicle/scripts/run.sh
+TimeoutStartSec=900
+Environment=PATH=%h/.local/bin:/usr/bin:/bin
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=read-only
+ProtectSystem=strict
+ReadWritePaths=%h/dotfiles %h/dotfiles.worktrees %h/.local/state/chronicle-improve %h/.local/share/opencode %h/.config/opencode
+
+[Install]
+WantedBy=timers.target
