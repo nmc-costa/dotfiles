@@ -16,6 +16,14 @@ there. Added 2026-09-16 — this file previously had no explicit pointer to
 either, unlike Claude Code, which gets this automatically via a
 `SessionStart` hook (see `CLAUDE.md`'s "Known Gaps").
 
+If a `HANDOFF.md` exists at the repo (or subsystem) root, read its top
+block first — the previous session's state and next step, possibly from a
+different harness/model. When stopping with work unfinished, leave one per
+`.agents/skills/handoff/SKILL.md` (`python3 ~/.agents/skills/handoff/handoff.py
+new|check|prompt`).
+
+**Worktree per card (every harness, 2026-09-24):** writing code for a `tasks/` card? Your process cwd must be that card's worktree — `python3 ~/dotfiles/tasks/worktree.py path --task-id <id> --harness <claude|copilot|gemini|agy|codex>` prints it. If it doesn't exist or you aren't in it, run `python3 ~/dotfiles/tasks/worktree.py create --task-id <id> --harness <you>` and relaunch there (`python3 ~/dotfiles/tasks/dispatch.py --task-id <id> --provider <you> --worktree --launch`, or start your CLI from that directory) — never edit the main checkout, and never use a native `--worktree`/`EnterWorktree` for tasks work. See `.agents/skills/task-worktree/SKILL.md`.
+
 **Scope note (confirmed 2026-09-16 via direct diagnostic):** this file is
 auto-loaded by GitHub Copilot Chat / Copilot in VS Code (the documented
 "repository custom instructions" feature). It is **not** read by GitHub

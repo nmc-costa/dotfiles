@@ -16,6 +16,8 @@ Instructions for Gemini when working in this repository.
 
 - **`CHEATSHEET.md`** — where things go, and §4's persistent cross-session TODO list (survives longer than any single session's own tracking).
 - **`tasks/board.md`** and **`tasks/README.md`** — the workspace's task tracker (an append-only event log projected into a table). Check it for open work before starting something new, and append an event with `tasks/append_event.py` when you finish something worth tracking there.
+- **`HANDOFF.md`** at the repo/subsystem root, if present — read its top block (previous session's state + next step, possibly from another harness/model). When stopping with work unfinished, write one per `.agents/skills/handoff/SKILL.md` (`python3 ~/.agents/skills/handoff/handoff.py new|check|prompt`).
+- **Worktree per card (every harness, 2026-09-24):** writing code for a `tasks/` card? Your process cwd must be that card's worktree — `python3 ~/dotfiles/tasks/worktree.py path --task-id <id> --harness <claude|copilot|gemini|agy|codex>` prints it. If it doesn't exist or you aren't in it, run `python3 ~/dotfiles/tasks/worktree.py create --task-id <id> --harness <you>` and relaunch there (`python3 ~/dotfiles/tasks/dispatch.py --task-id <id> --provider <you> --worktree --launch`, or start your CLI from that directory) — never edit the main checkout, and never use a native `--worktree`/`EnterWorktree` for tasks work. See `.agents/skills/task-worktree/SKILL.md`.
 
 (Added 2026-09-16 — Claude Code gets this automatically via a `SessionStart` hook; Gemini has no equivalent hook yet, so this section is the manual substitute. See `CLAUDE.md`'s "Known Gaps" for the full finding.)
 

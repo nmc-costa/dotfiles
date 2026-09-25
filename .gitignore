@@ -141,3 +141,8 @@ tasks/.dispatch-logs/
 !.gemini/
 !.codex/
 !.copilot/
+
+# tasks/worktree.py's per-machine worktree view (one <task-id>.md per card
+# with a managed worktree + README.md index). Machine-local paths — never
+# committed, so the tracked cards next to it never churn.
+tasks/cards/worktrees/

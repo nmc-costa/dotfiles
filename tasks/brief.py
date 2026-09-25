@@ -31,13 +31,16 @@ import sys
 import time
 from pathlib import Path
 
-TASKS_DIR = Path(__file__).parent
-EVENTS_FILE = TASKS_DIR / "events.jsonl"
-HEARTBEAT_FILE = TASKS_DIR / ".sweep-heartbeat"
-HEARTBEAT_STALE_SECONDS = 15 * 60
-
+TASKS_DIR = Path(__file__).parent  # sibling .py modules only — never data paths
 sys.path.insert(0, str(TASKS_DIR))
-from lifecycle import CREATED_TYPES, P0_FACT_TYPES, PHASE_CHANGED_TYPES, current_phase  # noqa: E402
+from lifecycle import CREATED_TYPES, P0_FACT_TYPES, PHASE_CHANGED_TYPES, current_phase, tasks_root  # noqa: E402
+
+# Data via tasks_root() (tasks/paths.py), like every other script: run from
+# a worktree's copy of brief.py, Path(__file__).parent would read that
+# worktree's stale events.jsonl (dispatch.py --worktree hits exactly this).
+EVENTS_FILE = tasks_root() / "events.jsonl"
+HEARTBEAT_FILE = tasks_root() / ".sweep-heartbeat"
+HEARTBEAT_STALE_SECONDS = 15 * 60
 
 RAISED_TYPE = "notification.raised"
 ACKED_TYPE = "notification.acked"
