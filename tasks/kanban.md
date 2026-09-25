@@ -42,6 +42,7 @@
 - [ ] dotfiles-tsk-simplifyhit-ressonance-typo Fix typo: simplifyhit/SKILL.md escreve RESSONANCE em vez de RESONANCE no bloco de header
 - [ ] dotfiles-tsk-mermaid-instructions-footer-conflict mermaid.instructions.md (Regras 1, 2 e 5) entra em conflito com qualquer diagrama Mermaid devolvido inline (ex. footer do Output Frame)
 - [ ] dotfiles-tsk-chronicle-daily-improve Chronicle daily background improve: timer, headless opencode run, gated auto-merge PRs
+- [ ] dotfiles-tsk-radar-opencode-backend Radar family: commit skills+automation+units, omarchy-radar backend routing (opencode default)
 
 ## Validation
 - [ ] dotfiles-tsk-skill-gauntlet-prompting Skill: gauntlet prompting (desenhar e criar skill .agents/skills/gauntlet-prompting)

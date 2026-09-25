@@ -260,8 +260,10 @@ Continue the chronicle skill-layer plan from the previous handoff: land D4-D6 (3
 
 ## Open / risks
 
-- **PRs #98 (D7) and #102 (daily improve) both pending owner merge** (squash). After #98: move card d7 → validation, `./sync.sh`, **restart opencode**. After #102: `./sync.sh` then `systemctl --user enable --now chronicle-improve.timer` (owner-run; hardened unit, daily 08:00+jitter).
-- **Radar timers: `omarchy-radar.timer` is now INSTALLED + ENABLED** (2026-09-25 late session, see top block) — agent step currently GLM-routed. `harness-radar` timer is still not installed; same install flow when wanted.
+- **FIRST RUNS DONE (2026-09-26, owner-directed test-all):** chronicle daily-improve ran end-to-end and its gated auto-merge MERGED PR #106 (`0d97f4f`, task-brief SKILL.md improvement with cited evidence; revert cmd in body). Two run.sh bugs found+fixed on #102: chronicle.py `--json`/`--out` are mutually exclusive (→ two miner calls); gate 3 now queues `--auto` on UNSTABLE too (GitHub enforces CI green). harness-radar (merged #103) ran its full nested **opencode** pipeline and committed `radar/harness-radar/2026-09-26` (1 suggestion, honest caveats, ranked.json + history.db populated, 213 seen items). omarchy-radar #104 code: clean skip path validated. router.sh: both radars `enabled+active`.
+- **Quota matrix (probed 2026-09-26 ~00:00):** claude weekly-locked (Sep 29), copilot no quota, gemini CLI dead (migrate to Antigravity), codex 401, **agy 429 (~91h)**. opencode is the ONLY working agent — every run today routed to it; multi-agent dispatch is one env-var per skill once any quota returns.
+- **PRs #98 (D7), #102 (daily improve), #104 (omarchy fix) all pending owner merge.** #104 is time-sensitive: **both radar timers are installed+active** — at next 08:00 omarchy-radar fires the OLD claude-hardcoded script and fails until #104 lands.
+- **Radar timers are installed+active** (parallel session installed them; units also landed on main via #100/#103). chronicle-improve timer still NOT installed (awaits #102 merge + owner `systemctl --user enable --now chronicle-improve.timer`).
 - **The daily-improve gate model is a deliberate exception** to the human-only-merge rule (owner-directed); pr-finish's default and every other skill remain propose-only.
 - **Owner validation pending** for cards `dotfiles-tsk-chronicle-d4-d6` (in `validation`) and, later, `dotfiles-tsk-chronicle-d7`.
 - **D8 not built** (voxtype + ydotoold; plan note on done card `dotfiles-tsk-chronicle-skill-layer`).
