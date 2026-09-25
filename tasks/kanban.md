@@ -41,10 +41,10 @@
 - [ ] dotfiles-tsk-header-persona-drift Header/persona RESONANCE drift: ~15 ficheiros com cópias divergentes do bloco de header (achado pelo plano do Output Frame)
 - [ ] dotfiles-tsk-simplifyhit-ressonance-typo Fix typo: simplifyhit/SKILL.md escreve RESSONANCE em vez de RESONANCE no bloco de header
 - [ ] dotfiles-tsk-mermaid-instructions-footer-conflict mermaid.instructions.md (Regras 1, 2 e 5) entra em conflito com qualquer diagrama Mermaid devolvido inline (ex. footer do Output Frame)
+- [ ] dotfiles-tsk-chronicle-d7 Chronicle D7: opencode custom commands + tui.prompt.append chain bridge
 
 ## Validation
 - [ ] dotfiles-tsk-skill-gauntlet-prompting Skill: gauntlet prompting (desenhar e criar skill .agents/skills/gauntlet-prompting)
-- [ ] dotfiles-tsk-chronicle-d4-d6 Chronicle slice D4-D6: /pr-finish, /chronicle miner, footer+questionario conventions
 
 ## Done
 - [x] dotfiles-repo-hygiene-dotfiles Abrir PR: claude/repo-hygiene-dotfiles
@@ -83,6 +83,7 @@
 - [x] dotfiles-tsk-spike-herdr-commander-build Spike (hands-on): patch herdr-commander to overlay placement, wire real .vscode/tasks.json, verify picker end-to-end
 - [x] dotfiles-tsk-github-to-agents Migrar .github/ para .agents/ e apagar .github (Copilot já lê AGENTS.md)
 - [x] dotfiles-tsk-chronicle-skill-layer Chronicle-like skill layer: mine interactions into skills/instructions, resume-after-timeout, PR-finish, skill chaining + chat autocomplete
+- [x] dotfiles-tsk-chronicle-d4-d6 Chronicle slice D4-D6: /pr-finish, /chronicle miner, footer+questionario conventions
 
 ## Blocked
 
