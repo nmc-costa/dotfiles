@@ -1,0 +1,21 @@
+[Unit]
+Description=harness-radar -- daily digest of the AI coding-agent/harness ecosystem
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/dotfiles
+ExecStart=%h/dotfiles/.agents/skills/harness-radar/scripts/run.sh
+TimeoutStartSec=600
+Environment=PATH=%h/.local/bin:/usr/bin:/bin
+
+# Hardening: this unit has network access and runs an LLM agent
+# unattended against a public repo, so NoNewPrivileges alone is not
+# enough -- see the researcher-radar family plan's "systemd units"
+# section and harness-radar/security.md for the threat model.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=read-only
+ProtectSystem=strict
+ReadWritePaths=%h/dotfiles %h/.local/state/harness-radar %h/.claude
