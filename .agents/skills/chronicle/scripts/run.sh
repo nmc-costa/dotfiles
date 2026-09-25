@@ -252,7 +252,11 @@ done < <(gh pr view "$PR_NUMBER" --repo "$REPO" --json files --jq '.files[].path
 
 STATE="$(gh pr view "$PR_NUMBER" --repo "$REPO" \
   --json mergeable,mergeStateStatus --jq '"\(.mergeable) \(.mergeStateStatus)"')"
-if [[ "$FILES_OK" == "true" && "$STATE" == "MERGEABLE CLEAN" ]]; then
+# Gate 3 (CI green) is enforced BY GitHub's --auto: it queues the merge and
+# GitHub completes it only when checks pass. So MERGEABLE + CLEAN *or*
+# UNSTABLE (CI pending) both qualify; anything else (conflicts, blocked)
+# stays a human-review PR.
+if [[ "$FILES_OK" == "true" && "$STATE" == "MERGEABLE CLEAN" || "$FILES_OK" == "true" && "$STATE" == "MERGEABLE UNSTABLE" ]]; then
   log "gates 1+2 passed — enabling auto-merge (gate 3 = CI green, enforced by GitHub)"
   gh pr merge "$PR_NUMBER" --repo "$REPO" --auto --squash || {
     log "auto-merge not accepted (branch protection/reviews?) — PR left open for review"
