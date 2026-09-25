@@ -3,9 +3,10 @@ description: "Output Frame — header + footer standard for every human-facing a
 ---
 # Output Frame
 
-**On-demand reference, not always-loaded.** Every entry file (`AGENTS.md`,
-`GEMINI.md`, `.github/copilot-instructions.md`, `.agents/rules/output-frame.md`,
-and the 4 per-tool pointer files) already carries the short
+**On-demand reference, not always-loaded.** Every entry file (`AGENTS.md` — also
+read by GitHub Copilot —, `GEMINI.md`, `.agents/rules/output-frame.md`, and
+the 4 per-tool pointer files; list in `scripts/core_blocks.manifest`)
+already carries the short
 `<!-- OUTPUT-FRAME:CORE -->` block. Read this file only when you need the
 edge cases or the worked examples below — don't load it on every session
 start (it would duplicate the core block). Plan and rationale:

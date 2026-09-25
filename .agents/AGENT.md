@@ -1,3 +1,10 @@
+# GitHub Copilot session rules (VS Code)
+
+Copilot-specific detail formerly in `.github/copilot-instructions.md` (removed
+2026-09-25 — Copilot now reads the root `AGENTS.md`, which points here). The
+tool-agnostic startup protocol lives in `AGENTS.md`; this file only holds what
+is specific to Copilot Chat in VS Code.
+
 <!-- mermaid-ai-skills:start -->
 ## Mermaid Diagrams
 
@@ -54,7 +61,7 @@ instructions in `.agents/instructions/workspace-config/mermaid.instructions.md`.
 - **Pre-Flight Checks:** Before invoking any slash command (e.g., `/create-instructions`, `/create-agent`, `/create-skill`, `/chronicle`, `/analyze-prompt`), verify the command is registered and available.
 - **Error Handling:** If a slash command is not recognized, do NOT silently fail. Instead, explain to the user which commands are actually available and suggest alternatives based on their intent.
 - **File Reference in Commands:** When a slash command includes a file reference (e.g., `/create-agent based on @file:presentHITs.md`), expand and validate the path exists before executing.
-- **Known Available Commands:** `/chronicle`, `/compact` (VS Code built-in), `/memorize`, `/recall`, and skill-based commands defined in `.github/skills/` and custom agent files.
+- **Known Available Commands:** `/chronicle`, `/compact` (VS Code built-in), `/memorize`, `/recall`, and skill-based commands defined in `.agents/skills/` and custom agent files.
 
 **Slash Command Completion Pattern:**
 - `/create-instructions` → If user provides file/requirements, auto-generate full file (no "need more details" pause)
@@ -98,7 +105,7 @@ To verify the routing rule is working end-to-end and achieving ~30-40% token red
 
 1. **Phase 1 - Validation (Completed):**
    - ✅ Test harness confirms 100% routing accuracy on 5 representative tasks
-   - Results: `.github/skills/routing_test_results_phase1.json`
+   - Results: `.agents/skills/model-routing-monitor/routing_test_results_phase1.json`
 
 2. **Phase 2 - Real Session Monitoring (Weekly):**
    - Use the `model-routing-monitor` skill to query session store
@@ -113,7 +120,7 @@ To verify the routing rule is working end-to-end and achieving ~30-40% token red
    - Document findings in `.agents/automation/routing_compliance_YYYYMMDD.md`
 
 **Instructions for monitoring:** See `.agents/instructions/workspace-config/token-tracking.instructions.md`  
-**Skill for analytics:** See `.github/skills/model-routing-monitor/SKILL.md`
+**Skill for analytics:** See `.agents/skills/model-routing-monitor/SKILL.md`
 
 ## � Daily Workspace Optimization
 

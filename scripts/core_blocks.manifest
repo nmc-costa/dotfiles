@@ -8,10 +8,11 @@
 # the same commit; the canonical text lives in
 # .agents/instructions/workspace-config/<name>.instructions.md.
 
-# OUTPUT-FRAME:CORE — tasks/plans/agent-output-tldr-format.md §1/§6 (S2)
+# OUTPUT-FRAME:CORE — tasks/plans/agent-output-tldr-format.md §1/§6 (S2).
+# The plan's 8th target, .github/copilot-instructions.md, was removed by
+# #89 (Copilot now reads AGENTS.md, which carries the block).
 OUTPUT-FRAME AGENTS.md
 OUTPUT-FRAME GEMINI.md
-OUTPUT-FRAME .github/copilot-instructions.md
 OUTPUT-FRAME .agents/rules/output-frame.md
 OUTPUT-FRAME .claude/CLAUDE.md
 OUTPUT-FRAME .gemini/GEMINI.md

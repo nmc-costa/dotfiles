@@ -28,12 +28,15 @@ import sys
 import time
 from pathlib import Path
 
-TASKS_DIR = Path(__file__).parent
-EVENTS_FILE = TASKS_DIR / "events.jsonl"
+TASKS_DIR = Path(__file__).parent  # sibling .py modules only — never data paths
 
 sys.path.insert(0, str(TASKS_DIR))
 from append_event import append  # noqa: E402
-from lifecycle import P0_FACT_TYPES  # noqa: E402
+from lifecycle import P0_FACT_TYPES, tasks_root  # noqa: E402
+
+# Data via tasks_root() (tasks/paths.py), like brief.py: a copy of this script
+# running inside a worktree must still read/write the one shared log.
+EVENTS_FILE = tasks_root() / "events.jsonl"
 
 RAISED_TYPE = "notification.raised"
 DELIVERED_TYPE = "notification.delivered"

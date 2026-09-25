@@ -39,13 +39,16 @@ import json
 import sys
 from pathlib import Path
 
-TASKS_DIR = Path(__file__).parent
-EVENTS_FILE = TASKS_DIR / "events.jsonl"
-HEARTBEAT_FILE = TASKS_DIR / ".sweep-heartbeat"
+TASKS_DIR = Path(__file__).parent  # sibling .py modules only — never data paths
 
 sys.path.insert(0, str(TASKS_DIR))
 from append_event import append  # noqa: E402
-from lifecycle import AGENT_ACTOR_KINDS, PHASE_CHANGED_TYPES, dedup_key  # noqa: E402
+from lifecycle import AGENT_ACTOR_KINDS, PHASE_CHANGED_TYPES, dedup_key, tasks_root  # noqa: E402
+
+# Data via tasks_root() (tasks/paths.py), like brief.py: a copy of this script
+# running inside a worktree must still read/write the one shared log.
+EVENTS_FILE = tasks_root() / "events.jsonl"
+HEARTBEAT_FILE = tasks_root() / ".sweep-heartbeat"
 
 SLA_SECONDS = 4 * 3600
 BLOCKED_SECONDS = 24 * 3600

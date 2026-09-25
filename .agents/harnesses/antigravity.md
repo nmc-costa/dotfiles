@@ -27,7 +27,7 @@ Two formal mechanisms, per the tool itself:
    at the repo root: `.agents/` (or `.agent/`, `_agents/`, `_agent/`).
 
 **Confirmed NOT scanned for:** `CLAUDE.md`, `CHEATSHEET.md`,
-`.github/copilot-instructions.md`. Don't add pointers there expecting
+`.agents/AGENT.md` (Copilot-only). Don't add pointers there expecting
 Antigravity to see them — it won't.
 
 Given this, the session-startup fix lives in three places, redundantly, so

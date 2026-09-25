@@ -18,7 +18,7 @@ Added 2026-09-16 as a dedicated file under `.agents/rules/*.md` — a
 directory-scan convention confirmed real by a direct Antigravity diagnostic
 (it walks up from the open file to the repo root looking for `GEMINI.md`,
 `AGENTS.md`, and `.agents/rules/*.md`; it does not look for `CLAUDE.md`,
-`CHEATSHEET.md`, or `.github/copilot-instructions.md`). The same content is
+`CHEATSHEET.md`, or `.agents/AGENT.md`). The same content is
 also inlined in `AGENTS.md` and `GEMINI.md` for tools that read those
 instead — this file exists so a tool using only the `.agents/rules/`
 convention still gets it without depending on either.

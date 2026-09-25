@@ -12,9 +12,13 @@ Guidance for AI agents (Crush/Claude, Copilot, Gemini) working in this repositor
 
 **Session hygiene (`sessionHygiene`, 2026-09-15):** when the current session reaches a natural conclusion, or has already gone through many rounds of agent dispatch/tool calls with a large context relative to what the next task actually needs, or the next request is unrelated to what filled the session so far — proactively suggest starting a new session, and **always hand back a ready-to-copy kickoff prompt** (don't just say "you should start a new session") — when work is unfinished, produce it with the `handoff` skill (`.agents/skills/handoff/SKILL.md`: `handoff.py new` → fill → `check` → `prompt`), which leaves a `HANDOFF.md` any harness/model can resume from; at session start, read the top block of any `HANDOFF.md` at the repo/subsystem root. The concrete pattern is in this repo's `CHEATSHEET.md` §7: read `CLAUDE.md`+`CHEATSHEET.md`, rebuild the todo list from a persistent doc, and — this is the part every harness should also do, not just Claude Code — check `tasks/board.md` (and `tasks/README.md` for how to append events) for the workspace's cross-session task tracker, writing there (not only in-session) when something gets done.
 
-(Claude Code has this automated via a `SessionStart` hook — see `CLAUDE.md`. Other tools follow this protocol in prose, here. **Known gap (2026-09-16):** this file and `CLAUDE.md` both reference `CHEATSHEET.md` §7 but neither used to mention `tasks/` explicitly, and `.github/copilot-instructions.md`/`GEMINI.md` had no startup pointer to either — see `CLAUDE.md`'s "Known Gaps" for the full finding and what's still needed to fix it for Copilot/Gemini/Antigravity.)
+(Claude Code has this automated via a `SessionStart` hook — see `CLAUDE.md`. Other tools follow this protocol in prose, here. **Known gap (2026-09-16):** this file and `CLAUDE.md` both reference `CHEATSHEET.md` §7 but neither used to mention `tasks/` explicitly, and the old `.github/copilot-instructions.md` (removed 2026-09-25, see below)/`GEMINI.md` had no startup pointer to either — see `CLAUDE.md`'s "Known Gaps" for the full finding and what's still needed to fix it for Copilot/Gemini/Antigravity.)
 
 **Before writing to `tasks/` at all** (creating a task, moving a phase, or touching `tasks/events.jsonl`/`kanban.md`/`cards/` directly): read `tasks/README.md`'s "Agent actor-kind: never impersonate the human" and "`tasks/events.jsonl` is live and shared — don't run raw git ops on it" sections first (added 2026-09-24, after a real agent session did both wrong in the same afternoon). Short version — sign your own writes `actor.kind: agent`, never borrow a human's identity; and never `git checkout --`/`reset`/`stash`/`clean` that file in the shared checkout, since another session may be appending to it right now.
+
+**Mermaid diagrams:** when asked to create, edit, or visualize a diagram, follow `.agents/instructions/workspace-config/mermaid.instructions.md`.
+
+**GitHub Copilot (VS Code Chat / coding agent):** Copilot reads this `AGENTS.md` natively (`chat.useAgentsMdFile`, default on), so there is no `.github/copilot-instructions.md` any more — it was folded in here on 2026-09-25 (`dotfiles-tsk-github-to-agents`). Its Copilot-specific session rules (`/compact`→`/memorize`→`/recall`, slash-command handling, model routing, daily optimization) live in `.agents/AGENT.md` — Copilot, read that file too. Skills are discovered from `.agents/skills/` natively; `.github/` now holds only `workflows/` (GitHub Actions can't run from anywhere else).
 
 **Worktree per card (every harness, 2026-09-24):** writing code for a `tasks/` card? Your process cwd must be that card's worktree — `python3 ~/dotfiles/tasks/worktree.py path --task-id <id> --harness <claude|copilot|gemini|agy|codex>` prints it. If it doesn't exist or you aren't in it, run `python3 ~/dotfiles/tasks/worktree.py create --task-id <id> --harness <you>` and relaunch there (`python3 ~/dotfiles/tasks/dispatch.py --task-id <id> --provider <you> --worktree --launch`, or start your CLI from that directory) — never edit the main checkout, and never use a native `--worktree`/`EnterWorktree` for tasks work. See `.agents/skills/task-worktree/SKILL.md`.
 
@@ -35,7 +39,7 @@ Size the reply: S = <~25 lines, no headings · M = 25–80 lines, ≥3 sections,
 | Agent | Config Location | When to Use |
 |--------|-------------------|-------------|
 | **Crush/Claude** | `~/.claude/`, `~/.claude.json` | Development, code analysis, debugging, automation |
-| **Copilot CLI** | `~/.copilot/` | Terminal agent, own global instructions file — distinct from the VS Code extension, which reads `.github/copilot-instructions.md` per-project instead |
+| **Copilot CLI** | `~/.copilot/` | Terminal agent, own global instructions file — distinct from the VS Code extension, which reads this repo's `AGENTS.md` per-project instead |
 | **Gemini CLI** | `~/.gemini/` | Quick queries, brainstorming |
 | **OpenAI Codex CLI** | `~/.codex/` | Terminal coding agent |
 | **Cline** | `~/.cline/` | Complex multi-file task execution |
@@ -153,7 +157,7 @@ from) to the versioned copy in this repo:
 | `dotfiles/.gemini/GEMINI.md` | Gemini CLI | `~/.gemini/GEMINI.md` |
 | `dotfiles/.codex/AGENTS.md` | OpenAI Codex CLI | `~/.codex/AGENTS.md` |
 | `dotfiles/.copilot/copilot-instructions.md` | GitHub Copilot CLI | `~/.copilot/copilot-instructions.md` |
-| `.github/copilot-instructions.md` (this repo only) | GitHub Copilot (VS Code extension) | project-level, not global — auto-discovered per-repo |
+| `AGENTS.md` + `.agents/AGENT.md` (this repo only) | GitHub Copilot (VS Code extension) | project-level, not global — `AGENTS.md` auto-discovered per-repo |
 
 All five of the per-tool pointer files above just redirect to the same
 real source: `.agents/instructions/workspace-config/*.instructions.md`
@@ -169,7 +173,7 @@ assume one exists without checking.
 - **Restrictions:** No automatic commits without explicit confirmation
 
 ### Copilot
-- **Reads:** `.github/copilot-instructions.md` (project-level, VS Code extension) or `~/.copilot/copilot-instructions.md` (global, Copilot CLI — symlinked pointer, see above)
+- **Reads:** `AGENTS.md` → `.agents/AGENT.md` (project-level, VS Code extension; skills from `.agents/skills/`) or `~/.copilot/copilot-instructions.md` (global, Copilot CLI — symlinked pointer, see above)
 - **Preferences:** Fast inline suggestions, code completions
 - **Restrictions:** Doesn't modify files without intervention
 

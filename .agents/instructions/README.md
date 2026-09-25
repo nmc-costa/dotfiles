@@ -37,20 +37,19 @@ around only to be archived on GitHub for history — do not treat it as a live s
 ## 🏗️ Current Architecture
 
 - ✅ **Single Source of Truth**: `.agents/instructions/` in this repo (`~/dotfiles`)
-- ✅ **GitHub Compliance**: `.github/copilot-instructions.md` is auto-discovered by GitHub Copilot; `.github/instructions` is a symlink to `.agents/instructions` so both tools read the same files
-- ✅ **Zero Duplication**: `.github/instructions` and `.agents/instructions` are the same files on disk (symlink), not copies
+- ✅ **GitHub Copilot**: reads the root `AGENTS.md` natively (→ `.agents/AGENT.md`); VS Code finds these files once `chat.instructionsFilesLocations` includes `.agents/instructions` (see `.agents/harnesses/vscode-copilot.md`)
+- ✅ **Zero Duplication**: there is no `.github/instructions` copy or symlink any more (removed 2026-09-25)
 - ⚠️ **No central REGISTRY.md**: the old repo's `REGISTRY.md` was aspirational/stale and was not carried over. Browse `.agents/skills/` and `.agents/instructions/` directly instead.
 
 ## 🔄 How It Works
 
-1. GitHub Copilot discovers `.github/copilot-instructions.md`.
+1. GitHub Copilot discovers the root `AGENTS.md`, which points to `.agents/AGENT.md`.
 2. Claude Code, Cursor, Gemini CLI, etc. read `.agents/skills/*/SKILL.md` and `.agents/instructions/` directly.
-3. `.github/instructions` is a symlink to `.agents/instructions`, so editing either path edits the same file.
+3. VS Code Copilot reads `*.instructions.md` from here via `chat.instructionsFilesLocations`.
 
 ## 📝 Note for Contributors
 
-Edit files directly in this directory (`.agents/instructions/`) — there is no other copy to keep in sync, aside from
-the `.github/instructions` symlink which always resolves here automatically.
+Edit files directly in this directory (`.agents/instructions/`) — there is no other copy to keep in sync.
 
 ---
 

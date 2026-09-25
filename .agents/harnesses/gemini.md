@@ -11,18 +11,18 @@ flags anything about Gemini CLI's exact plumbing that hasn't been independently 
 ## How This Should Actually Work
 
 The convention this repo follows (already true for Claude Code and GitHub Copilot, see
-`.agents/harnesses/claude-code.md` and `.github/copilot-instructions.md`) is:
+`.agents/harnesses/claude-code.md` and `.agents/harnesses/vscode-copilot.md`) is:
 
 1. A tool-specific context file (`CLAUDE.md` for Claude Code; Gemini CLI's equivalent is a
    `GEMINI.md` project-context file) carries project-wide instructions and is auto-loaded.
 2. Reusable capabilities live once, under `.agents/skills/<name>/SKILL.md`, and each tool
    either reads that path directly or has its own directory **symlinked** to it (the way
-   `.github/instructions -> ../.agents/instructions` is set up in this repo).
+   `.claude/skills/<name> -> ../../.agents/skills/<name>` is set up in this repo).
 
 For Gemini CLI specifically: if/when you wire this repo up for it, symlink whatever
 directory Gemini CLI expects (check `gemini --help` / current Gemini CLI docs for the exact
 name, since this has changed across CLI versions) to `.agents/skills/`, the same pattern used
-for `.github/` and `.claude/skills/` here — rather than duplicating skill content into a
+for `.claude/skills/` here — rather than duplicating skill content into a
 Gemini-specific copy.
 
 **Do not** hand-roll a Python script that loads `archi.md` and pastes it into a
