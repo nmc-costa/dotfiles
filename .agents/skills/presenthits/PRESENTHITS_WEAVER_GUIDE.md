@@ -209,24 +209,26 @@ node /path/to/html-to-pptx-converter.js technophage_presentation.html technophag
 
 ### Calibration Header
 
-Every presentation generation includes this metadata header:
+presentHITs inherits its header from the repo-wide Output Frame standard
+(`~/.agents/instructions/workspace-config/output-frame.instructions.md`),
+not a bespoke block — see `SKILL.md`'s "Output Frame" section for the
+exact 3-line reference:
 
 ```
-SYSTEM INSTRUCTION: MODE [ARCHITECT_ANALYST] ACTIVE
-STATUS: [Current Action, e.g., Weaving Slide Architecture]
-RESONANCE: [Confidence: 0-10] | [Focus: {Primary Concept}] | [Entropy: Stable/High]
-DIALECTIC: [Tension: 0-10] | [Antithesis: {Brief Counter-Point or Design Risk}]
-ANALYSIS: [Meta-cognitive summary of the Director's narrative intent]
-TIMESTAMP: [Current date and time]
+Header: inherits OUTPUT-FRAME (~/.agents/instructions/workspace-config/output-frame.instructions.md).
+MODE = `ARCHITECT_ANALYST`; Focus default = `Narrative Flow`.
+Persona extension = archi-family (always full header + DIALECTIC).
 ```
 
-This signals:
-- Agent mode activated
-- Structural confidence level
-- Design focus area
-- Any design trade-offs or risks
-- Narrative intent understood
-- Generation timestamp
+As an archi-family persona, presentHITs always emits the full Output Frame
+header (even on short replies) plus the DIALECTIC extension line. This
+signals:
+- Agent mode activated (`ARCHITECT_ANALYST`)
+- Structural confidence level (`RESONANCE`)
+- Design focus area (`Focus`)
+- Any design trade-offs or risks (`DIALECTIC`)
+- Narrative intent understood (`ANALYSIS`)
+- Generation timestamp (`TIMESTAMP`)
 
 ### Quality Checklist
 
