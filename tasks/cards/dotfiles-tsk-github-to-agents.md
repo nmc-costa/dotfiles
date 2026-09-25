@@ -2,9 +2,9 @@
 task_id: dotfiles-tsk-github-to-agents
 title: Migrar .github/ para .agents/ e apagar .github (Copilot já lê AGENTS.md)
 project: dotfiles
-phase: backlog
+phase: done
 created: "2026-09-24T14:04:22.171539+00:00"
-touched: "2026-09-24T14:04:22.171539+00:00"
+touched: "2026-09-25T20:07:45.202176+00:00"
 energy: mechanical
 estimate: ""
 deadline: ""
@@ -17,6 +17,15 @@ origin: "pedido direto do owner 2026-09-24 via /task-brief (criado por claude em
 Migrar .github/ para .agents/ e apagar .github (Copilot já lê AGENTS.md)
 
 ## History
-- (no phase_changed events yet — still in its original created phase)
+- 2026-09-25T14:32:22.163448+00:00: backlog -> planning (actor: claude/agent) — owner respondeu questionário: manter workflows, fundir no AGENTS.md, verificar skills, executar+merge
+- 2026-09-25T14:32:22.425634+00:00: planning -> in_progress (actor: claude/agent)
+- 2026-09-25T20:07:10.458950+00:00: in_progress -> review (actor: claude/agent) — PR #89 aberto
+- 2026-09-25T20:07:26.523406+00:00: review -> validation (actor: claude/agent) — validate_dotfiles.sh 35/0; PR #89 merged (5aaaf8a)
+- 2026-09-25T20:07:45.202176+00:00: validation -> done (actor: claude/agent) — merged PR #89
 
 Worktrees (this machine): [worktrees/dotfiles-tsk-github-to-agents.md](worktrees/dotfiles-tsk-github-to-agents.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-github-to-agents`
+
+## Latest handoff
+_@ done_
+
+Feito. Pendente do owner: adicionar chat.promptFilesLocations/chat.instructionsFilesLocations (.agents/prompts, .agents/instructions) às settings de utilizador do VS Code — snippet em .agents/harnesses/vscode-copilot.md.

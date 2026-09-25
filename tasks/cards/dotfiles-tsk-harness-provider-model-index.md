@@ -4,7 +4,7 @@ title: Build a validated harness x provider x model orchestration index
 project: dotfiles
 phase: validation
 created: "2026-09-23T11:52:17.170402+00:00"
-touched: "2026-09-23T21:49:00.824912+00:00"
+touched: "2026-09-25T21:09:18.091733+00:00"
 energy: ""
 estimate: ""
 deadline: ""
