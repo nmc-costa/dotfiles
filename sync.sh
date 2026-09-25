@@ -411,6 +411,19 @@ main() {
       fi
     fi
 
+    # opencode/ additionally mirrors command/ + plugin/ into
+    # ~/.config/opencode/ (opencode's global command and plugin
+    # auto-discovery dirs — see .agents/opencode/README.md). Only these two
+    # subdirs are reconciled; the rest of ~/.config/opencode (opencode.json
+    # with machine-local keys, node_modules, herdr's plugins/) is never
+    # touched. Skipped entirely when opencode isn't installed.
+    if [[ "$subdir_name" == "opencode" ]]; then
+      if [[ -d "$HOME/.config/opencode" ]]; then
+        sync_subdir "opencode/command" "$subdir/command" "$HOME/.config/opencode/command" "~/.config/opencode/command" || true
+        sync_subdir "opencode/plugin" "$subdir/plugin" "$HOME/.config/opencode/plugin" "~/.config/opencode/plugin" || true
+      fi
+    fi
+
     # hooks/ additionally mirrors to ~/.claude/hooks (Claude Code's own
     # hook-script location, same idea as the skills mirror above), then
     # reconciles ~/.claude/settings.json's hooks.SessionStart against
