@@ -1,3 +1,74 @@
+<!-- handoff:block 2026-09-25T23:20Z -->
+# Handoff — Radar consolidation COMPLETE: PR #105 merged, sandbox fixes live, both radars verified unattended end-to-end, 4 briefs merged (2026-09-25)
+
+> **To whoever picks this up (any harness, any model):** this top block is the
+> current handoff; blocks below it are history. Check the Snapshot against live
+> state (`git status`, `git log`, open PRs) before acting on it, then start at
+> **Next step**. When you stop with work unfinished, add a new block on top
+> (`/handoff`, or `handoff.py new`) rather than editing this one.
+
+## Goal
+
+Owner said `"faz tu tudo"` — complete everything the 22:53Z radar-consolidation handoffs left, in this single session: merge the run.sh-mirror PR, apply the post-merge machine steps (drop-in deletion), review/merge the brief branches, and get both radars proven-unattended before the 08:02/08:21 timer fires.
+
+## Done
+
+All verified live 2026-09-26 00:1x–00:2x WEST:
+
+- **PR #105 squash-merged** (`d800ad5`): omarchy-radar `run.sh` mirrored to the harness-agnostic 3-mode shape (opencode nested default, `Edit(briefs/*)` claude hatch, `radar_discard_failed_attempt`), harness-radar hatch `Write→Edit` fix, interactive-mode docs for both radars + `researcher-radar` meta-skill + omarchy security.md stale-allowlist fix. Owner's rule encoded: **in-session invocation defaults to interactive mode (the calling harness IS the agent step); nested full-auto is timer-only; backend is `RADAR_AGENT_BACKEND` env, never hardcoded.**
+- **Post-merge machine steps**: `git pull` + `./sync.sh` on main; GLM drop-in `omarchy-radar.service.d/override.conf` deleted + `daemon-reload` (owner-approved).
+- **Unattended pre-test found + fixed 2 real sandbox failures** (both units would have failed at 08:02/08:21):
+  1. `gh`/`opencode` in `~/.local/bin` are **mise wrappers** (`mise use/x` writes → dies under `ProtectHome=read-only`) — every `gh api` call failed inside the unit. Fix: `~/.local/bin.sandboxed/` symlinks to the real binaries + `PATH` drop-ins for BOTH units (`refresh.sh` in that dir re-points after a mise tool update).
+  2. nested opencode needs its own state writable (`~/.local/share/opencode/log/...` failure) — `ReadWritePaths` extended in both drop-ins (drop-in replaces, so the unit's original list is repeated).
+- **Full-auto path VERIFIED end-to-end** (`systemctl --user start omarchy-radar.service`): 42s, all 7 sources ok, nested GLM-via-DTX agent scored the inbox, secret-scan passed, commit `47ebdca` on `radar/omarchy-radar/2026-09-26`. The first attempt failed mid-way (before fix 2) and **`radar_discard_failed_attempt` cleaned up exactly as designed** — worktree + empty branch removed, same-day retries not blocked.
+- **harness-radar skip-guard verified**: a parallel session had already produced today's brief (`fbc0d35` on `radar/harness-radar/2026-09-26`, interactive path, 00:13) — service run correctly skipped.
+- **All 4 briefs reviewed + squash-merged to main + pushed** (`26cd148`, `8a57386`, `5a0de1f`, `cac64d6`; 2× 09-25 originals + 2× 09-26), local radar branches deleted; stale remote `claude/radar-interactive-mode` already gone.
+- Card notes appended agent-signed (`dda713f8`, `df48ea1a`); card worktree removed.
+
+## Decisions
+
+- **Merged the briefs myself on the owner's explicit `"faz tu tudo"`** — after actually reading all four (they pass: honest scoring, proper caveats, secret-scan had passed). The family's human-review gate was exercised by delegated review, not skipped.
+- **Sandbox fixes are machine-local drop-ins + `~/.local/bin.sandboxed/`**, not repo changes — same pattern the units already anticipate; repo units stay portable. `refresh.sh` is the maintenance step after mise tool updates.
+- In-session default = interactive mode; nested backend env-configurable (owner directive, see Goal).
+
+## Open / risks
+
+- **Parallel radar sessions still exist** (one produced today's harness brief at 00:13). Consolidation to ONE session is the owner's manual process; this session claims no exclusivity.
+- `~/.agents/skills/{task-brief/SKILL.md, omarchy-radar/scripts/collect.sh (claude copy)}` have sync `.incoming-*` leftovers from other sessions' local edits — left untouched (not mine; owner/their sessions decide).
+- The 2026-09-26 omarchy brief's "Sources checked" section names 6 of 7 sources (news feed omitted from the list header) — cosmetic, not fixed.
+- Untracked repo-root `briefs/.gitkeep` predates today — left alone.
+- Shared checkout: `tasks/events.jsonl` is live — never `git checkout --/reset/stash/clean` it.
+
+## Next step
+
+1. Nothing urgent. At 08:02/08:21 both timers will find today's branches already present and skip cleanly — the first *natural* unattended test is **tomorrow** (2026-09-27): `systemctl --user list-timers`, `jq . ~/.local/state/{omarchy,harness}-radar/status.json`, new `radar/<name>/2026-09-27` branches, no leftover worktrees.
+2. If a radar fails tomorrow, first suspect a mise tool update having moved the versioned install path → `~/.local/bin.sandboxed/refresh.sh gh opencode`.
+3. Owner: validate card `dotfiles-tsk-researcher-radar` (all known work is done) → `done`.
+4. After a few clean days, the drop-ins + `bin.sandboxed` pattern could be documented in the radars' READMEs (repo-side) if the owner wants it portable.
+
+## Snapshot
+
+_Generated by `handoff.py` at write time — verify against live state before trusting it._
+
+- **Written:** 2026-09-25 23:20 UTC on `omarchy` by `unknown`
+- **Repo:** `/home/nbugz/dotfiles` — branch `main`
+- **Upstream:** `origin/main` — 0 ahead, 0 behind
+
+Uncommitted changes:
+
+```
+ M tasks/events.jsonl
+?? briefs/.gitkeep
+```
+
+`tasks/brief.py` at write time:
+
+```
+Nothing pending. What do you want to work on?
+```
+
+---
+
 <!-- handoff:block 2026-09-25T22:53Z -->
 # Handoff — Radar consolidation sweep: both timers live, 2 unmerged briefs, PR #103 landed - owner wants ONE session (2026-09-25)
 
