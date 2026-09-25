@@ -85,10 +85,14 @@ if [[ "${CHRONICLE_DRY_RUN:-0}" != "1" ]]; then trap 'cleanup' EXIT; fi
 # ---- deterministic collect: mine local history (read-only) ----------------
 # Runs with cwd = canonical checkout so chronicle.py's tasks_root() and
 # transcript paths resolve to the real, live data; outputs land in a temp
-# dir, the main checkout is never written.
+# dir, the main checkout is never written. Two invocations on purpose:
+# chronicle.py's --json and --out are mutually exclusive modes.
 MINE_DIR="$(mktemp -d)"
-python3 "$CHRONICLE_PY" mine --json --out "$MINE_DIR/mine.md" \
-  > "$MINE_DIR/candidates.json" || die "chronicle.py mine failed"
+python3 "$CHRONICLE_PY" mine --json > "$MINE_DIR/candidates.json" \
+  || die "chronicle.py mine (json) failed"
+python3 "$CHRONICLE_PY" mine --out "$MINE_DIR/mine.md" > /dev/null \
+  || die "chronicle.py mine (report) failed"
+[[ -s "$MINE_DIR/mine.md" ]] || die "chronicle.py wrote no report"
 
 CANDIDATE_COUNT="$(python3 -c \
   'import json,sys;print(len(json.load(open(sys.argv[1]))))' \
@@ -192,7 +196,10 @@ esac
 }
 
 # ---- push + PR --------------------------------------------------------------
-git -C "$WORKTREE" push -u origin "$BRANCH" --quiet
+# --force-with-lease: the daily branch is disposable by design; an aborted
+# earlier attempt may have left a remote branch this run intentionally
+# replaces (local branch was reset to BASE by switch -C).
+git -C "$WORKTREE" push --force-with-lease -u origin "$BRANCH" --quiet
 
 PR_BODY="$(mktemp)"
 {
