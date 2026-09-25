@@ -1,0 +1,26 @@
+name: Core Blocks Drift Check
+
+# Fails if any <!-- NAME:CORE BEGIN/END --> block (OUTPUT-FRAME, later
+# AUTONOMY) is missing from a file listed in scripts/core_blocks.manifest or
+# differs between copies. See scripts/check_core_blocks.sh.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  core-blocks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Check core blocks
+        run: bash scripts/check_core_blocks.sh

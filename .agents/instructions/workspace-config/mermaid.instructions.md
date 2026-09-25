@@ -6,6 +6,17 @@ applyTo: "**"
 When the user asks to create, edit, or visualize any diagram, use the Mermaid
 VS Code extension tools and commands described below.
 
+## Scope
+
+These rules apply to **diagrams the user requests as a deliverable** (a
+diagram file, a diagram for a doc, "draw me X"). They do **not** apply to the
+inline `## Flow` diagram in an Output Frame footer
+(`output-frame.instructions.md`): that one needs no `.mmd` file and no
+preview, and must still use the Output Frame's Mermaid safe subset. Where
+`mermaid-diagram-validator` exists (VS Code Copilot), still call it on the
+footer diagram; elsewhere the safe subset stands in for it. The LM tools and
+commands below only exist in VS Code Copilot — other harnesses skip them.
+
 ## Workflow
 
 1. Determine the diagram type and generate Mermaid syntax.
@@ -72,11 +83,11 @@ Do not manually rewrite diagrams managed by this workflow. Accept/reject/diff UI
 
 ## Rules
 
-1. Always call `mermaid-diagram-validator` before showing any diagram.
-2. Always call `mermaid-diagram-preview` after generating a diagram.
+1. Always call `mermaid-diagram-validator` before showing any deliverable diagram (and on inline Output Frame Flow diagrams too, where the tool exists — see "Scope").
+2. Always call `mermaid-diagram-preview` after generating a deliverable diagram.
 3. Use `get-syntax-docs-mermaid` before generating an unfamiliar diagram type.
 4. Prefer `@mermaid-chart` slash commands for complex generation.
-5. Write diagrams to `.mmd` files; never return unvalidated Mermaid syntax.
+5. Write deliverable diagrams to `.mmd` files; never return unvalidated Mermaid syntax (inline Output Frame Flow diagrams are exempt from the `.mmd` file and count as validated by the safe subset where no validator tool exists — see "Scope").
 6. Warn the user before Repair (Mermaid AI credits).
 7. Cooperate with the Sync workflow — do not manually regenerate managed diagrams.
 

@@ -18,3 +18,5 @@ Abrir PR: claude/ideas-review-fixes
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/notes-ideas-review-fixes.md](worktrees/notes-ideas-review-fixes.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id notes-ideas-review-fixes`

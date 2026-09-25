@@ -23,6 +23,8 @@ Adopt HANDOFF.md convention (global index + per-repo/subsystem), rename tasks/ha
 - 2026-09-21T21:51:45.793279+00:00: review -> validation (actor: claude/agent)
 - 2026-09-21T21:51:45.865185+00:00: validation -> done (actor: claude/agent)
 
+Worktrees (this machine): [worktrees/dotfiles-handoff-standardization.md](worktrees/dotfiles-handoff-standardization.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-handoff-standardization`
+
 ## Latest handoff
 _@ review_
 

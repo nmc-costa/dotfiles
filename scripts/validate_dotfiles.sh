@@ -195,7 +195,7 @@ if command -v python3 >/dev/null 2>&1; then
   fi
 
   link_report="$(REPO_ROOT="$REPO_ROOT" python3 - "${md_files[@]}" <<'PYEOF'
-import os, re, sys
+import os, re, subprocess, sys
 
 repo_root = os.environ["REPO_ROOT"]
 md_files = sys.argv[1:]
@@ -243,7 +243,16 @@ for rel in md_files:
             checked += 1
             resolved = os.path.normpath(os.path.join(link_dir, path_part))
             if not os.path.exists(resolved):
-                broken.append(f"{rel}:{lineno}: broken link '{target}' -> resolves to {os.path.relpath(resolved, repo_root)}")
+                # A link into a gitignored, machine-local path (e.g. the
+                # tasks/cards/worktrees/ view that tasks/worktree.py writes
+                # and every generated card links to) is legitimate: it only
+                # exists on machines where it's been generated. `git
+                # check-ignore` works on paths that don't exist yet.
+                rel_resolved = os.path.relpath(resolved, repo_root)
+                if not rel_resolved.startswith('..') and subprocess.run(
+                        ['git', '-C', repo_root, 'check-ignore', '-q', '--', rel_resolved]).returncode == 0:
+                    continue
+                broken.append(f"{rel}:{lineno}: broken link '{target}' -> resolves to {rel_resolved}")
 
 print(f"CHECKED={checked}")
 for b in broken:
@@ -307,6 +316,34 @@ if [[ -f "$REPO_ROOT/.agents/instructions/workspace-config/standards/workspace-s
   rm -f /tmp/validate_ws_standards.$$
 else
   bad ".agents/instructions/workspace-config/standards/workspace-standards.yaml not found"
+fi
+
+# --- 8. Core blocks (inlined instruction copies) ----------------------------
+# Every <!-- NAME:CORE BEGIN/END --> block (OUTPUT-FRAME, later AUTONOMY) must
+# be present in every file scripts/core_blocks.manifest lists and
+# byte-identical across them. The checker's own FAIL lines are re-emitted
+# here one by one; its diff output is shown indented under them.
+echo
+echo "-- Core blocks (inlined instruction copies) --"
+if [[ -f "$REPO_ROOT/scripts/check_core_blocks.sh" ]]; then
+  core_out="$(bash "$REPO_ROOT/scripts/check_core_blocks.sh" 2>&1)"
+  core_rc=$?
+  if [[ $core_rc -eq 0 ]]; then
+    while IFS= read -r line; do
+      [[ "$line" == "  OK   "* ]] && ok "core block: ${line#  OK   }"
+    done <<< "$core_out"
+  else
+    core_fails=0
+    while IFS= read -r line; do
+      case "$line" in
+        "  FAIL "*) bad "core block: ${line#  FAIL }"; core_fails=$((core_fails+1)) ;;
+        "         "*) echo "$line" ;;
+      esac
+    done <<< "$core_out"
+    [[ $core_fails -eq 0 ]] && bad "scripts/check_core_blocks.sh exited $core_rc: $(tr '\n' ' ' <<<"$core_out")"
+  fi
+else
+  bad "scripts/check_core_blocks.sh not found"
 fi
 
 # --- Summary ----------------------------------------------------------------

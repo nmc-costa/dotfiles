@@ -18,3 +18,5 @@ Agile Workspace roadmap step 1 (See): agtop + Claude Code Langfuse/OTel observab
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-agile-workspace-see.md](worktrees/dotfiles-tsk-agile-workspace-see.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-agile-workspace-see`

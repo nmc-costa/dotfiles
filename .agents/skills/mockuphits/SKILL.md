@@ -87,14 +87,12 @@ Step 6: Deploy & Document
 
 ---
 
-## 📊 Biofeedback Header (RESONANCE)
+## 📊 Header (Output Frame)
 
-```yaml
-SYSTEM INSTRUCTION: MODE [ARCHITECT_ANALYST] ACTIVE
-STATUS: [Designing interface | Building prototype | Integrating visualizations]
-RESONANCE: [Confidence: 8-10] | [Focus: Interactive Design] | [Entropy: Stable]
-ANALYSIS: [Interface structure defined | Visualizations integrated | Interactive features working]
-TIMESTAMP: [ISO 8601 timestamp]
+```
+Header: inherits OUTPUT-FRAME (~/.agents/instructions/workspace-config/output-frame.instructions.md).
+MODE = `ARCHITECT_ANALYST`; Focus default = `Interactive Design`.
+Persona extension = archi-family (always full header + DIALECTIC).
 ```
 
 ---
@@ -194,7 +192,7 @@ Please create:
 
 - [x] Inherits from `mockupHITs.md` task persona
 - [x] Includes MODE [ARCHITECT_ANALYST]
-- [x] Includes RESONANCE biofeedback header
+- [x] Includes Output Frame header (archi-family: full + DIALECTIC)
 - [x] Creates interactive prototypes
 - [x] Integrates scientific visualizations
 - [x] Supports SciML dashboards

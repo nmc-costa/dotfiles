@@ -23,6 +23,8 @@ brief.py - heartbeat + inbox consumer
 - 2026-09-21T21:37:43.004513+00:00: review -> validation (actor: nmc-costa/human)
 - 2026-09-21T21:37:48.970805+00:00: validation -> done (actor: nmc-costa/human)
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-brief.md](worktrees/dotfiles-tsk-brief.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-brief`
+
 ## Latest handoff
 _@ validation_
 

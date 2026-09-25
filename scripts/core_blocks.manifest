@@ -1,0 +1,22 @@
+# Expected copies of every always-loaded <!-- NAME:CORE BEGIN/END --> block.
+# Read by scripts/check_core_blocks.sh. One "MARKER path" per line (path
+# relative to the repo root); blank lines and "#" comments are ignored.
+#
+# Every file listed here MUST contain the block, and every block found in a
+# tracked file (outside code fences, outside tasks/plans/ and
+# *.instructions.md) MUST be listed here. Adding a copy = add a line here in
+# the same commit; the canonical text lives in
+# .agents/instructions/workspace-config/<name>.instructions.md.
+
+# OUTPUT-FRAME:CORE — tasks/plans/agent-output-tldr-format.md §1/§6 (S2).
+# The plan's 8th target, .github/copilot-instructions.md, was removed by
+# #89 (Copilot now reads AGENTS.md, which carries the block).
+OUTPUT-FRAME AGENTS.md
+OUTPUT-FRAME GEMINI.md
+OUTPUT-FRAME .agents/rules/output-frame.md
+OUTPUT-FRAME .claude/CLAUDE.md
+OUTPUT-FRAME .gemini/GEMINI.md
+OUTPUT-FRAME .codex/AGENTS.md
+OUTPUT-FRAME .copilot/copilot-instructions.md
+
+# AUTONOMY:CORE — add its targets here when the autonomy-charter plan lands.

@@ -18,3 +18,5 @@ Abrir PR: claude/todo-continuation-and-notes-backlog
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/dotfiles-todo-continuation-and-notes-backlog.md](worktrees/dotfiles-todo-continuation-and-notes-backlog.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-todo-continuation-and-notes-backlog`

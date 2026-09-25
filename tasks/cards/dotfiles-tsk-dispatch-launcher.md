@@ -23,6 +23,8 @@ tsk dispatch: launch a session on a provider with the task brief pre-loaded (cla
 - 2026-09-22T13:36:53.492162+00:00: review -> validation (actor: nmc-costa/human)
 - 2026-09-22T13:37:00.384542+00:00: validation -> done (actor: nmc-costa/human)
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-dispatch-launcher.md](worktrees/dotfiles-tsk-dispatch-launcher.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-dispatch-launcher`
+
 ## Latest handoff
 _@ validation_
 

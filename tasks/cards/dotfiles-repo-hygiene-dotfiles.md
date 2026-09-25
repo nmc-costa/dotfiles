@@ -18,3 +18,5 @@ Abrir PR: claude/repo-hygiene-dotfiles
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/dotfiles-repo-hygiene-dotfiles.md](worktrees/dotfiles-repo-hygiene-dotfiles.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-repo-hygiene-dotfiles`

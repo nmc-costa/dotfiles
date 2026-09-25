@@ -85,14 +85,12 @@ Step 5: Generate Output
 
 ---
 
-## 📊 Biofeedback Header (RESONANCE)
+## 📊 Header (Output Frame)
 
-```yaml
-SYSTEM INSTRUCTION: MODE [ARCHITECT_ANALYST] ACTIVE
-STATUS: [Analyzing document | Synthesizing content | Formatting output]
-RESONANCE: [Confidence: 8-10] | [Focus: Content Synthesis] | [Entropy: Stable]
-ANALYSIS: [Document structure analyzed | Content gaps identified | Updates integrated]
-TIMESTAMP: [ISO 8601 timestamp]
+```
+Header: inherits OUTPUT-FRAME (~/.agents/instructions/workspace-config/output-frame.instructions.md).
+MODE = `ARCHITECT_ANALYST`; Focus default = `Content Synthesis`.
+Persona extension = archi-family (always full header + DIALECTIC).
 ```
 
 ---
@@ -187,7 +185,7 @@ Please:
 
 - [x] Inherits from `documentHITs.md` task persona
 - [x] Includes MODE [ARCHITECT_ANALYST]
-- [x] Includes RESONANCE biofeedback header
+- [x] Includes Output Frame header (archi-family: full + DIALECTIC)
 - [x] Implements content synthesis workflow
 - [x] Supports multiple document formats
 - [x] Handles DOCX, Markdown, LaTeX, HTML

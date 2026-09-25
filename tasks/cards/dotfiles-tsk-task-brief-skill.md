@@ -23,6 +23,8 @@ origin: ""
 - 2026-09-21T21:51:38.270559+00:00: review -> validation (actor: nmc-costa/human)
 - 2026-09-21T21:51:44.295417+00:00: validation -> done (actor: nmc-costa/human)
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-task-brief-skill.md](worktrees/dotfiles-tsk-task-brief-skill.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-task-brief-skill`
+
 ## Latest handoff
 _@ validation_
 

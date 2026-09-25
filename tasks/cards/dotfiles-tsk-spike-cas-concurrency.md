@@ -23,6 +23,8 @@ Spike: confirm git-ref compare-and-swap claiming survives concurrent writers
 - 2026-09-21T13:42:05.852470+00:00: review -> validation (actor: nmc-costa/human)
 - 2026-09-21T13:42:12.628263+00:00: validation -> done (actor: nmc-costa/human)
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-spike-cas-concurrency.md](worktrees/dotfiles-tsk-spike-cas-concurrency.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-spike-cas-concurrency`
+
 ## Latest handoff
 _@ done_
 

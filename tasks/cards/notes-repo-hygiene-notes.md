@@ -18,3 +18,5 @@ Abrir PR: claude/repo-hygiene-notes
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/notes-repo-hygiene-notes.md](worktrees/notes-repo-hygiene-notes.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id notes-repo-hygiene-notes`

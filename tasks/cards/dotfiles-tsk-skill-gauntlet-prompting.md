@@ -19,6 +19,8 @@ Skill: gauntlet prompting (desenhar e criar skill .agents/skills/gauntlet-prompt
 ## History
 - 2026-09-24T11:19:09.597347+00:00: backlog -> planning (actor: claude/agent) — owner pediu plano por agente Opus
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-skill-gauntlet-prompting.md](worktrees/dotfiles-tsk-skill-gauntlet-prompting.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-skill-gauntlet-prompting`
+
 ## Latest handoff
 _@ planning_
 

@@ -18,3 +18,5 @@ dotfiles-tsk-autolaunch-test: Verify dispatch auto-launch across providers
 
 ## History
 - (no phase_changed events yet — still in its original created phase)
+
+Worktrees (this machine): [worktrees/dotfiles-tsk-autolaunch-test.md](worktrees/dotfiles-tsk-autolaunch-test.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-autolaunch-test`

@@ -26,6 +26,8 @@ Spike (hands-on): patch herdr-commander to overlay placement, wire real .vscode/
 - 2026-09-23T22:02:54.825853+00:00: review -> validation (actor: claude/agent)
 - 2026-09-23T22:03:01.173023+00:00: validation -> done (actor: claude/agent)
 
+Worktrees (this machine): [worktrees/dotfiles-tsk-spike-herdr-commander-build.md](worktrees/dotfiles-tsk-spike-herdr-commander-build.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-spike-herdr-commander-build`
+
 ## Latest handoff
 _@ planning_
 

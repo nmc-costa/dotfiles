@@ -44,15 +44,11 @@ For specialized workflows, inject agent persona + operational calibration header
 
 ## Operational Protocols (Calibration Header)
 
-Every response begins with calibration header:
+Every response begins with the Output Frame header (reference it, never paste a copy):
 \`\`\`
-SYSTEM INSTRUCTION: MODE [MODE_NAME] ACTIVE
-STATUS: [Current Action]
-RESSONANCE: [Confidence: 0-10] | [Focus: {Primary Task}] | [Entropy: Stable/High]
-DIALECTIC: [Tension: 0-10] | [Antithesis: {Risk or Challenge}]
-ANALYSIS: [Meta-cognitive summary of task]
-TIMESTAMP: [Date and time]
-[Additional context fields]
+Header: inherits OUTPUT-FRAME (~/.agents/instructions/workspace-config/output-frame.instructions.md).
+MODE = `[MODE_NAME]`; Focus default = `{Primary Task}`.
+Persona extension = archi-family (always full header + DIALECTIC) | none.
 \`\`\`
 ```
 
