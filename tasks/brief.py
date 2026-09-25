@@ -106,7 +106,50 @@ def print_full_briefing():
         print(f"- {e['task_id']}: {e['payload'].get('fact_type')}{tag} (dedup_key={e['payload'].get('dedup_key')})")
 
 
-def prompt_for_task(task_id):
+def orchestra_contract(task_id, orchestra):
+    """Lines appended to the prompt for an orchestra sub-agent (tasks/plans/
+    cross-harness-orchestra.md §2, amended 2026-09-25 to route the handoff
+    through the repo-wide handoff.py instead of a custom template)."""
+    run_id = orchestra["run_id"]
+    label = orchestra["agent_label"]
+    harness = orchestra["harness"]
+    subtask = orchestra["subtask"]
+    handoff_dir = orchestra["handoff_path"]
+    owned_files = orchestra.get("owned_files") or []
+
+    lines = [
+        "",
+        "--- orchestra contract (tasks/plans/cross-harness-orchestra.md §2) ---",
+        f"run_id: {run_id}  label: {label}  harness: {harness}",
+        f"Subtask: {subtask}",
+    ]
+    if owned_files:
+        lines.append("Scope: only the subtask above and these files, in this worktree:")
+        lines.extend(f"  - {f}" for f in owned_files)
+    else:
+        lines.append("Scope: only the subtask above, in this worktree.")
+    lines += [
+        "Finish line (same in auto and yolo; the permission mode only decides whether prompts appear):",
+        "  1. validate",
+        "  2. commit",
+        "  3. git push -u origin <your branch>",
+        "  4. gh pr create --draft --base main",
+        f"  5. python3 ~/dotfiles/.agents/skills/handoff/handoff.py new --dir {handoff_dir} "
+        f'--title "{task_id} {label}" --by {harness} --model <your model id>',
+        "     then fill in Goal / Done / Decisions / Open risks / Next step in the new HANDOFF.md block.",
+        f"     Then run: python3 ~/dotfiles/.agents/skills/handoff/handoff.py check --dir {handoff_dir}",
+        "     and confirm it exits 0 BEFORE step 6.",
+        "  6. python3 ~/dotfiles/tasks/append_event.py --type orchestra.agent_finished "
+        f"--actor-kind agent --actor-id {harness} --task-id {task_id} "
+        '--payload \'{"run_id": "...", "label": "...", "branch": "...", "pr_url": "...", '
+        '"handoff_path": "...", "status": "done|blocked"}\'',
+        "Never: merge, push to main, force-push, move the parent card, or sign as human.",
+        "Blocked (e.g. a push refused in auto mode): write the handoff with status: blocked and the reason, then stop.",
+    ]
+    return lines
+
+
+def prompt_for_task(task_id, orchestra=None):
     events = load_events()
     phase = current_phase(events, task_id)
     if phase is None:
@@ -136,6 +179,8 @@ def prompt_for_task(task_id):
     if handoff:
         lines.append(f"Handoff mais recente: {handoff}")
     lines.append("Lê tasks/README.md e tasks/CHEATSHEET.md para o modelo e os comandos.")
+    if orchestra:
+        lines.extend(orchestra_contract(task_id, orchestra))
     print("\n".join(lines))
 
 
@@ -143,12 +188,31 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--prompt-only", action="store_true", help="print just a dispatch prompt for --task-id")
     parser.add_argument("--task-id")
+    parser.add_argument("--run-id", help="orchestra: tasks/orchestra.py run id")
+    parser.add_argument("--agent-label", help="orchestra: <harness>-<model-slug>")
+    parser.add_argument("--harness", help="orchestra: claude|copilot|agy")
+    parser.add_argument("--subtask", help="orchestra: this agent's slice of the task")
+    parser.add_argument("--handoff-path", help="orchestra: dir this agent's HANDOFF.md/brief.md live in")
+    parser.add_argument("--owned-files", nargs="+", default=[], help="orchestra: files this agent may touch")
     args = parser.parse_args()
 
     if args.prompt_only:
         if not args.task_id:
             parser.error("--prompt-only requires --task-id")
-        prompt_for_task(args.task_id)
+        orchestra_fields = [args.run_id, args.agent_label, args.harness, args.subtask, args.handoff_path]
+        if any(orchestra_fields) and not all(orchestra_fields):
+            parser.error("--run-id, --agent-label, --harness, --subtask and --handoff-path must all be given together")
+        orchestra = None
+        if all(orchestra_fields):
+            orchestra = {
+                "run_id": args.run_id,
+                "agent_label": args.agent_label,
+                "harness": args.harness,
+                "subtask": args.subtask,
+                "handoff_path": args.handoff_path,
+                "owned_files": args.owned_files,
+            }
+        prompt_for_task(args.task_id, orchestra=orchestra)
         return
 
     print_full_briefing()

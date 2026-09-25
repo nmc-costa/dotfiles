@@ -21,6 +21,7 @@ orchestration layer — partially built, see below). This file is only the
 | `brief.py` | Heartbeat + pending-facts briefing, or `--prompt-only --task-id` for a ready-to-paste dispatch prompt. No hook wires it up automatically yet. |
 | `dispatch.py` | Launch a task on another provider (`claude`/`copilot`/`agy`) with its brief pre-loaded. Dry-run by default — add `--launch` to actually run it. `--worktree` launches it inside the card's worktree. |
 | `worktree.py` | One git worktree per (harness, card) at `~/dotfiles.worktrees/<harness>/<task-id>`, branch `<harness>/<task-id>` — same for every harness. Per-machine view in `tasks/cards/worktrees/`. |
+| `orchestra.py` | Fan a task out across several harness+provider+model agents at once (`launch`/`status`/`collect`), each in its own `agent-deck` worktree/branch. Dry-run by default — add `--launch`. See "Orchestrate across harnesses" below. |
 
 None of these need arguments beyond what's shown below — no config file, no
 setup. Run them from anywhere with `python3 tasks/<tool>.py ...` or `cd
@@ -167,6 +168,29 @@ branch) is never listed, reused or pruned. Removal refuses dirty, locked
 or occupied worktrees and never deletes the branch. Every card links to
 its `tasks/cards/worktrees/<id>.md` (gitignored, per-machine). Design:
 `tasks/plans/card-worktrees.md`.
+
+## Orchestrate across harnesses
+
+Fan one card out across several harness+provider+model agents at once
+(`/harness-orchestra`, `tasks/plans/cross-harness-orchestra.md`). Adopts
+`agent-deck` as the L2 execution engine (not `worktree.py`/`dispatch.py`
+above — those stay single-harness):
+
+```bash
+python3 tasks/orchestra.py launch --task-id dotfiles-my-task \
+  --agent 'claude:opus:<subtask 1>' --agent 'copilot:gpt-5.5:<subtask 2>'   # dry-run: prints commands + briefs
+python3 tasks/orchestra.py launch --task-id dotfiles-my-task \
+  --agent 'claude:opus:<subtask 1>' --launch                               # real: worktrees, agent-deck sessions, claims, events
+python3 tasks/orchestra.py status --run-id <run-id>                        # read-only: deck status, commits, handoff, PR
+python3 tasks/orchestra.py collect --run-id <run-id>                       # concatenate HANDOFF.mds, release claims
+```
+
+Models are validated live (`copilot help config`, `agy models`) before
+anything is created. Each agent's handoff/brief live at
+`tasks_root()/handoffs/<run_id>/<label>/{HANDOFF.md,brief.md}` — the
+agent writes `HANDOFF.md` itself with `.agents/skills/handoff/handoff.py`,
+same format as everywhere else in this repo. Never merges; never removes
+worktrees — that's `agent-deck worktree finish --no-merge`/`cleanup` by hand.
 
 ## See what's going on
 

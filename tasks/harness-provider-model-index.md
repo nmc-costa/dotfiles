@@ -46,6 +46,25 @@ standalone DeepSeek API key, an Anthropic API key separate from the Claude
 Pro plan, OpenRouter credits. These appeared in an earlier draft (see
 Appendix) but aren't real here.
 
+### Real Copilot/agy model lists (live, 2026-09-25 — via `tasks/orchestra.py`)
+
+`tasks/orchestra.py`'s `validate_model` reads these live from the CLI
+itself on every run (cached per process, never hardcoded), so this list
+is a snapshot for humans, not the source of truth:
+
+- **Copilot CLI** (`copilot help config`): `gpt-5-mini`, `gpt-5.3-codex`,
+  `gpt-5.4`, `gpt-5.4-mini`, `gpt-5.5`, `gpt-5.6-luna`, `gpt-5.6-sol`,
+  `gpt-5.6-terra`, `gpt-6-astra`. There is no plain `gpt-5`.
+- **agy** (`agy models`): `claude-opus-4-6-thinking`,
+  `claude-sonnet-4-6`, `gemini-3.1-pro-high`, `gemini-3.1-pro-low`,
+  `gemini-3.6-flash-{high,low,medium}`, `gemini-3.7-flash-{high,low,medium}`,
+  `gemini-3.8-flash-{high,low,medium}`.
+
+`agent-deck` (row-3-adjacent L2 decision in `tasks/README.md`) is now
+used in practice, not just evaluated — `tasks/orchestra.py launch` shells
+out to `agent-deck launch` for every harness, including `agy` (unverified
+support, see `tasks/plans/cross-harness-orchestra.md` §Risks).
+
 ## Phase-routing guidance (folded in from a separate Antigravity-authored draft)
 
 A second document — `.agents/instructions/workspace-config/harness-matrix.instructions.md`

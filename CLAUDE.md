@@ -92,6 +92,11 @@ Skills are agent extensions. Location: `~/.agents/skills/`
 - **Triggers:** Hyprland, hyprctl, keybindings, themes, gaps, borders
 - **See:** `~/.agents/skills/omarchy/SKILL.md`
 
+### harness-orchestra
+- **Purpose:** Fan a `tasks/` card out across several harness+provider+model agents at once (e.g. 1 Claude Opus + 1 Copilot GPT-5.5), each in its own git worktree, closing via handoff.py + events
+- **Triggers:** /harness-orchestra, "run this on multiple harnesses/models", parallelize a tasks/ card across agents
+- **See:** `~/.agents/skills/harness-orchestra/SKILL.md`
+
 ## Adding a New Skill
 
 1. Create the folder:

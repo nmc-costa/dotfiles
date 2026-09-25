@@ -467,3 +467,22 @@ quoting of a title with an apostrophe), a nonexistent task-id and a
 missing binary both error correctly. **Not** verified: an actual
 `--launch`, deliberately — it would spawn a real concurrent session into
 an already busy multi-session environment purely as a smoke test.
+
+**`orchestra.py` done (2026-09-25):** `tasks/plans/cross-harness-orchestra.md`'s
+implementation — **L2 `agent-deck` is now in use, not just evaluated**:
+`tasks/orchestra.py launch/status/collect` shells out to `agent-deck
+launch`/`session status` for every harness (Claude, Copilot, and agy —
+agy's support is unverified, see the plan's §Risks). Fans one card out
+across several `harness:model:subtask` agents, each its own
+`agent-deck`-managed worktree/branch; validates models live against
+`copilot help config`/`agy models` before creating anything; dry-run by
+default, `--launch` for real side effects. Handoffs go through the
+repo-wide `.agents/skills/handoff/handoff.py`, one format everywhere —
+`tasks/brief.py --prompt-only` gained the `--run-id`/`--agent-label`/
+`--harness`/`--subtask`/`--handoff-path`/`--owned-files` orchestra
+contract. Skill: `/harness-orchestra`
+(`.agents/skills/harness-orchestra/SKILL.md`). Verified: dry-run creates
+nothing and prints correct `agent-deck` commands/briefs; unknown
+Copilot/agy models fail listing the real valid ones. **Not** verified: an
+actual `--launch` — that's the owner's throwaway
+`dotfiles-tsk-orchestra-smoke` card (plan §Verification 3).

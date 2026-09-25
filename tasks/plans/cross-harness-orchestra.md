@@ -99,6 +99,22 @@ Sources:
 
 ### 2. `tasks/brief.py`: orchestra contract
 
+**Amended 2026-09-25** (agreed with the `/handoff` session, PR #84 — overrides this
+section's original custom handoff template): one handoff format repo-wide. Each
+orchestra agent's handoff lives at `tasks_root()/handoffs/<run_id>/<label>/HANDOFF.md`
+and is created with
+```
+python3 ~/dotfiles/.agents/skills/handoff/handoff.py new --dir <that dir> --title "<task-id> <label>" --by <harness> --model <model>
+```
+then the agent fills Goal/Done/Decisions/Open-risks/Next-step, and must get exit 0 from
+```
+python3 ~/dotfiles/.agents/skills/handoff/handoff.py check --dir <that dir>
+```
+BEFORE appending `orchestra.agent_finished`. The branch/PR/status fields go in the event
+payload, not in a custom template. `orchestra.py status` uses `handoff.py check --dir` to
+report handoff complete/incomplete; `collect` concatenates those `HANDOFF.md` files. The
+per-agent brief file becomes `tasks_root()/handoffs/<run_id>/<label>/brief.md`.
+
 `prompt_for_task` gains `--run-id --agent-label --harness --subtask --handoff-path --owned-files`.
 The prompt then gets a fixed contract appended:
 - **Scope:** only the subtask and the listed files, in this worktree.
@@ -107,7 +123,8 @@ The prompt then gets a fixed contract appended:
   2. commit;
   3. `git push -u origin <branch>`;
   4. `gh pr create --draft --base main`;
-  5. write the handoff md at `<handoff-path>` (template: Status done|blocked / Done / Left / Branch / PR / Commits / Next step / Blockers);
+  5. `handoff.py new --dir <handoff-path> --title "<task-id> <label>" --by <harness> --model <model>`, fill it in,
+     then `handoff.py check --dir <handoff-path>` and confirm exit 0;
   6. `python3 ~/dotfiles/tasks/append_event.py --type orchestra.agent_finished --actor-kind agent --actor-id <harness> --task-id <parent> --payload {run_id,label,branch,pr_url,handoff_path,status}`.
 - **Never:** merge, push to `main`, force-push, move the parent card, or sign as `human`.
 - **Blocked** (for example, a push refused in `auto`): write the handoff with `status: blocked` and the reason, then stop.
