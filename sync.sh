@@ -413,14 +413,21 @@ main() {
 
     # opencode/ additionally mirrors command/ + plugin/ into
     # ~/.config/opencode/ (opencode's global command and plugin
-    # auto-discovery dirs — see .agents/opencode/README.md). Only these two
+    # auto-discovery dirs — see .agents/opencode/README.md). The plugin
+    # target is plugins/ PLURAL — that's opencode's global plugin dir per
+    # https://opencode.ai/docs/plugins; the singular plugin/ is never
+    # scanned (D7 bug found 2026-09-26: the plugin silently never loaded).
+    # Only these two
     # subdirs are reconciled; the rest of ~/.config/opencode (opencode.json
-    # with machine-local keys, node_modules, herdr's plugins/) is never
+    # with machine-local keys, node_modules, herdr's files) is never
     # touched. Skipped entirely when opencode isn't installed.
     if [[ "$subdir_name" == "opencode" ]]; then
       if [[ -d "$HOME/.config/opencode" ]]; then
         sync_subdir "opencode/command" "$subdir/command" "$HOME/.config/opencode/command" "~/.config/opencode/command" || true
-        sync_subdir "opencode/plugin" "$subdir/plugin" "$HOME/.config/opencode/plugin" "~/.config/opencode/plugin" || true
+        sync_subdir "opencode/plugin" "$subdir/plugin" "$HOME/.config/opencode/plugins" "~/.config/opencode/plugins" || true
+        # One-time migration: the singular plugin/ dir was created by older
+        # sync.sh versions and opencode never scans it — remove it if present.
+        [[ -d "$HOME/.config/opencode/plugin" && ! -L "$HOME/.config/opencode/plugin" ]] && rm -rf "$HOME/.config/opencode/plugin" || true
       fi
     fi
 

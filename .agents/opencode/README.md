@@ -10,7 +10,7 @@ deployed to `~/.config/opencode/` by `sync.sh` (see the `opencode` mirror in
 | Path | Deployed to | What it is |
 | ---- | ----------- | ---------- |
 | `command/*.md` | `~/.config/opencode/command/` | Global slash commands (`/pr-finish`, `/chronicle`, `/task-brief`, `/handoff`) — thin templates that invoke the workspace skills synced to `~/.agents/skills/` (opencode auto-loads those as external skills). |
-| `plugin/chronicle-chain.js` | `~/.config/opencode/plugin/` | Server plugin (auto-discovered, no `opencode.json` entry): stages the D6 chain-suggestion footer (`Next: /skill <args>`) into the TUI prompt input via `tui.prompt.append`, propose-only, error-swallowing. |
+| `plugin/chronicle-chain.js` | `~/.config/opencode/plugins/` (plural — opencode's global plugin dir; the singular `plugin/` is never scanned, found 2026-09-26) | Server plugin (auto-discovered, no `opencode.json` entry): stages the D6 chain-suggestion footer (`Next: /skill <args>`) into the TUI prompt input via `tui.prompt.append`, propose-only, error-swallowing. |
 
 `~/.config/opencode/opencode.json`, `node_modules/`, herdr's `plugins/` and
 all other machine-local state under `~/.config/opencode/` are **not** touched
