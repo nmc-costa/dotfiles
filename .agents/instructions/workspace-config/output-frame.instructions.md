@@ -20,6 +20,15 @@ long replies — a footer that compacts what's above it (the bottom in chat,
 the top in a file). The frame is **sized to the reply**: a 5-line block on
 a 1-line answer makes scrolling worse, not better.
 
+The owner's metric is **time on screen** ("quero estar o mínimo de tempo a
+olhar para aqui"). While executing multi-step work, emit keyword-compact
+status lines — what is happening + which phase of the todo — not prose
+narration. Put detail where it can be expanded on demand: a collapsible
+block in a click-UI, a file path or follow-up command in a terminal.
+Long-running chat is not the destination — session-dashboard UX (Claude
+Code agent view, opencode FR #5971, herdr pane) is the direction — so
+write replies for glancing, not for reading.
+
 ## Sizing
 
 Sized by rendered line count (the model can see its own lines; it can't
@@ -103,6 +112,12 @@ flowchart LR
 **Index rule:** headings copied word for word and in order, so the owner
 can jump with Ctrl-F (chat has no anchors). Every `##` in the body gets
 exactly one index line.
+
+**Chain suggestion line (optional, M and L):** directly under `Needs you:`,
+at most one line — `Next: /skill <args>` — suggesting the next skill to
+run. Emit it **only** when a chain listed in the executed skill's
+`## Chains` section actually applies to what just happened; otherwise omit
+the line entirely. One per reply, never decorative.
 
 ## Flow
 
@@ -194,6 +209,39 @@ triggers:
 - A `DECISION` line inside a footer triggers the same `tasks/escalate.py`
   event as a standalone interrupt.
 - One drift check covers both marker blocks: `scripts/check_core_blocks.sh`.
+
+### Closing decisions — the questionnaire rule
+
+`Needs you:` opens a decision; a **questionnaire** closes it in the same
+reply. Every decision the owner can confirm as-is is presented as a
+questionnaire, never as an open question the owner must reformulate
+(2026-09-25 meta-lesson, task note on `dotfiles-tsk-chronicle-skill-layer`):
+
+- Recommended option first, labelled `(Recommended)`.
+- Every option is actionable as-is: a ready-to-run command, a path to
+  approve, or a one-word answer — no "tell me more" options.
+- Use the harness's native ask/question tool when it has one; otherwise a
+  numbered list the owner answers by number.
+- Test: the owner accepts by reading the chat alone.
+
+## Skill stacking and Chains
+
+The micro-language for chaining skills (D6, plan of card
+`dotfiles-tsk-chronicle-skill-layer`):
+
+- **Stacking (input):** the owner may put several skills in one message —
+  `/skill-a args /skill-b`. Run them in the listed order, threading each
+  output into the next as context unless the later args say otherwise.
+  Interrupt only for a destructive or outward-facing step.
+- **`## Chains` (documentation):** a skill that usually leads into another
+  documents that in a `## Chains` section in its SKILL.md **body** — one
+  line per chain: `→ /next-skill <args>` — when/why. **Descriptions stay
+  tight:** never move chain keywords into the skill's `description`;
+  triggering matches on it and stuffing it degrades matching in every
+  harness.
+- **Footer suggestion (output):** the `Next: /skill args` line (see
+  Footers) appears only when a chain from the executed skill's `## Chains`
+  section applies to the turn's outcome.
 
 ## Persona extension
 
