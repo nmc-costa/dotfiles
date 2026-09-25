@@ -53,7 +53,7 @@ This is the critical differentiator for ambiguous tasks:
 
 ## Integration with Skills and Workflows
 
-Skills in `.github/skills/` inherit these routing rules. For example:
+Skills in `.agents/skills/` inherit these routing rules. For example:
 
 - `project-doc-lifecycle/SKILL.md` uses Haiku for template-based doc conversion
 - Any complex research delegated to `runSubagent` should respect these guidelines

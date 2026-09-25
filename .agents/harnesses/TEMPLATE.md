@@ -73,7 +73,7 @@ decide:
 
 **Type** — pick one:
 - `native` — built into an IDE/CLI that auto-discovers files (e.g. Claude Code reading
-  `CLAUDE.md` / `SKILL.md`, Copilot reading `.github/copilot-instructions.md`)
+  `CLAUDE.md` / `SKILL.md`, Copilot reading `AGENTS.md`)
 - `api` — you write the glue code that loads persona/skill files and calls a provider API
   directly (see `.agents/harnesses/openai.md`)
 - `abstraction` — a multi-provider proxy/router (see `.agents/harnesses/litellm.md`)
@@ -111,7 +111,7 @@ a central `REGISTRY.md`. The file should cover, at minimum:
 - [ ] Fix every path reference to point at real files under `.agents/` in this repo
 - [ ] Add a skill/persona trigger table
 - [ ] Add a deployment checklist specific to that harness
-- [ ] If the harness needs a symlinked directory (like `.github/` does for Copilot), set that
+- [ ] If the harness needs a symlinked directory (like `.claude/skills/` does for Claude Code), set that
       up rather than duplicating skill/instruction content into a harness-specific copy
 
 ---

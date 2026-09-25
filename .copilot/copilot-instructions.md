@@ -5,7 +5,7 @@ This file is symlinked to `~/.copilot/copilot-instructions.md` (see
 Copilot CLI's otherwise-local `~/.copilot/` state directory
 (`session-store.db`, `logs/`, `config.json`, etc. stay real and untouched).
 
-Distinct from this repo's own `.github/copilot-instructions.md`, which is
+Distinct from this repo's own `AGENTS.md` (→ `.agents/AGENT.md`), which is
 project-level and auto-discovered by GitHub Copilot inside this specific
 repository — this file is Copilot CLI's personal, cross-project global
 instructions file.

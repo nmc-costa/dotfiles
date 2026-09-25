@@ -363,7 +363,7 @@ If ANY box unchecked → Apply simplifyHIT restructuring before publishing.
 
 - **projecthits** — Charter Architect (exemplar of simplifyHIT applied); `.agents/skills/projecthits/`
 - **audit_instruction_health.py** — Script to measure instruction quality; `.agents/skills/simplifyhit/scripts/audit_instruction_health.py`
-- **.github/copilot-instructions.md** — Global system instructions
+- **AGENTS.md** (Copilot also reads it) — Global system instructions
 
 ---
 
