@@ -16,6 +16,12 @@ there. Added 2026-09-16 — this file previously had no explicit pointer to
 either, unlike Claude Code, which gets this automatically via a
 `SessionStart` hook (see `CLAUDE.md`'s "Known Gaps").
 
+If a `HANDOFF.md` exists at the repo (or subsystem) root, read its top
+block first — the previous session's state and next step, possibly from a
+different harness/model. When stopping with work unfinished, leave one per
+`.agents/skills/handoff/SKILL.md` (`python3 ~/.agents/skills/handoff/handoff.py
+new|check|prompt`).
+
 **Scope note (confirmed 2026-09-16 via direct diagnostic):** this file is
 auto-loaded by GitHub Copilot Chat / Copilot in VS Code (the documented
 "repository custom instructions" feature). It is **not** read by GitHub

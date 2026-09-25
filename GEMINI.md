@@ -16,6 +16,7 @@ Instructions for Gemini when working in this repository.
 
 - **`CHEATSHEET.md`** — where things go, and §4's persistent cross-session TODO list (survives longer than any single session's own tracking).
 - **`tasks/board.md`** and **`tasks/README.md`** — the workspace's task tracker (an append-only event log projected into a table). Check it for open work before starting something new, and append an event with `tasks/append_event.py` when you finish something worth tracking there.
+- **`HANDOFF.md`** at the repo/subsystem root, if present — read its top block (previous session's state + next step, possibly from another harness/model). When stopping with work unfinished, write one per `.agents/skills/handoff/SKILL.md` (`python3 ~/.agents/skills/handoff/handoff.py new|check|prompt`).
 
 (Added 2026-09-16 — Claude Code gets this automatically via a `SessionStart` hook; Gemini has no equivalent hook yet, so this section is the manual substitute. See `CLAUDE.md`'s "Known Gaps" for the full finding.)
 

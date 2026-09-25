@@ -8,6 +8,11 @@ At the start of a session anywhere in this repository, read:
   work before starting something new, and append an event with
   `python3 tasks/append_event.py` when you finish something worth tracking
   there.
+- `HANDOFF.md` at the repo root (or at the root of the subsystem you're
+  working in), if present — read its **top block**: the previous session's
+  state and next step, possibly from a different harness/model. When you stop
+  with work unfinished, leave one with `.agents/skills/handoff/SKILL.md`
+  (`python3 ~/.agents/skills/handoff/handoff.py new|check|prompt`).
 
 Added 2026-09-16 as a dedicated file under `.agents/rules/*.md` — a
 directory-scan convention confirmed real by a direct Antigravity diagnostic
