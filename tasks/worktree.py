@@ -62,7 +62,7 @@ TASKS_DIR = Path(__file__).parent
 sys.path.insert(0, str(TASKS_DIR))
 from lifecycle import project as project_phases, tasks_root  # noqa: E402
 
-HARNESSES = ("claude", "copilot", "gemini", "agy", "codex")
+HARNESSES = ("claude", "copilot", "gemini", "agy", "codex", "opencode")
 TASK_ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 
 
