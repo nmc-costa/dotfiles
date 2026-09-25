@@ -1,23 +1,19 @@
 # omarchy-radar — 2026-09-26
 
-## Sources checked
-- omacom/omarchy discussions (omarchy_core): ok (1 new item)
-- awesome-omarchy: ok (0 new items)
-- omarchy-plugin-marketplace: ok (0 new items)
-- r/omarchy: ok (0 new items)
-- Hacker News: ok (0 new items)
-- skills/MCP ecosystem: ok (0 new items)
+**Reading time:** <1 min · **Sources:** omacom/omarchy discussions (2) · **Verdict:** nothing actionable today
 
-## Top 3 suggestions
+## What's new
 
-None — the day's single item cleared the security gate but not the scoring bar:
+| # | Item | Score | Why |
+|---|------|-------|-----|
+| 1 | [Nixarchy — Omarchy for NixOS users](https://github.com/omacom/omarchy/discussions/9176) (olafkfreund) | 2.0 | A NixOS port discussion updated 23:30Z. Interesting direction for reproducibility, but this machine is a plain Arch/omarchy install — zero fit today. |
+| 2 | [Decision on a "jev-like"/decision model + api wrapper](https://github.com/omacom/omarchy/discussions/13273) (crazymonkyyy) | 1.0 | Omarchy-internal design debate about defaults/API wrappers; no user-facing change to watch yet. |
 
-- [Discussion #13273](https://github.com/omacom/omarchy/discussions/13273) —
-  "Make a decision on a \"jev-like\"/decision model that is a good default and
-  an api wrapper": an upstream Omarchy-core design deliberation about
-  standardizing a decision-model default plus an API wrapper. Scored 2/10 —
-  zero local impact (nothing on this machine to change or configure until the
-  maintainers actually decide and ship it), no tracked dotfile or live
-  `~/.config` file it maps to, and following/opining on the discussion is a
-  human, upstream-community action outside what this radar proposes. No
-  proposal file and no config diff warranted.
+## Suggested action
+
+- **None.** Both items are upstream community discussions with no release, commit, or config-affecting change. Re-check when either lands in a tagged release.
+- Yesterday's (2026-09-25) brief's items remain the live ones if not yet reviewed.
+
+## Machine context
+
+No change proposed to this machine's Hyprland/omarchy-shell/terminal config today.

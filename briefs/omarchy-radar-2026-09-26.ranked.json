@@ -1,10 +1,16 @@
 [
   {
+    "title": "Nixarchy — Omarchy for NixOS users",
+    "url": "https://github.com/omacom/omarchy/discussions/9176",
+    "category": "omarchy_core",
+    "score": 2.0,
+    "rationale": "NixOS port discussion; interesting upstream, zero fit for this plain Arch/omarchy machine"
+  },
+  {
     "title": "Make a decision on a \"jev-like\"/decision model that is a good default and an api wrapper",
     "url": "https://github.com/omacom/omarchy/discussions/13273",
     "category": "omarchy_core",
-    "score": 2,
-    "rationale": "Upstream core design discussion (default decision model + API wrapper); passes the security gate but zero local impact and no tracked/live-config file it maps to — nothing actionable for this machine.",
-    "picked_top3": false
+    "score": 1.0,
+    "rationale": "Internal design debate; no user-facing change yet"
   }
 ]
