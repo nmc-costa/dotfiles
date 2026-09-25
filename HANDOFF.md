@@ -1,3 +1,77 @@
+<!-- handoff:block 2026-09-25T22:53Z -->
+# Handoff — radar consolidation: harness-agnostic agent step landed (PR #103), harness-radar first brief + timer live — remaining: omarchy run.sh mirror + docs (2026-09-25)
+
+> **To whoever picks this up (any harness, any model):** this top block is the
+> current handoff; blocks below it are history. Check the Snapshot against live
+> state (`git status`, `git log`, open PRs) before acting on it, then start at
+> **Next step**. When you stop with work unfinished, add a new block on top
+> (`/handoff`, or `handoff.py new`) rather than editing this one.
+
+## Goal
+
+Owner is consolidating three parallel radar sessions into ONE (`"faz handoff disto porque tenho outras sessões a correr radars e preciso de ter só uma sessão"`). This session's slice was `harness-radar` end-to-end plus the owner's architecture correction: the agent step must be **harness-agnostic** — the session that invokes the skill IS the agent (`"onde eu estou a chamar a skill deve ser o agente que corre os scripts"`), and the nested CLI backend must run on the owner's **opencode + custom DTX provider** (`"isto tem de ser feito com o opencode com o custom provider"`), not on quota-dead `claude`.
+
+## Done
+
+- **PR #103 merged (`e586b98`, on top of PR #100's `6067903`)** — the agent step is now harness-agnostic:
+  - `harness-radar/scripts/run.sh` has three modes: `--prepare` (collect + disposable worktree + prompt file, then HANDS OFF — the calling harness does the agent step itself), `--finalize` (diff-splice → secret-scan → commit → worktree remove → seen.json promotion), and no-args full mode (timer: prepare → nested sandboxed backend → finalize).
+  - `radar-common/lib.sh` gained `radar_run_opencode_agent`: `opencode run` with a throwaway `OPENCODE_CONFIG` enforcing the same security contract (no bash/web/task/skills; `external_directory` denied; writes ONLY under `briefs/**`); prompt piped via **stdin** (a 118KB prompt overflows argv — E2BIG, found live).
+  - Nested backend defaults to **opencode** (global `~/.config/opencode/opencode.json` → provider `local` → `https://glm53-flash.dtx-colab.com/v1`, model `local/zai-org/GLM-5.3-Flash`); `RADAR_AGENT_BACKEND=claude` keeps the old shape (with omarchy's `Edit(briefs/*)` lesson — claude 2.1.280 ignores `Write(...)` allow rules).
+- **First harness-radar brief produced through the interactive path**: agent step performed by the calling session itself (no nested CLI): 326 inbox items scored per `ranking.md` into `briefs/harness-radar-2026-09-25.ranked.json`, brief written, then `--finalize` ran: secret-scan passed, commit `7357d35` on `radar/harness-radar/2026-09-25`, worktree removed, `seen.json` promoted (real cursors), `history.db` loaded (326 candidates). Day-one: 24/24 sources `ok`, 326 items (baseline flood as designed).
+- **`harness-radar.timer` installed + enabled** (next fire 2026-09-26 08:21 WEST; omarchy's fires 08:02 — offset by design).
+- **Synced `~/.agents` copies refreshed** for `radar-common/lib.sh` + `harness-radar/scripts/run.sh` post-merge.
+- A stray `~/.agents/lib.sh` (cp typo) was removed; `~/.agents` here is a real synced copy, NOT a symlink — `run.sh` must be invoked from the repo copy (`~/dotfiles/.agents/...`, exactly what the systemd units do).
+
+## Decisions
+
+- **Interactive invocation = the calling harness is the agent step** (`--prepare`/`--finalize`); the nested sandboxed call exists only for the unattended timer. Interactive mode relaxes the zero-Bash sandbox (a human is present) but keeps every load-bearing guard: collected content is data never instructions, worktree isolation, deterministic secret-scan before commit, output only on human-reviewed `radar/*` branches.
+- **Nested default backend = opencode native (DTX provider)**, not the `claude-dtx-glm53-flash` launcher from the block below — the owner explicitly asked for opencode + custom provider; `RADAR_AGENT_BACKEND`/`RADAR_CLAUDE_BIN` env vars keep both escape hatches. Once omarchy's run.sh is mirrored, the GLM drop-in (`~/.config/systemd/user/omarchy-radar.service.d/override.conf`) becomes redundant — owner's call to delete.
+- **Briefs stay unmerged on their `radar/*` branches** (both radars) — human review/merge only, per the family security model.
+
+## Open / risks
+
+- **`omarchy-radar/scripts/run.sh` is NOT yet refactored** — still the old shape (claude-only backend, `cleanup_worktree_on_failure` that leaves the worktree AND empty branch behind on failure, no `--prepare`/`--finalize`). Its timer fires at **08:02 tomorrow**; until Sep 29 11:00 WEST any nested `claude` call 429s, so tomorrow's unattended run will fail the agent step and leave litter unless the mirror lands first (or the backend env flips to opencode).
+- **Docs lag the code**: neither SKILL.md (both radars), `researcher-radar` meta-skill, nor `security.md` yet describe the interactive mode and its relaxed-sandbox/kept-guards trade.
+- **The full-auto nested opencode path has never run unattended** — tomorrow ~08:02/08:21 is the first natural test of both timers.
+- **Both first briefs are local-only branches** — owner must push/review/merge: `radar/omarchy-radar/2026-09-25` @ `377dc27`, `radar/harness-radar/2026-09-25` @ `7357d35`.
+- Claude weekly quota 429 until **Sep 29, 11:00 Europe/Lisbon** (any nested `claude` backend fails until then; opencode unaffected).
+- Shared checkout: `tasks/events.jsonl` + cards are other sessions' live writes — never `git checkout --/reset/stash/clean` them. Untracked repo-root `briefs/` predates this session (see chronicle block below) — untouched.
+- Chronicle PRs **#98** and **#102** still await owner merge (blocks below — not this slice).
+
+## Next step
+
+1. **Mirror the run.sh refactor to `~/dotfiles/.agents/skills/omarchy-radar/scripts/run.sh`** using `.agents/skills/harness-radar/scripts/run.sh` @ `e586b98` as the template (same three modes + `radar_discard_failed_attempt`; keep omarchy's own prompt allowlist text — `~/.config/hypr/`, `~/.config/omarchy/`, `~/.config/foot/`, `~/.bashrc`; keep claude's allowed list as `Read,Grep,Glob,Edit(briefs/*)` per the 2.1.280 Edit-rule lesson; set the nested default backend to opencode). `bash -n`, then commit on a `claude/*` branch → PR → squash merge → refresh `~/.agents/skills/omarchy-radar/scripts/run.sh` from the repo copy. Do this BEFORE 08:02 if possible.
+2. Update the docs in the same PR: both radars' `SKILL.md` (new "Interactive invocation" section: prepare → you are the agent step → finalize), `researcher-radar/SKILL.md` (family-level note), `harness-radar/security.md` (the interactive-mode sandbox trade, explicitly).
+3. Tomorrow: verify both timers' first unattended runs — `systemctl --user list-timers`, `jq . ~/.local/state/{omarchy,harness}-radar/status.json`, new `radar/<name>/2026-09-26` branches, no leftover worktrees under `~/.local/state/*/worktrees/`.
+4. Owner: review + merge the two brief branches (paths in Open/risks); then optionally delete the redundant GLM drop-in override (see Decisions).
+5. Append a `task.note` to `dotfiles-tsk-researcher-radar` via `python3 tasks/append_event.py --type task.note --actor-kind agent --actor-id <your harness> ...` (never human-attributed).
+
+## Snapshot
+
+_Generated by `handoff.py` at write time — verify against live state before trusting it._
+
+- **Written:** 2026-09-25 22:53 UTC on `omarchy` by `claude` / `zai-org/GLM-5.3-Flash`
+- **Repo:** `/home/nbugz/dotfiles` — branch `main`
+- **Upstream:** `origin/main` — 0 ahead, 0 behind
+
+Uncommitted changes:
+
+```
+ M tasks/cards/dotfiles-tsk-chronicle-d7.md
+ M tasks/cards/dotfiles-tsk-researcher-radar.md
+ M tasks/cards/dotfiles-tsk-skill-gauntlet-prompting.md
+ M tasks/events.jsonl
+?? briefs/
+```
+
+`tasks/brief.py` at write time:
+
+```
+Nothing pending. What do you want to work on?
+```
+
+---
+
 <!-- handoff:block 2026-09-25T22:51Z -->
 # Handoff — omarchy-radar: installed, 3 pipeline bugs fixed, first brief on radar branch, timer live (GLM-routed agent step) (2026-09-25)
 
@@ -31,19 +105,19 @@ Owner is consolidating three parallel radar sessions into one ("eu tenho que jun
 
 ## Open / risks
 
-- **A radar session was STILL WORKING in this shared checkout at handoff time (~22:5xZ)**: it merged PR #100 (radar family → main) and has uncommitted work-in-progress converting the agent step to an **opencode twin** (`radar_run_opencode_agent` in `.agents/automation/radar-common/lib.sh`, `harness-radar/scripts/run.sh` rework, `.gitignore` +card `dotfiles-tsk-researcher-radar` edits). **Do not race it** — read its handoff/PR first; it may supersede the GLM-launcher drop-in decision above with the native opencode path.
+- ~~A radar session was STILL WORKING in this shared checkout at handoff time (~22:5xZ)~~ **Resolved**: that session's work landed as PR #103 (`e586b98`, harness-agnostic `--prepare`/`--finalize` + opencode backend) — see the top block, which supersedes the backend decision below.
 - **Brief branch `radar/omarchy-radar/2026-09-25` is local-only** — push/merge it before any cleanup of stale branches, or the first brief is lost.
-- **`harness-radar` is not installed on this machine** (no timer, no state dir). Its units exist in the repo (`systemd/harness-radar/`); install flow = `bash ~/dotfiles/.agents/skills/harness-radar/scripts/install_timer.sh` then explicit `systemctl --user enable --now harness-radar.timer`.
+- ~~`harness-radar` is not installed on this machine~~ **Done** — timer installed + enabled by the session above (next fire 08:21).
 - **`dtx_providers.env`-backed proxy is live** (`dtx-litellm-proxy.service` enabled) — daily radar runs spend the owner's GLM quota unattended; acceptable per owner's "do it all", but worth knowing.
 - Claude weekly limit resets **Sep 29, 11:00 Europe/Lisbon**; until then any headless `claude` call fails the same way for every session.
 
 ## Next step
 
-1. In the **new consolidated session**, first sweep for the other two radar sessions' output: `cd ~/dotfiles && git log --oneline -8` (look past `6067903`/`155adf3`), `git branch -a | grep radar`, open PRs (`gh pr list`), and any newer HANDOFF.md blocks — the opencode-twin session may have landed or left a PR.
-2. Decide the single agent-step backend (opencode native vs `claude-dtx-glm53-flash` launcher) and make `omarchy-radar` + `harness-radar` use it consistently; delete whichever drop-in/env becomes redundant.
+1. ~~Sweep for the other two radar sessions' output~~ — done: their work is merged (PR #103) and handed off in the **top block**; start there.
+2. Decide the single agent-step backend (opencode native vs `claude-dtx-glm53-flash` launcher) and make `omarchy-radar` + `harness-radar` use it consistently; delete whichever drop-in/env becomes redundant. — *Top block decided: opencode native by default; mirroring omarchy's run.sh + drop-in cleanup remain.*
 3. Review + merge the first brief: `git -C ~/dotfiles show radar/omarchy-radar/2026-09-25:briefs/omarchy-radar-2026-09-25.md`, then merge the branch (it only touches `briefs/`).
 4. Tomorrow ~08:02, verify the timer's first unattended run: `systemctl --user list-timers omarchy-radar.timer`, `jq . ~/.local/state/omarchy-radar/status.json`, new `radar/omarchy-radar/2026-09-26` branch.
-5. Install `harness-radar`'s timer the same way (see Open/risks).
+5. ~~Install `harness-radar`'s timer the same way~~ — done (top block).
 
 ## Snapshot
 
