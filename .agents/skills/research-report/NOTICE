@@ -1,0 +1,16 @@
+research-report skill — third-party notice
+
+ledger.py ports design and logic (content-addressed evidence store, claim <->
+evidence binding, byte-level literal verification, honest verdict markers,
+falsification log / negative knowledge, sealed manifest + offline verifier)
+from:
+
+  dsh-research-report — https://github.com/PerryLink/dsh-research-report
+  Copyright PerryLink contributors
+  Licensed under the Apache License, Version 2.0
+  https://www.apache.org/licenses/LICENSE-2.0
+
+This is a rewrite in Python, not a copy of the TypeScript source. Changes:
+the mandatory support-quote model, the blind semantic verifier layer
+(SKILL.md), the corroboration rule, source tiers/staleness, verdict drift
+binding, and removal of all DeepSeek Harness dependencies.

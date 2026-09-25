@@ -1,5 +1,7 @@
 # `research-report` skill — design (2026-09-24)
 
+**Status: implemented 2026-09-25** — `.agents/skills/research-report/` (see §H for the live-eval result).
+
 **Ask (human, pt):** "era importante ter uma skill de research report que foca
 mesmo e valida o que está a ver" — can we use
 <https://github.com/PerryLink/dsh-research-report>, or build something better?
@@ -150,3 +152,21 @@ live eval matches → done.
 
 One session: ledger.py + tests (~400 lines), SKILL.md, symlink via `sync.sh`,
 one live eval. Proposed card: `dotfiles-tsk-research-report-skill`.
+
+## H. Live eval result (2026-09-25)
+
+Real sources captured with `ledger.py add` over the network (docs.python.org
+What's New 3.13, PEP 719, PEP 703). Five claims, two of them planted:
+
+| claim | planted flaw | L1 | L2 (blind Opus verifier, packet only) | final |
+|---|---|---|---|---|
+| c1 3.13.0 final on 2024-10-07 (key) | only one publisher (python.org) | PASS | supports | **single-source** |
+| c2 GIL disabled by default | quote byte-true, negated in context | PASS | contradicts ("not enabled by default") | **disproven** |
+| c3 separate `python3.13t` executable | — | PASS | supports | verified |
+| c4 JIT "speeds up Python programs" | hedge dropped ("may speed up some") | PASS | partial | **partial** |
+| c5 security updates to ~Oct 2029 | — | PASS | supports | verified |
+
+L1 alone passed all five: the dsh-research-report gap reproduced. L2 caught
+both planted flaws without being told they existed. `seal` → `verify` reproduced
+the seal hash. One L1 fix came out of the eval: version tokens (`3.13` vs
+`3.13.0`) now also match literally, with a regression test.
