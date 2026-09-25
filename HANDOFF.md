@@ -1,3 +1,73 @@
+<!-- handoff:block 2026-09-25T23:42Z -->
+# Handoff — Timers not yet fired (morning check pending); omarchy brief merged; sync.sh hang REPRODUCED (--dry-run, not --force-source) (2026-09-25)
+
+> **To whoever picks this up (any harness, any model):** this top block is the
+> current handoff; blocks below it are history. Check the Snapshot against live
+> state (`git status`, `git log`, open PRs) before acting on it, then start at
+> **Next step**. When you stop with work unfinished, add a new block on top
+> (`/handoff`, or `handoff.py new`) rather than editing this one.
+
+## Goal
+
+Owner (2026-09-26 ~00:35 WEST): "Verifica os 3 timers (--user: omarchy 08:02, chronicle-improve 08:07, harness 08:21) correram bem esta manhã: systemctl --user list-timers + ~/.local/state/*/run.log. Depois: merge de radar/omarchy-radar/2026-09-26 se o resumo ainda interessar, e o PR de fix do sync.sh (--force-source hang + nota de symlink no AGENTS.md)." Owner then said "continuas depois, vou desligar" — session cut mid-investigation.
+
+## Done
+
+All verified 2026-09-26 ~00:36–00:47 WEST:
+
+- **Timers have NOT fired yet** — checked ~00:41 WEST: `systemctl --user list-timers` shows NEXT 08:02:21 (omarchy-radar) / 08:07:13 (chronicle-improve) / 08:22:03 (harness-radar; owner said 08:21, it's 08:22), LAST "-" for all three. `~/.local/state/` dirs show only last-night test runs (23:33–00:34, all sources `"ok"`, 0 consecutive failures; `chronicle-improve/run.log` has only 22:46–23:10Z install-test lines). Morning verification still to do after 08:22.
+- **omarchy brief MERGED**: `radar/omarchy-radar/2026-09-26` squash-merged as `fdab988` (briefs/omarchy-radar-2026-09-26.md + .ranked.json, 2 files), pushed; local + remote branch deleted. Brief verdict: "nothing actionable today" (Nixarchy 2.0, jev-decision 1.0) — merged as the day's record; content read and verified before merge.
+- **sync.sh investigation (the important finding)**: the handoff's premise is WRONG — `--force-source` cannot reach the gum prompt (early return at sync.sh:257–265; only gum call sites are 216/219 in `sync_handle_conflict`). The REAL hang was **reproduced this session**: `timeout 45 ./sync.sh --dry-run --verbose` → exit 124; output ends right after `✓ reconciled rules -> ~/.agents/rules`, i.e. it hangs in the NEXT subdir (alphabetically `skills/` → `~/.claude/skills` mirror is the prime suspect). Corroborated by tasks/events.jsonl line 278 (opencode, 2026-09-25T22:03Z): "sync.sh --dry-run smoke test hangs on base commit too (pre-existing, environment)". No PR exists (`gh pr list` = `[]`).
+- Stale branch `claude/sync-baseline-fix` (5418501) identified as superseded: the same baseline-recording change is already on main via `6b8aea3` (#22) — current sync.sh:291–304 has the new wording.
+
+## Decisions
+
+- **Merged the omarchy brief myself**: owner explicitly delegated it ("merge … se o resumo ainda interessar"); read the brief first — clean, honest scoring, nothing sensitive (same delegated-review pattern as the 2026-09-25 "faz tu tudo" brief merges).
+- **Did NOT open the sync.sh PR**: the requested fix ("--force-source hang") targets a code path that cannot hang; shipping it would be a no-op. The real reproduced bug (--dry-run hang, environmental) needs diagnosis first.
+- Left `tasks/*` modified files untouched — parallel session was live in this shared checkout.
+
+## Open / risks
+
+- **sync.sh --dry-run hang: reproduced, root cause UNKNOWN.** Bisect needed (see Next step). Check whether `~/.claude/skills` is a symlink, contains huge files, or `find`/`sha256sum` blocks on something there.
+- Timer triple-fire (08:02/08:07/08:22) unverified — happens later this morning; that is the owner's item #1.
+- `gum choose` (sync.sh:216/219) blocks forever for callers that hold a PTY but never send input (agent harnesses). Worth `--timeout=60s` → fallback `resolve="skip"` in the eventual PR — improvement, not the reproduced hang.
+- Stale `claude/sync-baseline-fix` branch (local + remote) to delete after confirming identical to `6b8aea3`.
+- AGENTS.md "Broken Symlinks" section is wrong for this machine: `~/.agents` is a REAL dir here (sync.sh populates it); running its `ln -sf ~/dotfiles/.agents ~/.agents` would nest a symlink INSIDE the dir. Fix belongs in the sync.sh PR.
+
+## Next step
+
+1. Bisect the hang: `cd ~/dotfiles && timeout 30 bash -x ./sync.sh --dry-run --verbose 2>/tmp/opencode/sync-x.log; echo $?; tail -30 /tmp/opencode/sync-x.log` — expect the last line inside the `skills/` reconcile; inspect `~/.claude/skills` (symlink? fifo? huge file?).
+2. After 08:22 WEST: `systemctl --user list-timers --no-pager` (check LAST columns) + `cat ~/.local/state/chronicle-improve/run.log` + `jq -c '.' ~/.local/state/{omarchy,harness}-radar/status.json` — confirm the first natural triple-fire was green (or that radar skip-guards fired because today's branches/briefs already exist — note the omarchy branch is now merged+deleted, so today's 08:02 run may legitimately produce a NEW brief; that's fine, review it before merging).
+3. Delete the stale branch if step-1-equivalent diff is empty: `git diff 6b8aea3 5418501 -- sync.sh` → empty ⇒ `git branch -D claude/sync-baseline-fix && git push origin --delete claude/sync-baseline-fix`.
+4. Open the sync.sh PR from a card worktree with a harness-prefixed branch (e.g. `claude/sync-dry-run-hang`): real hang fix + `--timeout=60s` on both `gum choose` calls + AGENTS.md `~/.agents`-is-a-real-dir note. CI rejects non-prefixed branches.
+
+## Snapshot
+
+_Generated by `handoff.py` at write time — verify against live state before trusting it._
+
+- **Written:** 2026-09-25 23:42 UTC on `omarchy` by `opencode` / `local/zai-org/GLM-5.3-Flash`
+- **Repo:** `/home/nbugz/dotfiles` — branch `main`
+- **Upstream:** `origin/main` — 0 ahead, 0 behind
+
+Uncommitted changes:
+
+```
+ M tasks/cards/dotfiles-tsk-researcher-radar.md
+ M tasks/cards/dotfiles-tsk-skill-gauntlet-prompting.md
+ M tasks/events.jsonl
+ M tasks/kanban.md
+?? briefs/.gitkeep
+```
+
+`tasks/brief.py` at write time:
+
+```
+1 fact(s) need you:
+- dotfiles-tsk-skill-gauntlet-prompting: sla_expired (dedup_key=dotfiles-tsk-skill-gauntlet-prompting:sla_expired:9)
+```
+
+---
+
 <!-- handoff:block 2026-09-26T01:0xZ -->
 # Handoff — Radars chat-usable: /omarchy-radar + /harness-radar commands live (#112), ranked.json loader fix (#113), chronicle-improve timer installed (08:07)
 
