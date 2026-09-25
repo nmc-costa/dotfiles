@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily omarchy-radar digest timer (Omarchy Linux Quattro community)
+
+[Timer]
+OnCalendar=08:00
+Persistent=true
+RandomizedDelaySec=600
+
+[Install]
+WantedBy=timers.target
