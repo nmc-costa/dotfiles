@@ -87,6 +87,18 @@ present); every load-bearing guard — data-not-instructions, worktree
 isolation, secret-scan before commit, `radar/*`-branch-only output, no push —
 is identical in both modes. Each radar's `security.md` states the trade.
 
+### Validating a radar's pipeline
+
+[`validate_pipeline.sh`](../../automation/radar-common/validate_pipeline.sh)
+exercises a radar's full `run.sh` pipeline in a disposable sandbox — fixture
+inbox, stub backend, no network, no LLM, no real state — and asserts the
+output contract of every failure/success mode (happy commit, secret-scan
+abort keeps the day blocked, agent failure discards cleanly, empty inbox
+skips, interactive prepare/finalize). Run it after touching any `run.sh` or
+`radar-common` code: `bash .agents/automation/radar-common/validate_pipeline.sh
+<radar-name>`. It relies on the `RADAR_STATE_DIR`/`RADAR_DATE` test hooks in
+`run.sh`, which must keep working defaults.
+
 ### `router.sh`: one entry point across every radar
 
 [`.agents/automation/radar-common/router.sh`](../../automation/radar-common/router.sh)

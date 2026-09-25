@@ -41,8 +41,11 @@ RADAR_NAME="harness-radar"
 # shellcheck source=../../../.agents/automation/radar-common/lib.sh
 source "$REPO_DIR/.agents/automation/radar-common/lib.sh"
 
-STATE_DIR="$HOME/.local/state/$RADAR_NAME"
-DATE="$(date +%Y-%m-%d)"
+# RADAR_STATE_DIR / RADAR_DATE are test hooks (radar-common/validate_pipeline.sh):
+# they redirect state and pin the date so the pipeline can be exercised
+# end-to-end in a disposable sandbox. Unset in production — defaults below.
+STATE_DIR="${RADAR_STATE_DIR:-$HOME/.local/state/$RADAR_NAME}"
+DATE="${RADAR_DATE:-$(date +%Y-%m-%d)}"
 BRANCH="radar/$RADAR_NAME/$DATE"
 WORKTREE_DIR="$STATE_DIR/worktrees/$DATE"
 LOCK_FILE="$STATE_DIR/$RADAR_NAME.lock"
@@ -245,9 +248,12 @@ finalize_step() {
     done < <(find "$proposals_dir" -type f -print0)
   fi
 
-  # Secret-scan before anything is committed. On a hit: the evidence lives
-  # in the worktree (keep it for inspection); drop only the empty branch so
-  # same-day retries aren't blocked by radar_branch_exists.
+  # Secret-scan before anything is committed. On a hit: keep BOTH the
+  # worktree (the flagged brief is the evidence) and the branch — the day
+  # stays blocked until a human inspects and cleans up. This is deliberate:
+  # `git branch -D` cannot delete a branch checked out in the kept worktree,
+  # so the block is structural, and the alert notification below is what
+  # makes it visible. Never auto-retry past a secret alarm.
   local f
   for f in "$BRIEF_PATH" "$RANKED_PATH"; do
     [[ -f "$f" ]] || continue
