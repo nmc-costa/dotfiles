@@ -4,7 +4,7 @@ title: "researcher-radar family: omarchy-radar + agents-radar (headless daily di
 project: dotfiles
 phase: in_progress
 created: "2026-09-24T20:45:26.404229+00:00"
-touched: "2026-09-25T23:02:55.975434+00:00"
+touched: "2026-09-25T23:20:48.634964+00:00"
 energy: deep
 estimate: ""
 deadline: ""
