@@ -81,3 +81,7 @@ If a HANDOFF.md exists at the root of the repo or subsystem you're working
 in, read its top block before starting (see
 `.agents/instructions/workspace-config/handoff.instructions.md`). Trust the
 narrative, but re-verify the Snapshot — it's a picture of the past.
+
+## Chains
+
+- `→ /task-brief` — receiving side, after reading the top handoff block: check whether anything needs the human before picking the Next step.

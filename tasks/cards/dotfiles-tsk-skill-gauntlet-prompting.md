@@ -4,7 +4,7 @@ title: "Skill: gauntlet prompting (desenhar e criar skill .agents/skills/gauntle
 project: dotfiles
 phase: validation
 created: "2026-09-24T11:19:09.455211+00:00"
-touched: "2026-09-25T22:14:26.995426+00:00"
+touched: "2026-09-25T22:20:21.791435+00:00"
 energy: deep
 estimate: ""
 deadline: ""

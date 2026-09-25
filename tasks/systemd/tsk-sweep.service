@@ -1,0 +1,7 @@
+[Unit]
+Description=tsk sweep — raise facts (sla_expired, blocked_too_long) from tasks/ events for brief.py to surface
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/dotfiles
+ExecStart=/usr/bin/python3 %h/dotfiles/tasks/sweep.py

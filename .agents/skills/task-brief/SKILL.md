@@ -66,3 +66,8 @@ claude-code` (a real `SessionStart` hook), `dotfiles-tsk-cpx-copilot` (a
 wrapper, since Copilot CLI's own `sessionStart` hook is confirmed broken),
 and `dotfiles-tsk-hook-antigravity` are still backlog. Until one of those
 lands, invoke this skill manually or via `/task-brief`.
+
+## Chains
+
+- `→ /task-worktree --task-id <id>` — when the owner picks a card to build in this session; code work happens in that card's worktree, never the main checkout.
+- `→ brief.py --prompt-only` dispatch — when the owner names a task for a *different* session/harness (step 5 above), not this one.

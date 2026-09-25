@@ -51,3 +51,7 @@ Layout: `~/dotfiles.worktrees/<harness>/<task-id>` on branch
 - Don't create worktrees for review/validation-only work — only for code.
 - Don't write events from inside a worktree by hand; `tasks/*.py` already
   resolve the one real log via `tasks_root()`.
+
+## Chains
+
+- `→ /pr-finish --task-id <id>` — when the card's code is complete and verified and its PR should be validated/finished (see `.agents/skills/pr-finish/SKILL.md`).

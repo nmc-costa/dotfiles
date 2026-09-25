@@ -63,6 +63,19 @@ Agents reference this skill like this:
 
 ---
 
+## Chains
+
+Optional — what this skill usually leads to next (one line per chain):
+
+- `→ /next-skill <args>` — when the output of this skill is that skill's input
+
+Rules: document chains here, in the body — never in `description`
+(descriptions stay tight for trigger matching). Agents emit the footer
+`Next: /skill args` line (output-frame) only when a listed chain actually
+applies to the turn's outcome.
+
+---
+
 ## Configuration
 
 ### Required Parameters
