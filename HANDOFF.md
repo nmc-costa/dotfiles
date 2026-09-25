@@ -1,3 +1,36 @@
+<!-- handoff:block 2026-09-26T01:0xZ -->
+# Handoff — Radars chat-usable: /omarchy-radar + /harness-radar commands live (#112), ranked.json loader fix (#113), chronicle-improve timer installed (08:07)
+
+> **To whoever picks this up (any harness, any model):** this top block is the
+> current handoff; blocks below it are history. Check the Snapshot against live
+> state (`git status`, `git log`, open PRs) before acting on it, then start at
+> **Next step**. When you stop with work unfinished, add a new block on top
+> (`/handoff`, or `handoff.py new`) rather than editing this one.
+
+## Goal
+
+Owner: "quero poder chamar a skill e obter um resumo do report no chat — eles ainda não funcionam". Close the radar chat gap end-to-end: deploy stale copies, add opencode commands for both radars, prove the in-chat summary flow live, and enable the chronicle daily-improve timer.
+
+## Done (all verified live 2026-09-26 00:5x–01:0x WEST)
+
+- **Stale deployed copies fixed**: `~/.agents` is a REAL dir (not a symlink — AGENTS.md troubleshooting note is wrong for this machine); `--adopt=source` only covers no-baseline cases and `--force-source` HANGS (interactive gum prompt — known sync.sh bug). Surgical `cp` reconciled the 3 diverged files (`radar-common/lib.sh`, `task-brief/SKILL.md`, omarchy `collect.sh`); next clean sync re-baselines them.
+- **PR #112 merged** (`419c849`): `/omarchy-radar` + `/harness-radar` opencode commands (read today's brief from `radar/<name>/<date>` if it exists → summarize in chat; else `--prepare` → agent step → `--finalize` → summarize). Deployed to `~/.config/opencode/command/` via sync.
+- **PR #113 merged** (`afad9ac`): `radar_sqlite_load_ranked` now accepts object-wrapped ranked.json (`{"ranked":[...]}`), not just bare arrays — found live: `--finalize` silently dropped the day's history row on the object form. Verified both shapes load.
+- **chronicle-improve.timer installed + active**: units from repo `systemd/chronicle-improve/` → `~/.config/systemd/user/`, `enable --now`; first fire **today 08:07 WEST** (omarchy 08:02, harness 08:21).
+- **Radar lifecycle clarified**: the 00:13/00:19 "wiped worktrees" were the parallel session's correct post-merge cleanup — the 2026-09-25 briefs (and their harness 2026-09-26 brief) are MERGED on main under `briefs/`. My duplicate `radar/harness-radar/2026-09-26` branch was deleted; kept only **`radar/omarchy-radar/2026-09-26`** (new: 2 discussion items, nothing actionable — Nixarchy 2.0, jev-decision 1.0).
+- **Card `dotfiles-tsk-radar-opencode-backend` → validation** (CAS `1e4eb4f5`): landed via #105; my #104 superseded. Meanwhile: #98 merged (D7, `3a6da09`), #102 merged (daily-improve, 23:22Z), #111 merged (validator 29/29).
+
+## Next step
+
+1. Owner merges `radar/omarchy-radar/2026-09-26` (or the timers fold it into tomorrow's run). 2. First unattended triple-fire this morning (08:02/08:07/08:21) — check `systemctl --user list-timers` + `~/.local/state/*/run.log`. 3. Chat usage: say "omarchy-radar" or `/harness-radar` in opencode → in-chat summary. 4. AGENTS.md fix (separate PR): `~/.agents` is a real dir here, not a symlink; sync.sh `--force-source` hangs on interactive conflicts.
+
+## Snapshot
+
+- main `afad9ac`, in sync with origin. Open PRs: #111-era researcher-radar work merged; nothing of mine open.
+- Timers: chronicle-improve 08:07 (NEW), omarchy-radar 08:02, harness-radar 08:21 — all `--user`, all active.
+- Deployed skill copies now equal main (lib.sh has opencode backend, 2 hits).
+- Parallel session: very active on `tasks/` (events.jsonl/kanban M — leave to them; card move already evented).
+
 <!-- handoff:block 2026-09-25T23:20Z -->
 # Handoff — Radar consolidation COMPLETE: PR #105 merged, sandbox fixes live, both radars verified unattended end-to-end, 4 briefs merged (2026-09-25)
 

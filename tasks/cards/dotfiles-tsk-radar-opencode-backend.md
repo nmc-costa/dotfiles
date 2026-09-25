@@ -2,9 +2,9 @@
 task_id: dotfiles-tsk-radar-opencode-backend
 title: "Radar family: commit skills+automation+units, omarchy-radar backend routing (opencode default)"
 project: dotfiles
-phase: review
+phase: validation
 created: "2026-09-25T23:01:30.869355+00:00"
-touched: "2026-09-25T23:03:45.546138+00:00"
+touched: "2026-09-25T23:35:20.457317+00:00"
 energy: mechanical
 estimate: ""
 deadline: ""
@@ -20,5 +20,6 @@ Radar family: commit skills+automation+units, omarchy-radar backend routing (ope
 - 2026-09-25T23:01:31.339858+00:00: backlog -> planning (actor: opencode/agent) — Scope confirmed: family + fix, one PR
 - 2026-09-25T23:01:31.749294+00:00: planning -> in_progress (actor: opencode/agent) — Committing family into card worktree + backend fix
 - 2026-09-25T23:03:45.546138+00:00: in_progress -> review (actor: opencode/agent) — PR #104 opened: omarchy-radar --prepare/--finalize interactive modes + RADAR_AGENT_BACKEND (opencode default, claude opt-in); quota-proof per owner report; CI green
+- 2026-09-25T23:35:20.457317+00:00: review -> validation (actor: claude/agent) — Landed via PR #105 (d800ad5) from the parallel session; my #104 was closed as superseded. Both radars verified unattended end-to-end per handoff 00:1x.
 
 Worktrees (this machine): [worktrees/dotfiles-tsk-radar-opencode-backend.md](worktrees/dotfiles-tsk-radar-opencode-backend.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-radar-opencode-backend`
