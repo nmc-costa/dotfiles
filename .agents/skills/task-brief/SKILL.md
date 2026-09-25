@@ -31,6 +31,22 @@ multi-agent planning, the opposite of this: a single deterministic check).
    silently act on a fact yourself (move a task, ack it) without the human
    directing that. Once they do, translate their answer into the matching
    `tasks/move_task.py`/`tasks/notify.py --ack` command yourself.
+   The `move_task.py` shape, so you emit it right the first time instead of
+   re-deriving it with `--help` (evidence: chronicle candidates 2026-09-26,
+   repeated-command `python3 tasks/move_task.py` ×116, several just
+   `--help`):
+   ```bash
+   python3 tasks/move_task.py --task-id <id> --to-phase <phase> --reason "<why>"
+   ```
+   Two constraints the script enforces — know them before running:
+   - Only `tasks/lifecycle.py`'s `LEGAL_TRANSITIONS` are accepted (e.g.
+     `backlog` can't jump straight to `in_progress`); illegal moves exit 2.
+   - Into `validation` or `done`, pass
+     `--expect-last-event-id <id the previous move printed>` (Layer A CAS) —
+     a mismatch exits 3 rather than overwriting a concurrent move.
+   Sign your own moves: `--actor-kind` already defaults to `agent`
+   (`--actor-id` to `claude`); never pass `--actor-kind human` for your own
+   write (tasks/README.md, "Agent actor-kind").
 4. If it prints "Nothing pending. What do you want to work on?" — ask
    exactly that, in your own words, and wait. Do **not** pick a task
    yourself and start working on it unprompted (§5: "nunca escolhe trabalho
