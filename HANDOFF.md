@@ -41,9 +41,9 @@ All verified live 2026-09-26 00:1x–00:2x WEST:
 
 ## Next step
 
-1. Nothing urgent. At 08:02/08:21 both timers will find today's branches already present and skip cleanly — the first *natural* unattended test is **tomorrow** (2026-09-27): `systemctl --user list-timers`, `jq . ~/.local/state/{omarchy,harness}-radar/status.json`, new `radar/<name>/2026-09-27` branches, no leftover worktrees.
-2. If a radar fails tomorrow, first suspect a mise tool update having moved the versioned install path → `~/.local/bin.sandboxed/refresh.sh gh opencode`.
-3. Owner: validate card `dotfiles-tsk-researcher-radar` (all known work is done) → `done`.
+1. **Owner validates card `dotfiles-tsk-researcher-radar`** (now in `review`) — the validation gate the owner required EXISTS and RUNS GREEN: `bash .agents/automation/radar-common/validate_pipeline.sh omarchy-radar` (29/29) and `... harness-radar` (29/29), on merged main `ab149f8`, PR #111. Run them yourself before closing the card.
+2. At 08:02/08:21 the timers skip cleanly (today's branches exist); the first *natural* unattended test is **2026-09-27**: `systemctl --user list-timers`, `jq . ~/.local/state/{omarchy,harness}-radar/status.json`, new `radar/<name>/2026-09-27` branches.
+3. If a radar fails tomorrow, first suspect a mise tool update having moved the versioned install path → `~/.local/bin.sandboxed/refresh.sh gh opencode`.
 4. After a few clean days, the drop-ins + `bin.sandboxed` pattern could be documented in the radars' READMEs (repo-side) if the owner wants it portable.
 
 ## Snapshot
