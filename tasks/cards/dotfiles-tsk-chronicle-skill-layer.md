@@ -2,9 +2,9 @@
 task_id: dotfiles-tsk-chronicle-skill-layer
 title: "Chronicle-like skill layer: mine interactions into skills/instructions, resume-after-timeout, PR-finish, skill chaining + chat autocomplete"
 project: dotfiles
-phase: review
+phase: done
 created: "2026-09-25T20:56:46.453899+00:00"
-touched: "2026-09-25T21:36:14.457941+00:00"
+touched: "2026-09-25T21:41:16.427167+00:00"
 energy: deep
 estimate: ""
 deadline: ""
@@ -20,6 +20,8 @@ Chronicle-like skill layer: mine interactions into skills/instructions, resume-a
 - 2026-09-25T21:09:18.695274+00:00: backlog -> planning (actor: nmc-costa/human) — human answered plan-orchestra questionnaire: move to planning
 - 2026-09-25T21:32:25.642057+00:00: planning -> in_progress (actor: opencode/agent) — owner directed: build D1-D3 in opencode session (Claude Pro weekly limit hit; Copilot timing out)
 - 2026-09-25T21:36:14.457941+00:00: in_progress -> review (actor: opencode/agent) — D1-D3 implemented + verified in worktree; PR #92 open
+- 2026-09-25T21:41:16.037275+00:00: review -> validation (actor: opencode/agent) — owner accepted in chat without review and directed the merge ('eu aceito o que fizeste só de olhar para o chat; quero que faças merge') — PR #92 squash-merged, deploy done (hook live in settings.json)
+- 2026-09-25T21:41:16.427167+00:00: validation -> done (actor: opencode/agent) — D1-D3 shipped: PR #92 merged (20a8bf6), PreCompact hook live, handoff --json + title-from-branch shipped
 
 Worktrees (this machine): [worktrees/dotfiles-tsk-chronicle-skill-layer.md](worktrees/dotfiles-tsk-chronicle-skill-layer.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-chronicle-skill-layer`
 

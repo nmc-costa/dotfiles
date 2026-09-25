@@ -4,7 +4,7 @@ title: "Skill: gauntlet prompting (desenhar e criar skill .agents/skills/gauntle
 project: dotfiles
 phase: validation
 created: "2026-09-24T11:19:09.455211+00:00"
-touched: "2026-09-25T14:34:02.628032+00:00"
+touched: "2026-09-25T22:14:26.995426+00:00"
 energy: deep
 estimate: ""
 deadline: ""
@@ -21,8 +21,6 @@ Skill: gauntlet prompting (desenhar e criar skill .agents/skills/gauntlet-prompt
 - 2026-09-25T14:27:03.717149+00:00: planning -> in_progress (actor: claude/agent) — owner respondeu: 3 rondas/peca, sempre hand-off, PR e merge
 - 2026-09-25T14:33:56.078214+00:00: in_progress -> review (actor: claude/agent) — PR #86 opened
 - 2026-09-25T14:34:02.628032+00:00: review -> validation (actor: claude/agent) — PR #86 merged (aa9f3f016ceda688119b035ac3cf2011d5e2887d), owner authorized PR+merge
-
-Worktrees (this machine): [worktrees/dotfiles-tsk-skill-gauntlet-prompting.md](worktrees/dotfiles-tsk-skill-gauntlet-prompting.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-skill-gauntlet-prompting`
 
 Worktrees (this machine): [worktrees/dotfiles-tsk-skill-gauntlet-prompting.md](worktrees/dotfiles-tsk-skill-gauntlet-prompting.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-skill-gauntlet-prompting`
 

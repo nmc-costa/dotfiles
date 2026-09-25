@@ -2,9 +2,9 @@
 task_id: dotfiles-tsk-harness-provider-model-index
 title: Build a validated harness x provider x model orchestration index
 project: dotfiles
-phase: validation
+phase: done
 created: "2026-09-23T11:52:17.170402+00:00"
-touched: "2026-09-25T21:09:18.091733+00:00"
+touched: "2026-09-25T21:53:08.497011+00:00"
 energy: ""
 estimate: ""
 deadline: ""
@@ -21,6 +21,7 @@ Build a validated harness x provider x model orchestration index
 - 2026-09-23T12:00:09.249287+00:00: planning -> in_progress (actor: claude/agent)
 - 2026-09-23T12:02:25.508135+00:00: in_progress -> review (actor: claude/agent)
 - 2026-09-23T21:49:00.824912+00:00: review -> validation (actor: claude/agent) — PR #72 merged (merge commit 67cec54044e66abbef11c86bbfc282f4ea47463e), owner authorized the merge directly
+- 2026-09-25T21:53:08.497011+00:00: validation -> done (actor: claude/agent) — Doc validated against machine state 2026-09-25: dispatch.py PROVIDER_BINARIES includes agy, harness-matrix.instructions.md points back here, hardware claims match (38GB RAM, Iris Xe). 5 documented gaps stay open by design; unblocks dotfiles-tsk-task-brief-assistant
 
 Worktrees (this machine): [worktrees/dotfiles-tsk-harness-provider-model-index.md](worktrees/dotfiles-tsk-harness-provider-model-index.md) — `python3 ~/dotfiles/tasks/worktree.py list --task-id dotfiles-tsk-harness-provider-model-index`
 

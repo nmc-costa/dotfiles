@@ -44,6 +44,15 @@ Size the reply: S = <~25 lines, no headings · M = 25–80 lines, ≥3 sections,
 | **OpenAI Codex CLI** | `~/.codex/` | Terminal coding agent |
 | **Cline** | `~/.cline/` | Complex multi-file task execution |
 
+## Radar family (`omarchy-radar` / `harness-radar`)
+
+Community/live-system config lives in `~/.config`, never the vendored
+`/usr/share/omarchy` tree — and a radar only ever *proposes* a change, on a
+disposable git-worktree branch for human review; it never installs or applies
+one automatically. See `.agents/skills/researcher-radar/SKILL.md` for the
+shared architecture, and check `docs/radar-knowledge/*.md` before spending a
+fresh research pass re-establishing a fact it may already answer.
+
 ## Custom Skills
 
 This repository centralizes skills (extensions/plugins) in the standard `.agents/skills/` folder:

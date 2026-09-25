@@ -36,7 +36,7 @@ flowchart LR
         dotfiles-tsk-cpx-copilot["dotfiles-tsk-cpx-copilot<br/>cpx wrapper for Copilot CLI (its own sessionStart hook is broken)"]:::backlog
         dotfiles-tsk-hook-antigravity["dotfiles-tsk-hook-antigravity<br/>Antigravity hook (inherited hook mechanism)"]:::backlog
         dotfiles-tsk-task-brief-skill["dotfiles-tsk-task-brief-skill<br/>/task-brief skill - thin shell over brief.py"]:::done
-        dotfiles-tsk-systemd-units["dotfiles-tsk-systemd-units<br/>ensure-tsk-sweep.sh + systemd units, following the existing ensure-*.sh convention"]:::backlog
+        dotfiles-tsk-systemd-units["dotfiles-tsk-systemd-units<br/>ensure-tsk-sweep.sh + systemd units, following the existing ensure-*.sh convention"]:::in_progress
         dotfiles-tsk-graph-dependency-edges["dotfiles-tsk-graph-dependency-edges<br/>Add blocked_by dependency edges to rebuild_graph.py's flowchart (needs blocked_by as a list, not prose)"]:::backlog
         dotfiles-tsk-cards-frontmatter["dotfiles-tsk-cards-frontmatter<br/>L1: markdown+YAML-frontmatter card per task (rebuild_cards.py, generated view, never hand-edited)"]:::done
         dotfiles-tsk-dispatch-launcher["dotfiles-tsk-dispatch-launcher<br/>tsk dispatch: launch a session on a provider with the task brief pre-loaded (claude &quot;<p>&quot;/--bg, copilot -i, agy -i) - push side of cross-provider handoff, pull side is dotfiles-tsk-brief"]:::done
@@ -56,17 +56,17 @@ flowchart LR
         dotfiles-tsk-sweep-validate["dotfiles-tsk-sweep-validate<br/>Test and validate sweep.py end-to-end (never run on this machine yet)"]:::backlog
         dotfiles-tsk-card-priority["dotfiles-tsk-card-priority<br/>Add priority levels (P0-P3) to tasks/ cards"]:::backlog
         dotfiles-tsk-recurring-cards["dotfiles-tsk-recurring-cards<br/>Recurring cards: spawn new task instances on a cadence"]:::backlog
-        dotfiles-tsk-harness-provider-model-index["dotfiles-tsk-harness-provider-model-index<br/>Build a validated harness x provider x model orchestration index"]:::validation
+        dotfiles-tsk-harness-provider-model-index["dotfiles-tsk-harness-provider-model-index<br/>Build a validated harness x provider x model orchestration index"]:::done
         dotfiles-tsk-task-brief-assistant["dotfiles-tsk-task-brief-assistant<br/>Upgrade /task-brief into a full tasks/ management assistant"]:::review
         dotfiles-tsk-chezmoi-config-drift["dotfiles-tsk-chezmoi-config-drift<br/>Corrigir ~/.config/chezmoi/chezmoi.toml pos-PR1 (destDir=$HOME, sourceDir=home/) + limpar ~/dotfiles/.dtx-providers/ + corrigir PROVIDERS.md e render-litellm-config.sh"]:::done
         dotfiles-tsk-verify-setup-skill-gaps["dotfiles-tsk-verify-setup-skill-gaps<br/>Investigate 2 findings from first real run of setup-dotfiles/verify_setup.sh: _templates flagged missing from synced skills dirs, chezmoi status failure"]:::done
-        dotfiles-tsk-agent-actor-safety["dotfiles-tsk-agent-actor-safety<br/>[HIGH PRIORITY] Agents must sign tasks/ events as actor-kind=agent for their own writes, and must not run unguarded git ops on the shared tasks/events.jsonl working tree"]:::validation
+        dotfiles-tsk-agent-actor-safety["dotfiles-tsk-agent-actor-safety<br/>[HIGH PRIORITY] Agents must sign tasks/ events as actor-kind=agent for their own writes, and must not run unguarded git ops on the shared tasks/events.jsonl working tree"]:::done
         dotfiles-tsk-spike-herdr-commander["dotfiles-tsk-spike-herdr-commander<br/>Spike: evaluate herdr-commander (lurepos) as herdr palette for tasks/ commands"]:::backlog
         dotfiles-tsk-spike-herdr-commander-build["dotfiles-tsk-spike-herdr-commander-build<br/>Spike (hands-on): patch herdr-commander to overlay placement, wire real .vscode/tasks.json, verify picker end-to-end"]:::done
-        dotfiles-tsk-skill-gauntlet-prompting["dotfiles-tsk-skill-gauntlet-prompting<br/>Skill: gauntlet prompting (desenhar e criar skill .agents/skills/gauntlet-prompting)"]:::planning
+        dotfiles-tsk-skill-gauntlet-prompting["dotfiles-tsk-skill-gauntlet-prompting<br/>Skill: gauntlet prompting (desenhar e criar skill .agents/skills/gauntlet-prompting)"]:::validation
         dotfiles-tsk-agent-autonomy-charter["dotfiles-tsk-agent-autonomy-charter<br/>Agent autonomy charter: shared system prompt for all harnesses with no-ask domains + TL;DR-only escalation"]:::planning
-        dotfiles-tsk-github-to-agents["dotfiles-tsk-github-to-agents<br/>Migrar .github/ para .agents/ e apagar .github (Copilot já lê AGENTS.md)"]:::backlog
-        dotfiles-tsk-cross-harness-orchestra["dotfiles-tsk-cross-harness-orchestra<br/>Skill /harness-orchestra: fan-out de tarefas entre harness+provider+model (ex: 1 Claude Code Opus + 1 Copilot CLI GPT-5), cada um no seu worktree, fecho via handoff md"]:::planning
+        dotfiles-tsk-github-to-agents["dotfiles-tsk-github-to-agents<br/>Migrar .github/ para .agents/ e apagar .github (Copilot já lê AGENTS.md)"]:::done
+        dotfiles-tsk-cross-harness-orchestra["dotfiles-tsk-cross-harness-orchestra<br/>Skill /harness-orchestra: fan-out de tarefas entre harness+provider+model (ex: 1 Claude Code Opus + 1 Copilot CLI GPT-5), cada um no seu worktree, fecho via handoff md"]:::review
         dotfiles-tsk-researcher-radar["dotfiles-tsk-researcher-radar<br/>researcher-radar family: omarchy-radar + agents-radar (headless daily digests, human approves everything)"]:::in_progress
         dotfiles-tsk-agent-output-tldr-format["dotfiles-tsk-agent-output-tldr-format<br/>Formato padrão de fecho para planos e outputs longos de agentes: TL;DR + índice, com opção visual/diagrama e possível artifact"]:::review
         dotfiles-tsk-tree-tidy-core["dotfiles-tsk-tree-tidy-core<br/>[P1] Tree-tidy core: root check in validate_workspace_standards.py + allowlist reconcile, tree_tidy.py scope/map/metrics, root-guard PreToolUse hook, 3 AGENTS.md lines, delete docs/directory_tree.md"]:::backlog
@@ -77,12 +77,23 @@ flowchart LR
         dotfiles-tsk-header-persona-drift["dotfiles-tsk-header-persona-drift<br/>Header/persona RESONANCE drift: ~15 ficheiros com cópias divergentes do bloco de header (achado pelo plano do Output Frame)"]:::review
         dotfiles-tsk-simplifyhit-ressonance-typo["dotfiles-tsk-simplifyhit-ressonance-typo<br/>Fix typo: simplifyhit/SKILL.md escreve RESSONANCE em vez de RESONANCE no bloco de header"]:::review
         dotfiles-tsk-mermaid-instructions-footer-conflict["dotfiles-tsk-mermaid-instructions-footer-conflict<br/>mermaid.instructions.md (Regras 1, 2 e 5) entra em conflito com qualquer diagrama Mermaid devolvido inline (ex. footer do Output Frame)"]:::review
+        dotfiles-tsk-dispatch-interactive-fix["dotfiles-tsk-dispatch-interactive-fix<br/>dispatch.py: copilot/agy lançados com -i e stdin=/dev/null (TUI sem terminal) — encaminhar via agent-deck launch"]:::backlog
+        dotfiles-tsk-card-worktrees["dotfiles-tsk-card-worktrees<br/>tasks/worktree.py: one git worktree per (harness, card), visible from tasks/cards/, same for Claude/Copilot/Gemini/agy/Codex"]:::backlog
+        dotfiles-tsk-orchestra-smoke["dotfiles-tsk-orchestra-smoke<br/>Smoke test real do tasks/orchestra.py --launch (plan §Verification 3): 1 agente claude + 1 agente copilot"]:::backlog
+        dotfiles-tsk-worktree-model-suffix["dotfiles-tsk-worktree-model-suffix<br/>tasks/worktree.py v2: optional [-<model>] suffix in path/branch when a harness has >1 agent on the same card"]:::backlog
+        dotfiles-tsk-chronicle-skill-layer["dotfiles-tsk-chronicle-skill-layer<br/>Chronicle-like skill layer: mine interactions into skills/instructions, resume-after-timeout, PR-finish, skill chaining + chat autocomplete"]:::done
+        dotfiles-tsk-dispatch-quota-check["dotfiles-tsk-dispatch-quota-check<br/>dispatch.py: post-launch liveness probe + record provider quota status/reset time"]:::backlog
+        dotfiles-tsk-chronicle-d4-d6["dotfiles-tsk-chronicle-d4-d6<br/>Chronicle slice D4-D6: /pr-finish, /chronicle miner, footer+questionario conventions"]:::in_progress
     end
 
     subgraph proj_notes["notes"]
         notes-repo-hygiene-notes["notes-repo-hygiene-notes<br/>Abrir PR: claude/repo-hygiene-notes"]:::done
         notes-ideas-review-fixes["notes-ideas-review-fixes<br/>Abrir PR: claude/ideas-review-fixes"]:::done
         notes-workspace-standards-schema["notes-workspace-standards-schema<br/>Abrir PR: claude/workspace-standards-schema"]:::done
+    end
+
+    subgraph proj_unknown["unknown"]
+        dotfiles-tsk-task-plan["dotfiles-tsk-task-plan<br/>dotfiles-tsk-task-plan"]:::planning
     end
 
     subgraph proj_worknotes["worknotes"]

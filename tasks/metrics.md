@@ -13,11 +13,13 @@ Metrics come from `move_task.py`'s optional --team/--tokens/--cost-usd/
 | dotfiles-tsk-spike-herdr-popup | in_progress | team-herdr-popup | 77434 |  | 168 |  | 2026-09-21T17:34:03.235946+00:00 |
 | dotfiles-tsk-tuiboard-install | in_progress | team-tuiboard | 66299 |  | 424 |  | 2026-09-21T17:34:15.192898+00:00 |
 | dotfiles-tsk-roadmap-graph | in_progress | team-roadmap-graph | 85307 |  | 207 |  | 2026-09-21T17:34:28.651570+00:00 |
+| dotfiles-tsk-chronicle-skill-layer | in_progress | opencode-d1d3 |  |  |  |  | 2026-09-25T21:36:14.457941+00:00 |
 
 ## Totals by team
 
 | team | phases | tokens | cost_usd | duration_s | cycles |
 |---|---|---|---|---|---|
+| opencode-d1d3 | 1 | 0 | 0.0 | 0 | 0 |
 | team-agent-deck | 1 | 78388 | 0.0 | 280 | 0 |
 | team-herdr-popup | 1 | 77434 | 0.0 | 168 | 0 |
 | team-roadmap-graph | 1 | 85307 | 0.0 | 207 | 0 |
@@ -28,6 +30,7 @@ Metrics come from `move_task.py`'s optional --team/--tokens/--cost-usd/
 
 | task_id | phases | tokens | cost_usd | duration_s | cycles |
 |---|---|---|---|---|---|
+| dotfiles-tsk-chronicle-skill-layer | 1 | 0 | 0.0 | 0 | 0 |
 | dotfiles-tsk-roadmap-graph | 1 | 85307 | 0.0 | 207 | 0 |
 | dotfiles-tsk-spike-agent-deck | 1 | 78388 | 0.0 | 280 | 0 |
 | dotfiles-tsk-spike-herdr-popup | 1 | 77434 | 0.0 | 168 | 0 |

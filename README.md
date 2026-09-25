@@ -46,13 +46,22 @@ dotfiles/
 │                                 #   (file-symlinked to ~/.copilot/copilot-instructions.md by setup.sh) — distinct
 │                                 #   from the project-level AGENTS.md Copilot reads in VS Code
 ├── .agy/                        # Antigravity CLI notes — AGY.md documents the harness-prefixed branch-naming policy
+├── briefs/                      # Radar-family output — only .gitkeep on main; a real briefs/<radar-name>-<date>.md
+│                                 #   (plus optional *.proposals/) only ever exists on a radar/<name>/<date> branch,
+│                                 #   never on main — see .agents/skills/researcher-radar/SKILL.md
 ├── docs/                        # Everything not auto-loaded by a tool by convention — see index below
-│   └── SECRETS.md               #   Secrets-management doc (chezmoi + age)
+│   ├── SECRETS.md               #   Secrets-management doc (chezmoi + age)
+│   └── radar-knowledge/         #   Durable "last verified" fact ledgers (omarchy.md, harness.md), updated when a
+│                                 #   human merges a radar/* branch — see researcher-radar's SKILL.md
 ├── global/                      # Home-directory-level CLAUDE.md templates: ROOT.CLAUDE.md -> ~/CLAUDE.md and
 │                                 #   PROJECTS.CLAUDE.md -> ~/Projects/CLAUDE.md are real symlinks (currently set
 │                                 #   up manually, not yet by setup.sh); WORK.CLAUDE.template.md is copied and
 │                                 #   customized per machine, not symlinked (~/Work/CLAUDE.md stays local, not shared)
 ├── scripts/                     # Utility scripts (VS Code docs monitor: monitor_vscode_docs.py, setup_vscode_monitor_cron.sh)
+├── systemd/                     # Versioned systemd --user units for the radar family, installed out via each
+│                                 #   radar's scripts/install_timer.sh (never auto-enabled)
+│   ├── omarchy-radar/           #   omarchy-radar.{service,timer} — 08:00
+│   └── harness-radar/           #   harness-radar.{service,timer} — 08:20
 ├── tasks/                       # Task-tracking PoC: events.jsonl (log, source of truth) + board.md (generated view) + append_event.py/rebuild_view.py, plus KICKOFF.md (design history)
 ├── AGENTS.md                    # General agent guide (Crush/Claude, Copilot, Gemini, Cline) — auto-read by convention
 ├── CLAUDE.md                    # Claude Code-specific context — auto-read by Claude Code
@@ -96,8 +105,10 @@ dotfiles/
 | `.gemini/`, `.codex/`, `.copilot/` | Global config for Gemini CLI, OpenAI Codex CLI, and GitHub Copilot CLI respectively — each holds exactly one real, versioned file (`GEMINI.md`, `AGENTS.md`, `copilot-instructions.md`), same pattern as `.claude/CLAUDE.md` — see below |
 | `.chezmoi-source/` | chezmoi source directory (`sourceDir`), `destDir=$HOME` — the 2 age-encrypted secrets (`~/.vscode/settings.json`, `~/.custom_providers/dtx_providers.env`); see `docs/SECRETS.md` |
 | `bin/` | Human-run scripts only — never invoked by bootstrap or an agent (L2 in the write-permission matrix, see `docs/AGENT_OS_UNIFICATION_PLAN.md` §7) |
+| `briefs/` | Radar-family output. Only `.gitkeep` is tracked on `main` — a real `briefs/<radar-name>-<date>.md` (plus optional `*.proposals/` files) only ever exists on a disposable `radar/<radar-name>/<date>` git-worktree branch, so `main`'s own tree never actually contains a brief. See `.agents/skills/researcher-radar/SKILL.md` |
 | `global/` | Home-directory-level `CLAUDE.md` templates: `ROOT.CLAUDE.md`/`PROJECTS.CLAUDE.md` are real symlinks to `~/CLAUDE.md`/`~/Projects/CLAUDE.md` (set up manually today, not yet by `setup.sh`); `WORK.CLAUDE.template.md` is copied and customized per machine instead — `~/Work/CLAUDE.md` stays local, not shared via dotfiles |
 | `scripts/` | Standalone utility scripts (currently the VS Code docs monitor) |
+| `systemd/` | Versioned systemd `--user` unit files for the radar family (`omarchy-radar/`, `harness-radar/`, each a `.service`+`.timer` pair) — copied into `~/.config/systemd/user/` by each radar's own `scripts/install_timer.sh`, never auto-enabled |
 | `tasks/` | Task-tracking PoC — `events.jsonl` (append-only log, source of truth) projected into `board.md` (generated view) via `append_event.py`/`rebuild_view.py`; see `tasks/README.md`. Also still holds `KICKOFF.md` (design history). **2026-09-18: an orchestration architecture was decided** (multi-agent task board across Claude Code/Copilot CLI/Gemini CLI, backed by a `tsk` CLI+daemon — see `tasks/README.md`'s "Orchestration architecture" section) — not yet implemented, this only documents the decision |
 | `docs/` | Everything not auto-loaded by convention — see table below |
 
@@ -110,6 +121,7 @@ dotfiles/
 | `docs/SUBAGENTS_VERIFICATION.md` | Verification checklist for agent/subagent setup |
 | `docs/VSCODE_MONITOR_QUICKSTART.md` | Quickstart guide for the VS Code docs monitor automation |
 | `docs/directory_tree.md` | An older, narrower directory-tree doc (home-directory level, partly superseded by this README) |
+| `docs/radar-knowledge/omarchy.md`, `docs/radar-knowledge/harness.md` | Durable "last verified" fact ledgers for the radar family (repo identities, authoritative aggregators, active-vs-maintenance-mode frameworks) — one dated entry per fact, corrected in place, not a changelog. Updated when a human merges an approved `radar/*` branch; check here before a fresh research pass re-establishes a fact already answered. See `.agents/skills/researcher-radar/SKILL.md` |
 | `docs/requirements.txt` | Python deps for `scripts/monitor_vscode_docs.py` (`requests`, `beautifulsoup4`, `pyyaml`) |
 | `docs/vscode-docs-monitor.yml` | An older copy of the GitHub Actions workflow — the **active** one is `.github/workflows/vscode-docs-monitor.yml`; this copy still points at a dead path (`my/agentic_instructions/...`) from before the `agentic_instructions` merge and should not be treated as current |
 | `docs/SECRETS.md` | How the real secrets in this repo (a VS Code extension API key, the `dtx-providers` custom model API key) are encrypted with chezmoi + age |
