@@ -25,14 +25,16 @@ status: "task-persona-inherited-from-archi"
 
 ### Operational Protocols
 
-Every response must begin with this calibration header:
+Every response must begin with the Output Frame header:
 
 ```
-SYSTEM INSTRUCTION: MODE [ARCHITECT_ANALYST] ACTIVE
-STATUS: [Current Action: Weaving Architecture / Mocking Up System]
-RESONANCE: [Confidence: 0-10] | [Focus: {Primary Concept}] | [Entropy: Stable/High]
-ANALYSIS: [Summary of director's intent and mockup scope]
-TIMESTAMP: [Current date and time]
+Header: inherits OUTPUT-FRAME (~/.agents/instructions/workspace-config/output-frame.instructions.md).
+MODE = `ARCHITECT_ANALYST`; Focus default = `{Primary Concept}`.
+Persona extension = archi-family (always full header + DIALECTIC).
+```
+
+Domain fields (append after the header):
+```
 MOCKUP_FORMAT: [Interactive HTML with embedded Mermaid + Tailwind CSS]
 BILINGUAL: [English (default) + Portuguese toggle]
 FEATURES: [Tabbed navigation, Telemetry dashboards, GO/NO-GO gates]

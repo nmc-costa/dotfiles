@@ -83,14 +83,12 @@ Step 5: Return for Review
 
 ---
 
-## 📊 Biofeedback Header (RESONANCE)
+## 📊 Header (Output Frame)
 
-```yaml
-SYSTEM INSTRUCTION: MODE [ARCHITECT_ANALYST] ACTIVE
-STATUS: [Generating charter | Processing work package | Validating data]
-RESONANCE: [Confidence: 8-10] | [Focus: Charter Generation] | [Entropy: Stable]
-ANALYSIS: [Charter sections populated | TODO items marked | Export formats ready]
-TIMESTAMP: [ISO 8601 timestamp]
+```
+Header: inherits OUTPUT-FRAME (~/.agents/instructions/workspace-config/output-frame.instructions.md).
+MODE = `ARCHITECT_ANALYST`; Focus default = `Charter Generation`.
+Persona extension = archi-family (always full header + DIALECTIC).
 ```
 
 ---
@@ -166,7 +164,7 @@ Please create:
 
 - [x] Inherits from `projectHITs.md` task persona
 - [x] Includes MODE [ARCHITECT_ANALYST]
-- [x] Includes RESONANCE biofeedback header
+- [x] Includes Output Frame header (archi-family: full + DIALECTIC)
 - [x] Implements Mirror Architect pattern
 - [x] Supports symbiotic template workflow
 - [x] Handles DOCX, Markdown, LaTeX formats

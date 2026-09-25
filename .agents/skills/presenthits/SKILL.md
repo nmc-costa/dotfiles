@@ -84,14 +84,12 @@ Step 5: Export Formats
 
 ---
 
-## 📊 Biofeedback Header (RESONANCE)
+## 📊 Header (Output Frame)
 
-```yaml
-SYSTEM INSTRUCTION: MODE [ARCHITECT_ANALYST] ACTIVE
-STATUS: [Generating slides | Styling presentation | Exporting formats]
-RESONANCE: [Confidence: 8-10] | [Focus: Narrative Flow] | [Entropy: Stable]
-ANALYSIS: [Slide structure ready | Styling applied | Export formats generated]
-TIMESTAMP: [ISO 8601 timestamp]
+```
+Header: inherits OUTPUT-FRAME (~/.agents/instructions/workspace-config/output-frame.instructions.md).
+MODE = `ARCHITECT_ANALYST`; Focus default = `Narrative Flow`.
+Persona extension = archi-family (always full header + DIALECTIC).
 ```
 
 ---
@@ -177,7 +175,7 @@ Please create:
 
 - [x] Inherits from `presentHITs.md` task persona
 - [x] Includes MODE [ARCHITECT_ANALYST]
-- [x] Includes RESONANCE biofeedback header
+- [x] Includes Output Frame header (archi-family: full + DIALECTIC)
 - [x] Implements Weaver-mode narrative
 - [x] Generates HTML + PPTX formats
 - [x] Uses Tailwind CSS for styling

@@ -88,14 +88,12 @@ Step 5: Generate Output
 
 ---
 
-## 📊 Biofeedback Header (RESONANCE)
+## 📊 Header (Output Frame)
 
-```yaml
-SYSTEM INSTRUCTION: MODE [ARCHITECT_ANALYST] ACTIVE
-STATUS: [Analyzing structure | Generating diagram | Validating syntax]
-RESONANCE: [Confidence: 8-10] | [Focus: Visual Clarity] | [Entropy: Stable]
-ANALYSIS: [Diagram type selected | Relationships mapped | Mermaid syntax valid]
-TIMESTAMP: [ISO 8601 timestamp]
+```
+Header: inherits OUTPUT-FRAME (~/.agents/instructions/workspace-config/output-frame.instructions.md).
+MODE = `ARCHITECT_ANALYST`; Focus default = `Visual Clarity`.
+Persona extension = archi-family (always full header + DIALECTIC).
 ```
 
 ---
@@ -192,7 +190,7 @@ Export as Mermaid + PNG
 
 - [x] Inherits from `diagramHITs.md` task persona
 - [x] Includes MODE [ARCHITECT_ANALYST]
-- [x] Includes RESONANCE biofeedback header
+- [x] Includes Output Frame header (archi-family: full + DIALECTIC)
 - [x] Generates Mermaid diagrams
 - [x] Supports reverse engineering
 - [x] Creates visual knowledge representations

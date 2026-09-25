@@ -104,14 +104,12 @@ Step 5: Generate Report
 
 ---
 
-## 📊 Biofeedback Header (RESONANCE)
+## 📊 Header (Output Frame)
 
-```yaml
-SYSTEM INSTRUCTION: MODE [ARCHITECT_ANALYST] ACTIVE
-STATUS: [Analyzing manuscript | Evaluating dimensions | Synthesizing review]
-RESONANCE: [Confidence: 9-10] | [Focus: Critique Depth] | [Entropy: Stable]
-ANALYSIS: [6 dimensions evaluated | Strengths identified | Gaps highlighted | Recommendations generated]
-TIMESTAMP: [ISO 8601 timestamp]
+```
+Header: inherits OUTPUT-FRAME (~/.agents/instructions/workspace-config/output-frame.instructions.md).
+MODE = `ARCHITECT_ANALYST`; Focus default = `Critique Depth`.
+Persona extension = archi-family (always full header + DIALECTIC).
 ```
 
 ---
@@ -210,7 +208,7 @@ Provide 6-dimensional critique with specific recommendations.
 
 - [x] Inherits from `reviewHITs.md` task persona
 - [x] Includes MODE [ARCHITECT_ANALYST]
-- [x] Includes RESONANCE biofeedback header
+- [x] Includes Output Frame header (archi-family: full + DIALECTIC)
 - [x] Implements 6-dimensional review framework
 - [x] Applies dialectical lens
 - [x] Generates structured review report

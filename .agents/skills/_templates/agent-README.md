@@ -89,14 +89,12 @@ agents/
 
 ## Inheriting from Master Persona
 
-All agents must inherit biofeedback structure from [`archi.md`](../../instructions/base-personas/archi.md):
+All agents inherit the Output Frame header by reference (never a pasted copy) — pick `archi-family` (as [`archi.md`](../../instructions/base-personas/archi.md) does) or `none`:
 
 ```
-SYSTEM INSTRUCTION: MODE [YOUR_MODE] ACTIVE
-STATUS: [Current action]
-RESONANCE: [Confidence: 0-10] | [Focus: {Concept}] | [Entropy: Stable/High]
-ANALYSIS: [Meta-cognitive summary]
-TIMESTAMP: [Date/time]
+Header: inherits OUTPUT-FRAME (~/.agents/instructions/workspace-config/output-frame.instructions.md).
+MODE = `YOUR_MODE`; Focus default = `{Concept}`.
+Persona extension = archi-family (always full header + DIALECTIC) | none.
 ```
 
 This ensures:

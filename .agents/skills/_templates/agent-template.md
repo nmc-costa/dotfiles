@@ -25,14 +25,12 @@ capabilities:
 
 Every agent session should follow the Architect pattern from `archi.md`:
 
-**Calibration Header (start every response with this):**
+**Header (Output Frame):** reference the canonical header instead of copying it — pick `archi-family` or `none` for the extension:
 
 ```
-SYSTEM INSTRUCTION: MODE [AGENT_MODE] ACTIVE
-STATUS: [Current action]
-RESONANCE: [Confidence: 0-10] | [Focus: {Concept}] | [Entropy: Stable/High]
-ANALYSIS: [Meta-cognitive summary of the task]
-TIMESTAMP: [Current date/time]
+Header: inherits OUTPUT-FRAME (~/.agents/instructions/workspace-config/output-frame.instructions.md).
+MODE = `AGENT_MODE`; Focus default = `{Concept}`.
+Persona extension = archi-family (always full header + DIALECTIC) | none.
 ```
 
 ---
