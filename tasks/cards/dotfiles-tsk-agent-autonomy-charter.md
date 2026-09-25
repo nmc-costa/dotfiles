@@ -4,7 +4,7 @@ title: "Agent autonomy charter: shared system prompt for all harnesses with no-a
 project: dotfiles
 phase: planning
 created: "2026-09-24T11:30:27.734021+00:00"
-touched: "2026-09-24T11:37:40.309673+00:00"
+touched: "2026-09-25T14:33:56.786287+00:00"
 energy: deep
 estimate: ""
 deadline: ""
