@@ -30,8 +30,11 @@ reading, and proposes — never applies — the top 3 changes worth making to th
 machine's setup.
 
 This skill has two readers: a **human or agent working interactively** (setting
-the radar up, reading a brief, deciding whether to act on a suggestion), and the
-**unattended `claude -p` agent step** inside `run.sh`, which is handed this file
+the radar up, reading a brief, deciding whether to act on a suggestion), and
+the **agent step** inside `run.sh` — in interactive mode (run.sh --prepare /
+--finalize) that is the invoking agent itself, in timer mode it is an
+unattended nested run (`opencode run` by default; `RADAR_AGENT_BACKEND=claude`
+opts back into `claude -p`), which is handed this file
 plus `ranking.md` and the day's `inbox.json` as its entire prompt. The Decision
 Framework below is written for that second reader as much as the first.
 

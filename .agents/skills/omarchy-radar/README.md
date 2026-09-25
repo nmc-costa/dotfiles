@@ -25,7 +25,7 @@ promptly on next wake/boot.
 ## Pipeline
 
 ```
-collect.sh  →  skip if inbox empty & no source errors  →  claude -p (disposable git worktree, no Bash/git tools)  →  run.sh verifies diffs, secret-scans, commits  →  notify
+collect.sh  →  skip if inbox empty & no source errors  →  agent step (interactive: the invoking agent; timer: nested `opencode run`, RADAR_AGENT_BACKEND=claude opts into claude -p) on a disposable git worktree, no Bash/git tools  →  run.sh verifies diffs, secret-scans, commits  →  notify
 ```
 
 1. **`collect.sh`** (deterministic, no LLM, idempotent) fetches every source
@@ -36,11 +36,17 @@ collect.sh  →  skip if inbox empty & no source errors  →  claude -p (disposa
    proportional to actual news).
 2. **`run.sh`** creates a disposable `git worktree` at
    `~/.local/state/omarchy-radar/worktrees/<date>` on a new
-   `radar/omarchy-radar/<date>` branch, and invokes `claude -p` with cwd set
-   to that worktree root, `--allowedTools "Read,Grep,Glob,Write(briefs/*)"`,
+   `radar/omarchy-radar/<date>` branch and hands the agent step to the
+   backend chosen by `RADAR_AGENT_BACKEND` (default `opencode run` with a
+   hardened throwaway OPENCODE_CONFIG; `claude` restores the original
+   `claude -p` shape: cwd set to that worktree root,
+   `--allowedTools "Read,Grep,Glob,Write(briefs/*)"`,
    `--disallowedTools "WebFetch,WebSearch,Bash"`, and no
-   `--dangerously-skip-permissions`. The agent's whole job is described in
-   `SKILL.md`'s Decision Framework and `ranking.md`'s rubric.
+   `--dangerously-skip-permissions`). In interactive mode
+   (`run.sh --prepare` then `--finalize`) there is no nested call at all:
+   the agent that invoked the skill IS the agent step. The agent's whole
+   job is described in `SKILL.md`'s Decision Framework and `ranking.md`'s
+   rubric.
 3. `run.sh` (back in deterministic bash) computes the **real** `diff -u` for
    any tracked-file proposal, runs a secret-scan grep pass over the finished
    brief, commits inside the worktree only, removes the worktree, and only
