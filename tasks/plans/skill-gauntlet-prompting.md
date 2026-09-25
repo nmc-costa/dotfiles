@@ -1,6 +1,16 @@
 # Plan: `gauntlet-prompting` skill
 
-Card: `dotfiles-tsk-skill-gauntlet-prompting` (phase: planning). Written by an Opus Plan agent on 2026-09-24. **Waiting on owner answers in §(g) before implementation.**
+Card: `dotfiles-tsk-skill-gauntlet-prompting`. Written by an Opus Plan agent on 2026-09-24; implemented 2026-09-25 in `.agents/skills/gauntlet-prompting/`.
+
+**Owner decisions (2026-09-25), which override the defaults below:**
+1. Meaning confirmed: the Gauntlet Loop, which refines LLM outputs (not red-teaming).
+2. Round cap: **3 per piece** (not 6).
+3. **Always hand off** to a fresh session; the loop never runs in the current one.
+
+**Deviations made during implementation:**
+- Command bars must be written `cmd:<command>`. Without the prefix, a vague bar like "make it great" passed `check-bar`, because `make` is on PATH.
+- `pair` copies local files to neutral `A.<ext>`/`B.<ext>` names so their paths don't reveal which side is the candidate.
+- Shumer's source asks for an independent, A/B-style critic but doesn't mandate blindness. Blind picks are local hardening, and SKILL.md says so.
 
 ## (a) Definition and scope
 
