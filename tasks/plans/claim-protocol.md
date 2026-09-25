@@ -73,6 +73,11 @@ check, if ever wanted for a warning line, compares `git rev-parse
 
 - Code for a claimed task → one worktree per task, branch `claude/<task-id>`.
   Never a wave-worktree shared by many subagents for independent code work.
+  **Implemented 2026-09-24** (`dotfiles-tsk-card-worktrees`) as
+  `tasks/worktree.py`, generalized to every harness: path
+  `~/dotfiles.worktrees/<harness>/<task-id>`, branch `<harness>/<task-id>`,
+  `dispatch.py --worktree` launches inside it, per-machine view in the
+  gitignored `tasks/cards/worktrees/`. See `tasks/plans/card-worktrees.md`.
 - `tasks/` itself → always the canonical root, wherever the process runs
   from — guaranteed by A4/A5, not by discipline.
 - **On record:** the 2026-09-21 `wave1-parallel-dispatch` session wrote

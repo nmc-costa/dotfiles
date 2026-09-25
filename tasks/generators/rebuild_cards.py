@@ -118,6 +118,12 @@ def render_card(task_id, card):
             lines.append(f"- {entry['ts']}: {entry['from_phase']} -> {entry['to_phase']} (actor: {who}){reason}")
     else:
         lines.append("- (no phase_changed events yet — still in its original created phase)")
+    # Fixed and path-free on purpose: live worktree state is per-machine and
+    # lives in the gitignored tasks/cards/worktrees/ view (tasks/worktree.py),
+    # so this tracked file never churns when a worktree is created/removed.
+    lines.append("")
+    lines.append(f"Worktrees (this machine): [worktrees/{task_id}.md](worktrees/{task_id}.md) — "
+                 f"`python3 ~/dotfiles/tasks/worktree.py list --task-id {task_id}`")
     if card["handoff"]:
         lines.append("")
         lines.append("## Latest handoff")
