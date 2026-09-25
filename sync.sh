@@ -419,7 +419,12 @@ main() {
     if [[ "$subdir_name" == "hooks" ]]; then
       sync_subdir "hooks" "$subdir" "$CLAUDE_HOOKS" "~/.claude/hooks" || true
       if [[ -f "$BASE_DIR/.claude/settings.json" ]]; then
-        install_args=(--fragment "$AGENTS_DEST/hooks/session-start-hooks.json" --settings "$BASE_DIR/.claude/settings.json")
+        # Per-event fragment (SessionStart + PreCompact, dotfiles-tsk-
+        # chronicle-skill-layer); older checkouts may only have the
+        # pre-rename SessionStart-only file — installer accepts both.
+        hook_fragment="$AGENTS_DEST/hooks/session-and-compact-hooks.json"
+        [[ -f "$hook_fragment" ]] || hook_fragment="$AGENTS_DEST/hooks/session-start-hooks.json"
+        install_args=(--fragment "$hook_fragment" --settings "$BASE_DIR/.claude/settings.json")
         [[ $DRY_RUN -eq 1 ]] && install_args+=(--dry-run)
         python3 "$AGENTS_DEST/hooks/install_session_start_hooks.py" "${install_args[@]}" || true
       fi

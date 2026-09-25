@@ -1,0 +1,26 @@
+{
+  "_comment": "Versioned source of truth for the Claude Code hook entries this workspace wants present in the live, local ~/.claude/settings.json. Never symlinked wholesale -- that file also holds live runtime state (theme, autoMode, remoteControlAtStartup, etc.) that must stay local, see ~/dotfiles/.claude/CLAUDE.md. install_session_start_hooks.py merges these entries in idempotently (add-if-missing, matched by command string), never touching unrelated hooks like herdr-agent-state.sh. `{{HOME}}` in a command is substituted with the real, absolute home directory at install time -- Claude Code execs these command strings literally, no shell variable expansion, matching the pre-existing herdr-agent-state.sh/workspace-standards-review-check.sh entries which hardcode an absolute path for the same reason. Schema (dotfiles-tsk-chronicle-skill-layer, 2026-09-25): top-level `events` maps a Claude Code hook event name (SessionStart, PreCompact, ...) to that event's entry list; a legacy top-level `entries` list is still accepted and treated as SessionStart. PreCompact entries carry no `matcher` -- that event has no matcher field.",
+  "events": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hook": {
+          "type": "command",
+          "command": "bash '{{HOME}}/.claude/hooks/tsk-brief-session-start.sh'",
+          "timeout": 10,
+          "statusMessage": "Checking tasks/ for pending work..."
+        }
+      }
+    ],
+    "PreCompact": [
+      {
+        "hook": {
+          "type": "command",
+          "command": "python3 '{{HOME}}/.claude/hooks/precompact_handoff.py'",
+          "timeout": 30,
+          "statusMessage": "Snapshotting handoff before compaction..."
+        }
+      }
+    ]
+  }
+}
