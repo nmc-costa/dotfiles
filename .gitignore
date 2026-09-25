@@ -67,6 +67,7 @@ tmp/
 # commit live runtime state, credentials included.
 .claude/.credentials.json
 .claude/history.jsonl
+.claude/settings.local.json
 .claude/daemon.log
 .claude/daemon.lock
 .claude/daemon.status.json
