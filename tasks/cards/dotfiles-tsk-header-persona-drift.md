@@ -2,9 +2,9 @@
 task_id: dotfiles-tsk-header-persona-drift
 title: "Header/persona RESONANCE drift: ~15 ficheiros com cópias divergentes do bloco de header (achado pelo plano do Output Frame)"
 project: dotfiles
-phase: backlog
+phase: review
 created: "2026-09-24T22:02:12.013031+00:00"
-touched: "2026-09-24T22:02:12.013031+00:00"
+touched: "2026-09-25T14:25:13.381687+00:00"
 energy: mechanical
 estimate: ""
 deadline: ""
@@ -17,4 +17,11 @@ origin: "Achado pelo agente Opus (Plan) ao investigar dotfiles-tsk-agent-output-
 Header/persona RESONANCE drift: ~15 ficheiros com cópias divergentes do bloco de header (achado pelo plano do Output Frame)
 
 ## History
-- (no phase_changed events yet — still in its original created phase)
+- 2026-09-25T14:25:12.956103+00:00: backlog -> planning (actor: claude/agent) — folded into Output Frame rollout (plan §6)
+- 2026-09-25T14:25:13.179103+00:00: planning -> in_progress (actor: claude/agent) — implemented on claude/output-frame-impl
+- 2026-09-25T14:25:13.381687+00:00: in_progress -> review (actor: claude/agent) — fix in commit d284445, draft PR #83
+
+## Latest handoff
+_@ review_
+
+Corrigido no commit d284445 (branch claude/output-frame-impl, draft PR #83, parte do rollout de dotfiles-tsk-agent-output-tldr-format). Fica em review até o PR #83 fazer merge; depois: move_task.py --to-phase validation, e --to-phase done --expect-last-event-id <id do move anterior>, sempre --actor-kind agent --actor-id claude.

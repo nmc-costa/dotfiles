@@ -2,9 +2,9 @@
 task_id: dotfiles-tsk-agent-output-tldr-format
 title: "Formato padrão de fecho para planos e outputs longos de agentes: TL;DR + índice, com opção visual/diagrama e possível artifact"
 project: dotfiles
-phase: in_progress
+phase: review
 created: "2026-09-24T21:31:29.981641+00:00"
-touched: "2026-09-24T22:15:49.277024+00:00"
+touched: "2026-09-25T14:25:12.728405+00:00"
 energy: deep
 estimate: ""
 deadline: ""
@@ -19,20 +19,9 @@ Formato padrão de fecho para planos e outputs longos de agentes: TL;DR + índic
 ## History
 - 2026-09-24T21:43:16.274864+00:00: backlog -> planning (actor: claude/agent) — Owner refinou o pedido via chat 2026-09-24: header e footer de metadados, não só TL;DR solto.
 - 2026-09-24T22:05:16.470496+00:00: planning -> in_progress (actor: nmc-costa/human) — Owner aprovou Q1/Q2 do plano; plano fica aprovado como escrito, próximo passo é a implementação S1-S6.
+- 2026-09-25T14:25:12.728405+00:00: in_progress -> review (actor: claude/agent) — S1-S4 implemented, draft PR #83 open (stacked on plan PR #80)
 
 ## Latest handoff
-_@ planning_
+_@ review_
 
-Requisitos refinados pelo owner (2026-09-24, em PT no chat, não em events.jsonl anteriores):
-
-HEADER: igual ao padrão do skill archi (ver .agents/skills/archi/SKILL.md secção 'Biofeedback Header (RESONANCE)' — bloco SYSTEM INSTRUCTION/STATUS/RESONANCE/ANALYSIS/TIMESTAMP). Mas generalizado: hoje só o archi tem isto; o owner quer que TODOS os agentes/skills tenham um header equivalente. Isto implica que o header deixa de ser algo definido só no SKILL.md do archi e passa a ser um system prompt central em AGENTS.md (o guia que todos os harnesses leem), para que qualquer agente em qualquer skill o herde automaticamente.
-
-FOOTER (dois níveis):
-1. Genérico — sempre que um output é 'grande' (por definir o threshold: nº de linhas? de tokens? presença de secções?), acrescentar um resumo no fim. Analogia do owner: 'é quase como se tivesse um /compact sempre no final só para ter em hit-size' — ou seja, o footer funciona como uma compactação/TL;DR do que acabou de ser dito, não uma introdução do que vai vir.
-2. Específico para planos e outputs longos — footer indexado (índice das secções/passos) COM um diagrama rápido de entender o fluxo do plano (ex: mermaid, estilo do 'Workflow' já usado no diagramhits/archi), para o owner conseguir ver a big picture sem ter de ler o detalhe todo, e só descer ao detalhe se precisar.
-
-Ideia em aberto ainda não decidida (do pedido original que criou o card): outputs longos passarem a ser sempre publicados como Artifact em vez de texto solto no chat, para poupar tokens/scroll — a validar se isto é compatível ou concorrente com o header/footer inline (um Artifact pode ter o seu próprio header/footer dentro da página, não precisa necessariamente do padrão de chat).
-
-Relacionado (mesma família de ideia, gatilho diferente): dotfiles-tsk-agent-autonomy-charter é TL;DR só no momento de ESCALAÇÃO humano-agente (pedir validação); este card é TL;DR no FIM de qualquer output longo/plano, independente de haver escalação. Reconciliar os dois na fase de plano — provavelmente o mesmo mecanismo de footer serve para ambos.
-
-Próximo passo: um agente Opus em modo Plan deve desenhar a proposta concreta (texto exato do header/footer, onde entra no AGENTS.md, threshold de 'grande', formato do diagrama, decisão sobre Artifact) — ainda não implementar.
+Implementação S1-S4 em draft PR #83 (branch claude/output-frame-impl, stacked em PR #80 — merge #80 primeiro ou juntos). Commits: S1 3b4aa5f (output-frame.instructions.md + carve-out mermaid), S2 ea56fa3 (bloco OUTPUT-FRAME:CORE nos 8 ficheiros), S3 d284445 (17 personas/skills -> referência de 3 linhas + typo RESSONANCE), S4 151866c (scripts/check_core_blocks.sh + manifest + CI). validate_dotfiles.sh 37/0. Próximo passo (owner): rever PR #83 (secção 'Judgment calls'), correr o checklist S5 nos 4 harnesses (corpo do PR + CHEATSHEET §4), depois merge. S6 (Stop hook) só se compliance fraca após 2 semanas.

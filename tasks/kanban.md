@@ -20,9 +20,6 @@
 - [ ] dotfiles-tsk-tree-tidy-recurring [P2] Rung 3: recurring card template - run /tree-tidy on next repo in rotation every 14 days
 - [ ] dotfiles-tsk-tree-tidy-tournament [P1] Rung 4a: sandboxed haiku/sonnet worktree tournament, opus judge vs baseline, draft PR (manual runs first)
 - [ ] dotfiles-tsk-tree-tidy-schedule [P2] Rung 4b: weekly tree-tidy tournament job in .agents/automation/jobs/ manifest
-- [ ] dotfiles-tsk-header-persona-drift Header/persona RESONANCE drift: ~15 ficheiros com cópias divergentes do bloco de header (achado pelo plano do Output Frame)
-- [ ] dotfiles-tsk-simplifyhit-ressonance-typo Fix typo: simplifyhit/SKILL.md escreve RESSONANCE em vez de RESONANCE no bloco de header
-- [ ] dotfiles-tsk-mermaid-instructions-footer-conflict mermaid.instructions.md (Regras 1, 2 e 5) entra em conflito com qualquer diagrama Mermaid devolvido inline (ex. footer do Output Frame)
 
 ## Planning
 - [ ] dotfiles-tsk-archive-and-reorg Archive done tasks out of live views + reorganize tasks/ directory tree so 'current' stays small (no infinite memory/context)
@@ -32,12 +29,15 @@
 
 ## In Progress
 - [ ] dotfiles-tsk-researcher-radar researcher-radar family: omarchy-radar + agents-radar (headless daily digests, human approves everything)
-- [ ] dotfiles-tsk-agent-output-tldr-format Formato padrão de fecho para planos e outputs longos de agentes: TL;DR + índice, com opção visual/diagrama e possível artifact
 
 ## Review
 - [ ] dotfiles-tsk-gh-path-recursion Fix infinite recursion in ~/.local/bin/gh wrapper (duplicate PATH entry)
 - [ ] dotfiles-tsk-task-brief-assistant Upgrade /task-brief into a full tasks/ management assistant
 - [ ] worknotes-siac-colab-portfolio-report [HIGH PRIORITY] SIAC CoLAB (COMPETE2030 transferencia, ~1.2M EUR/24m): planear portfolio de demonstradores + report com tabela para o CEO (Work/notes/projects)
+- [ ] dotfiles-tsk-agent-output-tldr-format Formato padrão de fecho para planos e outputs longos de agentes: TL;DR + índice, com opção visual/diagrama e possível artifact
+- [ ] dotfiles-tsk-header-persona-drift Header/persona RESONANCE drift: ~15 ficheiros com cópias divergentes do bloco de header (achado pelo plano do Output Frame)
+- [ ] dotfiles-tsk-simplifyhit-ressonance-typo Fix typo: simplifyhit/SKILL.md escreve RESSONANCE em vez de RESONANCE no bloco de header
+- [ ] dotfiles-tsk-mermaid-instructions-footer-conflict mermaid.instructions.md (Regras 1, 2 e 5) entra em conflito com qualquer diagrama Mermaid devolvido inline (ex. footer do Output Frame)
 
 ## Validation
 - [ ] dotfiles-tsk-harness-provider-model-index Build a validated harness x provider x model orchestration index
