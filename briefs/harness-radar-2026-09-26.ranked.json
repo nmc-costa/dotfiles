@@ -1,0 +1,42 @@
+[
+  {
+    "title": "ZingerLittleBee/Heeler",
+    "url": "https://github.com/ZingerLittleBee/Heeler",
+    "category": "herdr_plugin_marketplace",
+    "score": 6.5,
+    "rationale": "Only real trend signal of the day (410★ vs 0-3★ peers, updated 2026-09-25) and herdr is in use on this machine; docked for unverifiable Quality/maintenance and unknown purpose from index metadata alone; adoption stays a manual human step.",
+    "picked_top3": true
+  },
+  {
+    "title": "cobanov/herdrchat",
+    "url": "https://github.com/cobanov/herdrchat",
+    "category": "herdr_plugin_marketplace",
+    "score": 2.0,
+    "rationale": "Flagged per ranking.md §2: 'herdr'-named repo under an unrelated owner matches the documented fork-spam shape and was unverifiable this run; 3★ with no fit evidence.",
+    "picked_top3": false
+  },
+  {
+    "title": "aneym/unblock",
+    "url": "https://github.com/aneym/unblock",
+    "category": "herdr_plugin_marketplace",
+    "score": 1.0,
+    "rationale": "0★, no trend, unknown purpose, no fit against any harness usage documented for this machine.",
+    "picked_top3": false
+  },
+  {
+    "title": "fuad-daoud/relevo",
+    "url": "https://github.com/fuad-daoud/relevo",
+    "category": "herdr_plugin_marketplace",
+    "score": 1.0,
+    "rationale": "1★, no trend, unknown purpose, no fit evidence.",
+    "picked_top3": false
+  },
+  {
+    "title": "marsilitonga-ifb/claude-shopifyql-workbench",
+    "url": "https://github.com/marsilitonga-ifb/claude-shopifyql-workbench",
+    "category": "copilot_cli",
+    "score": 1.0,
+    "rationale": "0★ single-owner ShopifyQL-niche tool with no Shopify context on this machine; 'claude-'-prefixed repo in the Copilot CLI category noted as a likely cross-tagged topic entry.",
+    "picked_top3": false
+  }
+]
