@@ -163,6 +163,58 @@ radar_run_claude_agent() {
   )
 }
 
+# radar_run_opencode_agent <worktree_dir> <prompt_file>
+#   Runs `opencode run` with cwd = <worktree_dir> — the opencode twin of
+#   radar_run_claude_agent, enforcing the identical security contract via a
+#   throwaway OPENCODE_CONFIG (loaded as the final local-scope merge, never
+#   written into the worktree or committed):
+#     - a dedicated primary agent whose permission ruleset denies Bash,
+#       webfetch/websearch, subagents (task), skills, and ALL reads outside
+#       the worktree (external_directory) — stronger than claude's
+#       deny-list, which blocked only named secret paths;
+#     - writes allowed ONLY under briefs/** (permission patterns evaluate
+#       last-match-wins, so the "*" deny must precede the briefs/** allow).
+#   The prompt is piped via STDIN (a 100KB+ radar prompt overflows the
+#   argv size limit — E2BIG). Model comes from the user's global opencode
+#   config (their custom provider) unless RADAR_OPENCODE_MODEL overrides
+#   it; --pure skips external plugins so a headless run stays
+#   deterministic. Prints opencode's stdout; returns opencode's exit code.
+radar_run_opencode_agent() {
+  local worktree_dir="$1" prompt_file="$2"
+  local cfg model_args=()
+  cfg="$(mktemp "${TMPDIR:-/tmp}/radar-opencode-config.XXXXXX")"
+  cat > "$cfg" <<'JSON'
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "radar",
+  "agent": {
+    "radar": {
+      "mode": "primary",
+      "steps": 60,
+      "permission": {
+        "edit": { "*": "deny", "briefs/**": "allow" },
+        "bash": "deny",
+        "webfetch": "deny",
+        "websearch": "deny",
+        "task": "deny",
+        "skill": "deny",
+        "external_directory": "deny"
+      }
+    }
+  }
+}
+JSON
+  [[ -n "${RADAR_OPENCODE_MODEL:-}" ]] && model_args=(--model "$RADAR_OPENCODE_MODEL")
+  local rc=0
+  (
+    cd "$worktree_dir" || exit 1
+    export OPENCODE_CONFIG="$cfg" OPENCODE_DISABLE_EXTERNAL_SKILLS=1
+    cat "$prompt_file" | opencode run --pure --agent radar "${model_args[@]}"
+  ) || rc=$?
+  rm -f "$cfg"
+  return "$rc"
+}
+
 # ---------------------------------------------------------------------------
 # Secret-scan safety net — runs on the finished brief before any commit, on
 # top of (never instead of) the read-path allow/deny lists in security.md.

@@ -41,6 +41,7 @@
 - [ ] dotfiles-tsk-header-persona-drift Header/persona RESONANCE drift: ~15 ficheiros com cópias divergentes do bloco de header (achado pelo plano do Output Frame)
 - [ ] dotfiles-tsk-simplifyhit-ressonance-typo Fix typo: simplifyhit/SKILL.md escreve RESSONANCE em vez de RESONANCE no bloco de header
 - [ ] dotfiles-tsk-mermaid-instructions-footer-conflict mermaid.instructions.md (Regras 1, 2 e 5) entra em conflito com qualquer diagrama Mermaid devolvido inline (ex. footer do Output Frame)
+- [ ] dotfiles-tsk-chronicle-daily-improve Chronicle daily background improve: timer, headless opencode run, gated auto-merge PRs
 
 ## Validation
 - [ ] dotfiles-tsk-skill-gauntlet-prompting Skill: gauntlet prompting (desenhar e criar skill .agents/skills/gauntlet-prompting)

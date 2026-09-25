@@ -36,7 +36,7 @@ flowchart LR
         dotfiles-tsk-cpx-copilot["dotfiles-tsk-cpx-copilot<br/>cpx wrapper for Copilot CLI (its own sessionStart hook is broken)"]:::backlog
         dotfiles-tsk-hook-antigravity["dotfiles-tsk-hook-antigravity<br/>Antigravity hook (inherited hook mechanism)"]:::backlog
         dotfiles-tsk-task-brief-skill["dotfiles-tsk-task-brief-skill<br/>/task-brief skill - thin shell over brief.py"]:::done
-        dotfiles-tsk-systemd-units["dotfiles-tsk-systemd-units<br/>ensure-tsk-sweep.sh + systemd units, following the existing ensure-*.sh convention"]:::in_progress
+        dotfiles-tsk-systemd-units["dotfiles-tsk-systemd-units<br/>ensure-tsk-sweep.sh + systemd units, following the existing ensure-*.sh convention"]:::done
         dotfiles-tsk-graph-dependency-edges["dotfiles-tsk-graph-dependency-edges<br/>Add blocked_by dependency edges to rebuild_graph.py's flowchart (needs blocked_by as a list, not prose)"]:::backlog
         dotfiles-tsk-cards-frontmatter["dotfiles-tsk-cards-frontmatter<br/>L1: markdown+YAML-frontmatter card per task (rebuild_cards.py, generated view, never hand-edited)"]:::done
         dotfiles-tsk-dispatch-launcher["dotfiles-tsk-dispatch-launcher<br/>tsk dispatch: launch a session on a provider with the task brief pre-loaded (claude &quot;<p>&quot;/--bg, copilot -i, agy -i) - push side of cross-provider handoff, pull side is dotfiles-tsk-brief"]:::done
@@ -83,7 +83,9 @@ flowchart LR
         dotfiles-tsk-worktree-model-suffix["dotfiles-tsk-worktree-model-suffix<br/>tasks/worktree.py v2: optional [-<model>] suffix in path/branch when a harness has >1 agent on the same card"]:::backlog
         dotfiles-tsk-chronicle-skill-layer["dotfiles-tsk-chronicle-skill-layer<br/>Chronicle-like skill layer: mine interactions into skills/instructions, resume-after-timeout, PR-finish, skill chaining + chat autocomplete"]:::done
         dotfiles-tsk-dispatch-quota-check["dotfiles-tsk-dispatch-quota-check<br/>dispatch.py: post-launch liveness probe + record provider quota status/reset time"]:::backlog
-        dotfiles-tsk-chronicle-d4-d6["dotfiles-tsk-chronicle-d4-d6<br/>Chronicle slice D4-D6: /pr-finish, /chronicle miner, footer+questionario conventions"]:::in_progress
+        dotfiles-tsk-chronicle-d4-d6["dotfiles-tsk-chronicle-d4-d6<br/>Chronicle slice D4-D6: /pr-finish, /chronicle miner, footer+questionario conventions"]:::done
+        dotfiles-tsk-chronicle-d7["dotfiles-tsk-chronicle-d7<br/>Chronicle D7: opencode custom commands + tui.prompt.append chain bridge"]:::validation
+        dotfiles-tsk-chronicle-daily-improve["dotfiles-tsk-chronicle-daily-improve<br/>Chronicle daily background improve: timer, headless opencode run, gated auto-merge PRs"]:::review
     end
 
     subgraph proj_notes["notes"]
